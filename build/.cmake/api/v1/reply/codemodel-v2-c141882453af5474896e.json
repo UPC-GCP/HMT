@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "JsonCpp::JsonCpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-JsonCpp__JsonCpp-Debug-a5e2bb8f29acd805659d.json",
+					"name" : "JsonCpp::JsonCpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "jsoncpp_lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-jsoncpp_lib-Debug-9076560df32d023734f7.json",
+					"name" : "jsoncpp_lib",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1
+					],
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f040eec181a89de70dbe.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "HMT",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "MainSolver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MainSolver-Debug-1ef21ccec1f90349db4a.json",
+					"name" : "MainSolver",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+		"source" : "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	}
+}

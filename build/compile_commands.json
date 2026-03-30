@@ -1,0 +1,50 @@
+[
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\MainSolver.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\MainSolver.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/MainSolver.cpp",
+  "output": "CMakeFiles/MainSolver.dir/MainSolver.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Material.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Material.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Material.cpp",
+  "output": "CMakeFiles/MainSolver.dir/Material.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Mesh.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Mesh.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Mesh.cpp",
+  "output": "CMakeFiles/MainSolver.dir/Mesh.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Discretizer.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Discretizer.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Discretizer.cpp",
+  "output": "CMakeFiles/MainSolver.dir/Discretizer.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Solver.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Solver.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Solver.cpp",
+  "output": "CMakeFiles/MainSolver.dir/Solver.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\CG.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\CG.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/CG.cpp",
+  "output": "CMakeFiles/MainSolver.dir/CG.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\ExpressionParser.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\ExpressionParser.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/ExpressionParser.cpp",
+  "output": "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Probe.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Probe.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Probe.cpp",
+  "output": "CMakeFiles/MainSolver.dir/Probe.cpp.obj"
+}
+]
