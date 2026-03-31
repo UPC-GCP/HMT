@@ -43,14 +43,14 @@ double Solver::calcErr(std::vector<std::vector<double>> matA, std::vector<std::v
     for (size_t i = 0; i < Nx; i++){
         for (size_t j = 0; j < Ny; j++){
             k = i * Ny + j;
-            errVec[k] = abs(matA[i][j] - matB[i][j])
+            errVec[k] = abs(matA[i][j] - matB[i][j]);
         }
     }
 
     // Norm
     double rsNew = operDotProd(errVec, errVec);
-
-    return std::sqrt(rsNew)
+    
+    return rsNew;
 
 }
 

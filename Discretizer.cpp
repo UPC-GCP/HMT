@@ -141,7 +141,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ae = - beta * lamb / Msh.nd[0][Pos0[0]];
                         Msh.matA[j].ap = - Msh.matA[j].ae;
-                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i+1] / Msh.nd[0][Pos0[0]]);
+                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
                     }
 
                 } else if (bC.side == 1){
@@ -180,7 +180,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = i * Msh.N[1] + Pos0[1];
                         Msh.matA[j].an = - beta * lamb / Msh.nd[1][Pos0[1]];
                         Msh.matA[j].ap = - Msh.matA[j].an;
-                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]] - lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]]);
+                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]] - lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]]);
                     }
 
                 } else if (bC.side == 1){
@@ -224,7 +224,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ae = - beta * lamb / Msh.nd[0][Pos0[0]];
                         Msh.matA[j].ap = - Msh.matA[j].ae + bC.alpha;
-                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i+1] / Msh.nd[0][Pos0[0]]);
+                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
                         
 
                     }
@@ -266,7 +266,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = i * Msh.N[1] + Pos0[1];
                         Msh.matA[j].an = - beta * lamb / Msh.nd[1][Pos0[1]];
                         Msh.matA[j].ap = - Msh.matA[j].an + bC.alpha;
-                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]] - lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]]);
+                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]] - lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]]);
 
                     }
 
@@ -320,7 +320,7 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
             lambw = calcHarmonicMean(Msh.nd[0][i-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i-1][j]].lambda}, {Msh.ndelta[0][i-1], Msh.ndelta[0][i]});
             lambe = calcHarmonicMean(Msh.nd[0][i], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i+1][j]].lambda}, {Msh.ndelta[0][i+1], Msh.ndelta[0][i]});
             lambs = calcHarmonicMean(Msh.nd[1][j-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j-1]].lambda}, {Msh.ndelta[1][j-1], Msh.ndelta[1][j]});
-            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j]].lambda}, {Msh.ndelta[1][j+1], Msh.ndelta[1][j]});
+            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j+1], Msh.ndelta[1][j]});
 
             // Index
             k = i * Msh.N[1] + j;
@@ -354,7 +354,7 @@ void Discretizer::newSetRHS(Material& Mat, Mesh& Msh){
             lambw = calcHarmonicMean(Msh.nd[0][i-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i-1][j]].lambda}, {Msh.ndelta[0][i-1], Msh.ndelta[0][i]});
             lambe = calcHarmonicMean(Msh.nd[0][i], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i+1][j]].lambda}, {Msh.ndelta[0][i+1], Msh.ndelta[0][i]});
             lambs = calcHarmonicMean(Msh.nd[1][j-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j-1]].lambda}, {Msh.ndelta[1][j-1], Msh.ndelta[1][j]});
-            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j]].lambda}, {Msh.ndelta[1][j+1], Msh.ndelta[1][j]});
+            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j+1], Msh.ndelta[1][j]});
 
             // Index
             k = i * Msh.N[1] + j;

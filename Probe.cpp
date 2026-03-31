@@ -47,9 +47,10 @@ std::ofstream createFile(std::string fName){
 }
 
 Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName){
-
+    
     // Create Folder
-    pathBase = createFolder(scheme, fName.substr(12, fName.size()-1));
+    std::filesystem::path newPath(fName);
+    pathBase = createFolder(scheme, newPath.filename().string());
     
     // Add Probes and Create Files
     pMap tempMap{};
@@ -63,7 +64,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             }
 
             // Header
-            probePoint.file << ",[" << probes[i]["x0"][0].asDouble() << " " << probes[i]["x0"][1].asDouble() << "]";
+            probePoint.file << "," << probes[i]["x0"][0].asDouble() << " " << probes[i]["x0"][1].asDouble();
             
             // Time
             probePoint.t0.push_back(probes[i]["t"][0].asDouble()); probePoint.t1.push_back(probes[i]["t"][1].asDouble());
@@ -87,7 +88,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             // Header
             for (int j = tempMap.xPos[0]; j <= tempMap.xPos[1]; j++){
                 for (int k = tempMap.yPos[0]; k <= tempMap.yPos[1]; k++){
-                    tempMap.file << ",[" << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k] << "]";
+                    tempMap.file << "," << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k];
                 }
             } tempMap.file << "\n";
 

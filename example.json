@@ -1,0 +1,51 @@
+{
+    "_dataNum": "Numerical Data",
+    "scheme": "implicit", "solver": "CG",
+    "tolNumeric": 1e-8, "tolTemporal": 1e-3, "maxIterations": 2000,
+    "endTime": 500, "timeStep": 1,
+    
+    "_dataPhys": "Physical Data",
+    "T0": 8,
+    "materials": [
+        {"rho":1500, "lambda":750, "cp":170},
+        {"rho":1600, "lambda":770, "cp":140},
+        {"rho":1900, "lambda":810, "cp":200},
+        {"rho":2500, "lambda":930, "cp":140}
+    ],
+    
+    "_dataGeom": "Geometrical Data",
+    "width": 1, "height": 1,
+    "sections": [
+        {"material": 0, "x0": [0, 0], "x1": [0.5, 0.4], "qV": 0},
+        {"material": 1, "x0": [0.5, 0], "x1": [1.1, 0.7], "qV": 0},
+        {"material": 2, "x0": [0, 0.4], "x1": [0.5, 0.8], "qV": 0},
+        {"material": 3, "x0": [0.5, 0.7], "x1": [1.1, 0.8], "qV": 0}
+    ],
+
+    "_dataMesh": "Mesh Data",
+    "strength": 0, "centering": 0.5, "kappa": 1, "delta": 0.001,
+    "meshAlgorithm": 3, "N": [55, 40],
+    "refinement": [
+        {"axis": 0, "N": 10, "range": [0, 0.5]},
+        {"axis": 0, "N": 10, "range": [0.5, 1]},
+        {"axis": 0, "N": 10, "range": [1, 1.5]},
+        {"axis": 1, "N": 20, "range": [0, 1]}
+    ],
+
+    "_dataBnd": "Boundary Conditions",
+    "boundaries": [
+        {"type": "Dirichlet", "x0": [0, 0], "x1": [1.1, 0], "value": 23},
+        {"type": "Neumann", "x0": [0, 0.8], "x1": [1.1, 0.8], "value": 60, "side": 1},
+        {"type": "Convection", "x0": [0, 0], "x1": [0, 0.8], "value": 33, "side": 0, "alpha": 9},
+        {"type": "Dirichlet", "x0": [1.1, 0], "x1": [1.1, 0.8], "value": "8 + 0.005 * t"}
+    ],
+
+    "_dataProbe": "Probe Data",
+    "probes": [
+        {"type": "Point", "t": [0, 10000], "x0": [0.65, 0.56]},
+        {"type": "Point", "t": [0, 10000], "x0": [0.74, 0.72]},
+        {"type": "Map", "t": [2000, 5000], "x0": [0, 0], "x1": [1.1, 0.8]},
+        {"type": "Map", "t": [5000, 7500], "x0": [0, 0.4], "x1": [0.5, 0.8]}
+    ]
+
+}

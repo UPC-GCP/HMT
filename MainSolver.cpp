@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
     std::cout << "Initializing probes ...\n";
     Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); "Files configured.\n";
     Prb.checkProbes(Msh);
-    
+
 
     ///// Solver /////
     std::cout << "Initializing solver ... \n";
@@ -114,7 +114,6 @@ int main(int argc, char* argv[]){
         // Control
         // Update previous value: tempTemp = Msh.nT
         // cTemp = Msh.nT;
-        
 
         // Update Coefficients
         Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
