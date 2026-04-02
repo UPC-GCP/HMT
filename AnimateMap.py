@@ -1,81 +1,84 @@
+import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animate
 
+def getFrames(fPath:str):
 
-# Data
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260330122723_data_implicit\Probe_1_Map.csv"
-data = pd.read_csv(filePath)
-vTitle = data.columns.values
+    tStart = time.time()
 
-aTemp, bTemp = [], []
-k, tempVal, fps = 0, 0, 40
+    # Read Data
+    data = pd.read_csv(fPath)
+    vTitle = data.columns.values
 
-# Read Line
-for i in range(1, len(vTitle)-1):
-
-    # Coordinates
-    tVec = vTitle[i].split(" "); tVec = [float(x) for x in tVec]
-
-    # Check
-    if tVec[0] == tempVal:
-        bTemp.append(data.iloc[0][i])
-    else:
-        bTemp = [float(x) for x in bTemp]
-        aTemp.append(bTemp)
-        bTemp = [data.iloc[0][i]]
-    
     # Control
-    tempVal = tVec[0]
+    vRet, vTime = [], []
+    N, aTemp, bTemp = [], [], []
 
-# Single Plot
-# plt.figure(1); plt.imshow(aTemp, cmap='jet')
+    # Dimensions
+    i = 1; xPos = vTitle[i].split(' ')[0]
+    while vTitle[i+1].split(' ')[0] == xPos: i += 1
+    N = [int((len(vTitle)-1) / i), i]
+    
+    # Rows Loop
+    for index, row in data.iterrows():
 
-# Start Plot
-fig, ax = plt.subplots()
-im = ax.imshow(aTemp, cmap='jet', interpolation='bilinear')
-fig.colorbar(im, label="Temperature (°C)")
-ax.set_title("Temperature Evolution: Frame 0")
+        # Time
+        vTime.append(row[0])
 
-def update(frame):
+        # Temperature
+        for i in range(N[0]):
+            for j in range(N[1]):
+                
+                # Save Node
+                k = i * N[1] + j; bTemp.append(row[k+1])
+            
+            # Save Map
+            bTemp = [float(x) for x in bTemp]; aTemp.append(bTemp)
+            
+            # Control
+            bTemp = []
 
-    # nonlocal k
+        # Save Frame
+        vRet.append(np.array(aTemp))
 
-    # k += 1
-
-    aTemp, bTemp = [], []
-    tempVal = 0
-
-    # Read Line
-    for i in range(1, len(vTitle)-1):
-
-        # Coordinates
-        tVec = vTitle[i].split(" "); tVec = [float(x) for x in tVec]
-
-        # Check
-        if tVec[0] == tempVal:
-            bTemp.append(data.iloc[int(frame)][i])
-        else:
-            bTemp = [float(x) for x in bTemp]
-            aTemp.append(bTemp)
-            bTemp = [data.iloc[int(frame)][i]]
-        
         # Control
-        tempVal = tVec[0]
-    # aTemp.append(bTemp)
+        aTemp = []
+    
+    print(f"Elapsed Time: {time.time() - tStart:.3f}")
+
+    return vRet, vTime
 
 
-    # Update
-    aTemp = np.array(aTemp)
-    im.set_array(aTemp)
-    ax.set_title(f"Temperature Evolution: Frame {frame}")
+########## Plot Map ##########
+# Parse Data
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260402142932_data_implicit\Probe_1_Map.csv"
+frames, vTime = getFrames(filePath)
+
+# ##### Single Plot #####
+# plt.figure(1); plt.imshow(frames[0], cmap='jet')
+# plt.figure(2); plt.imshow(frames[100], cmap='jet')
+# plt.figure(3); plt.imshow(frames[200], cmap='jet')
+# plt.figure(4); plt.imshow(frames[300], cmap='jet')
+# plt.figure(5); plt.imshow(frames[400], cmap='jet')
+# plt.figure(6); plt.imshow(frames[500], cmap='jet')
+
+fig, ax = plt.subplots()
+im = ax.imshow(frames[0], cmap='jet', interpolation='bilinear')
+fig.colorbar(im, label="Temperature (°C)")
+ax.set_title(f"Temperature Evolution: Time {vTime[0]:.2f} s")
+
+def update(frame): 
+    
+    # Update Plot
+    im.set_array(frames[frame])
+    ax.set_title(f"Temperature Evolution: Time {vTime[frame]:.2f} s"); fig.canvas.draw()
 
     return [im]
 
-
 # Animation
-ani = animate.FuncAnimation(fig, update, frames=len(data.index), interval=1, blit=True)
+ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
 
-# End
+# Show
 plt.show()
