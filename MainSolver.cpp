@@ -86,6 +86,10 @@ int main(int argc, char* argv[]){
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Discretized coefficients set.\n";
 
 
+    // DEBUGGING: NEUMANN / CONVECTION BOUNDARY COEFFICIENTS
+
+    std::exit(0);
+
     ///// Probes /////
     std::cout << "Initializing probes ...\n";
     Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); "Files configured.\n";

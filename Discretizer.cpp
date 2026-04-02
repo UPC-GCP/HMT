@@ -72,6 +72,11 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 
 void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
+    std::cout << "Mat A:\n";
+    for (Matrix Mat : Msh.matA){
+        std::cout << "ap: " << Mat.ap << " aw: " << Mat.aw << " ae: " << Mat.ae << " as: " << Mat.as << " an: " << Mat.an << "\n";
+    }
+
     // Boundary Conditions
     std::vector<int> Pos0, Pos1; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size()); double lamb; int j;
     for (Boundary bC : Msh.newBoundaryConditions){
@@ -211,6 +216,8 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                 
                 // xBoundary
                 if (bC.side == 0){
+                    
+                    std::cout << "West Boundary\n";
 
                     // West Boundary // ae, ap, bp
                     for (int i = Pos0[1]; i < Pos1[1]; i++){
@@ -225,8 +232,11 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         Msh.matA[j].ae = - beta * lamb / Msh.nd[0][Pos0[0]];
                         Msh.matA[j].ap = - Msh.matA[j].ae + bC.alpha;
                         Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
-                        
+                    }
 
+                    std::cout << "Mat A:\n";
+                    for (Matrix Mat : Msh.matA){
+                        std::cout << "ap: " << Mat.ap << " aw: " << Mat.aw << " ae: " << Mat.ae << " as: " << Mat.as << " an: " << Mat.an << "\n";
                     }
 
                 } else if (bC.side == 1){
