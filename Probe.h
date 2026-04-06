@@ -35,6 +35,7 @@ public:
 
     // Variables
     std::string pathBase{};
+    std::string dirName{};
     pPoint probePoint{};
 
     // Vectors

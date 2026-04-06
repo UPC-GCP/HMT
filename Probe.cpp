@@ -9,7 +9,7 @@
 #include "Probe.h"
 #include "Mesh.h"
 
-std::string createFolder(std::string scheme, std::string fName){
+std::string createFolder(std::string scheme, std::string fName, std::string& dirName){
 
     // Directory
     std::filesystem::path dName = std::filesystem::current_path(); 
@@ -21,7 +21,7 @@ std::string createFolder(std::string scheme, std::string fName){
     char oName[35]; strftime(oName, sizeof(oName), "%Y%m%d%H%M%S_", &datetime);
     
     // Folder Name
-    int iPos = fName.find(".json"); std::string dirName = oName + fName.substr(0, iPos) + "_" + scheme;
+    int iPos = fName.find(".json"); dirName = oName + fName.substr(0, iPos) + "_" + scheme;
     pBase += "\\" + dirName + "\\";
 
     // Create Folder
@@ -50,7 +50,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
     
     // Create Folder
     std::filesystem::path newPath(fName);
-    pathBase = createFolder(scheme, newPath.filename().string());
+    pathBase = createFolder(scheme, newPath.filename().string(), dirName);
     
     // Add Probes and Create Files
     pMap tempMap{};

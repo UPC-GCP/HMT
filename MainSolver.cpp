@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
+#include <iomanip>
 
 // Self-Imports
 #include "Material.h"
@@ -88,7 +89,7 @@ int main(int argc, char* argv[]){
 
     // DEBUGGING: NEUMANN / CONVECTION BOUNDARY COEFFICIENTS
 
-    std::exit(0);
+    // std::exit(0);
 
     ///// Probes /////
     std::cout << "Initializing probes ...\n";
@@ -111,13 +112,13 @@ int main(int argc, char* argv[]){
 
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
+    std::cout << std::fixed << std::setprecision(2);
 
-    // std::vector<std::vector<double>> cTemp{};
+    std::vector<std::vector<double>> cTemp{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
         // Control
-        // Update previous value: tempTemp = Msh.nT
-        // cTemp = Msh.nT;
+        cTemp = Msh.nT;
 
         // Update Coefficients
         Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
@@ -126,21 +127,25 @@ int main(int argc, char* argv[]){
         // Solver
         Sol->newSolve(Msh.matA, Msh.nT, Msh.bp, Msh.nIgnore);
 
-        // Write Content
+        // Write Data
         Prb.checkProbes(Msh, t);
 
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
 
         // Convergence
-        // if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "Steady-state achieved at instant t = " << t << "\n"; break;}
+        if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
 
     } std::cout << "\n";
 
     // Time
     auto t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> msDoub = t2 - t1;
+    double tTime = msDoub.count()/1000/60;
 
-    std::cout << "Time elapsed: " << msDoub.count()/1000/60 << " minutes.\n";
+    std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n";
+
+    // End
+    std::cout << "Files saved to: " << Prb.dirName;
 
 }
 

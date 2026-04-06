@@ -27,13 +27,13 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
             } else if (i == 0){
                 // West Boundary - ae, ap
                 aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].ap * Vec[i][j];
-            } else if (i == n){
+            } else if (i == n-1){
                 // East Boundary - aw, ap
                 aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].ap * Vec[i][j];
             } else if (j == 0){
                 // South Boundary - an, ap
                 aVec[k] = Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
-            } else if (j == m){
+            } else if (j == m-1){
                 // North Boundary - as, ap
                 aVec[k] = Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
             }
