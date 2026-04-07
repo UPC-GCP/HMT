@@ -97,8 +97,6 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
 
             // Dirichlet
             if (Pos0[0] == Pos1[0]){
-                
-                // SHOULD ADD THE BOUNDARY COEFFICIENTS TO AVOID ISSUES WITH CGSolver
 
                 // xBoundary
                 for (int i = Pos0[1]; i < Pos1[1]; i++){

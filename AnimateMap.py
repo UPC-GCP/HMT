@@ -1,3 +1,4 @@
+import os
 import time
 import numpy as np
 import pandas as pd
@@ -53,8 +54,10 @@ def getFrames(fPath:str):
 
 ########## Plot Map ##########
 # Parse Data
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260406085429_data_implicit\Probe_1_Map.csv"
-frames, vTime = getFrames(filePath)
+# filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260407052224_data_implicit\Probe_1_Map.csv"
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260407052224_data_implicit"
+fileName = "\\Probe_1_Map.csv"
+frames, vTime = getFrames(filePath + fileName)
 
 # ##### Single Plot #####
 # plt.figure(1); plt.imshow(frames[0], cmap='jet')
@@ -79,6 +82,11 @@ def update(frame):
 
 # Animation
 ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
+
+# Save Video
+if not os.path.exists(filePath + "\\Animation_1.mp4"):
+    ani.save(filePath + "\\Animation_1.mp4", writer='ffmpeg', fps=30)
+    print("File saved to: " + filePath + "\\Animation_1.mp4")
 
 # Show
 plt.show()
