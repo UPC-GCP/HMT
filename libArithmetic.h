@@ -20,10 +20,8 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
 
             // Calculate
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
-                
                 // Interior Nodes
                 aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
-
             } else if (i == 0){
                 // West Boundary - ae, ap
                 aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].ap * Vec[i][j];

@@ -17,6 +17,7 @@ add_executable(MainSolver
     Discretizer.cpp
     Solver.cpp
     CG.cpp
+    GS.cpp
     ExpressionParser.cpp
     Probe.cpp
 )

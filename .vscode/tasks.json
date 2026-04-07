@@ -18,6 +18,7 @@
                 "${fileDirname}\\Discretizer.cpp",
                 "${fileDirname}\\Solver.cpp",
                 "${fileDirname}\\CG.cpp",
+                "${fileDirname}\\GS.cpp",
                 "${fileDirname}\\ExpressionParser.cpp",
                 "${fileDirname}\\Probe.cpp",
                 // include path from vcpkg

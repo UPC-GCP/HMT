@@ -54,7 +54,7 @@ public:
     // Functions
     bool isFormula(std::string value);
     std::vector<double> splitString(std::string strSplit, char delimiter);
-    void newCalculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec); // Las primeras dos no fueron usadas, la tercera puede ser local
+    void newCalculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec); // Pueden ser locales
 
     void newAddBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs);
     void newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement);

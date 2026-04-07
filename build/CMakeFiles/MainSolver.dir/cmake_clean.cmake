@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MainSolver.dir/Discretizer.cpp.obj.d"
   "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj"
   "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj.d"
+  "CMakeFiles/MainSolver.dir/GS.cpp.obj"
+  "CMakeFiles/MainSolver.dir/GS.cpp.obj.d"
   "CMakeFiles/MainSolver.dir/MainSolver.cpp.obj"
   "CMakeFiles/MainSolver.dir/MainSolver.cpp.obj.d"
   "CMakeFiles/MainSolver.dir/Material.cpp.obj"

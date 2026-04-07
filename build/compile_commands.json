@@ -37,6 +37,12 @@
 },
 {
   "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\GS.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\GS.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/GS.cpp",
+  "output": "CMakeFiles/MainSolver.dir/GS.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\ExpressionParser.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\ExpressionParser.cpp\"",
   "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/ExpressionParser.cpp",
   "output": "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj"

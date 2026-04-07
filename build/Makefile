@@ -200,6 +200,30 @@ ExpressionParser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/ExpressionParser.cpp.s
 .PHONY : ExpressionParser.cpp.s
 
+GS.obj: GS.cpp.obj
+.PHONY : GS.obj
+
+# target to build an object file
+GS.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/GS.cpp.obj
+.PHONY : GS.cpp.obj
+
+GS.i: GS.cpp.i
+.PHONY : GS.i
+
+# target to preprocess a source file
+GS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/GS.cpp.i
+.PHONY : GS.cpp.i
+
+GS.s: GS.cpp.s
+.PHONY : GS.s
+
+# target to generate assembly for a file
+GS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/GS.cpp.s
+.PHONY : GS.cpp.s
+
 MainSolver.obj: MainSolver.cpp.obj
 .PHONY : MainSolver.obj
 
@@ -338,6 +362,9 @@ help:
 	@echo ... ExpressionParser.obj
 	@echo ... ExpressionParser.i
 	@echo ... ExpressionParser.s
+	@echo ... GS.obj
+	@echo ... GS.i
+	@echo ... GS.s
 	@echo ... MainSolver.obj
 	@echo ... MainSolver.i
 	@echo ... MainSolver.s

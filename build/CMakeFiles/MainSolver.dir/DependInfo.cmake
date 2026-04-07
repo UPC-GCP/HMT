@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/CG.cpp" "CMakeFiles/MainSolver.dir/CG.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/CG.cpp.obj.d"
   "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Discretizer.cpp" "CMakeFiles/MainSolver.dir/Discretizer.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/Discretizer.cpp.obj.d"
   "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/ExpressionParser.cpp" "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj.d"
+  "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/GS.cpp" "CMakeFiles/MainSolver.dir/GS.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/GS.cpp.obj.d"
   "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/MainSolver.cpp" "CMakeFiles/MainSolver.dir/MainSolver.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/MainSolver.cpp.obj.d"
   "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Material.cpp" "CMakeFiles/MainSolver.dir/Material.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/Material.cpp.obj.d"
   "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Mesh.cpp" "CMakeFiles/MainSolver.dir/Mesh.cpp.obj" "gcc" "CMakeFiles/MainSolver.dir/Mesh.cpp.obj.d"

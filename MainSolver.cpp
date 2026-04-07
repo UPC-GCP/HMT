@@ -15,7 +15,7 @@
 #include "Mesh.h"
 #include "Discretizer.h"
 #include "Solver.h"
-// #include "GS.h"
+#include "GS.h"
 #include "CG.h"
 #include "ExpressionParser.h"
 #include "Probe.h"
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]){
 
     // DEBUGGING: NEUMANN / CONVECTION BOUNDARY COEFFICIENTS
 
-    // std::exit(0);
+    // return 0;
 
     ///// Probes /////
     std::cout << "Initializing probes ...\n";
@@ -103,8 +103,8 @@ int main(int argc, char* argv[]){
     if (data["solver"] == "CG"){
         Sol = new CG(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
     } else if (data["solver"] == "GS"){
-        // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
-        std::cerr << "Currently unavailable.\n";
+        Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+        // std::cerr << "Currently unavailable.\n";
     } else {
         std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
     } std::cout << "Solver configured.\n";

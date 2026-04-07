@@ -46,7 +46,7 @@
 			{
 				"command" : 2,
 				"file" : 1,
-				"line" : 40,
+				"line" : 41,
 				"parent" : 0
 			},
 			{
@@ -58,25 +58,25 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 34,
+				"line" : 35,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 31,
+				"line" : 32,
 				"parent" : 0
 			},
 			{
 				"command" : 6,
 				"file" : 1,
-				"line" : 25,
+				"line" : 26,
 				"parent" : 0
 			},
 			{
 				"command" : 6,
 				"file" : 1,
-				"line" : 42,
+				"line" : 43,
 				"parent" : 0
 			}
 		]
@@ -139,7 +139,8 @@
 				4,
 				5,
 				6,
-				7
+				7,
+				8
 			]
 		}
 	],
@@ -198,7 +199,8 @@
 				4,
 				5,
 				6,
-				7
+				7,
+				8
 			]
 		}
 	],
@@ -238,6 +240,12 @@
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
 			"path" : "CG.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "GS.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

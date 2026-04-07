@@ -161,11 +161,26 @@ CMakeFiles/MainSolver.dir/CG.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/CG.cpp.s"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\CG.cpp" -o CMakeFiles\MainSolver.dir\CG.cpp.s
 
+CMakeFiles/MainSolver.dir/GS.cpp.obj: CMakeFiles/MainSolver.dir/flags.make
+CMakeFiles/MainSolver.dir/GS.cpp.obj: CMakeFiles/MainSolver.dir/includes_CXX.rsp
+CMakeFiles/MainSolver.dir/GS.cpp.obj: C:/Users/gonce/Documents/Master\ -\ UPC/0.\ TFM/HMT/GS.cpp
+CMakeFiles/MainSolver.dir/GS.cpp.obj: CMakeFiles/MainSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MainSolver.dir/GS.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/GS.cpp.obj -MF CMakeFiles\MainSolver.dir\GS.cpp.obj.d -o CMakeFiles\MainSolver.dir\GS.cpp.obj -c "C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\GS.cpp"
+
+CMakeFiles/MainSolver.dir/GS.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MainSolver.dir/GS.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\GS.cpp" > CMakeFiles\MainSolver.dir\GS.cpp.i
+
+CMakeFiles/MainSolver.dir/GS.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/GS.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\GS.cpp" -o CMakeFiles\MainSolver.dir\GS.cpp.s
+
 CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj: CMakeFiles/MainSolver.dir/flags.make
 CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj: CMakeFiles/MainSolver.dir/includes_CXX.rsp
 CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj: C:/Users/gonce/Documents/Master\ -\ UPC/0.\ TFM/HMT/ExpressionParser.cpp
 CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj: CMakeFiles/MainSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj -MF CMakeFiles\MainSolver.dir\ExpressionParser.cpp.obj.d -o CMakeFiles\MainSolver.dir\ExpressionParser.cpp.obj -c "C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\ExpressionParser.cpp"
 
 CMakeFiles/MainSolver.dir/ExpressionParser.cpp.i: cmake_force
@@ -180,7 +195,7 @@ CMakeFiles/MainSolver.dir/Probe.cpp.obj: CMakeFiles/MainSolver.dir/flags.make
 CMakeFiles/MainSolver.dir/Probe.cpp.obj: CMakeFiles/MainSolver.dir/includes_CXX.rsp
 CMakeFiles/MainSolver.dir/Probe.cpp.obj: C:/Users/gonce/Documents/Master\ -\ UPC/0.\ TFM/HMT/Probe.cpp
 CMakeFiles/MainSolver.dir/Probe.cpp.obj: CMakeFiles/MainSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MainSolver.dir/Probe.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/MainSolver.dir/Probe.cpp.obj"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/Probe.cpp.obj -MF CMakeFiles\MainSolver.dir\Probe.cpp.obj.d -o CMakeFiles\MainSolver.dir\Probe.cpp.obj -c "C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\Probe.cpp"
 
 CMakeFiles/MainSolver.dir/Probe.cpp.i: cmake_force
@@ -199,6 +214,7 @@ MainSolver_OBJECTS = \
 "CMakeFiles/MainSolver.dir/Discretizer.cpp.obj" \
 "CMakeFiles/MainSolver.dir/Solver.cpp.obj" \
 "CMakeFiles/MainSolver.dir/CG.cpp.obj" \
+"CMakeFiles/MainSolver.dir/GS.cpp.obj" \
 "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj" \
 "CMakeFiles/MainSolver.dir/Probe.cpp.obj"
 
@@ -211,6 +227,7 @@ MainSolver.exe: CMakeFiles/MainSolver.dir/Mesh.cpp.obj
 MainSolver.exe: CMakeFiles/MainSolver.dir/Discretizer.cpp.obj
 MainSolver.exe: CMakeFiles/MainSolver.dir/Solver.cpp.obj
 MainSolver.exe: CMakeFiles/MainSolver.dir/CG.cpp.obj
+MainSolver.exe: CMakeFiles/MainSolver.dir/GS.cpp.obj
 MainSolver.exe: CMakeFiles/MainSolver.dir/ExpressionParser.cpp.obj
 MainSolver.exe: CMakeFiles/MainSolver.dir/Probe.cpp.obj
 MainSolver.exe: CMakeFiles/MainSolver.dir/build.make
@@ -218,7 +235,7 @@ MainSolver.exe: C:/Users/gonce/vcpkg/installed/x64-mingw-dynamic/lib/libjsoncpp.
 MainSolver.exe: CMakeFiles/MainSolver.dir/linkLibs.rsp
 MainSolver.exe: CMakeFiles/MainSolver.dir/objects1.rsp
 MainSolver.exe: CMakeFiles/MainSolver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable MainSolver.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable MainSolver.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\MainSolver.dir\link.txt --verbose=$(VERBOSE)
 	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Users/gonce/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build/MainSolver.exe" -installedDir C:/Users/gonce/vcpkg/installed/x64-mingw-dynamic/debug/bin -OutVariable out
 
