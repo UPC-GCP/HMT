@@ -54,8 +54,7 @@ def getFrames(fPath:str):
 
 ########## Plot Map ##########
 # Parse Data
-# filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260407052224_data_implicit\Probe_1_Map.csv"
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260407052224_data_implicit"
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260408010825_data_crank-nicolson"
 fileName = "\\Probe_1_Map.csv"
 frames, vTime = getFrames(filePath + fileName)
 
@@ -85,6 +84,7 @@ ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=
 
 # Save Video
 if not os.path.exists(filePath + "\\Animation_1.mp4"):
+    print("Exporting video ...")
     ani.save(filePath + "\\Animation_1.mp4", writer='ffmpeg', fps=30)
     print("File saved to: " + filePath + "\\Animation_1.mp4")
 

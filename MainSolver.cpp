@@ -67,6 +67,7 @@ int main(int argc, char* argv[]){
     Material Mat(data["materials"]); std::cout << "Material properties set.\n";
     Mat.setInitialConditions(data["T0"].asDouble()); std::cout << "Initial conditions set.\n";
 
+
     ///// Parser /////
     std::cout << "Initializing Parser ...\n";
     ExpressionParser Prs; std::cout << "Parser configured.\n";
@@ -77,7 +78,7 @@ int main(int argc, char* argv[]){
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["height"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.newGenerateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
     Msh.newAddBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.newBoundaryConditions.size() << " boundary conditions added.\n";
-
+    
     
     ///// Discretizer /////
     std::cout << "Initializing discretizer ...\n";
@@ -86,11 +87,7 @@ int main(int argc, char* argv[]){
     Dsc.newSetBoundaryConditions(Mat, Msh, Prs); std::cout << "Boundary conditions set.\n";
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Discretized coefficients set.\n";
 
-
-    // DEBUGGING: NEUMANN / CONVECTION BOUNDARY COEFFICIENTS
-
-    // return 0;
-
+    
     ///// Probes /////
     std::cout << "Initializing probes ...\n";
     Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); "Files configured.\n";
@@ -103,8 +100,8 @@ int main(int argc, char* argv[]){
     if (data["solver"] == "CG"){
         Sol = new CG(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
     } else if (data["solver"] == "GS"){
-        Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
-        // std::cerr << "Currently unavailable.\n";
+        // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+        std::cerr << "Currently unavailable.\n";
     } else {
         std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
     } std::cout << "Solver configured.\n";
@@ -148,4 +145,3 @@ int main(int argc, char* argv[]){
     std::cout << "Files saved to: " << Prb.dirName;
 
 }
-

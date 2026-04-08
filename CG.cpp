@@ -35,7 +35,7 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
     for (int k = 0; k < maxIter; k++){
 
         // Step Size
-        Ap = operProdMatVec(matA, p);
+        Ap = operProdMatVec(matA, p, m, l);
         alpha = rsOld / operDotProd(p, Ap);
 
         // Update Values
@@ -48,6 +48,12 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
         
         // Control
         rsNew = operDotProd(r, r);
+
+        // Diagnostics
+        if (std::isnan(rsNew) || std::isinf(rsNew)){
+            std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
+            lastIter = k; lastRes = rsNew; break;
+        }
 
         // Error
         if (std::sqrt(rsNew) < tolNum){lastIter = k; lastRes = rsNew; break;}

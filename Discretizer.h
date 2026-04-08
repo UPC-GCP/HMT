@@ -17,6 +17,7 @@ public:
     // Variables
     std::string scheme{};
     double beta{}, endTime{}, dt{}, epsFind{};
+    bool bIgnore=true;
 
     // Constructor
     Discretizer(std::string scheme, double endTime, double dt, double epsFind=1e-5);

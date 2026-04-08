@@ -44,22 +44,38 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
 }
 
 
-inline std::vector<double> operProdMatVec(std::vector<Matrix> Mat, std::vector<double> Vec){
+inline std::vector<double> operProdMatVec(std::vector<Matrix> Mat, std::vector<double> Vec, int n, int m){
 
     // Control
-    int n = Vec.size(); std::vector<double> aVec(n); 
+    int k; std::vector<double> aVec(n*m);
 
     // Calculate
-    for (size_t i = 0; i < n; i++){
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
 
-        if (i > 0 && i < n - 1){
-            aVec[i] = Mat[i].aw * Vec[i-1] + Mat[i].ap * Vec[i] + Mat[i].ae * Vec[i+1];
-        } else if (i == 0){
-            aVec[i] = Mat[i].ap * Vec[i] + Mat[i].ae * Vec[i+1];
-        } else if (i == n - 1){
-            aVec[i] = Mat[i].aw * Vec[i-1] + Mat[i].ap * Vec[i];
+            // Control
+            k = i*m + j;
+            if ((i == 0 || i == n-1) && (j == 0 || j == m-1)){continue;}
+
+            // Calculate
+            if (i > 0 && i < n-1 && j > 0 && j < m-1){
+                // Interior Nodes
+                aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+            } else if (i == 0){
+                // West Boundary - ae, ap
+                aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].ap * Vec[k];
+            } else if (i == n-1){
+                // East Boundary - aw, ap
+                aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].ap * Vec[k];
+            } else if (j == 0){
+                // South Boundary - an, ap
+                aVec[k] = Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+            } else if (j == m-1){
+                // North Boundary - as, ap
+                aVec[k] = Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
+            }
+
         }
-
     }
 
     return aVec;
