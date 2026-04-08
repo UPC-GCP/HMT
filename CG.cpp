@@ -50,7 +50,28 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
         rsNew = operDotProd(r, r);
 
         // Diagnostics
-        if (std::isnan(rsNew) || std::isinf(rsNew)){
+        double maxTemp = 0;
+        for (std::vector<double> vec : x){
+            for (double val : vec){
+                if (val > maxTemp){maxTemp = val;}
+            }
+        }
+
+        if (std::isnan(rsNew) || std::isinf(rsNew) || maxTemp > 1e6){
+
+            // std::cout << "\nCG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
+            // std::cout << "Need Help.\n";
+            // std::cout << "MatA:\n";
+            // for (int i = 0; i < matA.size(); i++){
+            //     std::cout << i << " " << matA[i].ap << " " << matA[i].aw << " " << matA[i].ae << " " << matA[i].as << " " << matA[i].an << " " << matB[i] << "\n";
+            // }
+            
+            // std::system("pause");
+
+            // for (Matrix vMat : matA){
+            //     std::cout << vMat.ap << " " << vMat.aw << " " << vMat.ae << " " << vMat.as << " " << vMat.an << "\n";
+            // }
+
             std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
             lastIter = k; lastRes = rsNew; break;
         }

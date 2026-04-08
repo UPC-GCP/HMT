@@ -53,7 +53,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
     pathBase = createFolder(scheme, newPath.filename().string(), dirName);
     
     // Add Probes and Create Files
-    pMap tempMap{};
+    pMap tempMap{}; pBug tempBug{};
     for (Json::Value::ArrayIndex i = 0; i < probes.size(); i++){
 
         if (probes[i]["type"].asString() == "Point"){
@@ -95,6 +95,29 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             // Control
             probeMap.push_back(std::move(tempMap));
             tempMap = {};
+        
+        } else if (probes[i]["type"].asString() == "Debug"){
+
+            // Create File
+            tempBug.file = createFile(pathBase + "Probe_" + std::to_string(probeMap.size() + probeBug.size() + 1) + "_Bug.csv");
+
+            // Time
+            tempBug.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
+
+            // Position
+            tempBug.xPos = {static_cast<size_t>(std::lower_bound(Msh.Nodes[0].begin(), Msh.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.Nodes[0].begin(), Msh.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.Nodes[0].begin())};
+            tempBug.yPos = {static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.Nodes[1].begin())};
+            
+            // Header
+            for (int j = tempBug.xPos[0]; j <= tempBug.xPos[1]; j++){
+                for (int k = tempBug.yPos[0]; k <= tempBug.yPos[1]; k++){
+                    tempBug.file << "," << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k];
+                }
+            } tempBug.file << "\n";
+
+            // Control
+            probeBug.push_back(std::move(tempBug));
+            tempBug = {};
 
         } else {
             std::cerr << "Probe type not recognized. \n";
@@ -146,6 +169,26 @@ void Probe::checkProbes(Mesh Msh, double t){
                 probeMap[i].file << "," << Msh.nT[j][k];
             }
         } probeMap[i].file << "\n";
+    }
+
+    // Bug Probe
+    bSave = {}; bSave.resize(probeBug.size(), false);
+    for (size_t i = 0; i < probeBug.size(); i++){
+        if (t >= probeBug[i].t[0] && t <= probeBug[i].t[1]){
+            bSave[i] = true;
+        }
+    }
+    
+    // Save Values
+    for (size_t i = 0; i < probeBug.size(); i++){
+        if (!bSave[i]){continue;}
+
+        probeBug[i].file << t;
+        for (size_t j = probeBug[i].xPos[0]; j <= probeBug[i].xPos[1]; j++){
+            for (size_t k = probeBug[i].yPos[0]; k <= probeBug[i].yPos[1]; k++){
+                probeBug[i].file << "," << Msh.bp[j*Msh.N[1] + k];
+            }
+        } probeBug[i].file << "\n";
     }
 
 }

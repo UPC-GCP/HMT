@@ -272,6 +272,30 @@ Material.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/Material.cpp.s
 .PHONY : Material.cpp.s
 
+Medic.obj: Medic.cpp.obj
+.PHONY : Medic.obj
+
+# target to build an object file
+Medic.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/Medic.cpp.obj
+.PHONY : Medic.cpp.obj
+
+Medic.i: Medic.cpp.i
+.PHONY : Medic.i
+
+# target to preprocess a source file
+Medic.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/Medic.cpp.i
+.PHONY : Medic.cpp.i
+
+Medic.s: Medic.cpp.s
+.PHONY : Medic.s
+
+# target to generate assembly for a file
+Medic.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MainSolver.dir\build.make CMakeFiles/MainSolver.dir/Medic.cpp.s
+.PHONY : Medic.cpp.s
+
 Mesh.obj: Mesh.cpp.obj
 .PHONY : Mesh.obj
 
@@ -371,6 +395,9 @@ help:
 	@echo ... Material.obj
 	@echo ... Material.i
 	@echo ... Material.s
+	@echo ... Medic.obj
+	@echo ... Medic.i
+	@echo ... Medic.s
 	@echo ... Mesh.obj
 	@echo ... Mesh.i
 	@echo ... Mesh.s

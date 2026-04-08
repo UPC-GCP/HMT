@@ -21,6 +21,7 @@
                 "${fileDirname}\\GS.cpp",
                 "${fileDirname}\\ExpressionParser.cpp",
                 "${fileDirname}\\Probe.cpp",
+                "${fileDirname}\\Medic.cpp",
                 // include path from vcpkg
                 "-IC:\\Users\\gonce\\vcpkg\\installed\\x64-mingw-dynamic\\include",
                 // link path and library

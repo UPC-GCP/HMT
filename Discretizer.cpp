@@ -151,7 +151,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ae = - beta * lamb / Msh.nd[0][Pos0[0]];
                         Msh.matA[j].ap = - Msh.matA[j].ae;
-                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
+                        Msh.bp[j] = - bC.value - (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
                     }
 
                 } else if (bC.side == 1){

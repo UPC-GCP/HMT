@@ -20,6 +20,7 @@ add_executable(MainSolver
     GS.cpp
     ExpressionParser.cpp
     Probe.cpp
+    Medic.cpp
 )
 
 # Add BOTH the root include and the specific json folder just in case

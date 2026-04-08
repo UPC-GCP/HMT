@@ -19,6 +19,7 @@
 #include "CG.h"
 #include "ExpressionParser.h"
 #include "Probe.h"
+#include "Medic.h"
 
 Json::Value getParsedData(std::string fileName){
     
@@ -94,6 +95,11 @@ int main(int argc, char* argv[]){
     Prb.checkProbes(Msh);
 
 
+    ///// Medic /////
+    std::cout << "Initializing medic ...\n";
+    Medic Mdc;
+
+
     ///// Solver /////
     std::cout << "Initializing solver ... \n";
     Solver* Sol = nullptr;
@@ -106,6 +112,10 @@ int main(int argc, char* argv[]){
         std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
     } std::cout << "Solver configured.\n";
 
+    // std::cout << "MatA:\n";
+    // for (int i = 0; i < Msh.matA.size(); i++){
+    //     std::cout << i << " " << Msh.matA[i].ap << " " << Msh.matA[i].aw << " " << Msh.matA[i].ae << " " << Msh.matA[i].as << " " << Msh.matA[i].an << " " << Msh.bp[i] << "\n";
+    // }
 
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";

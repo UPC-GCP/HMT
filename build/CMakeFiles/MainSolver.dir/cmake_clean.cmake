@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MainSolver.dir/MainSolver.cpp.obj.d"
   "CMakeFiles/MainSolver.dir/Material.cpp.obj"
   "CMakeFiles/MainSolver.dir/Material.cpp.obj.d"
+  "CMakeFiles/MainSolver.dir/Medic.cpp.obj"
+  "CMakeFiles/MainSolver.dir/Medic.cpp.obj.d"
   "CMakeFiles/MainSolver.dir/Mesh.cpp.obj"
   "CMakeFiles/MainSolver.dir/Mesh.cpp.obj.d"
   "CMakeFiles/MainSolver.dir/Probe.cpp.obj"

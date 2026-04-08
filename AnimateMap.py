@@ -54,7 +54,7 @@ def getFrames(fPath:str):
 
 ########## Plot Map ##########
 # Parse Data
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260408010825_data_crank-nicolson"
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260408031540_data_crank-nicolson"
 fileName = "\\Probe_1_Map.csv"
 frames, vTime = getFrames(filePath + fileName)
 

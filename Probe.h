@@ -14,6 +14,12 @@ struct Prb{
     std::ofstream file{};
 };
 
+struct pBug{
+    std::ofstream file{};
+    std::vector<size_t> xPos{}, yPos{};
+    std::vector<double> t;
+};
+
 struct pMap{
     std::ofstream file{};
     std::vector<size_t> xPos{}, yPos{};
@@ -40,6 +46,7 @@ public:
 
     // Vectors
     std::vector<pMap> probeMap{};
+    std::vector<pBug> probeBug{};
 
     // Constructor
     Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName);

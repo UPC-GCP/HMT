@@ -52,5 +52,11 @@
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Probe.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Probe.cpp\"",
   "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Probe.cpp",
   "output": "CMakeFiles/MainSolver.dir/Probe.cpp.obj"
+},
+{
+  "directory": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DJSON_DLL @CMakeFiles/MainSolver.dir/includes_CXX.rsp -g -std=gnu++17 -Wa,-mbig-obj -o CMakeFiles\\MainSolver.dir\\Medic.cpp.obj -c \"C:\\Users\\gonce\\Documents\\Master - UPC\\0. TFM\\HMT\\Medic.cpp\"",
+  "file": "C:/Users/gonce/Documents/Master - UPC/0. TFM/HMT/Medic.cpp",
+  "output": "CMakeFiles/MainSolver.dir/Medic.cpp.obj"
 }
 ]
