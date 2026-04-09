@@ -69,6 +69,13 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 
 }
 
+void Discretizer::setBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
+
+    // NEW VERSION OF setBoundaryConditions
+    // THIS ONE SHOULD CALCULATE THE VALUES AND IMPOSE IT BY SETTING IT AS A DIRICHLET BOUNDARY
+
+}
+
 
 void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
@@ -147,11 +154,27 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
 
+                        // Value
+                        Msh.nT[Pos0[0]][i] = bC.value * Msh.nd[0][Pos0[0]] / lamb + Msh.nT[Pos0[0]+1][i];
+
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
-                        Msh.matA[j].ae = - beta * lamb / Msh.nd[0][Pos0[0]];
-                        Msh.matA[j].ap = - Msh.matA[j].ae;
-                        Msh.bp[j] = - bC.value - (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[Pos0[0]][i];
+
+                        // std::cout << "\nCheck values for bp:\n";
+
+                        // std::cout << "Node: " << Pos0[0] << " " << i << "\n";
+                        // std::cout << "Q_Neumann: " << bC.value << "\n";
+                        // std::cout << "beta: " << beta << "\n";
+                        // std::cout << "lambda: " << lamb << "\n";
+                        // std::cout << "T_E: " << Msh.nT[Pos0[0]+1][i] << "\n";
+                        // std::cout << "nd: " << Msh.nd[0][Pos0[0]] << "\n";
+
+                        // std::cout << "bp: " << Msh.bp[j] << "\n";
+
+                        // std::system("pause");
+
                     }
 
                 } else if (bC.side == 1){
@@ -164,11 +187,14 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
 
+                        // Value
+                        Msh.nT[Pos0[0]][i] = bC.value * Msh.nd[0][Pos0[0]-1] / lamb + Msh.nT[Pos0[0]-1][i];
+
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
-                        Msh.matA[j].aw = - beta * lamb / Msh.nd[0][Pos0[0]-1];
-                        Msh.matA[j].ap = - Msh.matA[j].aw;
-                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[Pos0[0]-1][i] / Msh.nd[0][Pos0[0]-1] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]-1]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[Pos0[0]][i];
+
                     }
 
                 } else {std::cerr << "Boundary side not specified correcly.\n";}
@@ -186,11 +212,14 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
+                        // Value
+                        Msh.nT[i][Pos0[1]] = bC.value * Msh.nd[1][Pos0[1]] / lamb + Msh.nT[i][Pos0[1]+1];
+
                         // Coefficients
                         j = i * Msh.N[1] + Pos0[1];
-                        Msh.matA[j].an = - beta * lamb / Msh.nd[1][Pos0[1]];
-                        Msh.matA[j].ap = - Msh.matA[j].an;
-                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]] - lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[i][Pos0[1]];
+
                     }
 
                 } else if (bC.side == 1){
@@ -203,11 +232,13 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
+                        // Value
+                        Msh.nT[i][Pos0[1]] = bC.value * Msh.nd[1][Pos0[1]-1] / lamb + Msh.nT[i][Pos0[1]-1];
+
                         // Coefficients
                         j = i * Msh.N[1] + Pos0[1];
-                        Msh.matA[j].as = - beta * lamb / Msh.nd[1][Pos0[1]-1];
-                        Msh.matA[j].ap = - Msh.matA[j].as;
-                        Msh.bp[j] = bC.value + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]-1] / Msh.nd[1][Pos0[1]-1] - lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]-1]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[i][Pos0[1]];
                     }
 
                 } else {std::cerr << "Boundary side not specified correcly.\n";}
@@ -230,11 +261,20 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
 
+                        std::cout << "Test Convection: \n";
+                        std::cout << "Tinf: " << bC.value << "\n";
+                        std::cout << "alpha: " << bC.alpha << "\n";
+                        std::cout << "lamb: " << lamb << "\n";
+                        std::cout << "Tp: " << Msh.nT
+
+                        // Value
+                        Msh.nT[Pos0[0]][i] = (bC.alpha * bC.value - lamb * Msh.nT[Pos0[0]+1][i]) / (lamb/Msh.nd[0][Pos0[0]] + bC.alpha);
+
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
-                        Msh.matA[j].ae = - beta * lamb / Msh.nd[0][Pos0[0]];
-                        Msh.matA[j].ap = - Msh.matA[j].ae + bC.alpha;
-                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[Pos0[0]][i];
+
                     }
 
                 } else if (bC.side == 1){
@@ -247,11 +287,13 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
 
+                        // Value
+                        Msh.nT[Pos0[0]][i] = (bC.alpha * bC.value + lamb * Msh.nT[Pos0[0]-1][i]) / (lamb/Msh.nd[0][Pos0[0]-1] + bC.alpha);
+
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
-                        Msh.matA[j].aw = - beta * lamb / Msh.nd[0][Pos0[0]-1];
-                        Msh.matA[j].ap = - Msh.matA[j].aw + bC.alpha;
-                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[Pos0[0]-1][i] / Msh.nd[0][Pos0[0]-1] - lamb * Msh.nT[Pos0[0]][i] / Msh.nd[0][Pos0[0]-1]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[Pos0[0]][i];
 
                     }
 
@@ -270,11 +312,13 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
+                        // Value
+                        Msh.nT[i][Pos0[1]] = (bC.alpha * bC.value + lamb * Msh.nT[i][Pos0[1]+1]) / (lamb/Msh.nd[1][Pos0[1]] + bC.alpha);
+
                         // Coefficients
                         j = i * Msh.N[1] + Pos0[1];
-                        Msh.matA[j].an = - beta * lamb / Msh.nd[1][Pos0[1]];
-                        Msh.matA[j].ap = - Msh.matA[j].an + bC.alpha;
-                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]] - lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[i][Pos0[1]];
 
                     }
 
@@ -288,11 +332,14 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
+                        // Value
+                        Msh.nT[i][Pos0[1]] = (bC.alpha * bC.value + lamb * Msh.nT[i][Pos0[1]-1]) / (lamb/Msh.nd[1][Pos0[1]-1] + bC.alpha);
+
                         // Coefficients
                         j = i * Msh.N[1] + Pos0[1];
-                        Msh.matA[j].as = - beta * lamb / Msh.nd[1][Pos0[1]-1];
-                        Msh.matA[j].ap = - Msh.matA[j].as + bC.alpha;
-                        Msh.bp[j] = bC.value * bC.alpha + (1 - beta) * (lamb * Msh.nT[i][Pos0[1]-1] / Msh.nd[1][Pos0[1]-1] - lamb * Msh.nT[i][Pos0[1]] / Msh.nd[1][Pos0[1]-1]);
+                        Msh.matA[j].ap = 1;
+                        Msh.bp[j] = Msh.nT[i][Pos0[1]];
+                        
                     }
 
                 } else {std::cerr << "Boundary side not specified correcly.\n";}

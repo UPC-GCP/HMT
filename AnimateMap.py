@@ -54,7 +54,7 @@ def getFrames(fPath:str):
 
 ########## Plot Map ##########
 # Parse Data
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260408031540_data_crank-nicolson"
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260409093525_data_crank-nicolson"
 fileName = "\\Probe_1_Map.csv"
 frames, vTime = getFrames(filePath + fileName)
 
@@ -68,14 +68,20 @@ frames, vTime = getFrames(filePath + fileName)
 
 fig, ax = plt.subplots()
 im = ax.imshow(frames[0], cmap='jet', interpolation='bilinear')
-fig.colorbar(im, label="Temperature (°C)")
+cb = fig.colorbar(im, label="Temperature (°C)")
 ax.set_title(f"Temperature Evolution: Time {vTime[0]:.2f} s")
 
 def update(frame): 
     
+    # Control
+    arrData = frames[frame]
+
     # Update Plot
-    im.set_array(frames[frame])
-    ax.set_title(f"Temperature Evolution: Time {vTime[frame]:.2f} s"); fig.canvas.draw()
+    im.set_array(arrData); im.set_clim(np.min(arrData), np.max(arrData))
+    cb.update_normal(im)
+    ax.set_title(f"Temperature Evolution: Time {vTime[frame]:.2f} s");
+
+    fig.canvas.draw()
 
     return [im]
 

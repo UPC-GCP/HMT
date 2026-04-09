@@ -2,8 +2,13 @@
 #define MEDIC_H_
 
 #include <vector>
+#include <string>
+#include <iostream>
 
+#include "Material.h"
 #include "Mesh.h"
+#include "Discretizer.h"
+#include "Probe.h"
 
 class Medic
 {
@@ -12,10 +17,14 @@ private:
 public:
 
     // Variables
-    bool bTest{};
+    std::string pathBase{};
+    std::ofstream file{};
     
     // Constructor
-    Medic();
+    Medic(Mesh Msh, Probe& Prb);
+
+    // Functions
+    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t);
 
 };
 

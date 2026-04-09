@@ -97,7 +97,7 @@ int main(int argc, char* argv[]){
 
     ///// Medic /////
     std::cout << "Initializing medic ...\n";
-    Medic Mdc;
+    Medic Mdc(Msh, Prb);
 
 
     ///// Solver /////
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]){
 
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
-    std::cout << std::fixed << std::setprecision(2);
+    // std::cout << std::fixed << std::setprecision(2);
 
     std::vector<std::vector<double>> cTemp{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
@@ -127,20 +127,40 @@ int main(int argc, char* argv[]){
         // Control
         cTemp = Msh.nT;
 
-        // Update Coefficients
-        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
-        Dsc.newSetRHS(Mat, Msh);
+        // std::cout << "Test 1\n";
 
         // Solver
         Sol->newSolve(Msh.matA, Msh.nT, Msh.bp, Msh.nIgnore);
 
+        // std::cout << "Test 2\n";
+
+        // Diagnostics
+        Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t);
+
+        // std::cout << "Test 3\n";
+
         // Write Data
         Prb.checkProbes(Msh, t);
+
+        // std::cout << "Test 4\n";
 
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
 
         // Convergence
         if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
+
+        // Update Coefficients
+        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
+        Dsc.newSetRHS(Mat, Msh);
+
+        // std::cout << "Temperature @ t=" << t << "\n";
+        // for (std::vector<double> tVec : Msh.nT){
+        //     for (double tVal : tVec){
+        //         std::cout << tVal << " ";
+        //     } std::cout << "\n";
+        // } std::cout << "\n";
+
+
 
     } std::cout << "\n";
 

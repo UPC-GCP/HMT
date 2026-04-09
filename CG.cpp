@@ -77,7 +77,19 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
         }
 
         // Error
-        if (std::sqrt(rsNew) < tolNum){lastIter = k; lastRes = rsNew; break;}
+        if (std::sqrt(rsNew) < tolNum){
+            
+            // std::cout << "Temperature:\n";
+            // for (std::vector<double> vec : x){
+            //     for (double val : vec){
+            //         std::cout << val << " ";
+            //     } std::cout << "\n";
+            // } std::cout << "\n";
+
+            // std::system("pause");
+            
+            
+            lastIter = k; lastRes = rsNew; break;}
 
         // Direction
         beta = rsNew / rsOld;
