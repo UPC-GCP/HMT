@@ -261,14 +261,19 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
 
-                        std::cout << "Test Convection: \n";
-                        std::cout << "Tinf: " << bC.value << "\n";
-                        std::cout << "alpha: " << bC.alpha << "\n";
-                        std::cout << "lamb: " << lamb << "\n";
-                        std::cout << "Tp: " << Msh.nT
+                        // std::cout << "Test Convection: \n";
+                        // std::cout << "Tinf: " << bC.value << "\n";
+                        // std::cout << "alpha: " << bC.alpha << "\n";
+                        // std::cout << "lamb: " << lamb << "\n";
+                        // std::cout << "Te: " << Msh.nT[Pos0[0]+1][i] << "\n";
+                        // std::cout << "dx: " << Msh.nd[0][Pos0[0]] << "\n";
 
                         // Value
-                        Msh.nT[Pos0[0]][i] = (bC.alpha * bC.value - lamb * Msh.nT[Pos0[0]+1][i]) / (lamb/Msh.nd[0][Pos0[0]] + bC.alpha);
+                        Msh.nT[Pos0[0]][i] = (bC.alpha * bC.value + lamb * Msh.nT[Pos0[0]+1][i] / Msh.nd[0][Pos0[0]]) / (lamb/Msh.nd[0][Pos0[0]] + bC.alpha);
+
+                        // std::cout << "Tp: " << Msh.nT[Pos0[0]][i] << "\n";
+
+                        // std:system("pause");
 
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
@@ -288,7 +293,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
 
                         // Value
-                        Msh.nT[Pos0[0]][i] = (bC.alpha * bC.value + lamb * Msh.nT[Pos0[0]-1][i]) / (lamb/Msh.nd[0][Pos0[0]-1] + bC.alpha);
+                        Msh.nT[Pos0[0]][i] = (bC.alpha * bC.value + lamb * Msh.nT[Pos0[0]-1][i] / Msh.nd[0][Pos0[0]-1]) / (lamb/Msh.nd[0][Pos0[0]-1] + bC.alpha);
 
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
@@ -313,7 +318,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
                         // Value
-                        Msh.nT[i][Pos0[1]] = (bC.alpha * bC.value + lamb * Msh.nT[i][Pos0[1]+1]) / (lamb/Msh.nd[1][Pos0[1]] + bC.alpha);
+                        Msh.nT[i][Pos0[1]] = (bC.alpha * bC.value + lamb * Msh.nT[i][Pos0[1]+1] / Msh.nd[1][Pos0[1]]) / (lamb/Msh.nd[1][Pos0[1]] + bC.alpha);
 
                         // Coefficients
                         j = i * Msh.N[1] + Pos0[1];
@@ -333,7 +338,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
                         // Value
-                        Msh.nT[i][Pos0[1]] = (bC.alpha * bC.value + lamb * Msh.nT[i][Pos0[1]-1]) / (lamb/Msh.nd[1][Pos0[1]-1] + bC.alpha);
+                        Msh.nT[i][Pos0[1]] = (bC.alpha * bC.value + lamb * Msh.nT[i][Pos0[1]-1] / Msh.nd[1][Pos0[1]-1]) / (lamb/Msh.nd[1][Pos0[1]-1] + bC.alpha);
 
                         // Coefficients
                         j = i * Msh.N[1] + Pos0[1];
