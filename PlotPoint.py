@@ -23,7 +23,8 @@ def getPlots(fPath:str):
 
     return vRet, vTime, vTitle[1:]
 
-########## Plot Temperature Evoluation ##########
+
+########## Plot Temperature Evolution ##########
 # Parse Data
 filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260408055922_data_crank-nicolson"
 fileName = "\\Probe_3_Bug.csv"

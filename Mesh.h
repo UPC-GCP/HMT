@@ -43,9 +43,9 @@ public:
     // New Vectors
     std::vector<Boundary> newBoundaryConditions{};
     std::vector<int> N{};
-    std::vector<std::vector<double>> Faces{}, Nodes{}, ndelta{}, nd{};
-    std::vector<std::vector<int>> nMat{}, nIgnore{};
-    std::vector<std::vector<double>> nQv{}, nT{}, nSw{}, nSe{}, nSs{}, nSn{}, nVp{};
+    std::vector<std::vector<double>> Faces{}, Nodes{}, ndelta{}, nd{}; // dimensions, values
+    std::vector<std::vector<int>> nMat{}, nIgnore{}; // x-axis, y-axis
+    std::vector<std::vector<double>> nQv{}, nT{}, nSw{}, nSe{}, nSs{}, nSn{}, nVp{}; // x-axis, y-axis
 
 
     // Constructor

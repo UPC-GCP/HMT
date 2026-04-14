@@ -204,6 +204,15 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
         }
     }
 
+    // for (size_t i = 0; i < nd.size(); i++){
+    //     std::cout << "nDelta " << i << ": " << ndelta[i].size() << " - ";
+    //     for (double val : ndelta[i]){
+    //         std::cout << val << " ";
+    //     } std::cout << "\n";
+    // }
+
+    // std::exit(0);
+
     // Resize
     nMat.resize(N[0]); nQv.resize(N[0]); nT.resize(N[0]); nSw.resize(N[0]); nSe.resize(N[0]); nSs.resize(N[0]); nSn.resize(N[0]); nVp.resize(N[0]);
 
@@ -229,8 +238,8 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
                 nMat[j][k] = sections[i]["material"].asInt(); nQv[j][k] = sections[i]["qV"].asDouble();
 
                 // Geometry
-                nSw[j][k] = ndelta[1][k] * W; nSe[j][k] = ndelta[1][k] * W; nSs[j][k] = ndelta[0][k] * W; nSn[j][k] = ndelta[0][k] * W;
-                nVp[j][k] = nSw[j][k] * nSs[j][k] * W;
+                nSw[j][k] = ndelta[1][k] * W; nSe[j][k] = ndelta[1][k] * W; nSs[j][k] = ndelta[0][j] * W; nSn[j][k] = ndelta[0][j] * W;
+                nVp[j][k] = ndelta[0][j] * ndelta[1][k] * W;
             }
         }
 

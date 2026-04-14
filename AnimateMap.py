@@ -54,7 +54,7 @@ def getFrames(fPath:str):
 
 ########## Plot Map ##########
 # Parse Data
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260409095045_4Materials_implicit"
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260409114606_data_cranknicolson"
 fileName = "\\Probe_1_Map.csv"
 frames, vTime = getFrames(filePath + fileName)
 
@@ -71,7 +71,7 @@ im = ax.imshow(frames[0], cmap='jet', interpolation='bilinear')
 cb = fig.colorbar(im, label="Temperature (°C)")
 ax.set_title(f"Temperature Evolution: Time {vTime[0]:.2f} s")
 
-def update(frame): 
+def update(frame):
     
     # Control
     arrData = frames[frame]

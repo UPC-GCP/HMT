@@ -69,13 +69,6 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 
 }
 
-void Discretizer::setBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
-
-    // NEW VERSION OF setBoundaryConditions
-    // THIS ONE SHOULD CALCULATE THE VALUES AND IMPOSE IT BY SETTING IT AS A DIRICHLET BOUNDARY
-
-}
-
 
 void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
@@ -140,6 +133,8 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
 
         } else if (bC.type == 1){
             
+            // double stabCoeff = 1;
+
             // Neumann
             if (Pos0[0] == Pos1[0]){
                 
@@ -212,6 +207,19 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
 
+                        // // Coefficients
+                        // j = i * Msh.N[1] + Pos0[1];
+                        // Msh.matA[j].an = - beta * lamb / Msh.nd[1][Pos0[1]];
+                        // Msh.matA[j].ap = - stabCoeff * Msh.matA[j].an;
+                        // Msh.bp[j] = bC.value + (1 - beta) * lamb * (Msh.nT[i][Pos0[1]] - Msh.nT[i][Pos0[1]+1]) / Msh.nd[1][Pos0[1]];
+                        
+                        // OLD COEFFICIENTS
+                        // Msh.matA[iPos].aw = - beta * lamb / Msh.dx[iPos-1];
+                        // Msh.matA[iPos].ap = - Msh.matA[iPos].aw;
+                        // Msh.bp[iPos] = bC[2] + (1 - beta) * (lamb * Msh.TNodes[iPos-1] / Msh.dx[iPos-1] - lamb * Msh.TNodes[iPos] / Msh.dx[iPos-1]);
+
+
+                        // DIRICHLET TYPE IMPLEMENTATION
                         // Value
                         Msh.nT[i][Pos0[1]] = bC.value * Msh.nd[1][Pos0[1]] / lamb + Msh.nT[i][Pos0[1]+1];
 
@@ -231,6 +239,15 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         
                         // Thermal Conductivity
                         lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
+
+                        // std::cout << "North BC: " << i << " " << Pos0[1];
+
+                        // // Coefficients
+                        // j = i * Msh.N[1] + Pos0[1];
+                        // Msh.matA[j].as = - beta * lamb / Msh.nd[1][Pos0[1]-1];
+                        // Msh.matA[j].ap = - stabCoeff * Msh.matA[j].an;
+                        // Msh.bp[j] = bC.value + (1 - beta) * lamb * (Msh.nT[i][Pos0[1]-1] - Msh.nT[i][Pos0[1]]) / Msh.nd[1][Pos0[1]-1];
+
 
                         // Value
                         Msh.nT[i][Pos0[1]] = bC.value * Msh.nd[1][Pos0[1]-1] / lamb + Msh.nT[i][Pos0[1]-1];
@@ -376,12 +393,12 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
     // Interior Nodes (Non-nD)
     for (size_t i = 1; i < Msh.N[0]-1; i++){
         for (size_t j = 1; j < Msh.N[1]-1; j++){
-            
+
             // Harmonic Mean
-            lambw = calcHarmonicMean(Msh.nd[0][i-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i-1][j]].lambda}, {Msh.ndelta[0][i-1], Msh.ndelta[0][i]});
-            lambe = calcHarmonicMean(Msh.nd[0][i], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i+1][j]].lambda}, {Msh.ndelta[0][i+1], Msh.ndelta[0][i]});
-            lambs = calcHarmonicMean(Msh.nd[1][j-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j-1]].lambda}, {Msh.ndelta[1][j-1], Msh.ndelta[1][j]});
-            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j+1], Msh.ndelta[1][j]});
+            lambw = calcHarmonicMean(Msh.nd[0][i-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i-1][j]].lambda}, {Msh.ndelta[0][i], Msh.ndelta[0][i-1]});
+            lambe = calcHarmonicMean(Msh.nd[0][i], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i+1][j]].lambda}, {Msh.ndelta[0][i], Msh.ndelta[0][i+1]});
+            lambs = calcHarmonicMean(Msh.nd[1][j-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j-1]].lambda}, {Msh.ndelta[1][j], Msh.ndelta[1][j-1]});
+            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j], Msh.ndelta[1][j+1]});
 
             // Index
             k = i * Msh.N[1] + j;
@@ -394,7 +411,19 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
             Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] / dt - Msh.matA[k].aw - Msh.matA[k].ae - Msh.matA[k].as - Msh.matA[k].an;
 
             // Coefficients B
-            Msh.bp[k] = Msh.nQv[i][j] * Msh.nVp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * Msh.nT[i][j] / dt + (1 - beta) * (lambw * Msh.nSw[i][j] * Msh.nT[i-1][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] * Msh.nT[i+1][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] * Msh.nT[i][j-1] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] * Msh.nT[i][j+1] / Msh.nd[1][j] - (lambw * Msh.nSw[i][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] / Msh.nd[1][j]) * Msh.nT[i][j]);
+            Msh.bp[k] = Msh.nQv[i][j] * Msh.nVp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nT[i][j] * Msh.nVp[i][j] / dt + (1 - beta) * (lambw * Msh.nSw[i][j] * Msh.nT[i-1][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] * Msh.nT[i+1][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] * Msh.nT[i][j-1] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] * Msh.nT[i][j+1] / Msh.nd[1][j] - (lambw * Msh.nSw[i][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] / Msh.nd[1][j]) * Msh.nT[i][j]);
+
+
+            // if (i == 1 && j == 1) {
+            //     std::cout << "Node (1,1) Coefficients:\n";
+            //     std::cout << "ap=" << Msh.matA[k].ap << ", aw=" << Msh.matA[k].aw << ", ae=" << Msh.matA[k].ae << ", as=" << Msh.matA[k].as << ", an=" << Msh.matA[k].an << "\n";
+            //     std::cout << "bp=" << Msh.bp[k] << "\n";
+            //     std::cout << "nQv=" << Msh.nQv[i][j] << ", nVp=" << Msh.nVp[i][j] << "\n";
+            //     std::cout << "lambw=" << lambw << ", nSw=" << Msh.nSw[i][j] << ", nd[0][i-1]=" << Msh.nd[0][i-1] << "\n";
+
+            //     std::system("pause");
+            // }
+
 
         }
     }
@@ -412,16 +441,33 @@ void Discretizer::newSetRHS(Material& Mat, Mesh& Msh){
         for (size_t j = 1; j < Msh.N[1]-1; j++){
             
             // Harmonic Mean
-            lambw = calcHarmonicMean(Msh.nd[0][i-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i-1][j]].lambda}, {Msh.ndelta[0][i-1], Msh.ndelta[0][i]});
-            lambe = calcHarmonicMean(Msh.nd[0][i], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i+1][j]].lambda}, {Msh.ndelta[0][i+1], Msh.ndelta[0][i]});
-            lambs = calcHarmonicMean(Msh.nd[1][j-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j-1]].lambda}, {Msh.ndelta[1][j-1], Msh.ndelta[1][j]});
-            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j+1], Msh.ndelta[1][j]});
+            lambw = calcHarmonicMean(Msh.nd[0][i-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i-1][j]].lambda}, {Msh.ndelta[0][i], Msh.ndelta[0][i-1]});
+            lambe = calcHarmonicMean(Msh.nd[0][i], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i+1][j]].lambda}, {Msh.ndelta[0][i], Msh.ndelta[0][i+1]});
+            lambs = calcHarmonicMean(Msh.nd[1][j-1], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j-1]].lambda}, {Msh.ndelta[1][j], Msh.ndelta[1][j-1]});
+            lambn = calcHarmonicMean(Msh.nd[1][j], {Mat.vMat[Msh.nMat[i][j]].lambda, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j], Msh.ndelta[1][j+1]});
 
             // Index
             k = i * Msh.N[1] + j;
 
             // Coefficients B
             Msh.bp[k] = Msh.nQv[i][j] * Msh.nVp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * Msh.nT[i][j] / dt + (1 - beta) * (lambw * Msh.nSw[i][j] * Msh.nT[i-1][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] * Msh.nT[i+1][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] * Msh.nT[i][j-1] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] * Msh.nT[i][j+1] / Msh.nd[1][j] - (lambw * Msh.nSw[i][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] / Msh.nd[1][j]) * Msh.nT[i][j]);
+
+
+            double qVVV{}, qTTT{}, qDDD{};
+
+            qVVV = Msh.nQv[i][j] * Msh.nVp[i][j];
+            qTTT = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * Msh.nT[i][j] / dt;
+            qDDD = (1 - beta) * (lambw * Msh.nSw[i][j] * Msh.nT[i-1][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] * Msh.nT[i+1][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] * Msh.nT[i][j-1] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] * Msh.nT[i][j+1] / Msh.nd[1][j] - (lambw * Msh.nSw[i][j] / Msh.nd[0][i-1] + lambe * Msh.nSe[i][j] / Msh.nd[0][i] + lambs * Msh.nSs[i][j] / Msh.nd[1][j-1] + lambn * Msh.nSn[i][j] / Msh.nd[1][j]) * Msh.nT[i][j]);
+
+            // std::cout << "Node (1,1) RHS components:\n";
+            // std::cout << "qV*V = " << qVVV << "\n";
+            // std::cout << "transient = " << qTTT << "\n";
+            // std::cout << "explicit_diffusion = " << qDDD << "\n";
+            // std::cout << "Total bp = " << qVVV + qTTT + qDDD << "\n";
+            // std::cout << "Original bp = " << Msh.bp[k] << "\n";
+
+
+            // std::system("pause");
 
         }
     }

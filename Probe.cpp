@@ -11,6 +11,9 @@
 
 std::string createFolder(std::string scheme, std::string fName, std::string& dirName){
 
+    // Control
+    if (scheme.find('-') != std::string::npos){scheme.erase(scheme.find('-'), 1);}
+
     // Directory
     std::filesystem::path dName = std::filesystem::current_path(); 
     std::string pBase = dName.string() + "\\TestData\\";

@@ -80,6 +80,11 @@ int main(int argc, char* argv[]){
     Msh.newGenerateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
     Msh.newAddBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.newBoundaryConditions.size() << " boundary conditions added.\n";
     
+
+    // En principio diría hasta aquí está bien, volumen y source/sink term bien definidos. Pero todavía no le doy al analytical solution.
+
+
+
     
     ///// Discretizer /////
     std::cout << "Initializing discretizer ...\n";
@@ -119,7 +124,7 @@ int main(int argc, char* argv[]){
 
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
-    // std::cout << std::fixed << std::setprecision(2);
+    std::cout << std::fixed << std::setprecision(2);
 
     std::vector<std::vector<double>> cTemp{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
@@ -127,31 +132,27 @@ int main(int argc, char* argv[]){
         // Control
         cTemp = Msh.nT;
 
-        // std::cout << "Test 1\n";
+        // Update Coefficients
+        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
+        Dsc.newSetRHS(Mat, Msh);
 
         // Solver
         Sol->newSolve(Msh.matA, Msh.nT, Msh.bp, Msh.nIgnore);
 
-        // std::cout << "Test 2\n";
+        // Update Coefficients
+        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
+        Dsc.newSetRHS(Mat, Msh);
 
         // Diagnostics
         Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t);
-
-        // std::cout << "Test 3\n";
+        Mdc.getSystemResidual(Mat, Msh, Dsc);
 
         // Write Data
         Prb.checkProbes(Msh, t);
-
-        // std::cout << "Test 4\n";
-
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
 
         // Convergence
         if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
-
-        // Update Coefficients
-        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
-        Dsc.newSetRHS(Mat, Msh);
 
         // std::cout << "Temperature @ t=" << t << "\n";
         // for (std::vector<double> tVec : Msh.nT){
@@ -160,18 +161,18 @@ int main(int argc, char* argv[]){
         //     } std::cout << "\n";
         // } std::cout << "\n";
 
-
-
     } std::cout << "\n";
+
+    // Global Energy Balance
+    Mdc.getGlobalBalance(Mat, Msh, Dsc);
 
     // Time
     auto t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> msDoub = t2 - t1;
     double tTime = msDoub.count()/1000/60;
 
-    std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n";
-
     // End
+    std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n";
     std::cout << "Files saved to: " << Prb.dirName;
 
 }
