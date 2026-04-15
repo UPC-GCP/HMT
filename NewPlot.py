@@ -185,7 +185,14 @@ def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1):
         tPos = min(range(len(vTime)), key=lambda i: abs(vTime[i] - tStep))
 
     # Plot Map
-    plt.figure(); plt.imshow(frames[tPos])
+    plt.figure(); im = plt.imshow(frames[tPos], origin='lower')
+    plt.colorbar(im, label="Temperature (°C)")
+    plt.xlabel('y coordinate'); plt.ylabel('x coordinate')
+    plt.title(f'Temperature map @ t = {tStep}')
+    
+    # Isotherms
+    contours = plt.contour(frames[tPos], colors='black', origin='lower', linewidths=0.8, alpha=0.7)
+    plt.clabel(contours, inline=True, fontsize=8, fmt='%.1f °C')
 
     # Save Plot
     if not os.path.exists(filePath + "\\Plot_" + str(idPlot+1) + ".png"):
@@ -194,7 +201,7 @@ def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1):
         plt.savefig(filePath + "\\Plot_" + str(idPlot) + ".png")
         print("File saved to: " + filePath + "\\Plot_" + str(idPlot) + ".png")
 
-def createProfile(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False, iAnal=0, tStep:float = -1,):
+def createProfile(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False, iAnal=0, tStep:float = -1):
 
     global idPlot
 
@@ -219,9 +226,8 @@ def createProfile(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False,
         idPlot += 1
         plt.savefig(filePath + "\\Plot_" + str(idPlot) + ".png")
         print("File saved to: " + filePath + "\\Plot_" + str(idPlot) + ".png")
-    
 
-def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False, iAnal=0, tStep:float = -1,):
+def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False, iAnal=0, tStep:float = -1):
 
     global idPlot
 
@@ -259,16 +265,20 @@ def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False
 ### Point (Plot Point Evolution): Plot data from Plot_0_Point.
 
 ##### Directory #####
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260414155709_test10_cranknicolson" # Change path here
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260415083501_test4_cranknicolson" # Change path here
 
 ##### Plotting #####
-# Parse Data
+
+# # Parse Data
 # fileName = "\\Probe_1_Map.csv"
 # frames, vTime, xVec, yVec = getFrames(filePath + fileName)
 
-# # Plot
+# Plot
 # createAnimation(filePath, frames, vTime)
-# createSnapshot(filePath, frames, vTime)
+# createSnapshot(filePath, frames, vTime, 2000)
+# createSnapshot(filePath, frames, vTime, 3000)
+# createSnapshot(filePath, frames, vTime, 4000)
+# createSnapshot(filePath, frames, vTime, 5000)
 
 
 # Parse Data
@@ -276,8 +286,8 @@ fileName = "\\Probe_2_Map.csv"
 frames, vTime, xVec, yVec = getFrames(filePath + fileName)
 
 # Plot
-# createProfile(filePath, xVec, frames, vTime, True, 0)
-createProfile2(filePath, yVec, frames, vTime, True, 4)
+createProfile(filePath, xVec, frames, vTime, True, 3)
+# createProfile2(filePath, yVec, frames, vTime, True, 3)
 # createPoint(filePath, fileName, 1000)
 
 

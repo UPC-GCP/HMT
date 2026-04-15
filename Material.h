@@ -6,7 +6,7 @@
 
 struct MatPhys{
     double rho, lambda, cp, alpha;
-    std::string rhoExpr, lambdaExpr, cpExpr;
+    std::string rhoExpr, lambdaExpr, cpExpr; // Not currently in use. Kept for future variable properties implementation.
 };
 
 class Material
@@ -15,7 +15,7 @@ private:
 
 public:
     // Variables
-    double T0{}, qV{};
+    double T0{};
 
     // Vectors
     std::vector<MatPhys> vMat{};

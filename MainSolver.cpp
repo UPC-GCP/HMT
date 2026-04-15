@@ -49,9 +49,9 @@ int main(int argc, char* argv[]){
 
     // Time
     auto t1 = std::chrono::high_resolution_clock::now();
-    
     std::cout << "Initializing model ... \n";
     
+
     ////////// Config File //////////
     std::cout << "Reading data ... \n";
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]){
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n";
-    Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["height"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
+    Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.newGenerateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
     Msh.newAddBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.newBoundaryConditions.size() << " boundary conditions added.\n";
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]){
 
     ///// Medic /////
     std::cout << "Initializing medic ...\n";
-    Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.";
+    Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.\n";
 
 
     ///// Solver /////
@@ -123,10 +123,6 @@ int main(int argc, char* argv[]){
         // Control
         cTemp = Msh.nT;
 
-        // Update Coefficients
-        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
-        Dsc.newSetRHS(Mat, Msh);
-
         // Solver
         Sol->newSolve(Msh.matA, Msh.nT, Msh.bp, Msh.nIgnore);
 
@@ -148,7 +144,7 @@ int main(int argc, char* argv[]){
     } std::cout << "\n";
 
     // Global Energy Balance
-    Mdc.getGlobalBalance(Mat, Msh, Dsc);
+    // Mdc.getGlobalBalance(Mat, Msh, Dsc);
 
     // Time
     auto t2 = std::chrono::high_resolution_clock::now();

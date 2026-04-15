@@ -42,11 +42,14 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
         
         // Beta
         beta = 0;
-        
-        // Calculate Time-step
-        std::vector<double> dtNew(Msh.totNodes, 0); double dtMin;
-        for (int i = 0; i < Msh.totNodes; i++){
-            dtNew[i] = 0.5 * pow(Msh.deltaX[i], 2) / Mat.vMat[Msh.xMat[i]].alpha;
+
+        // Calculate Timestep
+        std::vector<double> dtNew(Msh.totNodes, 0); double dtMin{}; int k{};
+        for (size_t i = 0; i < Msh.N[0]; i++){
+            for (size_t j = 0; j < Msh.N[1]; j++){
+                k = i * Msh.N[1] + j;
+                dtNew[k] = 0.5 * pow(Msh.ndelta[0][i], 2) * pow(Msh.ndelta[1][j], 2) / (Mat.vMat[Msh.nMat[i][j]].alpha * (pow(Msh.ndelta[0][i], 2) + pow(Msh.ndelta[1][j], 2)));
+            }
         }
 
         // Update Time-step

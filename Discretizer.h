@@ -27,8 +27,7 @@ public:
     void setSchemeParameters(Material& Mat, Mesh& Msh);
     void newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t = 0);
     void newSetCoefficients(Material& Mat, Mesh& Msh);
-    void newSetRHS(Material& Mat, Mesh& Msh);
-    
+    void newSetRHS(Material& Mat, Mesh& Msh);  
 };
 
 #endif

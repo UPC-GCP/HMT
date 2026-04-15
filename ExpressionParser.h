@@ -30,7 +30,6 @@ public:
     // Functions
     int registerExpression(std::string exprStr);
     double evaluateTime(int i, double nVal);
-
 };
 
 #endif

@@ -10,16 +10,18 @@
 #include "Mesh.h"
 #include "ExpressionParser.h"
 
-Mesh::Mesh(int algo, double W, double H, double A, double xC, double kStr, double delta) {
+
+Mesh::Mesh(int algo, double W, double A, double xC, double kStr, double delta) {
 
     // Geometry
-    this->W = W; this->H = H;
+    this->W = W;
 
     // Mesh Parameters
     algorithm = algo;
     strength = A; centering = xC; kStrength = kStr; this->delta = delta;
     
 }
+
 
 bool Mesh::isFormula(std::string value){
 
@@ -40,6 +42,7 @@ bool Mesh::isFormula(std::string value){
 
 }
 
+
 std::vector<double> Mesh::splitString(std::string strSplit, char delimiter){
     
     // Control
@@ -55,74 +58,6 @@ std::vector<double> Mesh::splitString(std::string strSplit, char delimiter){
 
 }
 
-void Mesh::newAddBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
-
-    // Resize
-    newBoundaryConditions.resize(boundaries.size());
-    std::vector<double> Pos0, Pos1;
-
-    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
-
-        newBoundaryConditions[i].x0.resize(N.size()); newBoundaryConditions[i].x1.resize(N.size());
-
-        if (boundaries[i]["type"] == "Dirichlet") {
-
-            // Control
-            newBoundaryConditions[i].type = 0;
-
-            // Position
-            for (int j = 0; j < N.size(); j++){
-                newBoundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
-                newBoundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
-            }
-
-            // Value
-            if (isFormula(boundaries[i]["value"].asString())){
-                newBoundaryConditions[i].value = 0;
-                newBoundaryConditions[i].bUpdate = true;
-                newBoundaryConditions[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString());
-            } else {
-                newBoundaryConditions[i].value = boundaries[i]["value"].asDouble();
-            }
-
-        } else if (boundaries[i]["type"] == "Neumann") {
-            
-            // Control
-            newBoundaryConditions[i].type = 1;
-
-            // Position
-            for (int j = 0; j < N.size(); j++){
-                newBoundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
-                newBoundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
-            }
-
-            // Value
-            newBoundaryConditions[i].value = boundaries[i]["value"].asDouble();
-            newBoundaryConditions[i].side = boundaries[i]["side"].asInt();
-
-        } else if (boundaries[i]["type"] == "Convection") {
-            
-            // Control
-            newBoundaryConditions[i].type = 2;
-            
-            // Position
-            for (int j = 0; j < N.size(); j++){
-                newBoundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
-                newBoundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
-            }
-
-            // Value
-            newBoundaryConditions[i].value = boundaries[i]["value"].asDouble();
-            newBoundaryConditions[i].side = boundaries[i]["side"].asInt();
-            newBoundaryConditions[i].alpha = boundaries[i]["alpha"].asDouble();
-
-        } else {
-            std::cerr << "Error: Invalid boundary condition type " << boundaries[i]["type"].asString() << std::endl;
-        }
-
-    }
-
-}
 
 void Mesh::newCalculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec) {
 
@@ -158,6 +93,7 @@ void Mesh::newCalculateFaces(int cNode, int NSec, double x0, double x1, std::vec
     }
 
 }
+
 
 void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement){
 
@@ -246,5 +182,75 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
 
     // Coefficients (nD)
     matA.resize(totNodes); bp.resize(totNodes, 0);
+
+}
+
+
+void Mesh::newAddBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
+
+    // Resize
+    newBoundaryConditions.resize(boundaries.size());
+    std::vector<double> Pos0, Pos1;
+
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
+
+        newBoundaryConditions[i].x0.resize(N.size()); newBoundaryConditions[i].x1.resize(N.size());
+
+        if (boundaries[i]["type"] == "Dirichlet") {
+
+            // Control
+            newBoundaryConditions[i].type = 0;
+
+            // Position
+            for (int j = 0; j < N.size(); j++){
+                newBoundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
+                newBoundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
+            }
+
+            // Value
+            if (isFormula(boundaries[i]["value"].asString())){
+                newBoundaryConditions[i].value = 0;
+                newBoundaryConditions[i].bUpdate = true;
+                newBoundaryConditions[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString());
+            } else {
+                newBoundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            }
+
+        } else if (boundaries[i]["type"] == "Neumann") {
+            
+            // Control
+            newBoundaryConditions[i].type = 1;
+
+            // Position
+            for (int j = 0; j < N.size(); j++){
+                newBoundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
+                newBoundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
+            }
+
+            // Value
+            newBoundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            newBoundaryConditions[i].side = boundaries[i]["side"].asInt();
+
+        } else if (boundaries[i]["type"] == "Convection") {
+            
+            // Control
+            newBoundaryConditions[i].type = 2;
+            
+            // Position
+            for (int j = 0; j < N.size(); j++){
+                newBoundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
+                newBoundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
+            }
+
+            // Value
+            newBoundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            newBoundaryConditions[i].side = boundaries[i]["side"].asInt();
+            newBoundaryConditions[i].alpha = boundaries[i]["alpha"].asDouble();
+
+        } else {
+            std::cerr << "Error: Invalid boundary condition type " << boundaries[i]["type"].asString() << std::endl;
+        }
+
+    }
 
 }
