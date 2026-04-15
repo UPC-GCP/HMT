@@ -58,38 +58,12 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
         }
 
         if (std::isnan(rsNew) || std::isinf(rsNew) || maxTemp > 1e6){
-
-            // std::cout << "\nCG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
-            // std::cout << "Need Help.\n";
-            // std::cout << "MatA:\n";
-            // for (int i = 0; i < matA.size(); i++){
-            //     std::cout << i << " " << matA[i].ap << " " << matA[i].aw << " " << matA[i].ae << " " << matA[i].as << " " << matA[i].an << " " << matB[i] << "\n";
-            // }
-            
-            // std::system("pause");
-
-            // for (Matrix vMat : matA){
-            //     std::cout << vMat.ap << " " << vMat.aw << " " << vMat.ae << " " << vMat.as << " " << vMat.an << "\n";
-            // }
-
             std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
             lastIter = k; lastRes = rsNew; break;
         }
 
         // Error
-        if (std::sqrt(rsNew) < tolNum){
-            
-            // std::cout << "Temperature:\n";
-            // for (std::vector<double> vec : x){
-            //     for (double val : vec){
-            //         std::cout << val << " ";
-            //     } std::cout << "\n";
-            // } std::cout << "\n";
-
-            // std::system("pause");
-            
-            
-            lastIter = k; lastRes = rsNew; break;}
+        if (std::sqrt(rsNew) < tolNum){lastIter = k; lastRes = rsNew; break;}
 
         // Direction
         beta = rsNew / rsOld;

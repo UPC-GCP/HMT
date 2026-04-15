@@ -79,11 +79,6 @@ int main(int argc, char* argv[]){
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["height"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.newGenerateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
     Msh.newAddBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.newBoundaryConditions.size() << " boundary conditions added.\n";
-    
-
-    // En principio diría hasta aquí está bien, volumen y source/sink term bien definidos. Pero todavía no le doy al analytical solution.
-
-
 
     
     ///// Discretizer /////
@@ -96,13 +91,13 @@ int main(int argc, char* argv[]){
     
     ///// Probes /////
     std::cout << "Initializing probes ...\n";
-    Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); "Files configured.\n";
+    Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); std::cout << "Files configured.\n";
     Prb.checkProbes(Msh);
 
 
     ///// Medic /////
     std::cout << "Initializing medic ...\n";
-    Medic Mdc(Msh, Prb);
+    Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.";
 
 
     ///// Solver /////
@@ -117,10 +112,6 @@ int main(int argc, char* argv[]){
         std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
     } std::cout << "Solver configured.\n";
 
-    // std::cout << "MatA:\n";
-    // for (int i = 0; i < Msh.matA.size(); i++){
-    //     std::cout << i << " " << Msh.matA[i].ap << " " << Msh.matA[i].aw << " " << Msh.matA[i].ae << " " << Msh.matA[i].as << " " << Msh.matA[i].an << " " << Msh.bp[i] << "\n";
-    // }
 
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
@@ -153,13 +144,6 @@ int main(int argc, char* argv[]){
 
         // Convergence
         if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
-
-        // std::cout << "Temperature @ t=" << t << "\n";
-        // for (std::vector<double> tVec : Msh.nT){
-        //     for (double tVal : tVec){
-        //         std::cout << tVal << " ";
-        //     } std::cout << "\n";
-        // } std::cout << "\n";
 
     } std::cout << "\n";
 

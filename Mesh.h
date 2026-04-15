@@ -58,7 +58,6 @@ public:
 
     void newAddBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs);
     void newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement);
-    
 };
 
 #endif

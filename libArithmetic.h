@@ -10,18 +10,9 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
     // Control
     int n = Vec.size(), m = Vec[0].size(), k; std::vector<double> aVec(n*m);
 
-    // std::cout << "Temperature: \n";
-    // for (std::vector<double> tVec : Vec){
-    //     for (double tVal : tVec){
-    //         std::cout << tVal << " ";
-    //     } std::cout << "\n";
-    // } std::cout << "\n";
-
     // Calculate
     for (int i = 0; i < n; i++){
         for (int j = 0; j < m; j++){
-
-            // std::cout << "Node: " << i << " " << j << "\n";
 
             // Control
             k = i * m + j;
@@ -45,20 +36,8 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
                 aVec[k] = Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
             }
 
-            // std::cout << "Coefficients: " << Mat[k].ap << " " << Mat[k].aw << " " << Mat[k].ae << " " << Mat[k].as << " " << Mat[k].an << "\n";
-            // std::cout << "Temperature: " << aVec[k] << "\n";
-
-            // std::system("pause");
-
         }
     }
-
-    // std::cout << "Temperature: \n";
-    // for (std::vector<double> tVec : Vec){
-    //     for (double tVal : tVec){
-    //         std::cout << tVal << " ";
-    //     } std::cout << "\n";
-    // } std::cout << "\n";
 
     return aVec;
 

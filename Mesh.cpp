@@ -204,15 +204,6 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
         }
     }
 
-    // for (size_t i = 0; i < nd.size(); i++){
-    //     std::cout << "nDelta " << i << ": " << ndelta[i].size() << " - ";
-    //     for (double val : ndelta[i]){
-    //         std::cout << val << " ";
-    //     } std::cout << "\n";
-    // }
-
-    // std::exit(0);
-
     // Resize
     nMat.resize(N[0]); nQv.resize(N[0]); nT.resize(N[0]); nSw.resize(N[0]); nSe.resize(N[0]); nSs.resize(N[0]); nSn.resize(N[0]); nVp.resize(N[0]);
 

@@ -18,7 +18,6 @@ public:
 
     // Functions
     void newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC) override;
-
 };
 
 #endif

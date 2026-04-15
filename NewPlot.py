@@ -259,7 +259,7 @@ def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False
 ### Point (Plot Point Evolution): Plot data from Plot_0_Point.
 
 ##### Directory #####
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260414064908_test6_cranknicolson" # Change path here
+filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260414155709_test10_cranknicolson" # Change path here
 
 ##### Plotting #####
 # Parse Data
@@ -277,7 +277,7 @@ frames, vTime, xVec, yVec = getFrames(filePath + fileName)
 
 # Plot
 # createProfile(filePath, xVec, frames, vTime, True, 0)
-createProfile2(filePath, yVec, frames, vTime, True, 0)
+createProfile2(filePath, yVec, frames, vTime, True, 4)
 # createPoint(filePath, fileName, 1000)
 
 

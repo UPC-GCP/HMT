@@ -15,7 +15,6 @@ class Medic
 private:
 
 public:
-
     // Variables
     std::string pathBase{};
     std::ofstream file{}, fileR{};
@@ -27,7 +26,6 @@ public:
     void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t);
     void getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc);
     void getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc);
-
 };
 
 #endif

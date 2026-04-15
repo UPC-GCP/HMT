@@ -21,16 +21,6 @@ Solver::Solver(std::string scheme, double maxIterations, double tolNum, double t
     // Data
     maxIter = maxIterations; this->tolNum = tolNum; this->tolTemp = tolTime;
 
-    // // Timestamp
-    // time_t timeStamp = std::time(nullptr);
-    // struct tm datetime = *localtime(&timeStamp);
-    
-    // // File Name
-    // char oName[35]; strftime(oName, sizeof(oName), "%Y%m%d%H%M%S_", &datetime);
-    // int iPos = fName.find(".json");
-    // fileName = oName + fName.substr(0, iPos) + "_" + fSol + "_" + scheme + ".csv";
-    // PENDING: Move saved file to new location
-
 }
 
 double Solver::calcErr(std::vector<std::vector<double>> matA, std::vector<std::vector<double>> matB){

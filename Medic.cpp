@@ -71,12 +71,6 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
 
             // Calculate Error
             tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j] + Msh.nQv[i][j] * Msh.nVp[i][j];
-
-
-            // Calculate Error
-            // tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt + Msh.matA[k].aw * (Msh.nT[i-1][j] - Msh.nT[i][j]) - Msh.matA[k].ae * (Msh.nT[i][j] - Msh.nT[i+1][j]) + Msh.matA[k].as * (Msh.nT[i][j-1] - Msh.nT[i][j]) - Msh.matA[k].an * (Msh.nT[i][j] - Msh.nT[i][j+1]) + Msh.bp[k];
-            // tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt + Msh.matA[k].aw * (Msh.nT[i-1][j] - Msh.nT[i][j]) / Dsc.beta - Msh.matA[k].ae * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Dsc.beta + Msh.matA[k].as * (Msh.nT[i][j-1] - Msh.nT[i][j]) / Dsc.beta - Msh.matA[k].an * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Dsc.beta + Msh.nQv[i][j] * Msh.nVp[i][j];
-
             
             // Print to File
             file << "," << tempErr;
@@ -133,6 +127,7 @@ void Medic::getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc){
             tempRes = Msh.matA[k].ap * Msh.nT[i][j] + Msh.matA[k].aw * Msh.nT[i-1][j] + Msh.matA[k].ae * Msh.nT[i+1][j] + Msh.matA[k].as * Msh.nT[i][j-1] + Msh.matA[k].an * Msh.nT[i][j+1] - Msh.bp[k];
             
             fileR << "," << tempRes;
+
         }
     } fileR << "\n";
 }

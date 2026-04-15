@@ -43,3 +43,7 @@
 # Directories
 TestData/
 RunConfig/
+
+# Reports
+*.tex
+*.cls
