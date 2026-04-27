@@ -10,7 +10,7 @@
 #include "Probe.h"
 #include "Medic.h"
 
-std::ofstream createDiagnostic(std::string fName){
+std::ofstream createDiagnostic(std::filesystem::path fName){
 
     // Open File 
     std::ofstream file(fName);
@@ -29,9 +29,10 @@ Medic::Medic(Mesh Msh, Probe& Prb){
 
     // Path
     pathBase = Prb.pathBase; int k{};
+    std::filesystem::path newPath(pathBase);
 
     // Energy Balance
-    file = createDiagnostic(Prb.pathBase + "Medic_Balance.csv");
+    file = createDiagnostic(newPath / "Medic_Balance.csv");
     for (size_t i = 1; i < Msh.N[0]-1; i++){
         for (size_t j = 1; j < Msh.N[1]-1; j++){
             file << "," << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j];
@@ -39,7 +40,7 @@ Medic::Medic(Mesh Msh, Probe& Prb){
     } file << "\n";
 
     // Residue
-    fileR = createDiagnostic(Prb.pathBase + "Medic_Residue.csv");
+    fileR = createDiagnostic(newPath / "Medic_Residue.csv");
     for (size_t i = 1; i < Msh.N[0]-1; i++){
         for (size_t j = 1; j < Msh.N[1]-1; j++){
             fileR << "," << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j];
@@ -51,7 +52,7 @@ Medic::Medic(Mesh Msh, Probe& Prb){
 void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t){
 
     // Control
-    double tempErr; int k{};
+    double tempErr, impErr, expErr; int k{};
     double lamb{}, lambw{}, lambe{}, lambs{}, lambn{};
     file << t;
 
@@ -70,7 +71,11 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
             lambn = Dsc.calcHarmonicMean(Msh.nd[1][j], {lamb, Mat.vMat[Msh.nMat[i][j+1]].lambda}, {Msh.ndelta[1][j], Msh.ndelta[1][j+1]});
 
             // Calculate Error
-            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j] + Msh.nQv[i][j] * Msh.nVp[i][j];
+	    impErr = - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j];
+	    expErr = - lambw * Msh.nSw[i][j] * (oldTemp[i][j] - oldTemp[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (oldTemp[i][j] - oldTemp[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (oldTemp[i][j] - oldTemp[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (oldTemp[i][j] - oldTemp[i][j+1]) / Msh.nd[1][j];
+            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - 0.5 * (impErr + expErr) - Msh.nQv[i][j] * Msh.nVp[i][j];
+
+	    // tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j] + Msh.nQv[i][j] * Msh.nVp[i][j];
             
             // Print to File
             file << "," << tempErr;
@@ -111,10 +116,11 @@ void Medic::getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc){
 }
 
 
-void Medic::getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc){
+void Medic::getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t){
     
     // Control
     double tempRes; int k{};
+    fileR << t;
 
     // Interior Nodes
     for (int i = 1; i < Msh.N[0]-1; i++){

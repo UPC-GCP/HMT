@@ -1,4 +1,5 @@
 // Imports
+#include <cstddef>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -86,20 +87,10 @@ int main(int argc, char* argv[]){
     Discretizer Dsc(data["scheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble());
     Dsc.setSchemeParameters(Mat, Msh); std::cout << "Temporal parameters set.\n";
     Dsc.newSetBoundaryConditions(Mat, Msh, Prs); std::cout << "Boundary conditions set.\n";
+    // Dsc.altSetBoundaryConditions(Mat, Msh, Prs);
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Discretized coefficients set.\n";
 
     
-    ///// Probes /////
-    std::cout << "Initializing probes ...\n";
-    Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); std::cout << "Files configured.\n";
-    Prb.checkProbes(Msh);
-
-
-    ///// Medic /////
-    std::cout << "Initializing medic ...\n";
-    Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.\n";
-
-
     ///// Solver /////
     std::cout << "Initializing solver ... \n";
     Solver* Sol = nullptr;
@@ -113,9 +104,28 @@ int main(int argc, char* argv[]){
     } std::cout << "Solver configured.\n";
 
 
+    ///// Probes /////
+    std::cout << "Initializing probes ...\n";
+    Probe Prb(Msh, data["probes"], Dsc.scheme, argv[1]); std::cout << "Files configured.\n";
+    Prb.checkProbes(Msh, Sol);
+
+
+    ///// Medic /////
+    std::cout << "Initializing medic ...\n";
+    Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.\n";
+
+
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
     std::cout << std::fixed << std::setprecision(2);
+
+
+    /* std::cout << "Temperature:\n"; */
+    /* for (std::vector<double> vec : Msh.nT){ */
+	    /* for (double val : vec){ */
+		    /* std::cout << val << " "; */
+	    /* } std::cout << "\n"; */
+    /* } */
 
     std::vector<std::vector<double>> cTemp{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
@@ -128,15 +138,25 @@ int main(int argc, char* argv[]){
 
         // Update Coefficients
         Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
+	// Dsc.altSetBoundaryConditions(Mat, Msh, Prs, t);
         Dsc.newSetRHS(Mat, Msh);
+
+	/* std::cout << "Temperature:\n"; */
+	/* for (std::vector<double> vec : Msh.nT){ */
+	/* 	for (double val:vec){ */
+	/* 		std::cout << val << " "; */
+	/* 	} std::cout << "\n"; */
+	/* } */
 
         // Diagnostics
         Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t);
-        Mdc.getSystemResidual(Mat, Msh, Dsc);
+        Mdc.getSystemResidual(Mat, Msh, Dsc, t);
 
         // Write Data
-        Prb.checkProbes(Msh, t);
+        Prb.checkProbes(Msh, Sol, t);
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
+
+
 
         // Convergence
         if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
@@ -144,7 +164,7 @@ int main(int argc, char* argv[]){
     } std::cout << "\n";
 
     // Global Energy Balance
-    // Mdc.getGlobalBalance(Mat, Msh, Dsc);
+    Mdc.getGlobalBalance(Mat, Msh, Dsc);
 
     // Time
     auto t2 = std::chrono::high_resolution_clock::now();
@@ -153,6 +173,6 @@ int main(int argc, char* argv[]){
 
     // End
     std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n";
-    std::cout << "Files saved to: " << Prb.dirName;
+    std::cout << "Files saved to: " << Prb.dirName << "\n";
 
 }

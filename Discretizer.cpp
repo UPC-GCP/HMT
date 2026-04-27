@@ -1,4 +1,5 @@
 // Imports
+#include <cstddef>
 #include <iostream>
 #include <vector>
 #include <json/json.h>
@@ -73,6 +74,207 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 }
 
 
+void Discretizer::altSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
+
+	// Boundary Condition
+	std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
+	double lamb{}; int k{};
+
+	for (Boundary bC : Msh.newBoundaryConditions){
+
+		// Positions (nD)
+		for (int i = 0; i < Msh.N.size(); i++){
+			Pos0[i] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), bC.x0[i] - epsFind) - Msh.Nodes[i].begin();
+			Pos1[i] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), bC.x1[i] - epsFind) - Msh.Nodes[i].begin();
+		}
+
+		if (bC.type == 0){
+
+			// Update Values
+			if (bC.bUpdate){
+				bC.value = Prs.evaluateTime(bC.iExpr, t);
+			}
+			
+			// Dirichlet
+			if (Pos0[0] == Pos1[0]){
+
+				// xBoundary
+				for (int i = Pos0[1]; i == Pos1[1]; i++){
+					// Corners
+					if (i == 0 || i == Msh.N[1]-1){continue;}
+
+					// Value
+					Msh.nT[Pos0[0]][i] = bC.value;
+
+					// Coefficients
+					k = Pos0[0] * Msh.N[1] + i;
+					Msh.matA[k].ap = 1;
+					Msh.bp[k] = bC.value;
+
+					// Control
+					// if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});}
+				}
+
+			} else if (Pos0[1] == Pos1[1]){
+				
+				// yBoundary
+				for (int i = Pos0[0]; i == Pos1[0]; i++){
+					// Corners
+					if (i == 0 || i == Msh.N[0]-1){continue;}
+
+					// Value
+					Msh.nT[i][Pos0[1]] = bC.value;
+
+					// Coefficients
+					k = i * Msh.N[1] + i;
+					Msh.matA[k].ap = 1;
+					Msh.bp[k] = bC.value;
+
+					// Control
+					// if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});}
+				}
+
+			}
+
+		} else if (bC.type == 1){
+
+			// Neumann
+			if (Pos0[0] == Pos1[0]){
+
+				// xBoundary
+				for (int i = Pos0[1]; i == Pos1[1]; i++){
+					// Corners
+					if (i == 0 || i == Msh.N[1]-1){continue;}
+
+					// Control
+					lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda; 
+					k = Pos0[0] * Msh.N[1] + i;
+
+					// Coefficients
+					if (bC.side == 0){
+						Msh.matA[k].ae = - beta * lamb / Msh.nd[0][0];
+						Msh.bp[k] = bC.value + (1 - beta) * (lamb / Msh.nd[0][0]) * (Msh.nT[1][i] - Msh.nT[0][i]);
+					} else if (bC.side == 1){
+						Msh.matA[k].aw = - beta * lamb / Msh.nd[0][Msh.N[0]-2];
+						Msh.bp[k] = bC.value + (1 - beta) * (lamb / Msh.nd[0][Msh.N[0]-2]) * (Msh.nT[Msh.N[0]-2][i] - Msh.nT[Msh.N[0]-1][i]);
+					} else {std::cerr << "Boundary side not specified correctly.\n";}	
+					Msh.matA[k].ap = - Msh.matA[k].aw - Msh.matA[k].ae;
+				
+				}
+
+				// NEED TO CHECK THE INDEXING OF THIS
+				// BP NEEDS TO BE DEFINED INSIDE THE IF STATEMENT
+
+			} else if (Pos0[1] == Pos1[1]){
+
+				// yBoundary
+				for (int i = Pos0[0]; i == Pos1[0]; i++){
+					// Corners
+					if (i == 0 || i == Msh.N[0]-1){continue;}
+
+					// Control
+					lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
+					k = i * Msh.N[1] + Pos0[1];
+
+					// Coefficients
+					if (bC.side == 0){
+						Msh.matA[k].an = - beta * lamb / Msh.nd[1][0];
+						Msh.bp[k] = bC.value + (1 - beta) * (lamb / Msh.nd[1][0]) * (Msh.nT[i][1] - Msh.nT[i][0]);
+					} else if (bC.side == 1){
+						Msh.matA[k].as = - beta * lamb / Msh.nd[1][Msh.N[1]-2];
+						Msh.bp[k] = bC.value + (1 - beta) * (lamb / Msh.nd[1][Msh.N[1]-2]) * (Msh.nT[i][Msh.N[1]-2] - Msh.nT[Msh.N[1]-1][i]);
+					} else {std::cerr << "Boundary side not specified correctly.\n";}
+					Msh.matA[k].ap = - Msh.matA[k].as - Msh.matA[k].an;
+
+				}
+
+			}
+
+		} else if (bC.type == 2){
+ 
+			// Convection
+			if (Pos0[0] == Pos1[0]){
+
+				// xBoundary
+				for (int i = Pos0[1]; i == Pos1[1]; i++){
+					// Corners
+					if (i == 0 || i == Msh.N[1]-1){continue;}
+
+					// Control
+					lamb = Mat.vMat[Msh.nMat[Pos0[0]][i]].lambda;
+					k = Pos0[0] * Msh.N[1] + i;
+
+					// Coefficients
+					if (bC.side == 0){
+						Msh.matA[k].ae = - beta * lamb / Msh.nd[0][0];
+						Msh.bp[k] = bC.value * bC.alpha + (1 - beta) * (lamb / Msh.nd[0][0]) * (Msh.nT[1][i] - Msh.nT[0][i]);
+					} else if (bC.side == 1){
+						Msh.matA[k].aw = - beta * lamb / Msh.nd[0][Msh.N[0]-2];
+						Msh.bp[k] = bC.value * bC.alpha + (1 - beta) * (lamb / Msh.nd[0][Msh.N[0]-2]) * (Msh.nT[Msh.N[0]-2][i] - Msh.nT[Msh.N[0]-1][i]);
+					} else {std::cerr << "Boundary side not specified correctly.\n";}
+					Msh.matA[k].ap = - Msh.matA[k].aw - Msh.matA[k].ae + bC.alpha;
+				}
+
+			} else if (Pos0[1] == Pos1[1]){
+
+				// yBoundary
+				for (int i = Pos0[0]; i == Pos1[0]; i++){
+					// Corners
+					if (i == 0 || i == Msh.N[0]-1){continue;}
+
+					// Control
+					lamb = Mat.vMat[Msh.nMat[i][Pos0[1]]].lambda;
+					k = i * Msh.N[1] + Pos0[1];
+
+					// Coefficients
+					if (bC.side == 0){
+						Msh.matA[k].an = - beta * lamb / Msh.nd[1][0];
+						Msh.bp[k] = bC.value * bC.alpha + (1 - beta) * (lamb / Msh.nd[1][0]) * (Msh.nT[i][1] - Msh.nT[i][0]);
+					} else if (bC.side == 1){
+						Msh.matA[k].as = - beta * lamb / Msh.nd[1][Msh.N[1]-2];
+						Msh.bp[k] = bC.value * bC.alpha + (1 - beta) * (lamb / Msh.nd[1][Msh.N[1]-2]) * (Msh.nT[i][Msh.N[1]-2] - Msh.nT[i][Msh.N[1]-1]);
+					} else {std::cerr << "Boundary side not specified correcly.\n";}
+					Msh.matA[k].ap = - Msh.matA[k].as - Msh.matA[k].an + bC.alpha;
+				}
+
+			}
+
+		} else {
+			std::cerr << "Boundary type not recognized.\n";
+		}
+
+	}
+	
+	// Corners
+	int i{}, j{};
+	i = 0; j = 0; k = i * Msh.N[1] + j; // SW
+	Msh.nT[i][j] = 0.5 * (Msh.nT[i+1][j] + Msh.nT[i][j+1]);
+	Msh.matA[k].ap = 2; Msh.matA[k].ae = 1; Msh.matA[k].an = 1;
+
+	i = 0; j = Msh.N[1]-1; k = i * Msh.N[1] + j; // NW
+	Msh.nT[i][j] = 0.5 * (Msh.nT[i+1][j] + Msh.nT[i][j-1]);
+	Msh.matA[k].ap = 2; Msh.matA[k].ae = 1; Msh.matA[k].as = 1;
+
+	i = Msh.N[0]-1; j = 0; k = i * Msh.N[1] + j; // SE
+	Msh.nT[i][j] = 0.5 * (Msh.nT[i-1][j] + Msh.nT[i][j+1]);
+	Msh.matA[k].ap = 2; Msh.matA[k].aw = 1; Msh.matA[k].an = 1;
+
+	i = Msh.N[0]-1; j = Msh.N[1]-1; k = i * Msh.N[1] + j; // NE
+	Msh.nT[i][j] = 0.5 * (Msh.nT[i-1][j] + Msh.nT[i][j-1]);
+	Msh.matA[k].ap = 2; Msh.matA[k].aw = 1; Msh.matA[k].as = 1;
+
+	// Control (Will try to make it work without bIgnore)
+	// if (bIgnore) {
+	//	Msh.nIgnore.push_back({0, 0});
+	//	Msh.nIgnore.push_back({0, Msh.N[1]-1});
+	//	Msh.nIgnore.push_back({Msh.N[0]-1, 0});
+	//	Msh.nIgnore.push_back({Msh.N[0]-1, Msh.N[1]-1});
+	//	bIgnore = false;
+	//}
+
+}
+
+
 void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
     // Boundary Conditions
@@ -80,7 +282,7 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
     for (Boundary bC : Msh.newBoundaryConditions){
 
         // Positions (nD)
-        for (int i = 0; i < Msh.N.size(); i++){
+        for (int i = 0; i < Msh.N.size(); i++){	
             Pos0[i] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), bC.x0[i] - epsFind) - Msh.Nodes[i].begin();
             Pos1[i] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), bC.x1[i] - epsFind) - Msh.Nodes[i].begin();
         }
@@ -109,8 +311,8 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                     Msh.matA[j].ap = 1;
                     Msh.bp[j] = bC.value;
 
-                    // Control
-                    if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});}
+                    /* // Control */
+                    /* if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});} */
                 }
 
             } else if (Pos0[1] == Pos1[1]){
@@ -128,8 +330,8 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                     Msh.matA[j].ap = 1;
                     Msh.bp[j] = bC.value;
 
-                    // Control
-                    if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});}
+                    /* // Control */
+                    /* if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});} */
                 }
 
             }
@@ -158,6 +360,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[Pos0[0]][i];
 
+  			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});} */
+
                     }
 
                 } else if (bC.side == 1){
@@ -177,6 +382,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[Pos0[0]][i];
+
+  			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});} */
 
                     }
 
@@ -203,6 +411,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[i][Pos0[1]];
 
+  			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});} */
+
                     }
 
                 } else if (bC.side == 1){
@@ -222,6 +433,10 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = i * Msh.N[1] + Pos0[1];
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[i][Pos0[1]];
+
+  			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});} */
+
                     }
 
                 } else {std::cerr << "Boundary side not specified correcly.\n";}
@@ -251,6 +466,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[Pos0[0]][i];
+			
+			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});} */
 
                     }
 
@@ -271,6 +489,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[Pos0[0]][i];
+			
+			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({Pos0[0], i});} */
 
                     }
 
@@ -297,6 +518,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[i][Pos0[1]];
 
+  			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});} */
+
                     }
 
                 } else if (bC.side == 1){
@@ -316,6 +540,9 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         j = i * Msh.N[1] + Pos0[1];
                         Msh.matA[j].ap = 1;
                         Msh.bp[j] = Msh.nT[i][Pos0[1]];
+  			
+			/* // Control (Testing) */
+	                /* if (bIgnore){Msh.nIgnore.push_back({i, Pos0[1]});} */
                         
                     }
 
@@ -333,9 +560,15 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
     Msh.nT[Msh.N[0]-1][0] = 0.5 * (Msh.nT[Msh.N[0]-2][0] + Msh.nT[Msh.N[0]-1][1]);
     Msh.nT[Msh.N[0]-1][Msh.N[1]-1] = 0.5 * (Msh.nT[Msh.N[0]-2][Msh.N[1]-1] + Msh.nT[Msh.N[0]-1][Msh.N[1]-2]);
 
-    // Control
-    if (bIgnore){Msh.nIgnore.push_back({0, 0}); Msh.nIgnore.push_back({0, Msh.N[1]-1}); Msh.nIgnore.push_back({Msh.N[0]-1, 0}); Msh.nIgnore.push_back({Msh.N[0]-1, Msh.N[1]-1});}
-    bIgnore = false;
+    /* // Control */
+    /* if (bIgnore){Msh.nIgnore.push_back({0, 0}); Msh.nIgnore.push_back({0, Msh.N[1]-1}); Msh.nIgnore.push_back({Msh.N[0]-1, 0}); Msh.nIgnore.push_back({Msh.N[0]-1, Msh.N[1]-1});} */
+    /* bIgnore = false; */
+
+
+    // std::cout << "MatA:\n";
+    // for (Matrix vec : Msh.matA){
+	//     std::cout << vec.ap << " " << vec.aw << " " << vec.ae << " " << vec.as << " " << vec.an << "\n";
+    // }
 
 }
 

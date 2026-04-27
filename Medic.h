@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
 
 #include "Material.h"
 #include "Mesh.h"
@@ -25,7 +24,7 @@ public:
     // Functions
     void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t);
     void getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc);
-    void getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc);
+    void getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t);
 };
 
 #endif

@@ -1,5 +1,6 @@
 // Imports
 #include <iostream>
+#include <string>
 #include <vector>
 #include <json/json.h>
 #include <fstream>
@@ -8,6 +9,7 @@
 
 #include "Probe.h"
 #include "Mesh.h"
+#include "Solver.h"
 
 std::string createFolder(std::string scheme, std::string fName, std::string& dirName){
 
@@ -15,8 +17,10 @@ std::string createFolder(std::string scheme, std::string fName, std::string& dir
     if (scheme.find('-') != std::string::npos){scheme.erase(scheme.find('-'), 1);}
 
     // Directory
-    std::filesystem::path dName = std::filesystem::current_path(); 
-    std::string pBase = dName.string() + "\\TestData\\";
+    // std::filesystem::path dName = std::filesystem::current_path(); 
+    // std::string pBase = dName.string() + "\\TestData\\";
+    std::filesystem::path pBase = std::filesystem::current_path();
+    pBase /= "TestData";
 
     // Timestamp
     time_t timeStamp = std::time(nullptr);
@@ -25,16 +29,17 @@ std::string createFolder(std::string scheme, std::string fName, std::string& dir
     
     // Folder Name
     int iPos = fName.find(".json"); dirName = oName + fName.substr(0, iPos) + "_" + scheme;
-    pBase += "\\" + dirName + "\\";
+    // pBase += "\\" + dirName + "\\";
+    pBase /= dirName;
 
     // Create Folder
     std::filesystem::create_directories(pBase);
 
-    return pBase;
+    return pBase.string();
 
 }
 
-std::ofstream createFile(std::string fName){
+std::ofstream createFile(std::filesystem::path fName){
 
     // Open File 
     std::ofstream file(fName);
@@ -52,8 +57,10 @@ std::ofstream createFile(std::string fName){
 Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName){
     
     // Create Folder
+    std::string tempString{};
     std::filesystem::path newPath(fName);
     pathBase = createFolder(scheme, newPath.filename().string(), dirName);
+    newPath = pathBase;
     
     // Add Probes and Create Files
     pMap tempMap{}; pBug tempBug{};
@@ -63,7 +70,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
 
             // Create File
             if (probePoint.bFile){
-                probePoint.file = createFile(pathBase + "Probe_0_Point.csv"); probePoint.bFile = false;
+                probePoint.file = createFile(newPath / "Probe_0_Point.csv"); probePoint.bFile = false;
             }
 
             // Header
@@ -79,7 +86,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
         } else if (probes[i]["type"].asString() == "Map"){
             
             // Create File
-            tempMap.file = createFile(pathBase + "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv");
+	    tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv";
+            tempMap.file = createFile(newPath / tempString);
 
             // Time
             tempMap.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
@@ -102,7 +110,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
         } else if (probes[i]["type"].asString() == "Debug"){
 
             // Create File
-            tempBug.file = createFile(pathBase + "Probe_" + std::to_string(probeMap.size() + probeBug.size() + 1) + "_Bug.csv");
+	    tempString = "Probe_" + std::to_string(probeMap.size() + probeBug.size() + 1) + "_Bug.csv";
+            tempBug.file = createFile(newPath / tempString);
 
             // Time
             tempBug.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
@@ -112,11 +121,12 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             tempBug.yPos = {static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.Nodes[1].begin())};
             
             // Header
-            for (int j = tempBug.xPos[0]; j <= tempBug.xPos[1]; j++){
-                for (int k = tempBug.yPos[0]; k <= tempBug.yPos[1]; k++){
-                    tempBug.file << "," << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k];
-                }
-            } tempBug.file << "\n";
+            tempBug.file << ",lastIter,lastRes\n";
+	    // for (int j = tempBug.xPos[0]; j <= tempBug.xPos[1]; j++){
+                // for (int k = tempBug.yPos[0]; k <= tempBug.yPos[1]; k++){
+                    // tempBug.file << "," << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k];
+                // }
+            // } tempBug.file << "\n";
 
             // Control
             probeBug.push_back(std::move(tempBug));
@@ -133,7 +143,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
 
 }
 
-void Probe::checkProbes(Mesh Msh, double t){
+void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
     
     // Point Probe
     std::vector<bool> bSave{}; bSave.resize(probePoint.xPos.size(), false);
@@ -186,12 +196,12 @@ void Probe::checkProbes(Mesh Msh, double t){
     for (size_t i = 0; i < probeBug.size(); i++){
         if (!bSave[i]){continue;}
 
-        probeBug[i].file << t;
-        for (size_t j = probeBug[i].xPos[0]; j <= probeBug[i].xPos[1]; j++){
-            for (size_t k = probeBug[i].yPos[0]; k <= probeBug[i].yPos[1]; k++){
-                probeBug[i].file << "," << Msh.bp[j*Msh.N[1] + k];
-            }
-        } probeBug[i].file << "\n";
+        probeBug[i].file << t << "," << Sol->lastIter << "," << Sol->lastRes << "\n";
+        // for (size_t j = probeBug[i].xPos[0]; j <= probeBug[i].xPos[1]; j++){
+            // for (size_t k = probeBug[i].yPos[0]; k <= probeBug[i].yPos[1]; k++){
+                // probeBug[i].file << "," << Msh.bp[j*Msh.N[1] + k];
+            // }
+        // } probeBug[i].file << "\n";
     }
 
 }
@@ -208,6 +218,13 @@ Probe::~Probe(){
         for (int i = 0; i < probeMap.size(); i++){
             probeMap[i].file.close();
         }
+    }
+
+    // Bug Probes
+    if (!probeBug.empty()){
+	    for (int i = 0; i < probeBug.size(); i++){
+		    probeBug[i].file.close();
+	    }
     }
 
 }

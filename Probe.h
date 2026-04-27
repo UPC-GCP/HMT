@@ -6,6 +6,7 @@
 #include <json/json.h>
 
 #include "Mesh.h"
+#include "Solver.h"
 
 struct Prb{
     int type{};
@@ -55,7 +56,7 @@ public:
     ~Probe();
 
     // Functions
-    void checkProbes(Mesh Msh, double t=0);
+    void checkProbes(Mesh Msh, Solver* Sol, double t=0);
     
 };
 

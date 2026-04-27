@@ -1,4 +1,5 @@
 // Imports
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <json/json.h>
@@ -68,7 +69,7 @@ void Mesh::newCalculateFaces(int cNode, int NSec, double x0, double x1, std::vec
     if (algorithm == 0){
         // Face Positions 0: Bidirectional Non-uniform (A, xC)
         for (int i = cNode; i < cNode+NSec+1; i++) {
-            fVec[i] = x0 + (i-cNode) * length / NSec + strength * (centering - (i-cNode) * length / NSec) * (1 - (i-cNode)/NSec) * (i-cNode) / NSec;
+            // fVec[i] = x0 + (i-cNode) * length / NSec + strength * (centering - (i-cNode) * length / NSec) * (1 - (i-cNode)/NSec) * (i-cNode) / NSec;
         }
     } else if (algorithm == 1){
         // Face Positions 1: Unidirectional Non-uniform (Kappa)
@@ -107,7 +108,7 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
     // Geometry (nD)
     Faces.resize(N.size()); Nodes.resize(N.size()); ndelta.resize(N.size()); nd.resize(N.size());
     for (int i = 0; i < N.size(); i++){
-        Faces[i].resize(N[i] - 1); Nodes[i].resize(N[i]); ndelta[i].resize(N[i]); nd[i].resize(N[i]);
+        Faces[i].resize(N[i] - 1); Nodes[i].resize(N[i]); ndelta[i].resize(N[i], 0); nd[i].resize(N[i], 0);
     }
     
     // Mesh Loop (nD)
@@ -139,7 +140,7 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
             }
         }
     }
-
+	
     // Resize
     nMat.resize(N[0]); nQv.resize(N[0]); nT.resize(N[0]); nSw.resize(N[0]); nSe.resize(N[0]); nSs.resize(N[0]); nSn.resize(N[0]); nVp.resize(N[0]);
 

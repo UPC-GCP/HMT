@@ -1,18 +1,20 @@
 import os
+import sys
 import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animate
+from pathlib import Path
 
 # Indexing
 idAnimation = 0
 idPlot = 0
 
 def plotAnalytic(xVec:list, case:int):
-
+    
     if case == 0: # Dirichlet - Dirichlet
-        
+
         # Test Variables
         Tl, Tr = 20, 100
         qV, V = 300000, 1
@@ -79,12 +81,13 @@ def plotAnalytic(xVec:list, case:int):
 
         # Return
         yRet = [float(C2 + C1*x - 0.5 * qV * V * x * x / lamb) for x in xVec]
-
+    
     return yRet
 
 def getFrames(fPath:str):
 
     tStart = time.time()
+    print(f"Parsing file: {str(fPath).split("/")[-1]}")
 
     # Read Data
     data = pd.read_csv(fPath)
@@ -114,14 +117,14 @@ def getFrames(fPath:str):
     for index, row in data.iterrows():
 
         # Time
-        vTime.append(row[0])
+        vTime.append(row.iloc[0])
 
         # Temperature
         for i in range(N[0]):
             for j in range(N[1]):
                 
                 # Save Node
-                k = i * N[1] + j; bTemp.append(row[k+1])
+                k = i * N[1] + j; bTemp.append(row.iloc[k+1])
             
             # Save Map
             bTemp = [float(x) for x in bTemp]; aTemp.append(bTemp)
@@ -184,6 +187,12 @@ def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1):
         # Find index and plot that step
         tPos = min(range(len(vTime)), key=lambda i: abs(vTime[i] - tStep))
 
+    # Levels
+    if tStep == 2000: levels = [15, 16, 17, 18, 19, 20, 21, 22]
+    elif tStep == 3000: levels = [18.5, 19, 19.5, 20, 20.5, 21, 21.5, 22, 22.5]
+    elif tStep == 4000: levels = [21, 22, 23, 24, 25, 26, 27]
+    elif tStep == 5000: levels = [23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+
     # Plot Map
     plt.figure(); im = plt.imshow(frames[tPos], origin='lower')
     plt.colorbar(im, label="Temperature (°C)")
@@ -191,15 +200,16 @@ def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1):
     plt.title(f'Temperature map @ t = {tStep}')
     
     # Isotherms
-    contours = plt.contour(frames[tPos], colors='black', origin='lower', linewidths=0.8, alpha=0.7)
+    contours = plt.contour(frames[tPos], levels=levels, colors='black', origin='lower', linewidths=0.8, alpha=0.7)
     plt.clabel(contours, inline=True, fontsize=8, fmt='%.1f °C')
 
     # Save Plot
-    if not os.path.exists(filePath + "\\Plot_" + str(idPlot+1) + ".png"):
+    tempName = "Plot_" + str(idPlot + 1) + ".png"
+    if not os.path.exists(filePath / tempName):
         print("Exporting image ...")
         idPlot += 1
-        plt.savefig(filePath + "\\Plot_" + str(idPlot) + ".png")
-        print("File saved to: " + filePath + "\\Plot_" + str(idPlot) + ".png")
+        plt.savefig(filePath / tempName)
+        print(f"File saved to: {filePath / tempName}")
 
 def createProfile(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False, iAnal=0, tStep:float = -1):
 
@@ -221,15 +231,18 @@ def createProfile(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False,
     plt.legend(); plt.grid(which="both", alpha=0.2); plt.minorticks_on()
 
     # Save Plot
-    if not os.path.exists(filePath + "\\Plot_" + str(idPlot + 1) + ".png"):
+    tempName = "Plot_" + str(idPlot + 1) + ".png"
+    if not os.path.exists(filePath / tempName):
         print("Exporting image ...")
         idPlot += 1
-        plt.savefig(filePath + "\\Plot_" + str(idPlot) + ".png")
-        print("File saved to: " + filePath + "\\Plot_" + str(idPlot) + ".png")
+        plt.savefig(filePath / tempName)
+        print(f"File saved to:  {filePath / tempName}")
 
 def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False, iAnal=0, tStep:float = -1):
 
     global idPlot
+
+    print(iAnal)
 
     # Index
     if tStep == -1: tPos = -1
@@ -265,31 +278,30 @@ def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False
 ### Point (Plot Point Evolution): Plot data from Plot_0_Point.
 
 ##### Directory #####
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260415083501_test4_cranknicolson" # Change path here
+dirPath = Path.cwd() / "TestData" / sys.argv[1]
+if len(sys.argv) != 3: print("Arguments passed incorrectly. (Expected values: Path, indexAnalytical)"); quit()
+
 
 ##### Plotting #####
 
-# # Parse Data
-# fileName = "\\Probe_1_Map.csv"
-# frames, vTime, xVec, yVec = getFrames(filePath + fileName)
+# Parse Data
+fileName = dirPath / "Probe_1_Map.csv"
+frames, vTime, xVec, yVec = getFrames(fileName)
 
-# Plot
+# Plot Maps
 # createAnimation(filePath, frames, vTime)
-# createSnapshot(filePath, frames, vTime, 2000)
-# createSnapshot(filePath, frames, vTime, 3000)
-# createSnapshot(filePath, frames, vTime, 4000)
-# createSnapshot(filePath, frames, vTime, 5000)
+createSnapshot(dirPath, frames, vTime, 2000)
+createSnapshot(dirPath, frames, vTime, 3000)
+createSnapshot(dirPath, frames, vTime, 4000)
+createSnapshot(dirPath, frames, vTime, 5000)
 
 
 # Parse Data
-fileName = "\\Probe_2_Map.csv"
-frames, vTime, xVec, yVec = getFrames(filePath + fileName)
+fileName = dirPath / "Probe_2_Map.csv"
+frames, vTime, xVec, yVec = getFrames(fileName)
 
-# Plot
-createProfile(filePath, xVec, frames, vTime, True, 3)
+# Plot Lines
+if sys.argv[2] != -1: createProfile(dirPath, xVec, frames, vTime, True, int(sys.argv[2])) # Only fixed one
 # createProfile2(filePath, yVec, frames, vTime, True, 3)
 # createPoint(filePath, fileName, 1000)
 
-
-# Show Plots (Comment if undesired)
-plt.show()

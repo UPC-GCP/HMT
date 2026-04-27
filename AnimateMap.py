@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animate
+from pathlib import Path
 
 def getFrames(fPath:str):
 
@@ -54,9 +55,10 @@ def getFrames(fPath:str):
 
 ########## Plot Map ##########
 # Parse Data
-filePath = r"C:\Users\gonce\Documents\Master - UPC\0. TFM\HMT\TestData\20260409114606_data_cranknicolson"
-fileName = "\\Probe_1_Map.csv"
-frames, vTime = getFrames(filePath + fileName)
+basePath = Path.cwd()
+dirPath = basePath / "TestData" / "20260422024433_4Materials_implicit"
+fileName = dirPath / "Probe_1_Map.csv"
+frames, vTime = getFrames(fileName)
 
 # ##### Single Plot #####
 # plt.figure(1); plt.imshow(frames[0], cmap='jet')
@@ -89,10 +91,9 @@ def update(frame):
 ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
 
 # Save Video
-if not os.path.exists(filePath + "\\Animation_1.mp4"):
+fileName = dirPath / "Animation_1.mp4"
+if not os.path.exists(fileName):
     print("Exporting video ...")
-    ani.save(filePath + "\\Animation_1.mp4", writer='ffmpeg', fps=30)
-    print("File saved to: " + filePath + "\\Animation_1.mp4")
+    ani.save(fileName, writer='ffmpeg', fps=30)
+    print(f"File saved to: {fileName}")
 
-# Show
-plt.show()

@@ -1,4 +1,5 @@
 
+#include <regex>
 #include <vector>
 #include <cmath>
 
@@ -22,6 +23,18 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
                 // Interior Nodes
                 aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
+	    } else if (i == 0 && j == 0){
+		    // SW Corner
+		    aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
+	    } else if (i == 0 && j == m-1){
+		    // NW Corner
+		    aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
+	    } else if (i == n-1 && j == 0){
+		    // SE Corner
+		    aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
+	    } else if (i == n-1 && j == m-1){
+		    // NE Corner
+		    aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
             } else if (i == 0){
                 // West Boundary - ae, ap
                 aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].ap * Vec[i][j];
@@ -61,6 +74,18 @@ inline std::vector<double> operProdMatVec(std::vector<Matrix> Mat, std::vector<d
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
                 // Interior Nodes
                 aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+	    } else if (i == 0 && j == 0){
+		    // SW Corner
+		    aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+	    } else if (i == 0 && j == m-1){
+		    // NW Corner
+		    aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
+	    } else if (i == n-1 && j == 0){
+		    // SE Corner
+		    aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+	    } else if (i == n-1 && j == m-1){
+		    // NE Corner
+		    aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
             } else if (i == 0){
                 // West Boundary - ae, ap
                 aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].ap * Vec[k];
