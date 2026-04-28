@@ -171,11 +171,12 @@ def createAnimation(filePath:str, frames:list, vTime:list):
     ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
 
     # Save Video
-    if not os.path.exists(filePath + "\\Animation_" + str(idAnimation+1) + ".mp4"):
+    tempName = "Animation_" + str(idAnimation+1) + ".mp4"
+    if not os.path.exists(filePath / tempName):
         print("Exporting video ...")
         idAnimation += 1
-        ani.save(filePath + "\\Animation_" + str(idAnimation) + ".mp4", writer='ffmpeg', fps=30)
-        print("File saved to: " + filePath + "\\Animation_" + str(idAnimation) + ".mp4")
+        ani.save(filePath / tempName, writer='ffmpeg', fps=30)
+        print(f"File saved to: {filePath / tempName}")
 
 def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1):
 
@@ -289,7 +290,7 @@ fileName = dirPath / "Probe_1_Map.csv"
 frames, vTime, xVec, yVec = getFrames(fileName)
 
 # Plot Maps
-# createAnimation(filePath, frames, vTime)
+# createAnimation(dirPath, frames, vTime)
 createSnapshot(dirPath, frames, vTime, 2000)
 createSnapshot(dirPath, frames, vTime, 3000)
 createSnapshot(dirPath, frames, vTime, 4000)
@@ -301,7 +302,7 @@ fileName = dirPath / "Probe_2_Map.csv"
 frames, vTime, xVec, yVec = getFrames(fileName)
 
 # Plot Lines
-if sys.argv[2] != -1: createProfile(dirPath, xVec, frames, vTime, True, int(sys.argv[2])) # Only fixed one
+if int(sys.argv[2]) != -1: createProfile(dirPath, xVec, frames, vTime, True, int(sys.argv[2])) # Only fixed one
 # createProfile2(filePath, yVec, frames, vTime, True, 3)
 # createPoint(filePath, fileName, 1000)
 

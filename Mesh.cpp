@@ -1,4 +1,5 @@
 // Imports
+#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -131,6 +132,8 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
         Nodes[i].front() = Faces[i].front(); Nodes[i].back() = Faces[i].back();
     }
 
+    
+
     // Deltas (nD)
     for (size_t i = 0; i < nd.size(); i++){
         for (size_t j = 0; j < nd[i].size()-1; j++){
@@ -140,6 +143,20 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
             }
         }
     }
+   
+   /*  for (size_t i = 0; i < N.size(); i++){ */
+	    /* std::cout << "nd: "; */
+	    /* for (double val : nd[i]){ */
+		    /* std::cout << val << " "; */
+	    /* } std::cout << "\n"; */
+   /*  } */
+
+    /* for (std::vector<double> vec : ndelta){ */
+	    /* std::cout << "ndelta: "; */
+	    /* for (double val : vec){ */
+		    /* std::cout << val << " "; */
+	    /* } std::cout << "\n"; */
+    /* } */
 	
     // Resize
     nMat.resize(N[0]); nQv.resize(N[0]); nT.resize(N[0]); nSw.resize(N[0]); nSe.resize(N[0]); nSs.resize(N[0]); nSn.resize(N[0]); nVp.resize(N[0]);

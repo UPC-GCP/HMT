@@ -20,7 +20,7 @@
 void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
 
     // Control
-    int n = matB.size(), m = x.size(), l = x[0].size(), iPos; double alpha, rsNew, beta;
+    int n = matB.size(), m = x.size(), l = x[0].size(), iPos{}; double alpha, rsNew, beta;
     std::vector<double> r = matB, Ap(n);
 
     // Residual

@@ -1,4 +1,5 @@
 // Imports
+#include <cerrno>
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -73,7 +74,7 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
             // Calculate Error
 	    impErr = - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j];
 	    expErr = - lambw * Msh.nSw[i][j] * (oldTemp[i][j] - oldTemp[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (oldTemp[i][j] - oldTemp[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (oldTemp[i][j] - oldTemp[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (oldTemp[i][j] - oldTemp[i][j+1]) / Msh.nd[1][j];
-            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - 0.5 * (impErr + expErr) - Msh.nQv[i][j] * Msh.nVp[i][j];
+            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr - Msh.nQv[i][j] * Msh.nVp[i][j]; 
 
 	    // tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j] + Msh.nQv[i][j] * Msh.nVp[i][j];
             
@@ -96,12 +97,14 @@ void Medic::getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc){
         }
     }
 
+    // THIS ONLY TAKES INTO ACCOUNT THE IMPLICIT PART OF THE EXPRESSION, NEED TO INCLUDE THE EXPLICIT PART AS WELL 
+
     // Outward flux
     double sumBC = 0;
     
     // xBoundaries (west, east)
     for (size_t i = 1; i < Msh.N[1]-1; i++){
-        sumBC +=  Mat.vMat[Msh.nMat[1][i]].lambda * Msh.nSw[1][i] * (Msh.nT[1][i] - Msh.nT[0][i]) / (Msh.ndelta[0][1] * 0.5);
+        sumBC += Mat.vMat[Msh.nMat[1][i]].lambda * Msh.nSw[1][i] * (Msh.nT[1][i] - Msh.nT[0][i]) / (Msh.ndelta[0][1] * 0.5);
         sumBC += Mat.vMat[Msh.nMat[Msh.N[0]-2][i]].lambda * Msh.nSe[Msh.N[0]-2][i] * (Msh.nT[Msh.N[0]-2][i] - Msh.nT[Msh.N[0]-1][i]) / (Msh.ndelta[0][Msh.N[0]-2] * 0.5);
     }
 

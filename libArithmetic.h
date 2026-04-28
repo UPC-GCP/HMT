@@ -1,15 +1,14 @@
 
-#include <regex>
 #include <vector>
 #include <cmath>
 
-#include "Discretizer.h"
+#include "Mesh.h"
 
 
 inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<std::vector<double>> Vec){
 
     // Control
-    int n = Vec.size(), m = Vec[0].size(), k; std::vector<double> aVec(n*m);
+    int n = Vec.size(), m = Vec[0].size(), k{}; std::vector<double> aVec(n*m);
 
     // Calculate
     for (int i = 0; i < n; i++){
@@ -17,7 +16,7 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
 
             // Control
             k = i * m + j;
-            if ((i == 0 || i == n-1) && (j == 0 || j == m-1)){continue;}
+            /* if ((i == 0 || i == n-1) && (j == 0 || j == m-1)){continue;} */
 
             // Calculate
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
@@ -68,7 +67,7 @@ inline std::vector<double> operProdMatVec(std::vector<Matrix> Mat, std::vector<d
 
             // Control
             k = i*m + j;
-            if ((i == 0 || i == n-1) && (j == 0 || j == m-1)){continue;}
+            /* if ((i == 0 || i == n-1) && (j == 0 || j == m-1)){continue;} */
 
             // Calculate
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
