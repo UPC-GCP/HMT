@@ -76,8 +76,6 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
 	    expErr = - lambw * Msh.nSw[i][j] * (oldTemp[i][j] - oldTemp[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (oldTemp[i][j] - oldTemp[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (oldTemp[i][j] - oldTemp[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (oldTemp[i][j] - oldTemp[i][j+1]) / Msh.nd[1][j];
             tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr - Msh.nQv[i][j] * Msh.nVp[i][j]; 
 
-	    // tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.nVp[i][j] * (Msh.nT[i][j] - oldTemp[i][j]) / Dsc.dt - lambw * Msh.nSw[i][j] * (Msh.nT[i][j] - Msh.nT[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.nSe[i][j] * (Msh.nT[i][j] - Msh.nT[i+1][j]) / Msh.nd[0][i] - lambs * Msh.nSs[i][j] * (Msh.nT[i][j] - Msh.nT[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.nSn[i][j] * (Msh.nT[i][j] - Msh.nT[i][j+1]) / Msh.nd[1][j] + Msh.nQv[i][j] * Msh.nVp[i][j];
-            
             // Print to File
             file << "," << tempErr;
 

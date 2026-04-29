@@ -115,13 +115,11 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
     // Mesh Loop (nD)
     std::vector<int> cNode; cNode.resize(N.size(), 0);
     for (int i = 0; i < refinement.size(); i++){
-
         // Faces
         newCalculateFaces(cNode[refinement[i]["axis"].asInt()], refinement[i]["N"].asInt(), refinement[i]["range"][0].asDouble(), refinement[i]["range"][1].asDouble(), Faces[refinement[i]["axis"].asInt()]);
 
         // Control
         cNode[refinement[i]["axis"].asInt()] += refinement[i]["N"].asInt();
-
     }
     
     // CV Position (nD)
@@ -132,8 +130,6 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
         Nodes[i].front() = Faces[i].front(); Nodes[i].back() = Faces[i].back();
     }
 
-    
-
     // Deltas (nD)
     for (size_t i = 0; i < nd.size(); i++){
         for (size_t j = 0; j < nd[i].size()-1; j++){
@@ -143,20 +139,6 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
             }
         }
     }
-   
-   /*  for (size_t i = 0; i < N.size(); i++){ */
-	    /* std::cout << "nd: "; */
-	    /* for (double val : nd[i]){ */
-		    /* std::cout << val << " "; */
-	    /* } std::cout << "\n"; */
-   /*  } */
-
-    /* for (std::vector<double> vec : ndelta){ */
-	    /* std::cout << "ndelta: "; */
-	    /* for (double val : vec){ */
-		    /* std::cout << val << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
 	
     // Resize
     nMat.resize(N[0]); nQv.resize(N[0]); nT.resize(N[0]); nSw.resize(N[0]); nSe.resize(N[0]); nSs.resize(N[0]); nSn.resize(N[0]); nVp.resize(N[0]);

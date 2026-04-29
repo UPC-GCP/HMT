@@ -166,6 +166,11 @@ def createAnimation(filePath:str, frames:list, vTime:list):
         fig.canvas.draw()
 
         return [im]
+    
+    # Control
+    tStart = time.time()
+    print(f"Parsing file: {str(filePath).split("/")[-1]}")
+
 
     # Animation
     ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
@@ -177,6 +182,8 @@ def createAnimation(filePath:str, frames:list, vTime:list):
         idAnimation += 1
         ani.save(filePath / tempName, writer='ffmpeg', fps=30)
         print(f"File saved to: {filePath / tempName}")
+
+    print(f"Elapsed Time: {time.time() - tStart:.3f}")
 
 def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1):
 
@@ -243,8 +250,6 @@ def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False
 
     global idPlot
 
-    print(iAnal)
-
     # Index
     if tStep == -1: tPos = -1
     else:
@@ -265,11 +270,16 @@ def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False
     plt.legend(); plt.grid(which="both", alpha=0.2); plt.minorticks_on()
 
     # Save Plot
-    if not os.path.exists(filePath + "\\Plot_" + str(idPlot + 1) + ".png"):
+    tempName = "Plot_" + str(idPlot + 1) + ".png"
+    if not os.path.exists(filePath / tempName):
         print("Exporting image ...")
         idPlot += 1
-        plt.savefig(filePath + "\\Plot_" + str(idPlot) + ".png")
-        print("File saved to: " + filePath + "\\Plot_" + str(idPlot) + ".png")
+        plt.savefig(filePath / tempName)
+        print(f"File saved to: {filePath / tempName}")
+
+def createPoint(filePath:str, xVec:list, vTime:list):
+
+    pass
 
 
 ########## Types of Plots ##########
@@ -278,10 +288,67 @@ def createProfile2(filePath:str, xVec:list, frames:list, vTime:list, bAnal=False
 ### Profile (Plot Temperature Profile): If timeStep not specified assumes last frame, needs separate file with a single row of temperatures
 ### Point (Plot Point Evolution): Plot data from Plot_0_Point.
 
+########## File Inputs ##########
+### Path: Folder where files are located
+### bPoint: Plot point data
+### bAnimate: Create animation of temperature map evolution (Probe_1_Map)
+### vSnapshot: Vector of instants for temperature map snapshot
+### iAnalytical: Create comparison with analytical Solution
+
+
 ##### Directory #####
 dirPath = Path.cwd() / "TestData" / sys.argv[1]
-if len(sys.argv) != 3: print("Arguments passed incorrectly. (Expected values: Path, indexAnalytical)"); quit()
+if len(sys.argv) != 7: print("Arguments passed incorrectly. (Expected values: Path, bPoint, bAnimate, vSnapshot, iAnalytical, iAxis)"); quit()
 
+
+### Plot Points
+if bool(int(sys.argv[2])):
+    print("Plot Probe_Point data")
+
+    # Parse Data
+    # fileName = dirPath / "Probe_0_Point.csv"
+    # frames, vTime, xVec, yVec = getFrames(fileName)
+
+    # Plot Data
+    # createPoint()
+
+
+if bool(int(sys.argv[3])) or len(sys.argv[4]) > 2:
+    
+    # Parse Data
+    fileName = dirPath / "Probe_1_Map.csv"
+    frames, vTime, xVec, yVec = getFrames(fileName)
+
+    ### Animate Map   
+    if bool(int(sys.argv[3])): 
+
+        # Plot
+        createAnimation(dirPath, frames, vTime)
+    
+    ### Plot Snapshots
+    for iSnap in sys.argv[4][1:-1].split(","):
+        
+        # Filter
+        if len(iSnap) == 0: break
+
+        # Plot
+        createSnapshot(dirPath, frames, vTime, float(iSnap))
+
+
+### Plot Analytical
+if int(sys.argv[5]) != -1:
+
+    print("Plot analytical solution comparison")
+
+    # Parse Data
+    fileName = dirPath / "Probe_2_Map.csv"
+    frames, vTime, xVec, yVec = getFrames(fileName)
+
+    # Plot
+    if int(sys.argv[6]) == 0: createProfile(dirPath, xVec, frames, vTime, True, int(sys.argv[5]))
+    elif int(sys.argv[6]) == 1: createProfile2(dirPath, yVec, frames, vTime, True, int(sys.argv[5]))
+
+quit()
 
 ##### Plotting #####
 
@@ -290,7 +357,7 @@ fileName = dirPath / "Probe_1_Map.csv"
 frames, vTime, xVec, yVec = getFrames(fileName)
 
 # Plot Maps
-# createAnimation(dirPath, frames, vTime)
+if int(sys.argv[3]) == 1: createAnimation(dirPath, frames, vTime)
 createSnapshot(dirPath, frames, vTime, 2000)
 createSnapshot(dirPath, frames, vTime, 3000)
 createSnapshot(dirPath, frames, vTime, 4000)
@@ -302,7 +369,8 @@ fileName = dirPath / "Probe_2_Map.csv"
 frames, vTime, xVec, yVec = getFrames(fileName)
 
 # Plot Lines
-if int(sys.argv[2]) != -1: createProfile(dirPath, xVec, frames, vTime, True, int(sys.argv[2])) # Only fixed one
-# createProfile2(filePath, yVec, frames, vTime, True, 3)
+# if int(sys.argv[2]) != -1: createProfile(dirPath, xVec, frames, vTime, True, int(sys.argv[2])) # Only fixed one
+if int(sys.argv[2]) != -1: createProfile2(dirPath, yVec, frames, vTime, True, int(sys.argv[2]))
+
 # createPoint(filePath, fileName, 1000)
 

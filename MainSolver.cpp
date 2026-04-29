@@ -85,60 +85,7 @@ int main(int argc, char* argv[]){
     Discretizer Dsc(data["scheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble());
     Dsc.setSchemeParameters(Mat, Msh); std::cout << "Temporal parameters set.\n";
     Dsc.newSetBoundaryConditions(Mat, Msh, Prs); std::cout << "Boundary conditions set.\n";
-    /* Dsc.altSetBoundaryConditions(Mat, Msh, Prs); */
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Discretized coefficients set.\n";
-
-    /* size_t k{}; */
-    /* std::cout << "ap:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-	    /* for (size_t j = 0; j < Msh.N[1]; j++){ */
-		    /* k = i * Msh.N[1] + j; */
-		    /* std::cout << Msh.matA[k].ap << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "aw:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-	    /* for (size_t j = 0; j < Msh.N[1]; j++){ */
-		    /* k = i * Msh.N[1] + j; */
-		    /* std::cout << Msh.matA[k].aw << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
- 
-    /* std::cout << "ae:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-	    /* for (size_t j = 0; j < Msh.N[1]; j++){ */
-		    /* k = i * Msh.N[1] + j; */
-		    /* std::cout << Msh.matA[k].ae << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "as:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-	    /* for (size_t j = 0; j < Msh.N[1]; j++){ */
-		    /* k = i * Msh.N[1] + j; */
-		    /* std::cout << Msh.matA[k].as << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "an:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-	    /* for (size_t j = 0; j < Msh.N[1]; j++){ */
-		    /* k = i * Msh.N[1] + j; */
-		    /* std::cout << Msh.matA[k].an << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "bp:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-	    /* for (size_t j = 0; j < Msh.N[1]; j++){ */
-		    /* k = i * Msh.N[1] + j; */
-		    /* std::cout << Msh.bp[k] << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
-    /* std::exit(0); */
 
     
     ///// Solver /////
@@ -169,19 +116,6 @@ int main(int argc, char* argv[]){
     std::cout << "Processing ...\n";
     std::cout << std::fixed << std::setprecision(2);
 
-
-    /* std::cout << "Temperature:\n"; */
-    /* for (std::vector<double> vec : Msh.nT){ */
-	    /* for (double val : vec){ */
-		    /* std::cout << val << " "; */
-	    /* } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "MatA:\n"; */
-    /* for (Matrix Mat : Msh.matA){ */
-	    /* std::cout << Mat.ap << " " << Mat.aw << " " << Mat.ae << " " << Mat.as << " " << Mat.an << "\n"; */	    
-    /* } */
-
     std::vector<std::vector<double>> cTemp{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
@@ -195,27 +129,18 @@ int main(int argc, char* argv[]){
         Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t);
         Mdc.getSystemResidual(Mat, Msh, Dsc, t);
 	
-	// Update Coefficients
-        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
-	/* Dsc.altSetBoundaryConditions(Mat, Msh, Prs, t); */
-        Dsc.newSetRHS(Mat, Msh);
-
         // Write Data
         Prb.checkProbes(Msh, Sol, t);
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
+	
+	// Update Coefficients
+        Dsc.newSetBoundaryConditions(Mat, Msh, Prs, t);
+        Dsc.newSetRHS(Mat, Msh);
 
         // Convergence
         if (std::sqrt(Sol->calcErr(cTemp, Msh.nT)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
 
     } std::cout << "\n";
-
-    /* std::cout << "Temperature:\n"; */
-    /* for (std::vector<double> vec : Msh.nT){ */
-    /* 	for (double val:vec){ */
-    /* 		std::cout << val << " "; */
-    /* 	} std::cout << "\n"; */
-    /* } */
-
 
     // Global Energy Balance
     /* Mdc.getGlobalBalance(Mat, Msh, Dsc); */

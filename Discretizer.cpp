@@ -81,11 +81,6 @@ void Discretizer::altSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
 	std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
 	double lamb{}; int k{};
     	
-	/* std::cout << "MatA:\n"; */
-	/* for (Matrix Mat : Msh.matA){ */
-	/* 	std::cout << Mat.ap << " " << Mat.aw << " " << Mat.ae << " " << Mat.as << " " << Mat.an << "\n"; */	    
-	/* } */
-
 	for (Boundary bC : Msh.newBoundaryConditions){
 
 		// Positions (nD)
@@ -268,21 +263,6 @@ void Discretizer::altSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
 	Msh.nT[i][j] = 0.5 * (Msh.nT[i-1][j] + Msh.nT[i][j-1]);
 	Msh.matA[k].ap = 2; Msh.matA[k].aw = 1; Msh.matA[k].as = 1;
 	
-	/* std::cout << "MatA:\n"; */
-	/* for (Matrix Mat : Msh.matA){ */
-	/* 	std::cout << Mat.ap << " " << Mat.aw << " " << Mat.ae << " " << Mat.as << " " << Mat.an << "\n"; */	    
-	/* } */
-
-
-	// Control (Will try to make it work without bIgnore)
-	// if (bIgnore) {
-	//	Msh.nIgnore.push_back({0, 0});
-	//	Msh.nIgnore.push_back({0, Msh.N[1]-1});
-	//	Msh.nIgnore.push_back({Msh.N[0]-1, 0});
-	//	Msh.nIgnore.push_back({Msh.N[0]-1, Msh.N[1]-1});
-	//	bIgnore = false;
-	//}
-
 }
 
 
@@ -369,8 +349,6 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
                         // Coefficients
                         j = Pos0[0] * Msh.N[1] + i;
                         Msh.matA[j].ap = 1;
-			/* Msh.bp[j] = bC.value * Msh.nd[0][Pos0[0]] / lamb + Msh.nT[Pos0[0]+1][i]; */
-
                         Msh.bp[j] = Msh.nT[Pos0[0]][i];
 
   			/* // Control (Testing) */
@@ -573,46 +551,28 @@ void Discretizer::newSetBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionP
     Msh.nT[Msh.N[0]-1][0] = 0.5 * (Msh.nT[Msh.N[0]-2][0] + Msh.nT[Msh.N[0]-1][1]);
     Msh.nT[Msh.N[0]-1][Msh.N[1]-1] = 0.5 * (Msh.nT[Msh.N[0]-2][Msh.N[1]-1] + Msh.nT[Msh.N[0]-1][Msh.N[1]-2]);
 
-    /* std::cout << "Testing Print\n"; */
-
     // Corners
     int l{}, m{}, n{};
-
-    /* std::cout << "Variables Initialized\n"; */
 
     l = 0; m = 0; n = l * Msh.N[1] + m; // SW
     Msh.nT[l][m] = 0.5 * (Msh.nT[l+1][m] + Msh.nT[l][m+1]);
     Msh.matA[n].ap = 2; Msh.matA[n].ae = -1; Msh.matA[n].an = -1;
 
-    /* std::cout << "Test 1\n"; */
-
     l = 0; m = Msh.N[1]-1; n = l * Msh.N[1] + m; // NW
     Msh.nT[l][m] = 0.5 * (Msh.nT[l+1][m] + Msh.nT[l][m-1]);
     Msh.matA[n].ap = 2; Msh.matA[n].ae = -1; Msh.matA[n].as = -1;
-
-    /* std::cout << "Test 2\n"; */
 
     l = Msh.N[0]-1; m = 0; n = l * Msh.N[1] + m; // SE
     Msh.nT[l][m] = 0.5 * (Msh.nT[l-1][m] + Msh.nT[l][m+1]);
     Msh.matA[n].ap = 2; Msh.matA[n].aw = -1; Msh.matA[n].an = -1;
 
-    /* std::cout << "Test 3\n"; */
-	
     l = Msh.N[0]-1; m = Msh.N[1]-1; n = l * Msh.N[1] + m; // NE
     Msh.nT[l][m] = 0.5 * (Msh.nT[l-1][m] + Msh.nT[l][m-1]);
     Msh.matA[n].ap = 2; Msh.matA[n].aw = -1; Msh.matA[n].as = -1;
 
-    /* std::cout << "Test 4\n"; */
-
     /* // Control */
     /* if (bIgnore){Msh.nIgnore.push_back({0, 0}); Msh.nIgnore.push_back({0, Msh.N[1]-1}); Msh.nIgnore.push_back({Msh.N[0]-1, 0}); Msh.nIgnore.push_back({Msh.N[0]-1, Msh.N[1]-1});} */
     /* bIgnore = false; */
-
-
-    // std::cout << "MatA:\n";
-    // for (Matrix vec : Msh.matA){
-	//     std::cout << vec.ap << " " << vec.aw << " " << vec.ae << " " << vec.as << " " << vec.an << "\n";
-    // }
 
 }
 

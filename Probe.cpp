@@ -17,8 +17,6 @@ std::string createFolder(std::string scheme, std::string fName, std::string& dir
     if (scheme.find('-') != std::string::npos){scheme.erase(scheme.find('-'), 1);}
 
     // Directory
-    // std::filesystem::path dName = std::filesystem::current_path(); 
-    // std::string pBase = dName.string() + "\\TestData\\";
     std::filesystem::path pBase = std::filesystem::current_path();
     pBase /= "TestData";
 
@@ -29,7 +27,6 @@ std::string createFolder(std::string scheme, std::string fName, std::string& dir
     
     // Folder Name
     int iPos = fName.find(".json"); dirName = oName + fName.substr(0, iPos) + "_" + scheme;
-    // pBase += "\\" + dirName + "\\";
     pBase /= dirName;
 
     // Create Folder
