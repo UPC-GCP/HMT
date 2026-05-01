@@ -1,0 +1,2 @@
+Running simulations w/ 6 cores ... Fri May  1 01:37:59 -05 2026
+All simulations complete ... Fri May  1 01:38:06 -05 2026
