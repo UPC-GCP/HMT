@@ -1,2 +1,6 @@
-MONITOR STARTED ... Sat May  2 14:57:51 -05 2026
-MONITOR ENDED ... Sat May  2 14:57:51 -05 2026
+MONITOR STARTED ... Sat May  2 20:45:20 -05 2026
+CONTROL: 20:45:20
+RAM Used: 544Mi / 7.7Gi
+Load Avg: 1.49, 0.34, 0.11
+Disk Free: 944G / 1007G (2% used)
+
