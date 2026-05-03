@@ -164,3 +164,8 @@ RAM Used: 691Mi / 7.7Gi
 Load Avg: 2.00, 2.00, 2.00
 Disk Free: 838G / 1007G (13% used)
 
+CONTROL: 05:01:35
+RAM Used: 655Mi / 7.7Gi
+Load Avg: 1.02, 1.47, 1.78
+Disk Free: 836G / 1007G (13% used)
+
