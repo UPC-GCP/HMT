@@ -2,3 +2,8 @@
 Running simulations w/ 8 cores ... Mon May  4 08:06:06 -05 2026
 ----------------------------------------------------
 Finished ./RunConfig/Case_21.json at 08:12:04
+Finished ./RunConfig/Case_20.json at 09:32:59
+Finished ./RunConfig/Case_17.json at 09:33:12
+Finished ./RunConfig/Case_22.json at 09:33:13
+Finished ./RunConfig/Case_19.json at 09:33:19
+Finished ./RunConfig/Case_18.json at 09:33:26
