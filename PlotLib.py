@@ -161,22 +161,39 @@ def createPoint(filePath:str): # FUNCTIONAL
     # Benchmark
     TPoint = [0, 1000, 2000, 3000, 4000, 5000]
     DPoint = [[8, 12.03, 16.01, 19.22, 22.02, 24.59], [8, 10.86, 15.26, 19.20, 22.37, 25.52]]
+    aColor = ['r', 'b']
 
     # Plot Figure
+    # plt.figure()
+    # for i, sHead in enumerate(vTitle[1:]):
+    #     plt.plot(data['Time'][1:], data[sHead][1:], aColor[i], label=sHead + ' (Model)')
+    #     plt.plot(TPoint, DPoint[i], aColor[i] + '--', label=sHead + ' (Benchmark)')
+    # plt.xlabel('Time (s)'); plt.ylabel('Temperature (°C)')
+    # plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+
+    # # Save Plot
+    # tempName = "Plot_" + str(idPlot+1) + ".png"
+    # if not os.path.exists(filePath / tempName):
+    #     print("Exporting image ..."); idPlot += 1
+    #     plt.savefig(filePath / tempName)
+    #     print(f"File saved to: {filePath / tempName}")
+
+    # Plot Secondary
     plt.figure()
-    aColor = ['r', 'b']
     for i, sHead in enumerate(vTitle[1:]):
-        plt.plot(data['Time'][1:], data[sHead][1:], aColor[i], label=sHead + ' (Model)')
+        aMid = len(data[sHead][1:]) // 22
+        plt.plot(data['Time'][1:aMid], data[sHead][1:aMid], aColor[i], label=sHead + ' (Model)')
         plt.plot(TPoint, DPoint[i], aColor[i] + '--', label=sHead + ' (Benchmark)')
     plt.xlabel('Time (s)'); plt.ylabel('Temperature (°C)')
     plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
 
-    # Save Plot
+    # Save Secondary
     tempName = "Plot_" + str(idPlot+1) + ".png"
     if not os.path.exists(filePath / tempName):
         print("Exporting image ..."); idPlot += 1
         plt.savefig(filePath / tempName)
         print(f"File saved to: {filePath / tempName}")
+
     
 def createNumericalStudy(fileName:str, sVar:str) :
 

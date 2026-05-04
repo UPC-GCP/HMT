@@ -24,10 +24,10 @@ while pgrep -f "MainSolver" > /dev/null; do
 	# TIME
 	CURRENT_TIME=$(date +%s)
 	DIFF_TIME=$((CURRENT_TIME - START_TIME))
-	RUNTIME=$(printf '%02dh:%02dm:%02ds' $((DIFF_TIME/3600)) $((DIFF_TIME%3600/60)) $((DIFF_TIME%60))
+	RUNTIME=$(printf '%02dh:%02dm:%02ds' $((DIFF_TIME/3600)) $((DIFF_TIME%3600/60)) $((DIFF_TIME%60)))
 
 	# PUSH
-	if [[ -n $(fit status --porcelain "$LFILE") ]]; then
+	if [[ -n $(git status --porcelain "$LFILE") ]]; then
 		git add "$MFILE" "$LFILE"
 		git commit -m "Automatic: Log Update | Runtime: $RUNTIME" -q
 		git push origin main -q
@@ -45,7 +45,7 @@ done
 # TIME
 CURRENT_TIME=$(date +%s)
 DIFF_TIME=$((CURRENT_TIME - START_TIME))
-RUNTIME=$(printf '%02dh:%02dm:%02ds' $((DIFF_TIME/3600)) $((DIFF_TIME%3600/60)) $((DIFF_TIME%60))
+RUNTIME=$(printf '%02dh:%02dm:%02ds' $((DIFF_TIME/3600)) $((DIFF_TIME%3600/60)) $((DIFF_TIME%60)))
 
 # FINAL PUSH
 echo "MONITOR ENDED ... $(date)" >> "$MFILE"

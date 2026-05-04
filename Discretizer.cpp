@@ -46,18 +46,19 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
         beta = 0;
 
         // Calculate Timestep
-        std::vector<double> dtNew(Msh.totNodes, 0); double dtMin{}; int k{};
-        for (size_t i = 0; i < Msh.N[0]; i++){
-            for (size_t j = 0; j < Msh.N[1]; j++){
-                k = i * Msh.N[1] + j;
-                dtNew[k] = 0.5 * pow(Msh.ndelta[0][i], 2) * pow(Msh.ndelta[1][j], 2) / (Mat.vMat[Msh.nMat[i][j]].alpha * (pow(Msh.ndelta[0][i], 2) + pow(Msh.ndelta[1][j], 2)));
+	int interiorNodes = 1; for (int NVal : Msh.N){interiorNodes *= (NVal-2);}
+        std::vector<double> dtNew(interiorNodes, 0); double dtMin{}; int k{};
+        for (size_t i = 1; i < Msh.N[0]-1; i++){
+            for (size_t j = 1; j < Msh.N[1]-1; j++){
+                k = (i-1) * (Msh.N[1]-2) + (j-1);
+		dtNew[k] = 0.5 * pow(Msh.ndelta[0][i], 2) * pow(Msh.ndelta[1][j], 2) / (Mat.vMat[Msh.nMat[i][j]].alpha * (pow(Msh.ndelta[0][i], 2) + pow(Msh.ndelta[1][j], 2)));
             }
         }
 
         // Update Time-step
         dtMin = *std::min_element(dtNew.begin()+1, dtNew.end()-1);
         if (dtMin < dt) {dt = dtMin;}
-        
+
     } else if (scheme == "crank-nicolson") {
 
         // Beta

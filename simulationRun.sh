@@ -11,6 +11,14 @@ if [ "$CORES" -gt 10 ]; then
 	CORES=8
 fi
 
+# RANGE
+if [ -z "$2" ]; then
+	SIMRANGE="*"
+else
+	ARGS_RANGE=$(echo "$@" | cut -d' ' -f2- | tr ' ' ',')
+	SIMRANGE="{$ARGS_RANGE}"
+fi
+
 # HEADER
 rm -f simulation_log.txt
 echo "----------------------------------------------------" > simulation_log.txt
@@ -18,7 +26,7 @@ echo "Running simulations w/ $CORES cores ... $(date)" | tee -a simulation_log.t
 echo "----------------------------------------------------" >> simulation_log.txt
 
 # RUN SIMULATIONS
-ls "$INPUT_DIR"/Case_*.json | sort -V | parallel -u -j "$CORES" \
+eval ls "$INPUT_DIR"/Case_"$SIMRANGE".json | sort -V | parallel -u -j "$CORES" \
 	"$EXECUTABLE {} && echo Finished {} at \$(date '+%H:%M:%S') | tee -a simulation_log.txt"
 
 # FOOTNOTE
