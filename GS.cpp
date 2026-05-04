@@ -17,7 +17,7 @@
 #include "GS.h"
 #include "libArithmetic.h"
 
-void GS::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
+bool GS::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
 
     // PENDING UPDATE TO CHANGES FROM OPERPRODMATVEC
     // QUE LATA TENER QUE HACER ESTO
@@ -70,5 +70,7 @@ void GS::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
     //     if (tempErr < tolNum){break;}
 
     // }
+
+	return false;
 
 }

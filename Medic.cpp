@@ -138,3 +138,11 @@ void Medic::getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t)
         }
     } fileR << "\n";
 }
+
+Medic::~Medic(){
+
+	// Close Files
+	file.close();
+	fileR.close();
+
+}

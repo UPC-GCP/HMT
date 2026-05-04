@@ -123,7 +123,10 @@ int main(int argc, char* argv[]){
         cTemp = Msh.nT;
         
         // Solver
-        Sol->newSolve(Msh.matA, Msh.nT, Msh.bp, Msh.nIgnore);
+        if (!Sol->newSolve(Msh.matA, Msh.nT, Msh.bp, Msh.nIgnore)){
+		std::cerr << "Simulation diverges @ t = " << t;
+		break;
+	}
 
         // Diagnostics
         Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t);

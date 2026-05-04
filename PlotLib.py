@@ -75,7 +75,8 @@ def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
 
     # Plot Map
     fig, ax = plt.subplots()
-    im = ax.imshow(frames[0], cmap='jet', interpolation='bilinear')
+    im = ax.imshow(np.transpose(frames[0]), cmap='jet', interpolation='bilinear', origin='lower', extent=[0, 1.1, 0, 0.8])
+    plt.xlabel('Length (m)'); plt.ylabel('Height (m)')
     cb = fig.colorbar(im, label="Temperature (°C)")
     ax.set_title(f"Temperature Evolution: Time {vTime[0]:.2f} s")
 
@@ -83,7 +84,7 @@ def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
     def update(frame):
     
         # Control
-        arrData = frames[frame]
+        arrData = np.transpose(frames[frame])
 
         # Update Plot
         im.set_array(arrData); im.set_clim(np.min(arrData), np.max(arrData))
@@ -96,7 +97,6 @@ def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
     
     # Control
     tStart = time.time()
-    print(f"Parsing file: {str(filePath).split('/')[-1]}")
 
     # Animation
     ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
@@ -131,9 +131,9 @@ def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1): # F
     framePlot = np.transpose(frames[tPos])
 
     # Plot Map
-    plt.figure(); im = plt.imshow(framePlot, extent=[0, 1.1, 0, 0.8], aspect='auto')
+    plt.figure(); im = plt.imshow(framePlot, cmap='jet', extent=[0, 1.1, 0, 0.8], origin='lower', aspect='auto')
     plt.colorbar(im, label="Temperature (°C)")
-    plt.xlabel('y coordinate'); plt.ylabel('x coordinate')
+    plt.xlabel('Length (m)'); plt.ylabel('Height (m)')
     plt.title(f'Temperature map @ t = {tStep}')
     
     # Isotherms
@@ -154,6 +154,7 @@ def createPoint(filePath:str): # FUNCTIONAL
     global idPlot
 
     # Read Data
+    print("Parsing file: Probe_0_Point.csv")
     data = pd.read_csv(filePath / "Probe_0_Point.csv")
     vTitle = data.columns.values
 
@@ -177,4 +178,50 @@ def createPoint(filePath:str): # FUNCTIONAL
         plt.savefig(filePath / tempName)
         print(f"File saved to: {filePath / tempName}")
     
+def createNumericalStudy(fileName:str, sVar:str) :
+
+    # Range
+    if sVar == 'dt':
+        rCase = [1,2,3,4,9,10,11,12,17,18,19,20]
+        rVar = [0.5, 1, 2, 5]
+    elif sVar == 'N':
+        rCase = [5,6,7,8,13,14,15,16,21,22,23,24]
+        rVar = [50, 100, 200, 400]
+    else: print('Variable not recognized ...'); quit
+    
+    # Directory 
+    dirPath = Path.cwd() / "TestData"; vRes, vIter = [], []; 
+    fileList = [f for f in sorted(os.listdir(dirPath)) if "Case" in f]
+    
+    # File Loop
+    for file in fileList:
+        
+        # Filter
+        if not int(file[20:22]) in rCase: continue
+
+        # Read Data
+        data = pd.read_csv(dirPath / file / fileName)
+        
+        # Log
+        vRes.append(data['lastRes'].mean())
+        vIter.append(data['lastIter'].mean())
+
+    # Loop
+    aColor = ['r', 'b', 'g']; aVal = ['Residue', 'Iterations']
+    for i, vPlot in enumerate([vRes, vIter]):
+        # Plot
+        plt.figure()
+        plt.plot(rVar, vPlot[0:4], aColor[0], label='implicit')
+        plt.plot(rVar, vPlot[4:8], aColor[1], label='crank-nicolson')
+        plt.plot(rVar, vPlot[8:12], aColor[2], label='explicit')
+        plt.xlabel(sVar); plt.ylabel(aVal[i]); plt.legend()
+        plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+
+        # Save
+        tempName = "Plot_" + sVar + "_" + aVal[i] + ".png"
+        if not os.path.exists(dirPath / tempName):
+            print("Exporting image ...")
+            plt.savefig(dirPath / tempName)
+            print(f"File saved to: {dirPath / tempName}")
+
 

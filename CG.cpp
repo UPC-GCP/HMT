@@ -17,7 +17,7 @@
 #include "CG.h"
 #include "libArithmetic.h"
 
-void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
+bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
 
     // Control
     int n = matB.size(), m = x.size(), l = x[0].size(), iPos{}; double alpha, rsNew, beta;
@@ -59,11 +59,11 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
 
         if (std::isnan(rsNew) || std::isinf(rsNew) || maxTemp > 1e6){
             std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
-            lastIter = k; lastRes = rsNew; break;
+            lastIter = k; lastRes = rsNew; return false;
         }
 
         // Error
-        if (std::sqrt(rsNew) < tolNum){lastIter = k; lastRes = rsNew; break;}
+        if (std::sqrt(rsNew) < tolNum){lastIter = k; lastRes = rsNew; return true;}
 
         // Direction
         beta = rsNew / rsOld;
@@ -73,5 +73,8 @@ void CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
         rsOld = rsNew;
 
     }
+
+    // Control
+    return true;
 
 }

@@ -21,6 +21,9 @@ public:
     // Constructor
     Medic(Mesh Msh, Probe& Prb);
 
+    // Destructor
+    ~Medic();
+
     // Functions
     void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t);
     void getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc);

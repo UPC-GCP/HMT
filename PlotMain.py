@@ -18,12 +18,15 @@ from pathlib import Path
 ### bPoint: Plot point data
 ### bAnimate: Create animation of temperature map evolution (Probe_1_Map)
 ### vSnapshot: Vector of instants for temperature map snapshot
-### iAnalytical: Create comparison with analytical Solution
+### bNumerical: Plot numerical study
+### sVar: Variable for numerical study
+
+# Safety Check
+if len(sys.argv) != 5 and len(sys.argv) != 7: print("Arguments passed incorrectly. (Expected values: Path, bPoint, bAnimate, vSnapshot)"); print("Additional arguments available. (Optional values: bNumerical, sVar)"); quit()
 
 
 ##### Directory #####
 dirPath = Path.cwd() / "TestData" / sys.argv[1]
-if len(sys.argv) != 5: print("Arguments passed incorrectly. (Expected values: Path, bPoint, bAnimate, vSnapshot)"); quit()
 
 
 ### Plot Points
@@ -35,6 +38,7 @@ if bool(int(sys.argv[3])) or len(sys.argv[4]) > 2:
     fileName = dirPath / "Probe_1_Map.csv"
     frames, vTime, xVec, yVec = PL.getFrames(fileName)
     cleanFrames = np.array([[x[1:-1] for x in y[1:-1]] for y in frames])
+    # cleanFrames = frames
 
     ### Animate Map
     if bool(int(sys.argv[3])): PL.createAnimation(dirPath, cleanFrames, vTime)
@@ -42,5 +46,20 @@ if bool(int(sys.argv[3])) or len(sys.argv[4]) > 2:
     ### Plot Snapshots
     if len(sys.argv[4]) > 2:
         for iSnap in sys.argv[4][1:-1].split(","): PL.createSnapshot(dirPath, cleanFrames, vTime, float(iSnap))
+
+### Numerical Study
+if bool(int(sys.argv[5])):
+    # Parse Data
+    # Por ahora va a estar hard coded como 4-4 para dt y N, pero debería ponerlo con inputs (sVar=dt, lVar=[0.5,1,2,5])
+    fileName = 'Probe_1_Bug.csv'
+    PL.createNumericalStudy(fileName, sys.argv[6])
+
+
+
+
+
+
+
+
 
 
