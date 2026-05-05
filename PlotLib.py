@@ -164,24 +164,24 @@ def createPoint(filePath:str): # FUNCTIONAL
     aColor = ['r', 'b']
 
     # Plot Figure
-    # plt.figure()
-    # for i, sHead in enumerate(vTitle[1:]):
-    #     plt.plot(data['Time'][1:], data[sHead][1:], aColor[i], label=sHead + ' (Model)')
-    #     plt.plot(TPoint, DPoint[i], aColor[i] + '--', label=sHead + ' (Benchmark)')
-    # plt.xlabel('Time (s)'); plt.ylabel('Temperature (°C)')
-    # plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+    plt.figure()
+    for i, sHead in enumerate(vTitle[1:]):
+        plt.plot(data['Time'][1:], data[sHead][1:], aColor[i], label=sHead + ' (Model)')
+        plt.plot(TPoint, DPoint[i], aColor[i] + '--', label=sHead + ' (Benchmark)')
+    plt.xlabel('Time (s)'); plt.ylabel('Temperature (°C)')
+    plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
 
-    # # Save Plot
-    # tempName = "Plot_" + str(idPlot+1) + ".png"
-    # if not os.path.exists(filePath / tempName):
-    #     print("Exporting image ..."); idPlot += 1
-    #     plt.savefig(filePath / tempName)
-    #     print(f"File saved to: {filePath / tempName}")
+    # Save Plot
+    tempName = "Plot_" + str(idPlot+1) + ".png"
+    if not os.path.exists(filePath / tempName):
+        print("Exporting image ..."); idPlot += 1
+        plt.savefig(filePath / tempName)
+        print(f"File saved to: {filePath / tempName}")
 
     # Plot Secondary
     plt.figure()
     for i, sHead in enumerate(vTitle[1:]):
-        aMid = len(data[sHead][1:]) // 22
+        aMid = len(data[sHead][1:]) // 2
         plt.plot(data['Time'][1:aMid], data[sHead][1:aMid], aColor[i], label=sHead + ' (Model)')
         plt.plot(TPoint, DPoint[i], aColor[i] + '--', label=sHead + ' (Benchmark)')
     plt.xlabel('Time (s)'); plt.ylabel('Temperature (°C)')

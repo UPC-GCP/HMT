@@ -47,6 +47,8 @@ if bool(int(sys.argv[3])) or len(sys.argv[4]) > 2:
     if len(sys.argv[4]) > 2:
         for iSnap in sys.argv[4][1:-1].split(","): PL.createSnapshot(dirPath, cleanFrames, vTime, float(iSnap))
 
+if len(sys.argv) == 5: quit()
+
 ### Numerical Study
 if bool(int(sys.argv[5])):
     # Parse Data
