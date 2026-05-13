@@ -1,5 +1,5 @@
 // Imports
-#include <cstddef>
+/* #include <cstddef> */
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,7 +18,7 @@
 #include "CG.h"
 #include "ExpressionParser.h"
 #include "Probe.h"
-#include "Medic.h"
+/* #include "Medic.h" // Diagnostic Tool: Activate if needed */
 
 Json::Value getParsedData(std::string fileName){
     
@@ -78,7 +78,8 @@ int main(int argc, char* argv[]){
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.newGenerateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
     Msh.newAddBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.newBoundaryConditions.size() << " boundary conditions added.\n";
-
+	
+    return 0;
     
     ///// Discretizer /////
     std::cout << "Initializing discretizer ...\n";
@@ -108,8 +109,8 @@ int main(int argc, char* argv[]){
 
 
     ///// Medic /////
-    std::cout << "Initializing medic ...\n";
-    Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.\n";
+    /* std::cout << "Initializing medic ...\n"; */
+    /* Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.\n"; */
 
 
     ////////// Temporal Loop //////////
@@ -129,8 +130,8 @@ int main(int argc, char* argv[]){
 	}
 
         // Diagnostics
-        Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t);
-        Mdc.getSystemResidual(Mat, Msh, Dsc, t);
+        /* Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t); */
+        /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
 	
         // Write Data
         Prb.checkProbes(Msh, Sol, t);

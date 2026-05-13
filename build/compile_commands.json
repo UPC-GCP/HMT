@@ -1,62 +1,56 @@
 [
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/MainSolver.cpp.o -c /home/upc_gcp/TFM/HMT/MainSolver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/MainSolver.cpp",
-  "output": "CMakeFiles/MainSolver.dir/MainSolver.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_MainSolver.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o00_MainSolver.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/Material.cpp.o -c /home/upc_gcp/TFM/HMT/Material.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Material.cpp",
-  "output": "CMakeFiles/MainSolver.dir/Material.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o01_Material.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/Mesh.cpp.o -c /home/upc_gcp/TFM/HMT/Mesh.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Mesh.cpp",
-  "output": "CMakeFiles/MainSolver.dir/Mesh.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o02_Mesh.cpp.o -c /home/upc_gcp/TFM/HMT/o02_Mesh.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o02_Mesh.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o02_Mesh.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/Discretizer.cpp.o -c /home/upc_gcp/TFM/HMT/Discretizer.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Discretizer.cpp",
-  "output": "CMakeFiles/MainSolver.dir/Discretizer.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o -c /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o03_Discretizer.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/Solver.cpp.o -c /home/upc_gcp/TFM/HMT/Solver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Solver.cpp",
-  "output": "CMakeFiles/MainSolver.dir/Solver.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o04_Solver.cpp.o -c /home/upc_gcp/TFM/HMT/o04_Solver.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_Solver.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o04_Solver.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/CG.cpp.o -c /home/upc_gcp/TFM/HMT/CG.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/CG.cpp",
-  "output": "CMakeFiles/MainSolver.dir/CG.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o04_CG.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CG.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_CG.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o04_CG.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/GS.cpp.o -c /home/upc_gcp/TFM/HMT/GS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/GS.cpp",
-  "output": "CMakeFiles/MainSolver.dir/GS.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o05_Probe.cpp.o -c /home/upc_gcp/TFM/HMT/o05_Probe.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o05_Probe.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o05_Probe.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/ExpressionParser.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/ExpressionParser.cpp",
-  "output": "CMakeFiles/MainSolver.dir/ExpressionParser.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/Probe.cpp.o -c /home/upc_gcp/TFM/HMT/Probe.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Probe.cpp",
-  "output": "CMakeFiles/MainSolver.dir/Probe.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/Medic.cpp.o -c /home/upc_gcp/TFM/HMT/Medic.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Medic.cpp",
-  "output": "CMakeFiles/MainSolver.dir/Medic.cpp.o"
+  "command": "/usr/bin/c++  -I/usr/include/jsoncpp -I/home/upc_gcp/TFM/HMT -std=gnu++17 -o CMakeFiles/MainSolver.dir/o09_Medic.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Medic.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_Medic.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o09_Medic.cpp.o"
 }
 ]

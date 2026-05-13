@@ -11,16 +11,16 @@ pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
 # 3. Executable
 add_executable(MainSolver
-    MainSolver.cpp
-    Material.cpp
-    Mesh.cpp
-    Discretizer.cpp
-    Solver.cpp
-    CG.cpp
-    GS.cpp
-    ExpressionParser.cpp
-    Probe.cpp
-    Medic.cpp
+    o00_MainSolver.cpp
+    o01_Material.cpp
+    o02_Mesh.cpp
+    o03_Discretizer.cpp
+    o04_Solver.cpp
+    o04_CG.cpp
+    # GS.cpp
+    o05_Probe.cpp
+    o09_ExpressionParser.cpp
+    o09_Medic.cpp
 )
 
 # 4. Directories

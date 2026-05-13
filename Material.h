@@ -5,8 +5,7 @@
 #include <json/json.h>
 
 struct MatPhys{
-    double rho, lambda, cp, alpha;
-    std::string rhoExpr, lambdaExpr, cpExpr; // Not currently in use. Kept for future variable properties implementation.
+    double rho, lambda, cp, alpha, gamma;
 };
 
 class Material

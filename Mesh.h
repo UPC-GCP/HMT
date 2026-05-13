@@ -33,8 +33,9 @@ public:
     std::vector<Matrix> matA{};
     std::vector<Boundary> newBoundaryConditions{};
     std::vector<int> N{};
-    std::vector<std::vector<double>> Faces{}, Nodes{}, ndelta{}, nd{}; // dimensions, values
+    std::vector<std::vector<double>> Faces{}, Nodes{}, ndelta{}, nd{}; // dimension, position
     std::vector<std::vector<int>> nMat{}, nIgnore{}; // x-axis, y-axis
+    std::vector<std::vector<std::vector<double>>> vConv{}; // dimension, x-axis, y-axis
     std::vector<std::vector<double>> nQv{}, nT{}, nSw{}, nSe{}, nSs{}, nSn{}, nVp{}; // x-axis, y-axis
 
     // Constructor
@@ -46,6 +47,8 @@ public:
     void newCalculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec);
     void newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement);
     void newAddBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs);
+
+    void addBoundaryConditions(ExpressionParser& Prs, Json::Value boundaries, Json::Value fluid);
 };
 
 #endif

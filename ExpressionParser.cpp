@@ -18,6 +18,8 @@ ExpressionParser::ExpressionParser(){
 
     // Variables
     symbol_table.add_variable("t", varTime);
+    symbol_table.add_variable("x", varX);
+    symbol_table.add_variable("y", varY);
 
 }
 
@@ -39,5 +41,12 @@ double ExpressionParser::evaluateTime(int i, double nVal){
 
     // Update
     varTime = nVal; return vExpr[i].value();
+
+}
+
+double ExpressionParser::evaluateCoordinates(int i, double xCoord, double yCoord){
+
+	// Update
+	varX = xCoord; varY = yCoord; return vExpr[i].value();
 
 }

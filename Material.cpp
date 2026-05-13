@@ -1,5 +1,4 @@
 // Imports
-#include <iostream>
 #include <vector> 
 #include <json/json.h>
 
@@ -17,6 +16,7 @@ Material::Material(Json::Value materials){
         vMat[i].lambda = materials[i]["lambda"].asDouble();
         vMat[i].cp = materials[i]["cp"].asDouble();
         vMat[i].alpha = vMat[i].lambda / (vMat[i].rho * vMat[i].cp);
+	vMat[i].gamma = materials[i]["gamma"].asDouble();
     }
 
 }

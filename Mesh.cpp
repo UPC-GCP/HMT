@@ -111,6 +111,15 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
     for (int i = 0; i < N.size(); i++){
         Faces[i].resize(N[i] - 1); Nodes[i].resize(N[i]); ndelta[i].resize(N[i], 0); nd[i].resize(N[i], 0);
     }
+
+    // Convection (Non-nD)
+    vConv.resize(N.size());
+    for (size_t i = 0; i < N.size(); i++){
+	    vConv[i].resize(N[0]-2);
+	    for (size_t j = 0; j < N[0] - 2; j++){vConv[i][j].resize(N[1]-2, 0);}
+    }
+
+    // THIS ONE IS CREATED ONLY FOR INTERIOR NODES. PENDING FROM HERE
     
     // Mesh Loop (nD)
     std::vector<int> cNode; cNode.resize(N.size(), 0);
@@ -182,6 +191,21 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
 
     // Coefficients (nD)
     matA.resize(totNodes); bp.resize(totNodes, 0);
+
+
+    std::cout << "Faces:\n";
+    for (std::vector<double> vec : Faces){for (double val : vec){std::cout << val << " ";} std::cout << "\n";}
+
+    std::cout << "Nodes:\n";
+    for (std::vector<double> vec : Nodes){for (double val : vec){std::cout << val << " ";} std::cout << "\n";}
+    
+    std::cout << "VConv\n";
+    for (std::vector<std::vector<double>> nVec : vConv){
+	    std::cout << "Axis:\n";
+	    for (std::vector<double> vec : nVec){
+		    for(double val : vec){std::cout << val << " ";} std::cout << "\n";
+	    } std::cout << "\n";
+    }
 
 }
 
