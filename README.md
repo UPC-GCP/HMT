@@ -16,7 +16,7 @@ Specify sections of the analyzed geometry, including material and internal heat 
 Specify mesh parameters, mesh algorithm, nodes per axis, and list refinement regions for the mesh.
 
 ### Boundary Conditions
-Specify the boundary conditions present in the model. Dirichlet boundary conditions also support variable temperature values.
+Specify the boundary conditions present in the model. Supports Dirichlet, Neumann and Robin boundary conditions. Dirichlet boundary conditions also support variable temperature values.
 
 ### Probe Data
 Specify data acquisition targets.

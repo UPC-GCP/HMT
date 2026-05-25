@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /home/upc_gcp/TFM/HMT/build
 
 # The main recursive "all" target.
 all: CMakeFiles/MainSolver.dir/all
+all: CMakeFiles/TestSolver.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,6 +73,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/MainSolver.dir/clean
+clean: CMakeFiles/TestSolver.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -81,12 +83,12 @@ clean: CMakeFiles/MainSolver.dir/clean
 CMakeFiles/MainSolver.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10 "Built target MainSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target MainSolver"
 .PHONY : CMakeFiles/MainSolver.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/MainSolver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/MainSolver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 0
 .PHONY : CMakeFiles/MainSolver.dir/rule
@@ -99,6 +101,32 @@ MainSolver: CMakeFiles/MainSolver.dir/rule
 CMakeFiles/MainSolver.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/clean
 .PHONY : CMakeFiles/MainSolver.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/TestSolver.dir
+
+# All Build rule for target.
+CMakeFiles/TestSolver.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestSolver.dir/build.make CMakeFiles/TestSolver.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestSolver.dir/build.make CMakeFiles/TestSolver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=7,8,9,10,11,12,13,14,15,16 "Built target TestSolver"
+.PHONY : CMakeFiles/TestSolver.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/TestSolver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 10
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/TestSolver.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 0
+.PHONY : CMakeFiles/TestSolver.dir/rule
+
+# Convenience name for target.
+TestSolver: CMakeFiles/TestSolver.dir/rule
+.PHONY : TestSolver
+
+# clean rule for target.
+CMakeFiles/TestSolver.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestSolver.dir/build.make CMakeFiles/TestSolver.dir/clean
+.PHONY : CMakeFiles/TestSolver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -15,9 +15,9 @@ private:
 
 public:
     // Variables
+    bool bIgnore=true;
     std::string tempScheme{}, spatScheme{};
     double beta{}, endTime{}, dt{}, epsFind{};
-    bool bIgnore=true;
     std::function<double(double)> funcScheme{};
 
     // Constructor

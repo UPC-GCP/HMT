@@ -207,6 +207,28 @@ void Mesh::newGenerateMesh(Material& Mat, Json::Value qNode, Json::Value section
 	    } std::cout << "\n";
     }
 
+
+    std::cout << "Sw:\n";
+    for (std::vector<double> vec : nSw){
+        for (double val : vec){std::cout << val << " ";} std::cout << "\n";
+    }
+
+    std::cout << "Se:\n";
+    for (std::vector<double> vec : nSe){
+        for (double val : vec){std::cout << val << " ";} std::cout << "\n";
+    }
+
+    std::cout << "Ss:\n";
+    for (std::vector<double> vec : nSs){
+        for (double val : vec){std::cout << val << " ";} std::cout << "\n";
+    }
+
+    std::cout << "Sn:\n";
+    for (std::vector<double> vec : nSn){
+        for (double val : vec){std::cout << val << " ";} std::cout << "\n";
+    }
+
+
 }
 
 

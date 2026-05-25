@@ -4,7 +4,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+/* #include <memory> */
 #include <pthread.h>
+#include <string>
 #include <vector>
 #include <json/json.h>
 #include <cmath>
@@ -27,7 +29,7 @@ Mesh::Mesh(int algo, double W, double A, double xC, double kStr, double delta) {
 }
 
 
-bool Mesh::isFormula(std::string value){
+bool isFormula(std::string value){
 
     // Stringstream
     std::stringstream ss; ss << value;
@@ -86,16 +88,16 @@ void Mesh::calculateFaces(int cNode, int NSec, double x0, double x1, std::vector
 void Mesh::generateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement){
 
 	// Control (nD)
-	N.resize(qNode.size(), 2);
+	N.resize(qNode.size());
 	for(Json::Value::ArrayIndex i = 0; i < N.size(); i++){
-		N[i] = qNode[i].asInt() + 2;
+		N[i] = qNode[i].asInt();
 	}
     for (int val : N){totNodes *= val;}
 
 	// Geometry (nD)
-	Faces.resize(N.size()); Nodes.resize(N.size()); ndelta.resize(N.size()); nd.resize(N.size());
+	Faces.resize(N.size()); Nodes.resize(N.size()); DeltaX.resize(N.size()); dX.resize(N.size());
 	for (size_t i = 0; i < N.size(); i++){
-		Faces[i].resize(N[i]-1); Nodes[i].resize(N[i]); ndelta[i].resize(N[i]); nd[i].resize(N[i]);
+		Faces[i].resize(N[i]+1); Nodes[i].resize(N[i]); DeltaX[i].resize(N[i]); dX[i].resize(N[i]+1);
 	}
     
     // Faces Loop (nD)
@@ -110,92 +112,57 @@ void Mesh::generateMesh(Material& Mat, Json::Value qNode, Json::Value sections, 
 
     // CV Positions (nD)
     for (size_t i = 0; i < N.size(); i++){
-        for (size_t j = 1; j < N[i]-1; j++){
-            Nodes[i][j] = 0.5 * (Faces[i][j] + Faces[i][j-1]);
+        for (size_t j = 0; j < N[i]; j++){
+            Nodes[i][j] = 0.5 * (Faces[i][j] + Faces[i][j+1]);
         }
-        Nodes[i].front() = Faces[i].front(); Nodes[i].back() = Faces[i].back();
     }
-
+    
     // Deltas (nD)
     for (size_t i = 0; i < N.size(); i++){
-        for (size_t j = 0; j < nd[i].size()-1; j++){
-            nd[i][j] = Nodes[i][j+1] - Nodes[i][j];
-            if (j > 0){ndelta[i][j] = Faces[i][j] - Faces[i][j-1];}
+        for (size_t j = 0; j < DeltaX[i].size(); j++){
+            // Delta X
+            DeltaX[i][j] = Faces[i][j+1] - Faces[i][j];
+
+            // dX
+            if (j == DeltaX[i].size()-1){continue;}
+            dX[i][j+1] = Nodes[i][j+1] - Nodes[i][j];
         }
+
+        // dX
+        dX[i].front() = Nodes[i].front() - Faces[i].front();
+        dX[i].back() = Faces[i].back() - Nodes[i].back();
     }
 
-
-    /* std::cout << "deltaX:\n"; */
-    /* for (std::vector<double> vec : ndelta){ */
-    /*     for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "dX:\n"; */
-    /* for (std::vector<double> vec : nd){ */
-    /*     for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-    /* } */
-
     // Resize (Non-nD)
-    nMat.resize(N[0]); sPhi.resize(N[0]); vPhi.resize(N[0]); Sw.resize(N[0]); Se.resize(N[0]); Ss.resize(N[0]); Sn.resize(N[0]); Vp.resize(N[0]);
+    nMat.resize(N[0]); vPhi.resize(N[0]); sPhi.resize(N[0]); Sw.resize(N[0]); Se.resize(N[0]); Ss.resize(N[0]); Sn.resize(N[0]); Vp.resize(N[0]);
     for (size_t i = 0; i < N[0]; i++){
-        nMat[i].resize(N[1], 0); sPhi[i].resize(N[1], 0); vPhi[i].resize(N[1], 0); Sw[i].resize(N[1], 0); Se[i].resize(N[1], 0); Ss[i].resize(N[1], 0); Sn[i].resize(N[1], 0); Vp[i].resize(N[1], 0);
+        nMat[i].resize(N[1], 0); vPhi[i].resize(N[1], 0); sPhi[i].resize(N[1], 0); Sw[i].resize(N[1], 0); Se[i].resize(N[1], 0); Ss[i].resize(N[1], 0); Sn[i].resize(N[1], 0); Vp[i].resize(N[1], 0);
     }
 
     // Sections
-    std::vector<int> xPos(N.size()), yPos(N.size());
+    std::vector<int> Pos0(N.size()), Pos1(N.size());
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
-
         // Find Positions (nD)
         for (int j = 0; j < N.size(); j++){
-            xPos[j] = std::find(Faces[j].begin(), Faces[j].end(), sections[i]["x0"][j].asDouble()) - Faces[j].begin();
-            yPos[j] = std::find(Faces[j].begin(), Faces[j].end(), sections[i]["x1"][j].asDouble()) - Faces[j].begin();
+            Pos0[j] = std::find(Faces[j].begin(), Faces[j].end(), sections[i]["x0"][j].asDouble()) - Faces[j].begin();
+            Pos1[j] = std::find(Faces[j].begin(), Faces[j].end(), sections[i]["x1"][j].asDouble()) - Faces[j].begin();
         }
 
         // Internal Nodes (Non-nD)
-        for (int j = xPos[0]+1; j < yPos[0]+1; j++){
-            for (int k = xPos[1]+1; k < yPos[1]+1; k++){
+        for (int j = Pos0[0]; j < Pos1[0]; j++){
+            for (int k = Pos0[1]; k < Pos1[1]; k++){
                 // Material
                 nMat[j][k] = sections[i]["material"].asInt(); sPhi[j][k] = sections[i]["source"].asDouble();
 
-                // Geometry
-                Sw[j][k] = ndelta[1][k] * W; Se[j][k] = ndelta[1][k] * W; Ss[j][k] = ndelta[0][j] * W; Sn[j][k] = ndelta[0][j] * W;
-                Vp[j][k] = ndelta[0][j] * ndelta[1][k] * W;
+                /* // Geometry */
+                Sw[j][k] = DeltaX[1][k] * W; Se[j][k] = DeltaX[1][k] * W; Ss[j][k] = DeltaX[0][j] * W; Sn[j][k] = DeltaX[0][j] * W;
+                Vp[j][k] = DeltaX[0][j] * DeltaX[1][k] * W;
             }
         }
-
     }
-
-    // Boundary Nodes (Non-nD)
-    for (int i = 0; i < nMat.size(); i++){
-        nMat[i].front() = nMat[i][1]; nMat[i].back() = nMat[i][nMat[i].size()-2];
-        Se[i].front() = Se[i][1]; Sw[i].back() = Sw[i][Sw[i].size()-2];
-    }
-    nMat.front() = nMat[1]; nMat.back() = nMat[nMat.size()-2];
-    Sn.front() = Sn[1]; Ss.back() = Ss[Ss.size()-2];
 
     // Coefficients (nD)
-    matA.resize(totNodes); bp.resize(totNodes, 0);
-
-
-/*     std::cout << "Sw:\n"; */
-/*     for (std::vector<double> vec : Sw){ */
-/*         for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-/*     } */
-
-/*     std::cout << "Se:\n"; */
-/*     for (std::vector<double> vec : Se){ */
-/*         for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-/*     } */
-
-/*     std::cout << "Ss:\n"; */
-/*     for (std::vector<double> vec : Ss){ */
-/*         for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-/*     } */
-
-/*     std::cout << "Sn:\n"; */
-/*     for (std::vector<double> vec : Sn){ */
-/*         for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-/*     } */
+    matA.resize(totNodes); bp.resize(totNodes, 0); tempA.resize(totNodes); tempB.resize(totNodes, 0);
 
 }
 
@@ -203,7 +170,7 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
 
     // Resize
     boundaryConditions.resize(boundaries.size());
-    std::vector<double> Pos0, Pos1;
+    std::vector<double> Pos0, Pos1; std::string sType{};
 
     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
 
@@ -222,9 +189,18 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
 
             // Value
             if (isFormula(boundaries[i]["value"].asString())){
+                
                 boundaryConditions[i].value = 0;
                 boundaryConditions[i].bUpdate = true;
                 boundaryConditions[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString());
+                
+                sType = boundaries[i]["value"].asString();
+                if (sType.find(" t ") != std::string::npos){
+                    boundaryConditions[i].iEq = 0; // updateTime
+                } else if (sType.find(" x ") != std::string::npos || sType.find(" y ") != std::string::npos){
+                    boundaryConditions[i].iEq = 1; // updateCoords
+                } else {boundaryConditions[i].iEq = 0;} // Generic uses updateTime
+
             } else {
                 boundaryConditions[i].value = boundaries[i]["value"].asDouble();
             }
@@ -244,7 +220,7 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
             boundaryConditions[i].value = boundaries[i]["value"].asDouble();
             boundaryConditions[i].side = boundaries[i]["side"].asInt();
 
-        } else if (boundaries[i]["type"] == "Convection") {
+        } else if (boundaries[i]["type"] == "Robin") {
             
             // Control
             boundaryConditions[i].type = 2;
@@ -274,28 +250,30 @@ void Mesh::addVelocityField(Json::Value nField, ExpressionParser& Prs){
     // Control
     if (N.size() != nField.size()){std::cerr << "Velocity field does not match dimensions.\n";}
 
-
     // Resize
-    vField.vConv.resize(N.size()); vField.iExpr.resize(N.size());
-    for (size_t i = 0; i < N.size(); i++){
-        vField.vConv[i].resize(N[0]);
-        for (size_t j = 0; j < N[0]; j++){
-            vField.vConv[i][j].resize(N[1], 0);
+    vConv.resize(N.size()); vExpr.resize(N.size());
+    for (size_t k = 0; k < N.size(); k++){
+        vConv[k].resize(N[0]+1);
+        for (size_t i = 0; i < N[0]+2; i++){
+            vConv[k][i].resize(N[1]+1);
         }
     }
     
     // Parser
-    for (Json::Value::ArrayIndex i = 0; i < vField.vConv.size(); i++){
+    for (Json::Value::ArrayIndex i = 0; i < vConv.size(); i++){
         if (isFormula(nField[i]["value"].asString())){
-            vField.iExpr[i] = Prs.registerExpression(nField[i]["value"].asString());
+            vExpr[i] = Prs.registerExpression(nField[i]["value"].asString());
         }
     }
-
+    
     // Calculate Field
     for (size_t k = 0; k < N.size(); k++){
-        for (size_t i = 0; i < N[0]; i++){
-            for (size_t j = 0; j < N[1]; j++){
-                vField.vConv[k][i][j] = Prs.evaluateCoordinates(vField.iExpr[k], Nodes[0][i] , Nodes[1][j]);
+        for (size_t i = 0; i < N[0]+1; i++){
+            for (size_t j = 0; j < N[1]+1; j++){
+                vConv[k][i][j].Vw = Prs.evaluateCoordinates(vExpr[k], Faces[0][i], Nodes[1][j]);
+                vConv[k][i][j].Ve = Prs.evaluateCoordinates(vExpr[k], Faces[0][i+1], Nodes[1][j]);
+                vConv[k][i][j].Vs = Prs.evaluateCoordinates(vExpr[k], Nodes[0][i], Faces[1][j]);
+                vConv[k][i][j].Vn = Prs.evaluateCoordinates(vExpr[k], Nodes[0][i], Faces[1][j+1]);
             }
         }
     }

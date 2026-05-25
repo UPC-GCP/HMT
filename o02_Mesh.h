@@ -12,16 +12,15 @@ struct Matrix{
 };
 
 struct Boundary{
-    int type{}, side{}, iExpr{};
+    int type{}, side{}, iExpr{}, iEq{};
     std::vector<double> x0{}, x1{};
     double value{}, alpha{};
     bool bUpdate = false;
     std::string expression;
 };
 
-struct velocityField{
-    std::vector<int> iExpr{};
-    std::vector<std::vector<std::vector<double>>> vConv{};
+struct VelocityField{
+    double Vw=0, Ve=0, Vs=0, Vn=0;
 };
 
 class Mesh
@@ -32,24 +31,22 @@ public:
     // Variables
     double W{}, strength{}, centering{}, kStrength{}, delta{};
     int totNodes=1, algorithm{};
-
+    
     // Vectors
-    std::vector<double> bp{};
-    std::vector<Matrix> matA{};
+    std::vector<int> N{}, vExpr{}; // dimension
+    std::vector<double> bp{}, tempB{}; // k = x-axis * N[1] + y-axis 
+    std::vector<Matrix> matA{}, tempA{}; // k = x-axis * N[1] + y-axis 
     std::vector<Boundary> boundaryConditions{};
-    std::vector<int> N{};
-    std::vector<std::vector<double>> Faces{}, Nodes{}, ndelta{}, nd{}; // dimension, position
     std::vector<std::vector<int>> nMat{}, nIgnore{}; // x-axis, y-axis
-    /* std::vector<std::vector<double>> nQv{}, nT{}, nSw{}, nSe{}, nSs{}, nSn{}, nVp{}; // x-axis, y-axis */
-    std::vector<std::vector<double>> vPhi{}, sPhi{}, Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // x-axis, y-axis
+    std::vector<std::vector<double>> Faces{}, Nodes{}, DeltaX{}, dX{}; // dimension, position
+    std::vector<std::vector<double>> sPhi{}, vPhi{}, Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // x-axis, y-axis
     /* std::vector<std::vector<std::vector<double>>> vConv{}; // dimension, x-axis, y-axis */
-    velocityField vField{};
+    std::vector<std::vector<std::vector<VelocityField>>> vConv{}; // dimension, x-axis, y-axis
 
     // Constructor
     Mesh(int algo, double W = 1, double A = 0, double xC = 0.5, double kStr = 1, double delta = 0.001);
 
     // Functions
-    bool isFormula(std::string value);
     void generateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement);
     void addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs);
     void addVelocityField(Json::Value nField, ExpressionParser& Prs);

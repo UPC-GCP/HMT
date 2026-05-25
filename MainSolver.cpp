@@ -79,7 +79,6 @@ int main(int argc, char* argv[]){
     Msh.newGenerateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
     Msh.newAddBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.newBoundaryConditions.size() << " boundary conditions added.\n";
 	
-    return 0;
     
     ///// Discretizer /////
     std::cout << "Initializing discretizer ...\n";
