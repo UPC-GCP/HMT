@@ -25,6 +25,10 @@ ExpressionParser::ExpressionParser(){
 
 int ExpressionParser::registerExpression(std::string exprStr){
 
+    // Check if expression already registered in sExpr
+    // If yes, return index instead of doing anything else
+    
+
     // Parse Expression
     exprtk::expression<double> exprTemp;
     exprTemp.register_symbol_table(symbol_table);
@@ -32,6 +36,7 @@ int ExpressionParser::registerExpression(std::string exprStr){
 
     // Store
     vExpr.push_back(exprTemp);
+    sExpr.push_back(exprStr);
 
     return vExpr.size() - 1;
 

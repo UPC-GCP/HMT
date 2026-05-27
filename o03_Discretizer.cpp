@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+/* #include <iterator> */
+#include <sys/ucontext.h>
 #include <vector>
 #include <json/json.h>
 #include <cmath>
@@ -88,7 +90,7 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
     } else if (spatScheme == "Exponential"){
         funcScheme = [](double Pe){return Pe / (exp(Pe) - 1);};
     } else {
-        std::cerr << "Error: Invalid spatial discretization scheme " << spatScheme << "\n";
+        std::cerr << "Error: Invalid spatial discretization scheme '" << spatScheme << "'\n";
     }
 
 }
@@ -97,10 +99,9 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
     // Control
+    Msh.tempB.resize(Msh.totNodes, 0);
     int i{}, j{}, k{}; double gammaw, gammae, gammas{}, gamman{};
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
-    Msh.tempB.resize(Msh.totNodes, 0);
-    
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
 
     ////////// Boundary Node Coefficients //////////
@@ -121,63 +122,201 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             // Dirichlet
             if (Pos0[0] == Pos1[0]){
 
-                std::cout << "\nDirichlet - xBoundary\n";
-                std::cout << "x: " << Pos0[0] << "\n";
-                std::cout << "y: " << Pos0[1] << " " << Pos1[1] << "\n";
-
                 // xBoundary
-                if (Pos0[0] == 0){i = Pos0[0];} else {i = Pos0[0]-1;}
-                for (int j = Pos0[1]; j < Pos1[1]; j++){
-                    std::cout << "Coordinates: " << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j] << "\n";
-                }
+                if (bC.side == 0){
+
+                    // West Boundary
+                    i = Pos0[0];
+
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.N[1] + j;
+                        if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Faces[0][i], Msh.Nodes[1][j]);}
+                        
+                        // Gamma
+                        gammaw = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients Conv-Diff
+                        Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
+                        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+
+                        // Coefficients B
+                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].aw * bC.value);
+                    }
+
+                } else if (bC.side == 1){
+                    
+                    // East Boundary
+                    i = Pos0[0] - 1;
+
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.N[1] + j;
+                        if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Faces[0][i+1], Msh.Nodes[1][j]);}
+
+                        // Gamma
+                        gammae = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients Conv-Diff
+                        De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
+                        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+
+                        // Coefficients B
+                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].ae * bC.value);
+                    }
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
 
             } else if (Pos0[1] == Pos1[1]){
     
-                std::cout << "\nDirichlet - yBoundary\n";
-                std::cout << "x: " << Pos0[0] << " " << Pos1[0] << "\n";
-                std::cout << "y: " << Pos0[1] << "\n";
-                /* std::cout << "Test: " << Msh.Nodes[1][Pos0[1]] << "\n"; */
-
                 // yBoundary
-                if (Pos0[1] == 0){j = Pos0[1];} else {j = Pos0[1]-1;}
-                for (int i = Pos0[0]; i < Pos1[0]; i++){
-                    std::cout << "Coordinates: " << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j] << "\n";
-                }
+                if (bC.side == 0){
 
-            } else {std::cerr << "Boundary range not specified correctly.\n";}
+                    // South Boundary
+                    j = Pos0[1];
+
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.N[1] + j;
+                        if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Nodes[0][i], Msh.Faces[1][j]);}
+
+                        // Gamma
+                        gammas = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients Conv-Diff
+                        Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
+                        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+
+                        // Coefficients B
+                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].as * bC.value);
+                    }
+
+                } else if (bC.side == 1){
+
+                    // North Boundary
+                    j = Pos0[1] - 1;
+
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // North Boundary
+                        k = i * Msh.N[1] + j;
+                        if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Nodes[0][i], Msh.Faces[1][j+1]);}
+
+                        // Gamma
+                        gamman = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients Conv-Diff
+                        Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
+                        Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+
+                        // Coefficients B
+                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].an * bC.value);
+                    }
+
+                } else {std::cerr << "Boundary range not specified correctly.\n";}
+
+            }
             
         } else if (bC.type == 1){
 
             // Neumann
             if (Pos0[0] == Pos1[0]){
 
-                std::cout << "\nNeumann - xBoundary\n";
-                std::cout << "x: " << Pos0[0] << "\n";
-                std::cout << "y: " << Pos0[1] << " " << Pos1[1] << "\n";
+                // Control
+                double phiBC{}, aTemp{};
 
                 // xBoundary
-                if (Pos0[0] == 0){i = Pos0[0];} else {i = Pos0[0]-1;}
-                for (int j = Pos0[1]; j < Pos1[1]; j++){
-                    std::cout << "Coordinates: " << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j] << "\n";
-                }
+                if (bC.side == 0){
+
+                    // West Boundary
+                    i = Pos0[0]; 
+
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.N[1] + j; gammaw = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients A
+                        Msh.tempA[k].aw = 0;
+                        Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
+                        Pw = Fw / Dw; aTemp = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+
+                        // Coefficients B
+                        phiBC = (bC.value + Msh.vPhi[i][j] * gammaw / Msh.dX[0][i]) / (gammaw / Msh.dX[0][i]);
+                        Msh.tempB[k] += bC.value * Msh.Sw[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                    }
+
+                } else if (bC.side == 1){
+                    
+                    // East Boundary
+                    i = Pos0[0]-1; 
+
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.N[1] + j;
+
+                        // Coefficients A
+                        Msh.tempA[k].ae = 0;
+                        De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
+                        Pe = Fe / De; aTemp = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+
+                        // Coefficients B
+                        phiBC = (bC.value - Msh.vPhi[i][j] * gammae / Msh.dX[0][i+1]) / (gammae / Msh.dX[0][i+1]); // CHECK SIGN, NOT SURE (PENDING)
+                        Msh.tempB[k] += bC.value * Msh.Se[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                    }
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
                 
             } else if (Pos0[1] == Pos1[1]){
 
-                std::cout << "\nNeumann - yBoundary\n";
-                std::cout << "x: " << Pos0[0] << " " << Pos1[0] << "\n";
-                std::cout << "y: " << Pos0[1] << "\n";
+                // Control
+                double phiBC{}, aTemp{};
 
                 // yBoundary
-                if (Pos0[1] == 0){j = Pos0[1];} else {j = Pos0[1]-1;}
-                for (int i = Pos0[0]; i < Pos1[0]; i++){
-                    std::cout << "Coordinates: " << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j] << "\n";
-                }
+                if (bC.side == 0){
+                    
+                    // South Boundary
+                    j = Pos0[1];
+
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.N[1] + j;
+
+                        // Coefficients A
+                        Msh.tempA[k].as = 0;
+                        Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
+                        Ps = Fs / Ds; aTemp = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+
+                        // Coefficients B
+                        phiBC = (bC.value + Msh.vPhi[i][j] * gammas / Msh.dX[1][j]) / (gammas / Msh.dX[1][j]);
+                        Msh.tempB[k] += bC.value * Msh.Ss[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                    }
+                    
+                } else if (bC.side == 1){
+
+                    // North Boundary
+                    j = Pos0[1]-1;
+
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.N[1] + j;
+
+                        // Coefficients A
+                        Msh.tempA[k].an = 0;
+                        Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
+                        Pn = Fn / Dn; aTemp = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+
+                        // Coefficients B
+                        phiBC = (bC.value - Msh.vPhi[i][j] * gamman / Msh.dX[1][j+1]) / (gamman / Msh.dX[1][j+1]);
+                        Msh.tempB[k] += bC.value * Msh.Sn[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                    }
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
+                
             } else {std::cerr << "Boundary range not specified correctly.\n";}
 
 
-        } else if (bC.type == 2){
+        } else if (bC.type == 2){ // PENDING HAVE TO ASK PEP IF THIS SHOULD BE IMPLEMENTED AS PURE DIFFUSION
 
-            // Robin (Hybrid / Convection)
+            // Robin (Hybrid)
             if (Pos0[0] == Pos1[0]){
 
                 // xBoundary
@@ -385,27 +524,6 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

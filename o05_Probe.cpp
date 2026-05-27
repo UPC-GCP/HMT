@@ -60,7 +60,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
     newPath = pathBase;
     
     // Add Probes and Create Files
-    pMap tempMap{}; pBug tempBug{};
+    pMap tempMap{}; pBug tempBug{}; pFld tempFld{};
     for (Json::Value::ArrayIndex i = 0; i < probes.size(); i++){
 
         if (probes[i]["type"].asString() == "Point"){
@@ -83,7 +83,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
         } else if (probes[i]["type"].asString() == "Map"){
             
             // Create File
-	    tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv";
+            tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv";
             tempMap.file = createFile(newPath / tempString);
 
             // Time
@@ -104,10 +104,34 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             probeMap.push_back(std::move(tempMap));
             tempMap = {};
         
+        } else if (probes[i]["type"].asString() == "Field"){
+
+            // Not using this one for now since I am using a static field and I can calculate it again later but will fully add it later
+
+            // Create File
+            tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Field.csv";
+            tempFld.file = createFile(newPath / tempString);
+
+            // Time
+            tempFld.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
+
+            // Position
+
+            // Header
+            for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){
+                for (int k = tempFld.yPos[0]; k <= tempFld.yPos[1]; k++){
+                    tempFld.file << "," << Msh.Faces[0][j] << " " << Msh.Faces[1][k];
+                }
+            }
+
+            // Control
+            probeFld.push_back(std::move(tempFld));
+            tempFld = {};
+
         } else if (probes[i]["type"].asString() == "Debug"){
 
             // Create File
-	    tempString = "Probe_" + std::to_string(probeMap.size() + probeBug.size() + 1) + "_Bug.csv";
+            tempString = "Probe_" + std::to_string(probeMap.size() + probeBug.size() + 1) + "_Bug.csv";
             tempBug.file = createFile(newPath / tempString);
 
             // Time
@@ -119,11 +143,6 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             
             // Header
             tempBug.file << ",lastIter,lastRes\n";
-	    // for (int j = tempBug.xPos[0]; j <= tempBug.xPos[1]; j++){
-                // for (int k = tempBug.yPos[0]; k <= tempBug.yPos[1]; k++){
-                    // tempBug.file << "," << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k];
-                // }
-            // } tempBug.file << "\n";
 
             // Control
             probeBug.push_back(std::move(tempBug));
@@ -141,7 +160,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
 }
 
 void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
-    
+
     // Point Probe
     std::vector<bool> bSave{}; bSave.resize(probePoint.xPos.size(), false);
     for (size_t i = 0; i < probePoint.xPos.size(); i++){
@@ -161,6 +180,7 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
         } probePoint.file << "\n";
     }
 
+
     // Map Probe
     bSave = {}; bSave.resize(probeMap.size(), false);
     for (size_t i = 0; i < probeMap.size(); i++){
@@ -174,8 +194,8 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
         if (!bSave[i]){continue;}
 
         probeMap[i].file << t;
-        for (size_t j = probeMap[i].xPos[0]; j <= probeMap[i].xPos[1]; j++){
-            for (size_t k = probeMap[i].yPos[0]; k <= probeMap[i].yPos[1]; k++){
+        for (size_t j = probeMap[i].xPos[0]; j < probeMap[i].xPos[1]; j++){
+            for (size_t k = probeMap[i].yPos[0]; k < probeMap[i].yPos[1]; k++){
                 probeMap[i].file << "," << Msh.vPhi[j][k];
             }
         } probeMap[i].file << "\n";
@@ -188,17 +208,12 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
             bSave[i] = true;
         }
     }
-    
+
     // Save Values
     for (size_t i = 0; i < probeBug.size(); i++){
         if (!bSave[i]){continue;}
 
         probeBug[i].file << t << "," << Sol->lastIter << "," << Sol->lastRes << "\n";
-        // for (size_t j = probeBug[i].xPos[0]; j <= probeBug[i].xPos[1]; j++){
-            // for (size_t k = probeBug[i].yPos[0]; k <= probeBug[i].yPos[1]; k++){
-                // probeBug[i].file << "," << Msh.bp[j*Msh.N[1] + k];
-            // }
-        // } probeBug[i].file << "\n";
     }
 
 }

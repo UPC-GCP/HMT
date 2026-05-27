@@ -23,6 +23,7 @@ public:
 
     // Vectors
     std::vector<exprtk::expression<double>> vExpr;
+    std::vector<std::string> sExpr; // Use this to compare expressions and avoid duplicating already parsed ones
 
     // Constructor
     ExpressionParser();

@@ -125,10 +125,52 @@ CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp -o CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.s
 
+CMakeFiles/MainSolver.dir/o04_Solver.cpp.o: CMakeFiles/MainSolver.dir/flags.make
+CMakeFiles/MainSolver.dir/o04_Solver.cpp.o: /home/upc_gcp/TFM/HMT/o04_Solver.cpp
+CMakeFiles/MainSolver.dir/o04_Solver.cpp.o: CMakeFiles/MainSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MainSolver.dir/o04_Solver.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/o04_Solver.cpp.o -MF CMakeFiles/MainSolver.dir/o04_Solver.cpp.o.d -o CMakeFiles/MainSolver.dir/o04_Solver.cpp.o -c /home/upc_gcp/TFM/HMT/o04_Solver.cpp
+
+CMakeFiles/MainSolver.dir/o04_Solver.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MainSolver.dir/o04_Solver.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o04_Solver.cpp > CMakeFiles/MainSolver.dir/o04_Solver.cpp.i
+
+CMakeFiles/MainSolver.dir/o04_Solver.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/o04_Solver.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o04_Solver.cpp -o CMakeFiles/MainSolver.dir/o04_Solver.cpp.s
+
+CMakeFiles/MainSolver.dir/o04_CG.cpp.o: CMakeFiles/MainSolver.dir/flags.make
+CMakeFiles/MainSolver.dir/o04_CG.cpp.o: /home/upc_gcp/TFM/HMT/o04_CG.cpp
+CMakeFiles/MainSolver.dir/o04_CG.cpp.o: CMakeFiles/MainSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MainSolver.dir/o04_CG.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/o04_CG.cpp.o -MF CMakeFiles/MainSolver.dir/o04_CG.cpp.o.d -o CMakeFiles/MainSolver.dir/o04_CG.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CG.cpp
+
+CMakeFiles/MainSolver.dir/o04_CG.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MainSolver.dir/o04_CG.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o04_CG.cpp > CMakeFiles/MainSolver.dir/o04_CG.cpp.i
+
+CMakeFiles/MainSolver.dir/o04_CG.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/o04_CG.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o04_CG.cpp -o CMakeFiles/MainSolver.dir/o04_CG.cpp.s
+
+CMakeFiles/MainSolver.dir/o05_Probe.cpp.o: CMakeFiles/MainSolver.dir/flags.make
+CMakeFiles/MainSolver.dir/o05_Probe.cpp.o: /home/upc_gcp/TFM/HMT/o05_Probe.cpp
+CMakeFiles/MainSolver.dir/o05_Probe.cpp.o: CMakeFiles/MainSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MainSolver.dir/o05_Probe.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/o05_Probe.cpp.o -MF CMakeFiles/MainSolver.dir/o05_Probe.cpp.o.d -o CMakeFiles/MainSolver.dir/o05_Probe.cpp.o -c /home/upc_gcp/TFM/HMT/o05_Probe.cpp
+
+CMakeFiles/MainSolver.dir/o05_Probe.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MainSolver.dir/o05_Probe.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o05_Probe.cpp > CMakeFiles/MainSolver.dir/o05_Probe.cpp.i
+
+CMakeFiles/MainSolver.dir/o05_Probe.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/o05_Probe.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o05_Probe.cpp -o CMakeFiles/MainSolver.dir/o05_Probe.cpp.s
+
 CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o: CMakeFiles/MainSolver.dir/flags.make
 CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o: /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp
 CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o: CMakeFiles/MainSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o -MF CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o.d -o CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp
 
 CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.i: cmake_force
@@ -139,13 +181,31 @@ CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp -o CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.s
 
+CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: CMakeFiles/MainSolver.dir/flags.make
+CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp
+CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: CMakeFiles/MainSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/MainSolver.dir/o09_Medic.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MainSolver.dir/o09_Medic.cpp.o -MF CMakeFiles/MainSolver.dir/o09_Medic.cpp.o.d -o CMakeFiles/MainSolver.dir/o09_Medic.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Medic.cpp
+
+CMakeFiles/MainSolver.dir/o09_Medic.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MainSolver.dir/o09_Medic.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o09_Medic.cpp > CMakeFiles/MainSolver.dir/o09_Medic.cpp.i
+
+CMakeFiles/MainSolver.dir/o09_Medic.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MainSolver.dir/o09_Medic.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o09_Medic.cpp -o CMakeFiles/MainSolver.dir/o09_Medic.cpp.s
+
 # Object files for target MainSolver
 MainSolver_OBJECTS = \
 "CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.o" \
 "CMakeFiles/MainSolver.dir/o01_Material.cpp.o" \
 "CMakeFiles/MainSolver.dir/o02_Mesh.cpp.o" \
 "CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o" \
-"CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o"
+"CMakeFiles/MainSolver.dir/o04_Solver.cpp.o" \
+"CMakeFiles/MainSolver.dir/o04_CG.cpp.o" \
+"CMakeFiles/MainSolver.dir/o05_Probe.cpp.o" \
+"CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o" \
+"CMakeFiles/MainSolver.dir/o09_Medic.cpp.o"
 
 # External object files for target MainSolver
 MainSolver_EXTERNAL_OBJECTS =
@@ -154,11 +214,15 @@ MainSolver: CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.o
 MainSolver: CMakeFiles/MainSolver.dir/o01_Material.cpp.o
 MainSolver: CMakeFiles/MainSolver.dir/o02_Mesh.cpp.o
 MainSolver: CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o
+MainSolver: CMakeFiles/MainSolver.dir/o04_Solver.cpp.o
+MainSolver: CMakeFiles/MainSolver.dir/o04_CG.cpp.o
+MainSolver: CMakeFiles/MainSolver.dir/o05_Probe.cpp.o
 MainSolver: CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o
+MainSolver: CMakeFiles/MainSolver.dir/o09_Medic.cpp.o
 MainSolver: CMakeFiles/MainSolver.dir/build.make
 MainSolver: /usr/lib/x86_64-linux-gnu/libjsoncpp.so
 MainSolver: CMakeFiles/MainSolver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable MainSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable MainSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MainSolver.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

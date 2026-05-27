@@ -180,6 +180,7 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
 
             // Control
             boundaryConditions[i].type = 0;
+            boundaryConditions[i].side = boundaries[i]["side"].asInt();
 
             // Position
             for (int j = 0; j < N.size(); j++){
@@ -192,7 +193,7 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
                 
                 boundaryConditions[i].value = 0;
                 boundaryConditions[i].bUpdate = true;
-                boundaryConditions[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString());
+                boundaryConditions[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString()); // FutureWork: Store expressions as strings and check if same expression is already stored to reuse the index instead of saving it once more
                 
                 sType = boundaries[i]["value"].asString();
                 if (sType.find(" t ") != std::string::npos){
@@ -254,11 +255,11 @@ void Mesh::addVelocityField(Json::Value nField, ExpressionParser& Prs){
     vConv.resize(N.size()); vExpr.resize(N.size());
     for (size_t k = 0; k < N.size(); k++){
         vConv[k].resize(N[0]+1);
-        for (size_t i = 0; i < N[0]+2; i++){
+        for (size_t i = 0; i < N[0]+1; i++){
             vConv[k][i].resize(N[1]+1);
         }
     }
-    
+
     // Parser
     for (Json::Value::ArrayIndex i = 0; i < vConv.size(); i++){
         if (isFormula(nField[i]["value"].asString())){

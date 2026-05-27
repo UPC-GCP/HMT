@@ -1,6 +1,8 @@
 #ifndef PROBE_H_
 #define PROBE_H_
 
+#include <cstddef>
+#include <fstream>
 #include <vector>
 #include <json/json.h>
 
@@ -15,6 +17,12 @@ struct Prb{
 };
 
 struct pBug{
+    std::ofstream file{};
+    std::vector<size_t> xPos{}, yPos{};
+    std::vector<double> t;
+};
+
+struct pFld{
     std::ofstream file{};
     std::vector<size_t> xPos{}, yPos{};
     std::vector<double> t;
@@ -46,6 +54,7 @@ public:
 
     // Vectors
     std::vector<pMap> probeMap{};
+    std::vector<pFld> probeFld{};
     std::vector<pBug> probeBug{};
 
     // Constructor

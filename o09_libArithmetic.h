@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <vector>
 #include <cmath>
 
@@ -15,7 +16,6 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
 
             // Control
             k = i * m + j;
-            /* if ((i == 0 || i == n-1) && (j == 0 || j == m-1)){continue;} */
 
             // Calculate
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
@@ -47,6 +47,24 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
                 aVec[k] = Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
             }
 
+        }
+    }
+
+    return aVec;
+
+}
+
+inline std::vector<double> operMatVecProd(std::vector<Matrix> Mat, std::vector<double> Vec, int n, int m){
+
+    // Control
+    int k; std::vector<double> aVec(n*m);
+
+    // Calculate
+    for (size_t i = 0; i < n; i++){
+        for (size_t j = 0; j < m; i++){
+            
+            // Control
+            k = i * m + j;
         }
     }
 

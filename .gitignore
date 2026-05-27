@@ -47,3 +47,6 @@ RunConfig/
 # Reports
 *.tex
 *.cls
+
+# Bash
+*.sh

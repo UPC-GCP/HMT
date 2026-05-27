@@ -25,9 +25,33 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/MainSolver.dir/o04_Solver.cpp.o -c /home/upc_gcp/TFM/HMT/o04_Solver.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_Solver.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o04_Solver.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/MainSolver.dir/o04_CG.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CG.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_CG.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o04_CG.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/MainSolver.dir/o05_Probe.cpp.o -c /home/upc_gcp/TFM/HMT/o05_Probe.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o05_Probe.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o05_Probe.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
   "output": "CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/MainSolver.dir/o09_Medic.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Medic.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_Medic.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o09_Medic.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",

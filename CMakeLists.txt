@@ -16,12 +16,12 @@ add_executable(MainSolver
     o01_Material.cpp
     o02_Mesh.cpp
     o03_Discretizer.cpp
-    # o04_Solver.cpp
-    # o04_CG.cpp
+    o04_Solver.cpp
+    o04_CG.cpp
     # GS.cpp
-    # o05_Probe.cpp
+    o05_Probe.cpp
     o09_ExpressionParser.cpp
-    # o09_Medic.cpp
+    o09_Medic.cpp
 )
 
 add_executable(TestSolver
