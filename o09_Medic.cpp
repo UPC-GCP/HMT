@@ -34,8 +34,8 @@ Medic::Medic(Mesh Msh, Probe& Prb){
 
     // Energy Balance
     file = createDiagnostic(newPath / "Medic_Balance.csv");
-    for (size_t i = 1; i < Msh.N[0]-1; i++){
-        for (size_t j = 1; j < Msh.N[1]-1; j++){
+    for (size_t i = 0; i < Msh.N[0]; i++){
+        for (size_t j = 0; j < Msh.N[1]; j++){
             file << "," << Msh.Nodes[0][i] << " " << Msh.Nodes[1][j];
         }
     } file << "\n";
@@ -50,7 +50,7 @@ Medic::Medic(Mesh Msh, Probe& Prb){
 
 }
 
-void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t){
+void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldPhi, double t){
 
     // Control
     double tempErr, impErr, expErr; int k{};
@@ -58,11 +58,44 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
     file << t;
 
     // Nodes Loop
-    for (int i = 1; i < Msh.N[0]-1; i++){
-        for (int j = 1; j < Msh.N[1]-1; j++){
+    for (int i = 0; i < Msh.N[0]; i++){
+        for (int j = 0; j < Msh.N[1]; j++){
             
             // Control
-            k = i * Msh.N[1] + j;
+            k = i * Msh.N[1] + j; impErr = 0; expErr = 0;
+
+            // West Boundary
+            if (i != 0){
+                impErr += - Msh.tempA[k].aw * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]); 
+                expErr += - Msh.tempA[k].aw * (oldPhi[i][j] - oldPhi[i-1][j]);
+            }
+
+            // East Boundary
+            if (i != Msh.N[0]-1){
+                impErr += - Msh.tempA[k].ae * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]);
+                expErr += - Msh.tempA[k].ae * (oldPhi[i][j] - oldPhi[i+1][j]);
+            }
+
+            // South Boundary
+            if (j != 0){
+                impErr += - Msh.tempA[k].as * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]);
+                expErr += - Msh.tempA[k].as * (oldPhi[i][j] - oldPhi[i][j-1]);
+            }
+
+            // North Boundary
+            if (j != Msh.N[1]-1){
+                impErr += - Msh.tempA[k].an * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]);
+                expErr += - Msh.tempA[k].an * (oldPhi[i][j] - oldPhi[i][j+1]);
+            }
+
+            // Calculate // PENDING - VERIFY EXPRESSION, THIS ONE IGNORES TEMPB
+            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] * (Msh.vPhi[i][j] - oldPhi[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr - Msh.sPhi[i][j] * Msh.Vp[i][j];
+
+            // Print to File
+            file << "," << tempErr;
+
+            /* impErr = - Msh.tempA[k].aw * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]) - Msh.tempA[k].ae * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]) - Msh.tempA[k].as * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]) - Msh.tempA[k].an * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]); */
+            /* expErr = - Msh.tempA[k].aw * (oldPhi[i][j] - oldPhi[i-1][j]) - Msh.tempA[k].ae * (oldPhi[i][j] - oldPhi[i+1][j]) - Msh.tempA[k].as * (oldPhi[i][j] - oldPhi[i][j-1]) - Msh.tempA[k].an * (oldPhi[i][j] - oldPhi[i][j+1]); */
 
             /* // Harmonic Mean */
             /* lamb = Mat.vMat[Msh.nMat[i][j]].gamma; */
@@ -72,15 +105,12 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
             /* lambn = Dsc.calcHarmonicMean(Msh.nd[1][j], {lamb, Mat.vMat[Msh.nMat[i][j+1]].gamma}, {Msh.ndelta[1][j], Msh.ndelta[1][j+1]}); */
 
             /* // Calculate Error */
-	    /* impErr = - lambw * Msh.Sw[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.Se[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]) / Msh.nd[0][i] - lambs * Msh.Ss[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.Sn[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]) / Msh.nd[1][j]; */
-	    /* expErr = - lambw * Msh.Sw[i][j] * (oldTemp[i][j] - oldTemp[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.Se[i][j] * (oldTemp[i][j] - oldTemp[i+1][j]) / Msh.nd[0][i] - lambs * Msh.Ss[i][j] * (oldTemp[i][j] - oldTemp[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.Sn[i][j] * (oldTemp[i][j] - oldTemp[i][j+1]) / Msh.nd[1][j]; */
+            /* impErr = - lambw * Msh.Sw[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.Se[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]) / Msh.nd[0][i] - lambs * Msh.Ss[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.Sn[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]) / Msh.nd[1][j]; */
+            /* expErr = - lambw * Msh.Sw[i][j] * (oldTemp[i][j] - oldTemp[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.Se[i][j] * (oldTemp[i][j] - oldTemp[i+1][j]) / Msh.nd[0][i] - lambs * Msh.Ss[i][j] * (oldTemp[i][j] - oldTemp[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.Sn[i][j] * (oldTemp[i][j] - oldTemp[i][j+1]) / Msh.nd[1][j]; */
             /* tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] * (Msh.vPhi[i][j] - oldTemp[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr - Msh.sPhi[i][j] * Msh.Vp[i][j]; */ 
 
-            /* // Print to File */
-            /* file << "," << tempErr; */
-
         }
-    } // file << "\n";
+    } file << "\n";
 
 }
 
@@ -101,13 +131,13 @@ void Medic::getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t)
             // Control
             k = i * Msh.N[1] + j;
 
-            std::cout << i << " " << j << " " << k << ": ";
+            /* std::cout << i << " " << j << " " << k << ": "; */
 
             // Calculate
             tempRes = 0;
             /* tempRes = Msh.matA[k].ap * Msh.vPhi[i][j] + Msh.matA[k].aw * Msh.vPhi[i-1][j] + Msh.matA[k].ae * Msh.vPhi[i+1][j] + Msh.matA[k].as * Msh.vPhi[i][j-1] + Msh.matA[k].an * Msh.vPhi[i][j+1] - Msh.bp[k]; */
 
-            std::cout << tempRes << "\n";
+            /* std::cout << tempRes << "\n"; */
             
             /* fileR << "," << tempRes; */
 

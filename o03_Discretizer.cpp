@@ -141,7 +141,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].aw * bC.value);
+                        Msh.tempB[k] += - (1 - beta) * (Msh.tempA[k].aw * bC.value);
                     }
 
                 } else if (bC.side == 1){
@@ -162,7 +162,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].ae * bC.value);
+                        Msh.tempB[k] += - (1 - beta) * (Msh.tempA[k].ae * bC.value);
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -188,7 +188,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].as * bC.value);
+                        Msh.tempB[k] += - (1 - beta) * (Msh.tempA[k].as * bC.value);
                     }
 
                 } else if (bC.side == 1){
@@ -209,7 +209,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].an * bC.value);
+                        Msh.tempB[k] += - (1 - beta) * (Msh.tempA[k].an * bC.value);
                     }
 
                 } else {std::cerr << "Boundary range not specified correctly.\n";}
@@ -241,7 +241,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value + Msh.vPhi[i][j] * gammaw / Msh.dX[0][i]) / (gammaw / Msh.dX[0][i]);
-                        Msh.tempB[k] += bC.value * Msh.Sw[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Sw[i][j] - (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
                     }
 
                 } else if (bC.side == 1){
@@ -260,7 +260,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value - Msh.vPhi[i][j] * gammae / Msh.dX[0][i+1]) / (gammae / Msh.dX[0][i+1]); // CHECK SIGN, NOT SURE (PENDING)
-                        Msh.tempB[k] += bC.value * Msh.Se[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Se[i][j] - (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -287,7 +287,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value + Msh.vPhi[i][j] * gammas / Msh.dX[1][j]) / (gammas / Msh.dX[1][j]);
-                        Msh.tempB[k] += bC.value * Msh.Ss[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Ss[i][j] - (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
                     }
                     
                 } else if (bC.side == 1){
@@ -306,7 +306,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value - Msh.vPhi[i][j] * gamman / Msh.dX[1][j+1]) / (gamman / Msh.dX[1][j+1]);
-                        Msh.tempB[k] += bC.value * Msh.Sn[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Sn[i][j] - (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -314,7 +314,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             } else {std::cerr << "Boundary range not specified correctly.\n";}
 
 
-        } else if (bC.type == 2){ // PENDING HAVE TO ASK PEP IF THIS SHOULD BE IMPLEMENTED AS PURE DIFFUSION
+        } else if (bC.type == 2){ // PENDING THIS SHOULD BE IMPLEMENTED AS PURE DIFFUSION
 
             // Robin (Hybrid)
             if (Pos0[0] == Pos1[0]){
@@ -346,7 +346,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             gammas = calcHarmonicMean(Msh.dX[1][j], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j-1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j-1]});
             Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
             Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
-            Msh.tempB[k] += Msh.vPhi[i][j-1] * Msh.tempA[k].as;
+            Msh.tempB[k] += - (1 - beta) * Msh.vPhi[i][j-1] * Msh.tempA[k].as;
         }
 
         // NW Corner (~an)
@@ -354,7 +354,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             gamman = calcHarmonicMean(Msh.dX[1][j+1], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j+1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j+1]});
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
             Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
-            Msh.tempB[k] += Msh.vPhi[i][j+1] * Msh.tempA[k].an;
+            Msh.tempB[k] += - (1 - beta) * Msh.vPhi[i][j+1] * Msh.tempA[k].an;
         } 
 
         // W Edge (ae)
@@ -372,7 +372,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         // No Msh.vPhi[i-1][j] so Msh.tempB[k] needs to be calculated at boundary
         // No Msh.vPhi[i][j+1] || Msh.vPhi[i][j-1] for corners so Msh.tempB[k] needs to be added with each term
         
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as) + Msh.tempB[k]);
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt - (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
 
     }
 
@@ -388,7 +388,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             gammas = calcHarmonicMean(Msh.dX[1][j], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j-1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j-1]});
             Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
             Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
-            Msh.tempB[k] += Msh.vPhi[i][j-1] * Msh.tempA[k].as;
+            Msh.tempB[k] += - (1 - beta) * Msh.vPhi[i][j-1] * Msh.tempA[k].as;
         }
 
         // NE Corner (~an)
@@ -396,7 +396,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             gamman = calcHarmonicMean(Msh.dX[1][j+1], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j+1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j+1]});
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
             Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
-            Msh.tempB[k] += Msh.vPhi[i][j+1] * Msh.tempA[k].an;
+            Msh.tempB[k] += - (1 - beta) * Msh.vPhi[i][j+1] * Msh.tempA[k].an;
         } 
 
         // East Edge (aw)
@@ -412,7 +412,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         // Msh.tempB[k] = Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i][j-1] * Msh.tempA[k].as + Msh.vPhi[i][j+1] * Msh.tempA[k].an
         // No Msh.vPhi[i+1][j] so Msh.tempB[k] needs to be calculated at boundary
         // No Msh.vPhi[i][j+1] || Msh.vPhi[i][j-1] for corners so Msh.tempB[k] needs to be added with each term
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as) + Msh.tempB[k]);
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt - (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
   
     }
 
@@ -444,7 +444,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         // Coefficients B - tempB keeps boundary values until needed PENDIENTE CAMBIAR A SUM TEMPB
         // Msh.tempB[k] = Msh.vPhi[i][j-1] * Msh.tempA[k].as
         // No Msh.vPhi[i][j-1] so Msh.tempB[k] needs to be calculated at boundary
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as) + Msh.tempB[k]);
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt - (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
 
     }
 
@@ -473,10 +473,10 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
         Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
-        // Coefficients B 
+        // Coefficients B
         // Msh.tempB[k] = Msh.vPhi[i][j+1] * Msh.tempA[k].an
         // No Msh.vPhi[i][j+1] so Msh.tempB[k] needs to be calculated at boundary
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as) + Msh.tempB[k]);
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt - (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
 
     }
 
@@ -518,13 +518,16 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
             Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
             // Coefficients B 
-            Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as));
+            Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt - (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as));
 
         }
     }
     
 }
 
+// CURRENT CHANGES IN DISCRETIZER 
+// WRITING EVERYTHING HERE SO I DON'T WASTE TIME TRYING THE SAME FIXES AND TO REMEMBER EVERYTHING IF I NEED TO REVERT ANYTHING
+// 1. + (1 - beta) ---> - (1 - beta)
 
 
 

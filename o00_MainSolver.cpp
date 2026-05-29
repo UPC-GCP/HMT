@@ -117,11 +117,11 @@ int main(int argc, char* argv[]){
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
 
-    std::vector<std::vector<double>> cTemp{};
+    std::vector<std::vector<double>> cPhi{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
         // Control
-        cTemp = Msh.vPhi;
+        cPhi = Msh.vPhi;
         
         // Solver
         if (!Sol->newSolve(Msh.matA, Msh.vPhi, Msh.bp, Msh.nIgnore)){
@@ -130,11 +130,9 @@ int main(int argc, char* argv[]){
 	}
 
         // Diagnostics
-        /* Mdc.getDiagnostic(Mat, Msh, Dsc, cTemp, t); */
-        Mdc.getSystemResidual(Mat, Msh, Dsc, t);
+        Mdc.getDiagnostic(Mat, Msh, Dsc, cPhi, t);
+        /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
 
-        return 0;
-	
         // Write Data
         Prb.checkProbes(Msh, Sol, t);
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
@@ -144,7 +142,7 @@ int main(int argc, char* argv[]){
         Dsc.newSetCoefficients(Mat, Msh);
 
         // Convergence
-        if (std::sqrt(Sol->calcErr(cTemp, Msh.vPhi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
+        if (std::sqrt(Sol->calcErr(cPhi, Msh.vPhi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
 
     } std::cout << "\n";
 

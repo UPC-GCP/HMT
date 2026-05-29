@@ -25,7 +25,7 @@ public:
     ~Medic();
 
     // Functions
-    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldTemp, double t);
+    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldPhi, double t);
     void getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc);
     void getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t);
 };
