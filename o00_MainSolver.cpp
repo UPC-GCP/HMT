@@ -111,6 +111,7 @@ int main(int argc, char* argv[]){
 
     ///// Medic /////
     std::cout << "Initializing medic ...\n";
+    bool bMdc = data["medicOn"].asBool();
     Medic Mdc(Msh, Prb); std::cout << "Diagnostic tools configured.\n";
 
 
@@ -130,8 +131,10 @@ int main(int argc, char* argv[]){
 	}
 
         // Diagnostics
-        Mdc.getDiagnostic(Mat, Msh, Dsc, cPhi, t);
-        /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
+        if (bMdc){
+            Mdc.getDiagnostic(Mat, Msh, Dsc, cPhi, t);
+            /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
+        }
 
         // Write Data
         Prb.checkProbes(Msh, Sol, t);
