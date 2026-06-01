@@ -90,6 +90,60 @@ int main(int argc, char* argv[]){
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Interior node coefficients set.\n";
 
 
+    /* std::cout << "phi:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.vPhi[i][j] << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* std::cout << "ap:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.matA[i * Msh.N[1] + j].ap << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* std::cout << "aw:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.matA[i * Msh.N[1] + j].aw << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* std::cout << "ae:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.matA[i * Msh.N[1] + j].ae << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* std::cout << "as:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.matA[i * Msh.N[1] + j].as << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* std::cout << "an:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.matA[i * Msh.N[1] + j].an << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* std::cout << "bp:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.bp[i*Msh.N[1] + j] << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+
+    /* return 0; */
+
+
+
+
     ///// Solver /////
     std::cout << "Initializing solver ... \n";
     Solver* Sol = nullptr;
@@ -187,52 +241,4 @@ int main(int argc, char* argv[]){
 
 
 
-    /* std::cout << "phi:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.vPhi[i][j] << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "ap:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.matA[i * Msh.N[1] + j].ap << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "aw:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.matA[i * Msh.N[1] + j].aw << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "ae:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.matA[i * Msh.N[1] + j].ae << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "as:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.matA[i * Msh.N[1] + j].as << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "an:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.matA[i * Msh.N[1] + j].an << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "bp:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.bp[i*Msh.N[1] + j] << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
 

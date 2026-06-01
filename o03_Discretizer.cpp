@@ -99,7 +99,7 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
     // Control
-    Msh.tempB.resize(Msh.totNodes, 0);
+    Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
     int i{}, j{}, k{}; double gammaw, gammae, gammas{}, gamman{};
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
@@ -141,7 +141,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].aw * bC.value + (1 - beta) * (Msh.tempA[k].aw * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].aw * bC.value;
                     }
 
                 } else if (bC.side == 1){
@@ -162,7 +162,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].ae * bC.value + (1 - beta) * (Msh.tempA[k].ae * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].ae * bC.value;
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -188,7 +188,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].as * bC.value + (1 - beta) * (Msh.tempA[k].as * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].as * bC.value;
                     }
 
                 } else if (bC.side == 1){
@@ -209,7 +209,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].an * bC.value + (1 - beta) * (Msh.tempA[k].an * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].an * bC.value;
                     }
 
                 } else {std::cerr << "Boundary range not specified correctly.\n";}
@@ -347,7 +347,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
             Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j-1] * Msh.tempA[k].as;
-        }
+        } 
 
         // NW Corner (~an)
         if (j != Msh.N[1]-1){
@@ -355,7 +355,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
             Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j+1] * Msh.tempA[k].an;
-        } 
+        }
 
         // W Edge (ae)
         gammae = calcHarmonicMean(Msh.dX[0][i+1], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i+1][j]].gamma}, {Msh.DeltaX[0][i], Msh.DeltaX[0][i+1]});
@@ -393,7 +393,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
             Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j+1] * Msh.tempA[k].an;
-        } 
+        }
 
         // East Edge (aw)
         gammaw = calcHarmonicMean(Msh.dX[0][i], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i-1][j]].gamma}, {Msh.DeltaX[0][i], Msh.DeltaX[0][i-1]});
