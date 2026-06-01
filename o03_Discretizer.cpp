@@ -141,7 +141,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].aw * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].aw * bC.value + (1 - beta) * (Msh.tempA[k].aw * bC.value);
                     }
 
                 } else if (bC.side == 1){
@@ -162,7 +162,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].ae * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].ae * bC.value + (1 - beta) * (Msh.tempA[k].ae * bC.value);
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -188,7 +188,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].as * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].as * bC.value + (1 - beta) * (Msh.tempA[k].as * bC.value);
                     }
 
                 } else if (bC.side == 1){
@@ -209,7 +209,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += (1 - beta) * (Msh.tempA[k].an * bC.value);
+                        Msh.tempB[k] += Msh.tempA[k].an * bC.value + (1 - beta) * (Msh.tempA[k].an * bC.value);
                     }
 
                 } else {std::cerr << "Boundary range not specified correctly.\n";}
