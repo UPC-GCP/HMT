@@ -367,11 +367,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
         Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
-        // Coefficients B 
-        // Msh.tempB[k] = Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j-1] * Msh.tempA[k].as + Msh.vPhi[i][j+1] * Msh.tempA[k].an
-        // No Msh.vPhi[i-1][j] so Msh.tempB[k] needs to be calculated at boundary
-        // No Msh.vPhi[i][j+1] || Msh.vPhi[i][j-1] for corners so Msh.tempB[k] needs to be added with each term
-        
+        // Coefficients B
         Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
 
     }
@@ -410,9 +406,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
         // Coefficients B
-        // Msh.tempB[k] = Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i][j-1] * Msh.tempA[k].as + Msh.vPhi[i][j+1] * Msh.tempA[k].an
-        // No Msh.vPhi[i+1][j] so Msh.tempB[k] needs to be calculated at boundary
-        // No Msh.vPhi[i][j+1] || Msh.vPhi[i][j-1] for corners so Msh.tempB[k] needs to be added with each term
         Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
   
     }
@@ -443,8 +436,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
         // Coefficients B - tempB keeps boundary values until needed PENDIENTE CAMBIAR A SUM TEMPB
-        // Msh.tempB[k] = Msh.vPhi[i][j-1] * Msh.tempA[k].as
-        // No Msh.vPhi[i][j-1] so Msh.tempB[k] needs to be calculated at boundary
         Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
 
     }
@@ -475,8 +466,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
         // Coefficients B
-        // Msh.tempB[k] = Msh.vPhi[i][j+1] * Msh.tempA[k].an
-        // No Msh.vPhi[i][j+1] so Msh.tempB[k] needs to be calculated at boundary
         Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
 
     }

@@ -24,17 +24,17 @@ add_executable(MainSolver
     o09_Medic.cpp
 )
 
-add_executable(TestSolver
-    MainSolver.cpp
-    Material.cpp
-    Mesh.cpp
-    Discretizer.cpp
-    Solver.cpp
-    CG.cpp
-    Probe.cpp
-    ExpressionParser.cpp
-    Medic.cpp
-)
+# add_executable(TestSolver
+#     MainSolver.cpp
+#     Material.cpp
+#     Mesh.cpp
+#     Discretizer.cpp
+#     Solver.cpp
+#     CG.cpp
+#     Probe.cpp
+#     ExpressionParser.cpp
+#     Medic.cpp
+# )
 
 # # 4. Directories
 # target_include_directories(MainSolver PRIVATE
@@ -46,7 +46,7 @@ add_executable(TestSolver
 # target_link_libraries(MainSolver PRIVATE ${JSONCPP_LIBRARIES})
 
 # 4. Linking
-foreach (target MainSolver TestSolver)
+foreach (target MainSolver)
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP)
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()

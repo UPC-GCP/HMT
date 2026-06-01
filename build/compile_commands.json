@@ -52,59 +52,5 @@
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/MainSolver.dir/o09_Medic.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Medic.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o09_Medic.cpp",
   "output": "CMakeFiles/MainSolver.dir/o09_Medic.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/MainSolver.cpp.o -c /home/upc_gcp/TFM/HMT/MainSolver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/MainSolver.cpp",
-  "output": "CMakeFiles/TestSolver.dir/MainSolver.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/Material.cpp.o -c /home/upc_gcp/TFM/HMT/Material.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Material.cpp",
-  "output": "CMakeFiles/TestSolver.dir/Material.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/Mesh.cpp.o -c /home/upc_gcp/TFM/HMT/Mesh.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Mesh.cpp",
-  "output": "CMakeFiles/TestSolver.dir/Mesh.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/Discretizer.cpp.o -c /home/upc_gcp/TFM/HMT/Discretizer.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Discretizer.cpp",
-  "output": "CMakeFiles/TestSolver.dir/Discretizer.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/Solver.cpp.o -c /home/upc_gcp/TFM/HMT/Solver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Solver.cpp",
-  "output": "CMakeFiles/TestSolver.dir/Solver.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/CG.cpp.o -c /home/upc_gcp/TFM/HMT/CG.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/CG.cpp",
-  "output": "CMakeFiles/TestSolver.dir/CG.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/Probe.cpp.o -c /home/upc_gcp/TFM/HMT/Probe.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Probe.cpp",
-  "output": "CMakeFiles/TestSolver.dir/Probe.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/ExpressionParser.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/ExpressionParser.cpp",
-  "output": "CMakeFiles/TestSolver.dir/ExpressionParser.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/TestSolver.dir/Medic.cpp.o -c /home/upc_gcp/TFM/HMT/Medic.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/Medic.cpp",
-  "output": "CMakeFiles/TestSolver.dir/Medic.cpp.o"
 }
 ]
