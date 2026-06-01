@@ -400,6 +400,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         } 
 
         // East Edge (aw)
+        gammaw = calcHarmonicMean(Msh.dX[0][i], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i-1][j]].gamma}, {Msh.DeltaX[0][i], Msh.DeltaX[0][i-1]});
         Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
         Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
 
