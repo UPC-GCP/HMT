@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 /* #include <memory> */
-#include <pthread.h>
+/* #include <pthread.h> */
 #include <string>
 #include <vector>
 #include <json/json.h>
@@ -136,7 +136,7 @@ void Mesh::generateMesh(Material& Mat, Json::Value qNode, Json::Value sections, 
     // Resize (Non-nD)
     nMat.resize(N[0]); vPhi.resize(N[0]); sPhi.resize(N[0]); Sw.resize(N[0]); Se.resize(N[0]); Ss.resize(N[0]); Sn.resize(N[0]); Vp.resize(N[0]);
     for (size_t i = 0; i < N[0]; i++){
-        nMat[i].resize(N[1], 0); vPhi[i].resize(N[1], 0); sPhi[i].resize(N[1], 0); Sw[i].resize(N[1], 0); Se[i].resize(N[1], 0); Ss[i].resize(N[1], 0); Sn[i].resize(N[1], 0); Vp[i].resize(N[1], 0);
+        nMat[i].resize(N[1], 0); vPhi[i].resize(N[1], Mat.Phi0); sPhi[i].resize(N[1], 0); Sw[i].resize(N[1], 0); Se[i].resize(N[1], 0); Ss[i].resize(N[1], 0); Sn[i].resize(N[1], 0); Vp[i].resize(N[1], 0);
     }
 
     // Sections

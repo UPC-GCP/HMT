@@ -66,7 +66,7 @@ int main(int argc, char* argv[]){
     ///// Material /////
     std::cout << "Initializing Materials ...\n";
     Material Mat(data["materials"]); std::cout << "Material properties set.\n";
-    Mat.setInitialConditions(data["T0"].asDouble()); std::cout << "Initial conditions set.\n";
+    Mat.setInitialConditions(data["PHI0"].asDouble()); std::cout << "Initial conditions set.\n";
 
 
     ///// Parser /////
@@ -90,14 +90,6 @@ int main(int argc, char* argv[]){
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Interior node coefficients set.\n";
 
 
-    /* std::cout << "phi:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.vPhi[i][j] << " "; */
-    /*     } std::cout << "\n"; */
-    /* } */
-
-    /* std::cout << "ap:\n"; */
     /* for (size_t i = 0; i < Msh.N[0]; i++){ */
     /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
     /*         std::cout << Msh.matA[i * Msh.N[1] + j].ap << " "; */
@@ -142,8 +134,6 @@ int main(int argc, char* argv[]){
     /* return 0; */
 
 
-
-
     ///// Solver /////
     std::cout << "Initializing solver ... \n";
     Solver* Sol = nullptr;
@@ -172,6 +162,15 @@ int main(int argc, char* argv[]){
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
 
+
+    /* std::cout << "phi:\n"; */
+    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+    /*         std::cout << Msh.vPhi[i][j] << " "; */
+    /*     } std::cout << "\n"; */
+    /* } */
+    std::cout << "Phi: " << Msh.vPhi[0][0];
+
     std::vector<std::vector<double>> cPhi{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
@@ -179,10 +178,16 @@ int main(int argc, char* argv[]){
         cPhi = Msh.vPhi;
         
         // Solver
-        if (!Sol->newSolve(Msh.matA, Msh.vPhi, Msh.bp, Msh.nIgnore)){
-		std::cerr << "Simulation diverges @ t = " << t;
-		break;
-	}
+        if (!Sol->newSolve(Msh.matA, Msh.vPhi, Msh.bp, Msh.nIgnore)){std::cerr << "Simulation diverges @ t = " << t; break;}
+
+        /* std::cout << "\nphi:\n"; */
+        /* for (size_t i = 0; i < Msh.N[0]; i++){ */
+        /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
+        /*         std::cout << Msh.vPhi[i][j] << " "; */
+        /*     } std::cout << "\n"; */
+        /* } */
+
+        std::cout << " " << Msh.vPhi[0][0];
 
         // Diagnostics
         if (bMdc){
@@ -192,7 +197,7 @@ int main(int argc, char* argv[]){
 
         // Write Data
         Prb.checkProbes(Msh, Sol, t);
-        std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
+        /* std::cout << "\r" << double(100 * t / Dsc.endTime) << " %"; */
 	
 	    // Update Coefficients
         Dsc.newSetBoundaries(Mat, Msh, Prs, t);
@@ -200,6 +205,8 @@ int main(int argc, char* argv[]){
 
         // Convergence
         if (std::sqrt(Sol->calcErr(cPhi, Msh.vPhi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
+
+        if (t == 5){std::cout << "\n"; return 0;}
 
     } std::cout << "\n";
 

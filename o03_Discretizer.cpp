@@ -314,16 +314,82 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             } else {std::cerr << "Boundary range not specified correctly.\n";}
 
 
-        } else if (bC.type == 2){ // PENDING THIS SHOULD BE IMPLEMENTED AS PURE DIFFUSION
+        } else if (bC.type == 2){
 
             // Robin (Hybrid)
             if (Pos0[0] == Pos1[0]){
 
                 // xBoundary
+                if (bC.side == 0){
+
+                    // West Boundary
+                    i = Pos0[0];
+
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.N[1] + j; gammaw = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients A
+                        Msh.tempA[k].aw = Msh.Sw[i][j] * (bC.alpha * gammaw / Msh.dX[0][i]) / (bC.alpha + gammaw / Msh.dX[0][i]);
+
+                        // Coefficients B
+                        Msh.tempB[k] += Msh.tempA[k].aw * bC.value + (1 - beta) * (Msh.tempA[k].aw * (bC.value - Msh.vPhi[i][j]));
+                    }
+
+                } else if (bC.side == 1){
+
+                    // East Boundary
+                    i = Pos0[0] - 1;
+
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.N[1] + j; gammae = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients A
+                        Msh.tempA[k].ae = Msh.Se[i][j] * (bC.alpha * gammae / Msh.dX[0][i+1]) / (bC.alpha + gammae / Msh.dX[0][i+1]);
+
+                        // Coefficients B
+                        Msh.tempB[k] += Msh.tempA[k].ae * bC.value + (1 - beta) * (Msh.tempA[k].ae * (bC.value - Msh.vPhi[i][j]));
+                    }
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
 
             } else if (Pos0[1] == Pos1[1]){
 
                 // yBoundary
+                if (bC.side == 0){
+
+                    // South Boundary
+                    j = Pos0[1];
+
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.N[1] + j; gammas = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients A
+                        Msh.tempA[k].as = Msh.Ss[i][j] * (bC.alpha * gammas / Msh.dX[1][j]) / (bC.alpha + gammas / Msh.dX[1][j]);
+
+                        // Coefficients B
+                        Msh.tempB[k] += Msh.tempA[k].as * bC.value + (1 - beta) * (Msh.tempA[k].as * (bC.value - Msh.vPhi[i][j]));
+                    }
+
+                } else if (bC.side == 1){
+
+                    // North Boundary
+                    j = Pos0[1] - 1;
+
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.N[1] + j; gamman = Mat.vMat[Msh.nMat[i][j]].gamma;
+
+                        // Coefficients A
+                        Msh.tempA[k].an = Msh.Sn[i][j] * (bC.alpha * gamman / Msh.dX[1][j+1]) / (bC.alpha + gamman / Msh.dX[1][j+1]);
+
+                        // Coefficients B
+                        Msh.tempB[k] += Msh.tempA[k].an * bC.value + (1 - beta) * (Msh.tempA[k].an * (bC.value - Msh.vPhi[i][j]));
+                    }
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
 
             } else {std::cerr << "Boundary range not specified correctly.\n";}
 
@@ -467,7 +533,8 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             
         // Coefficients B
         Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
-
+    
+        // PENDING: CHECK IF SIGN CONVENTION MATCHES ACROSS ALL BOUNDARIES
     }
 
 }

@@ -21,50 +21,32 @@ inline std::vector<double> newProdMatVec(std::vector<Matrix> Mat, std::vector<st
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
                 // Interior Nodes
                 aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
-	    } else if (i == 0 && j == 0){
-		    // SW Corner
-		    aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
-	    } else if (i == 0 && j == m-1){
-		    // NW Corner
-		    aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
-	    } else if (i == n-1 && j == 0){
-		    // SE Corner
-		    aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
-	    } else if (i == n-1 && j == m-1){
-		    // NE Corner
-		    aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
+            } else if (i == 0 && j == 0){
+                // SW Corner
+                aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
+            } else if (i == 0 && j == m-1){
+                // NW Corner
+                aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
+            } else if (i == n-1 && j == 0){
+                // SE Corner
+                aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
+            } else if (i == n-1 && j == m-1){
+                // NE Corner
+                aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
             } else if (i == 0){
-                // West Boundary - ae, ap
-                aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].ap * Vec[i][j];
+                // West Boundary
+                aVec[k] = Mat[k].ae * Vec[i+1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
             } else if (i == n-1){
-                // East Boundary - aw, ap
-                aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].ap * Vec[i][j];
+                // East Boundary
+                aVec[k] = Mat[k].aw * Vec[i-1][j] + Mat[k].as * Vec[i][j-1] + Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
             } else if (j == 0){
-                // South Boundary - an, ap
-                aVec[k] = Mat[k].an * Vec[i][j+1] + Mat[k].ap * Vec[i][j];
+                // South Boundary
+                aVec[k] = Mat[k].an * Vec[i][j+1] + Mat[k].aw * Vec[i-1][j] + Mat[k].ae * Vec[i+1][j] + Mat[k].ap * Vec[i][j];
             } else if (j == m-1){
-                // North Boundary - as, ap
-                aVec[k] = Mat[k].as * Vec[i][j-1] + Mat[k].ap * Vec[i][j];
+                // North Boundary
+                aVec[k] = Mat[k].as * Vec[i][j-1] + Mat[k].aw * Vec[i-1][j] + Mat[k].ae * Vec[i+1][j] + Mat[k].ap * Vec[i][j];
             }
 
-        }
-    }
-
-    return aVec;
-
-}
-
-inline std::vector<double> operMatVecProd(std::vector<Matrix> Mat, std::vector<double> Vec, int n, int m){
-
-    // Control
-    int k; std::vector<double> aVec(n*m);
-
-    // Calculate
-    for (size_t i = 0; i < n; i++){
-        for (size_t j = 0; j < m; i++){
-            
-            // Control
-            k = i * m + j;
         }
     }
 
@@ -90,30 +72,30 @@ inline std::vector<double> operProdMatVec(std::vector<Matrix> Mat, std::vector<d
             if (i > 0 && i < n-1 && j > 0 && j < m-1){
                 // Interior Nodes
                 aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
-	    } else if (i == 0 && j == 0){
-		    // SW Corner
-		    aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
-	    } else if (i == 0 && j == m-1){
-		    // NW Corner
-		    aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
-	    } else if (i == n-1 && j == 0){
-		    // SE Corner
-		    aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
-	    } else if (i == n-1 && j == m-1){
-		    // NE Corner
-		    aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
+            } else if (i == 0 && j == 0){
+                // SW Corner
+                aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+            } else if (i == 0 && j == m-1){
+                // NW Corner
+                aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
+            } else if (i == n-1 && j == 0){
+                // SE Corner
+                aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+            } else if (i == n-1 && j == m-1){
+                // NE Corner
+                aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
             } else if (i == 0){
                 // West Boundary - ae, ap
-                aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].ap * Vec[k];
+                aVec[k] = Mat[k].ae * Vec[k+m] + Mat[k].as * Vec[k-1] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
             } else if (i == n-1){
                 // East Boundary - aw, ap
-                aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].ap * Vec[k];
+                aVec[k] = Mat[k].aw * Vec[k-m] + Mat[k].as * Vec[k-1] + Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
             } else if (j == 0){
                 // South Boundary - an, ap
-                aVec[k] = Mat[k].an * Vec[k+1] + Mat[k].ap * Vec[k];
+                aVec[k] = Mat[k].an * Vec[k+1] + Mat[k].aw * Vec[k-m] + Mat[k].ae * Vec[k+m] + Mat[k].ap * Vec[k];
             } else if (j == m-1){
                 // North Boundary - as, ap
-                aVec[k] = Mat[k].as * Vec[k-1] + Mat[k].ap * Vec[k];
+                aVec[k] = Mat[k].as * Vec[k-1] + Mat[k].aw * Vec[k-m] + Mat[k].ae * Vec[k+m] + Mat[k].ap * Vec[k];
             }
 
         }
@@ -157,3 +139,23 @@ inline std::vector<double> operCombLinVec(std::vector<double> v1, std::vector<do
     return vec;
 
 }
+
+
+/* inline std::vector<double> operMatVecProd(std::vector<Matrix> Mat, std::vector<double> Vec, int n, int m){ */
+
+/*     // Control */
+/*     int k; std::vector<double> aVec(n*m); */
+
+/*     // Calculate */
+/*     for (size_t i = 0; i < n; i++){ */
+/*         for (size_t j = 0; j < m; i++){ */
+            
+/*             // Control */
+/*             k = i * m + j; */
+/*         } */
+/*     } */
+
+/*     return aVec; */
+
+/* } */
+
