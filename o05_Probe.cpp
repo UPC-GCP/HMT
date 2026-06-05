@@ -94,8 +94,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName
             tempMap.yPos = {static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.Nodes[1].begin())};
             
             // Header
-            for (int j = tempMap.xPos[0]; j <= tempMap.xPos[1]; j++){
-                for (int k = tempMap.yPos[0]; k <= tempMap.yPos[1]; k++){
+            for (int j = tempMap.xPos[0]; j < tempMap.xPos[1]; j++){
+                for (int k = tempMap.yPos[0]; k < tempMap.yPos[1]; k++){
                     tempMap.file << "," << Msh.Nodes[0][j] << " " << Msh.Nodes[1][k];
                 }
             } tempMap.file << "\n";

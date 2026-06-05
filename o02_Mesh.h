@@ -23,6 +23,10 @@ struct VelocityField{
     double Vw=0, Ve=0, Vs=0, Vn=0;
 };
 
+// Should make a separate struct for the node and store all vectors within the struct
+// Sw, Se, Ss, Sn, Vp, sPhi, vPhi, Vw, Ve, Vs, Vn, bp
+// ap, aw, ae, as, an: should I keep this as matrix for the solver?
+
 class Mesh
 {
 private:

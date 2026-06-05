@@ -5,6 +5,7 @@
 #include <fstream>
 #include <filesystem>
 
+/* #include "exprtk.hpp" */
 #include "o01_Material.h"
 #include "o02_Mesh.h"
 #include "o03_Discretizer.h"
@@ -26,7 +27,10 @@ std::ofstream createDiagnostic(std::filesystem::path fName){
 
 }
 
-Medic::Medic(Mesh Msh, Probe& Prb){
+Medic::Medic(Mesh Msh, Probe& Prb, bool bExit){
+
+    // Control
+    if (!bExit){return;}
 
     // Path
     pathBase = Prb.pathBase; int k{};
@@ -50,6 +54,26 @@ Medic::Medic(Mesh Msh, Probe& Prb){
 
 }
 
+
+void checkBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, double t, int xPos, int yPos, int side){
+
+    // Control
+    double lamb{};
+
+    // Loop
+    for (Boundary bC : Msh.boundaryConditions){
+
+        // NEED TO FIND THE RIGHT BOUNDARY AND IMPOSE THE VALUE OF THE BOUNDARY
+        // HOW TO IDENTIFY WHICH SIDE BOUNDARY I AM DOING WITHOUT HAVING TO PUT ALL 12 CASES FOR EACH TYPE OF BOUNDARY CONDITION
+        if (xPos >= bC.x0[0] && xPos <=  bC.x1[0] && yPos >= bC.x0[1] && yPos <= bC.x1[1]){
+
+        }
+
+    }
+
+}
+
+
 void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldPhi, double t){
 
     // Control
@@ -66,48 +90,33 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<s
 
             // West Boundary
             if (i != 0){
-                impErr += - Msh.tempA[k].aw * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]); 
-                expErr += - Msh.tempA[k].aw * (oldPhi[i][j] - oldPhi[i-1][j]);
-            }
+                impErr += Msh.tempA[k].aw * (Msh.vPhi[i-1][j] - Msh.vPhi[i][j]); 
+                expErr += Msh.tempA[k].aw * (oldPhi[i-1][j] - oldPhi[i][j]);
+            } else {}
 
             // East Boundary
             if (i != Msh.N[0]-1){
-                impErr += - Msh.tempA[k].ae * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]);
-                expErr += - Msh.tempA[k].ae * (oldPhi[i][j] - oldPhi[i+1][j]);
+                impErr += Msh.tempA[k].ae * (Msh.vPhi[i+1][j] - Msh.vPhi[i][j]);
+                expErr += Msh.tempA[k].ae * (oldPhi[i+1][j] - oldPhi[i][j]);
             }
 
             // South Boundary
             if (j != 0){
-                impErr += - Msh.tempA[k].as * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]);
-                expErr += - Msh.tempA[k].as * (oldPhi[i][j] - oldPhi[i][j-1]);
+                impErr += Msh.tempA[k].as * (Msh.vPhi[i][j-1] - Msh.vPhi[i][j]);
+                expErr += Msh.tempA[k].as * (oldPhi[i][j-1] - oldPhi[i][j]);
             }
 
             // North Boundary
             if (j != Msh.N[1]-1){
-                impErr += - Msh.tempA[k].an * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]);
-                expErr += - Msh.tempA[k].an * (oldPhi[i][j] - oldPhi[i][j+1]);
+                impErr += Msh.tempA[k].an * (Msh.vPhi[i][j+1] - Msh.vPhi[i][j]);
+                expErr += Msh.tempA[k].an * (oldPhi[i][j+1] - oldPhi[i][j]);
             }
 
             // Calculate // PENDING - VERIFY EXPRESSION, THIS ONE IGNORES TEMPB
-            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] * (Msh.vPhi[i][j] - oldPhi[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr - Msh.sPhi[i][j] * Msh.Vp[i][j];
+            tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] * (Msh.vPhi[i][j] - oldPhi[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr + Msh.sPhi[i][j] * Msh.Vp[i][j];
 
             // Print to File
             file << "," << tempErr;
-
-            /* impErr = - Msh.tempA[k].aw * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]) - Msh.tempA[k].ae * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]) - Msh.tempA[k].as * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]) - Msh.tempA[k].an * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]); */
-            /* expErr = - Msh.tempA[k].aw * (oldPhi[i][j] - oldPhi[i-1][j]) - Msh.tempA[k].ae * (oldPhi[i][j] - oldPhi[i+1][j]) - Msh.tempA[k].as * (oldPhi[i][j] - oldPhi[i][j-1]) - Msh.tempA[k].an * (oldPhi[i][j] - oldPhi[i][j+1]); */
-
-            /* // Harmonic Mean */
-            /* lamb = Mat.vMat[Msh.nMat[i][j]].gamma; */
-            /* lambw = Dsc.calcHarmonicMean(Msh.nd[0][i-1], {lamb, Mat.vMat[Msh.nMat[i-1][j]].gamma}, {Msh.ndelta[0][i], Msh.ndelta[0][i-1]}); */
-            /* lambe = Dsc.calcHarmonicMean(Msh.nd[0][i], {lamb, Mat.vMat[Msh.nMat[i+1][j]].gamma}, {Msh.ndelta[0][i], Msh.ndelta[0][i+1]}); */
-            /* lambs = Dsc.calcHarmonicMean(Msh.nd[1][j-1], {lamb, Mat.vMat[Msh.nMat[i][j-1]].gamma}, {Msh.ndelta[1][j], Msh.ndelta[1][j-1]}); */
-            /* lambn = Dsc.calcHarmonicMean(Msh.nd[1][j], {lamb, Mat.vMat[Msh.nMat[i][j+1]].gamma}, {Msh.ndelta[1][j], Msh.ndelta[1][j+1]}); */
-
-            /* // Calculate Error */
-            /* impErr = - lambw * Msh.Sw[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.Se[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i+1][j]) / Msh.nd[0][i] - lambs * Msh.Ss[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.Sn[i][j] * (Msh.vPhi[i][j] - Msh.vPhi[i][j+1]) / Msh.nd[1][j]; */
-            /* expErr = - lambw * Msh.Sw[i][j] * (oldTemp[i][j] - oldTemp[i-1][j]) / Msh.nd[0][i-1] - lambe * Msh.Se[i][j] * (oldTemp[i][j] - oldTemp[i+1][j]) / Msh.nd[0][i] - lambs * Msh.Ss[i][j] * (oldTemp[i][j] - oldTemp[i][j-1]) / Msh.nd[1][j-1] - lambn * Msh.Sn[i][j] * (oldTemp[i][j] - oldTemp[i][j+1]) / Msh.nd[1][j]; */
-            /* tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] * (Msh.vPhi[i][j] - oldTemp[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr - Msh.sPhi[i][j] * Msh.Vp[i][j]; */ 
 
         }
     } file << "\n";

@@ -19,7 +19,7 @@ public:
     std::ofstream file{}, fileR{};
     
     // Constructor
-    Medic(Mesh Msh, Probe& Prb);
+    Medic(Mesh Msh, Probe& Prb, bool bExit);
 
     // Destructor
     ~Medic();

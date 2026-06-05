@@ -254,9 +254,9 @@ void Mesh::addVelocityField(Json::Value nField, ExpressionParser& Prs){
     // Resize
     vConv.resize(N.size()); vExpr.resize(N.size());
     for (size_t k = 0; k < N.size(); k++){
-        vConv[k].resize(N[0]+1);
-        for (size_t i = 0; i < N[0]+1; i++){
-            vConv[k][i].resize(N[1]+1);
+        vConv[k].resize(N[0]);
+        for (size_t i = 0; i < N[0]; i++){
+            vConv[k][i].resize(N[1]);
         }
     }
 
@@ -269,8 +269,8 @@ void Mesh::addVelocityField(Json::Value nField, ExpressionParser& Prs){
     
     // Calculate Field
     for (size_t k = 0; k < N.size(); k++){
-        for (size_t i = 0; i < N[0]+1; i++){
-            for (size_t j = 0; j < N[1]+1; j++){
+        for (size_t i = 0; i < N[0]; i++){
+            for (size_t j = 0; j < N[1]; j++){
                 vConv[k][i][j].Vw = Prs.evaluateCoordinates(vExpr[k], Faces[0][i], Nodes[1][j]);
                 vConv[k][i][j].Ve = Prs.evaluateCoordinates(vExpr[k], Faces[0][i+1], Nodes[1][j]);
                 vConv[k][i][j].Vs = Prs.evaluateCoordinates(vExpr[k], Nodes[0][i], Faces[1][j]);

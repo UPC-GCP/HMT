@@ -100,7 +100,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
     // Control
     Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
-    int i{}, j{}, k{}; double gammaw, gammae, gammas{}, gamman{};
+    int i{}, j{}, k{}; double gammaw, gammae, gammas{}, gamman{}, a0{};
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
 
@@ -241,7 +241,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value + Msh.vPhi[i][j] * gammaw / Msh.dX[0][i]) / (gammaw / Msh.dX[0][i]);
-                        Msh.tempB[k] += bC.value * Msh.Sw[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Sw[i][j];
                     }
 
                 } else if (bC.side == 1){
@@ -260,7 +260,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value + Msh.vPhi[i][j] * gammae / Msh.dX[0][i+1]) / (gammae / Msh.dX[0][i+1]); // CHECK SIGN, NOT SURE (PENDING)
-                        Msh.tempB[k] += bC.value * Msh.Se[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Se[i][j];
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -287,7 +287,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value + Msh.vPhi[i][j] * gammas / Msh.dX[1][j]) / (gammas / Msh.dX[1][j]);
-                        Msh.tempB[k] += bC.value * Msh.Ss[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Ss[i][j];
                     }
                     
                 } else if (bC.side == 1){
@@ -306,7 +306,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients B
                         phiBC = (bC.value + Msh.vPhi[i][j] * gamman / Msh.dX[1][j+1]) / (gamman / Msh.dX[1][j+1]);
-                        Msh.tempB[k] += bC.value * Msh.Sn[i][j] + (1 - beta) * (phiBC * aTemp - Msh.vPhi[i][j] * aTemp);
+                        Msh.tempB[k] += bC.value * Msh.Sn[i][j];
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -429,12 +429,13 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
        
         // Coefficients A
+        a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
         Msh.matA[k].aw = - beta * Msh.tempA[k].aw; Msh.matA[k].ae = - beta * Msh.tempA[k].ae;
         Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
-        Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
+        Msh.matA[k].ap = a0 - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
         // Coefficients B
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + a0 * Msh.vPhi[i][j] + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae - Msh.vPhi[i][j] * (Msh.tempA[k].aw + Msh.tempA[k].ae + Msh.tempA[k].as + Msh.tempA[k].an)) + Msh.tempB[k];
 
     }
 
@@ -467,12 +468,13 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
 
         // Coefficients A
+        a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
         Msh.matA[k].aw = - beta * Msh.tempA[k].aw; Msh.matA[k].ae = - beta * Msh.tempA[k].ae;
         Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
-        Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
+        Msh.matA[k].ap = a0 - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
         // Coefficients B
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + a0 * Msh.vPhi[i][j] + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw - Msh.vPhi[i][j] * (Msh.tempA[k].aw + Msh.tempA[k].ae + Msh.tempA[k].as + Msh.tempA[k].an)) + Msh.tempB[k];
   
     }
 
@@ -496,13 +498,14 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
         Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
         
-        // Coefficients A - tempA keeps a_k values without beta
+        // Coefficients A
+        a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
         Msh.matA[k].aw = - beta * Msh.tempA[k].aw; Msh.matA[k].ae = - beta * Msh.tempA[k].ae;
         Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
-        Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
+        Msh.matA[k].ap = a0 - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
-        // Coefficients B - tempB keeps boundary values until needed PENDIENTE CAMBIAR A SUM TEMPB
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
+        // Coefficients B
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + a0 * Msh.vPhi[i][j] + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i][j+1] * Msh.tempA[k].an - Msh.vPhi[i][j] * (Msh.tempA[k].aw + Msh.tempA[k].ae + Msh.tempA[k].as + Msh.tempA[k].an)) + Msh.tempB[k];
 
     }
 
@@ -527,14 +530,14 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
         
         // Coefficients A
+        a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
         Msh.matA[k].aw = - beta * Msh.tempA[k].aw; Msh.matA[k].ae = - beta * Msh.tempA[k].ae;
         Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
-        Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
+        Msh.matA[k].ap = a0 - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
         // Coefficients B
-        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as)) + Msh.tempB[k];
+        Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + a0 * Msh.vPhi[i][j] + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].aw + Msh.tempA[k].ae + Msh.tempA[k].as + Msh.tempA[k].an)) + Msh.tempB[k];
     
-        // PENDING: CHECK IF SIGN CONVENTION MATCHES ACROSS ALL BOUNDARIES
     }
 
 }
@@ -543,7 +546,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
 
     // Control
-    int k{}; double gammaw, gammae, gammas{}, gamman{};
+    int k{}; double gammaw, gammae, gammas{}, gamman{}, a0{};
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
 
     // Interior Nodes Loop
@@ -570,12 +573,13 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
             Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
 
             // Coefficients A
+            a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
             Msh.matA[k].aw = - beta * Msh.tempA[k].aw; Msh.matA[k].ae = - beta * Msh.tempA[k].ae;
             Msh.matA[k].as = - beta * Msh.tempA[k].as; Msh.matA[k].an = - beta * Msh.tempA[k].an; 
-            Msh.matA[k].ap = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
+            Msh.matA[k].ap = a0 - Msh.matA[k].ae - Msh.matA[k].aw - Msh.matA[k].an - Msh.matA[k].as;
             
             // Coefficients B 
-            Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + Mat.vMat[Msh.nMat[i][j]].rho * Msh.Vp[i][j] * Msh.vPhi[i][j] / dt + (1 - beta) * (Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i][j+1] * Msh.tempA[k].an + Msh.vPhi[i][j-1] * Msh.tempA[k].as - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as));
+            Msh.bp[k] = Msh.sPhi[i][j] * Msh.Vp[i][j] + a0 * Msh.vPhi[i][j] + (1 - beta) * (Msh.vPhi[i-1][j] * Msh.tempA[k].aw + Msh.vPhi[i+1][j] * Msh.tempA[k].ae + Msh.vPhi[i][j-1] * Msh.tempA[k].as + Msh.vPhi[i][j+1] * Msh.tempA[k].an - Msh.vPhi[i][j] * (Msh.tempA[k].ae + Msh.tempA[k].aw + Msh.tempA[k].an + Msh.tempA[k].as));
 
         }
     }
