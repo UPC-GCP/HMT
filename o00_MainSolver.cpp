@@ -196,7 +196,7 @@ int main(int argc, char* argv[]){
 
         // Diagnostics
         if (bMdc){
-            Mdc.getDiagnostic(Mat, Msh, Dsc, cPhi, t);
+            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, t);
             /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
         }
 

@@ -8,6 +8,7 @@
 #include "o02_Mesh.h"
 #include "o03_Discretizer.h"
 #include "o05_Probe.h"
+#include "o09_ExpressionParser.h"
 
 class Medic
 {
@@ -25,7 +26,7 @@ public:
     ~Medic();
 
     // Functions
-    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, std::vector<std::vector<double>> oldPhi, double t);
+    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, std::vector<std::vector<double>> oldPhi, double t);
     void getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc);
     void getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t);
 };
