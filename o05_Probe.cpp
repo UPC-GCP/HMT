@@ -18,7 +18,7 @@ std::string createFolder(std::string scheme, std::string fName, std::string& dir
 
     // Directory
     std::filesystem::path pBase = std::filesystem::current_path();
-    pBase /= "TestData";
+    pBase /= "ioRes";
 
     // Timestamp
     time_t timeStamp = std::time(nullptr);

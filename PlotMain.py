@@ -26,7 +26,7 @@ if len(sys.argv) != 5 and len(sys.argv) != 7: print("Arguments passed incorrectl
 
 
 ##### Directory #####
-dirPath = Path.cwd() / "TestData" / sys.argv[1]
+dirPath = Path.cwd() / "ioRes" / sys.argv[1]
 
 
 ### Plot Points

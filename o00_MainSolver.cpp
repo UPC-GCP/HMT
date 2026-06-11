@@ -126,11 +126,11 @@ int main(int argc, char* argv[]){
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
     
-    std::vector<std::vector<double>> cPhi{};
+    std::vector<std::vector<double>> cPhi{}, cbPhi{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
         // Control
-        cPhi = Msh.vPhi;
+        cPhi = Msh.vPhi; cbPhi = Msh.bcPhi;
         
         // Solver
         if (!Sol->newSolve(Msh.matA, Msh.vPhi, Msh.bp, Msh.nIgnore)){std::cerr << "Simulation diverges @ t = " << t; break;}
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]){
 
         // Diagnostics
         if (bMdc){
-            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, t);
+            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, cbPhi, t);
             /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
         }
 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]){
         Dsc.newSetCoefficients(Mat, Msh);
 
         // Convergence
-        if (std::sqrt(Sol->calcErr(cPhi, Msh.vPhi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break;}
+        if (std::sqrt(Sol->calcErr(cPhi, Msh.vPhi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;}
 
     } std::cout << "\n";
 
@@ -257,6 +257,7 @@ int main(int argc, char* argv[]){
     /* for (std::vector<VelocityField> vec : Msh.vConv[1]){ */
     /*     for (VelocityField val : vec){std::cout << val.Vn << " ";} std::cout << "\n"; */
     /* } std::cout << "\n"; */
+
 
 
 

@@ -43,7 +43,7 @@ public:
     std::vector<Boundary> boundaryConditions{};
     std::vector<std::vector<int>> nMat{}, nIgnore{}; // x-axis, y-axis
     std::vector<std::vector<double>> Faces{}, Nodes{}, DeltaX{}, dX{}; // dimension, position
-    std::vector<std::vector<double>> sPhi{}, vPhi{}, Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // x-axis, y-axis // Eventually get rid of this and store it in a single variable struct Areas{double Aw=0, Ae=0, As=0, An=0;}
+    std::vector<std::vector<double>> sPhi{}, vPhi{}, Sw{}, Se{}, Ss{}, Sn{}, Vp{}, bcPhi{}; // x-axis, y-axis // Eventually get rid of this and store it in a single variable struct Areas{double Aw=0, Ae=0, As=0, An=0;}
     std::vector<std::vector<std::vector<VelocityField>>> vConv{}; // dimension, x-axis, y-axis
 
     // Constructor

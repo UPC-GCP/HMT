@@ -41,8 +41,8 @@
 *.dwo
 
 # Directories
-TestData/
-RunConfig/
+ioSrc/
+ioRes/
 
 # Reports
 *.tex

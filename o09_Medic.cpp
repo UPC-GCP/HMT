@@ -56,21 +56,20 @@ Medic::Medic(Mesh Msh, Probe& Prb, bool bExit){
 }
 
 
-double addBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, int xPos, int yPos, double t){
+double addBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, int i, int j, double t, std::vector<std::vector<double>> oPhi, std::vector<std::vector<double>> obPhi){
+
+
+    // Change of plans
+    // This now uses the coefficients in tempA. Just need to save and use bcPhi
+    // Can only use tempA for Dirichlet. Neumann needs to calculate it but both store bcPhi.
 
     // Control
-    double lamb{}, tempVal{};
+    double gamma{}, tempVal{}, a0{}, tempStore{}, Fp{}, Dp{}, Pp{}; int k{};
+    double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
 
     // Loop
     for (Boundary bC : Msh.boundaryConditions){
-
-        // Boundary
-        // THIS NEEDS TO ADD THE ENERGY INTRODUCED BY THE BOUNDARY CONDITION
-        // THIS WILL READ AXIS AND SIDE
-        // AXIS JUST DECIDES WHICH VECTORS TO USE
-        // SIDE WHICH SIDE OF THOSE VECTORS IT IS
-        // FOR EACH SIDE INCLUDE THE CORRESPONDING PART AND STORE IT IN TEMP VAL
 
         // Positions
         for (size_t i = 0; i < Msh.N.size(); i++){
@@ -79,19 +78,66 @@ double addBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& 
         }
 
         // Control 
-        if (!(xPos >= Pos0[0] && xPos <=  Pos1[0] && yPos >= Pos0[1] && yPos <= Pos1[1])){continue;}
+        if (!(i >= Pos0[0] && i <=  Pos1[0] && j >= Pos0[1] && j <= Pos1[1])){continue;}
+        k = i * Msh.N[1] + j;
 
         // Boundaries
         if (bC.type == 0){
 
-            // Update Value 
-            if (bC.bUpdate && bC.iEq == 0){bC.value = Prs.evaluateTime(bC.iExpr, t);}
+            // Update Value
+            if (bC.bUpdate && bC.iEq == 0){tempStore = Prs.evaluateTime(bC.iExpr, t - Dsc.dt);} else {tempStore = bC.value;}
 
             // Dirichlet
+            if (Pos0[0] == Pos1[0]){
+
+                // xBoundary
+                if (bC.side == 0){
+                    // West Boundary
+                    tempVal = Dsc.beta * Msh.tempA[k].aw * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].aw * (obPhi[i][j] - oPhi[i][j]);
+                } else if (bC.side == 1){
+                    // East Boundary
+                    tempVal = Dsc.beta * Msh.tempA[k].ae * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].ae * (obPhi[i][j] - oPhi[i][j]);
+                }
+
+            } else if (Pos0[1] == Pos1[1]){
+
+                // yBoundary
+                if (bC.side == 0){
+                    // South Boundary
+                    tempVal = Dsc.beta * Msh.tempA[k].as * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].as * (obPhi[i][j] - oPhi[i][j]);
+                } else if (bC.side == 1){
+                    // North Boundary
+                    tempVal = Dsc.beta * Msh.tempA[k].an * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].an * (obPhi[i][j] - oPhi[i][j]);
+                }
+
+            }
 
         } else if (bC.type == 1){
 
             // Neumann
+            if (Pos0[0] == Pos1[0]){
+
+                // xBoundary
+                if (bC.side == 0){
+                    // West Boundary
+                    tempVal = bC.value * Msh.Sw[i][j];
+                } else if (bC.side == 1){
+                    // East Boundary
+                    tempVal = bC.value * Msh.Se[i][j];
+                }
+
+            } else if (Pos0[1] == Pos1[1]){
+
+                // yBoundary
+                if (bC.side == 0){
+                    // South Boundary
+                    tempVal = bC.value * Msh.Ss[i][j];
+                } else if (bC.side == 1){
+                    // North Boundary
+                    tempVal = bC.value * Msh.Sn[i][j];
+                }
+
+            }
 
         } else if (bC.type == 2){
 
@@ -106,7 +152,7 @@ double addBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& 
 }
 
 
-void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, std::vector<std::vector<double>> oldPhi, double t){
+void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, std::vector<std::vector<double>> oldPhi, std::vector<std::vector<double>> bcPhi, double t){
 
     // Control
     double tempErr{}, impErr{}, expErr{}, extraErr{}; int k{};
@@ -124,25 +170,25 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionPar
             if (i != 0){
                 impErr += Msh.tempA[k].aw * (Msh.vPhi[i-1][j] - Msh.vPhi[i][j]); 
                 expErr += Msh.tempA[k].aw * (oldPhi[i-1][j] - oldPhi[i][j]);
-            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t);}
+            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t, oldPhi, bcPhi);}
 
             // East Boundary
             if (i != Msh.N[0]-1){
                 impErr += Msh.tempA[k].ae * (Msh.vPhi[i+1][j] - Msh.vPhi[i][j]);
                 expErr += Msh.tempA[k].ae * (oldPhi[i+1][j] - oldPhi[i][j]);
-            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t);}
+            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t, oldPhi, bcPhi);}
 
             // South Boundary
             if (j != 0){
                 impErr += Msh.tempA[k].as * (Msh.vPhi[i][j-1] - Msh.vPhi[i][j]);
                 expErr += Msh.tempA[k].as * (oldPhi[i][j-1] - oldPhi[i][j]);
-            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t);}
+            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t, oldPhi, bcPhi);}
 
             // North Boundary
             if (j != Msh.N[1]-1){
                 impErr += Msh.tempA[k].an * (Msh.vPhi[i][j+1] - Msh.vPhi[i][j]);
                 expErr += Msh.tempA[k].an * (oldPhi[i][j+1] - oldPhi[i][j]);
-            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t);}
+            } else {extraErr += addBoundaries(Mat, Msh, Dsc, Prs, i, j, t, oldPhi, bcPhi);}
 
             // Calculate
             tempErr = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] * (Msh.vPhi[i][j] - oldPhi[i][j]) / Dsc.dt - Dsc.beta * impErr - (1 - Dsc.beta) * expErr + Msh.sPhi[i][j] * Msh.Vp[i][j] + extraErr;
