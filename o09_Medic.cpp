@@ -93,10 +93,10 @@ double addBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& 
                 // xBoundary
                 if (bC.side == 0){
                     // West Boundary
-                    tempVal = Dsc.beta * Msh.tempA[k].aw * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].aw * (obPhi[i][j] - oPhi[i][j]);
+                    tempVal = Dsc.beta * Msh.temp2A[k].aw * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.temp2A[k].aw * (obPhi[i][j] - oPhi[i][j]);
                 } else if (bC.side == 1){
                     // East Boundary
-                    tempVal = Dsc.beta * Msh.tempA[k].ae * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].ae * (obPhi[i][j] - oPhi[i][j]);
+                    tempVal = Dsc.beta * Msh.temp2A[k].ae * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.temp2A[k].ae * (obPhi[i][j] - oPhi[i][j]);
                 }
 
             } else if (Pos0[1] == Pos1[1]){
@@ -104,10 +104,10 @@ double addBoundaries(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& 
                 // yBoundary
                 if (bC.side == 0){
                     // South Boundary
-                    tempVal = Dsc.beta * Msh.tempA[k].as * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].as * (obPhi[i][j] - oPhi[i][j]);
+                    tempVal = Dsc.beta * Msh.temp2A[k].as * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.temp2A[k].as * (obPhi[i][j] - oPhi[i][j]);
                 } else if (bC.side == 1){
                     // North Boundary
-                    tempVal = Dsc.beta * Msh.tempA[k].an * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.tempA[k].an * (obPhi[i][j] - oPhi[i][j]);
+                    tempVal = Dsc.beta * Msh.temp2A[k].an * (bC.value - Msh.vPhi[i][j]) + (1 - Dsc.beta) * Msh.temp2A[k].an * (obPhi[i][j] - oPhi[i][j]);
                 }
 
             }

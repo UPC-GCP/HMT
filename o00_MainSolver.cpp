@@ -131,6 +131,7 @@ int main(int argc, char* argv[]){
 
         // Control
         cPhi = Msh.vPhi; cbPhi = Msh.bcPhi;
+        Msh.oPhi = Msh.vPhi; Msh.obPhi = Msh.bcPhi;
         
         // Solver
         if (!Sol->newSolve(Msh.matA, Msh.vPhi, Msh.bp, Msh.nIgnore)){std::cerr << "Simulation diverges @ t = " << t; break;}

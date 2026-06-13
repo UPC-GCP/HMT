@@ -80,15 +80,15 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 
     // Spatial Scheme
     if (spatScheme == "CDS"){
-        funcScheme = [](double Pe) {return 1.0 - 0.5 * Pe;};
+        funcScheme = [](double Pe) {return 1.0 - 0.5 * std::abs(Pe);};
     } else if (spatScheme == "UDS"){
         funcScheme = [](double Pe){return 1;};
     } else if (spatScheme == "Hybrid"){
-        funcScheme = [](double Pe){return std::max(0.0, 1 -  0.5 * Pe);};
+        funcScheme = [](double Pe){return std::max(0.0, 1 -  0.5 * std::abs(Pe));};
     } else if (spatScheme == "PowerLaw"){
-        funcScheme = [](double Pe){return std::max(0.0, std::pow(1 - 0.1 * Pe, 5));};
+        funcScheme = [](double Pe){return std::max(0.0, std::pow(1 - 0.1 * std::abs(Pe), 5));};
     } else if (spatScheme == "Exponential"){
-        funcScheme = [](double Pe){return Pe / (exp(Pe) - 1);};
+        funcScheme = [](double Pe){return Pe / (exp(std::abs(Pe)) - 1);};
     } else {
         std::cerr << "Error: Invalid spatial discretization scheme '" << spatScheme << "'\n";
     }
@@ -99,7 +99,7 @@ void Discretizer::setSchemeParameters(Material& Mat, Mesh& Msh){
 void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t){
 
     // Control
-    Msh.tempA.resize(Msh.totNodes); Msh.tempB.assign(Msh.totNodes, 0);
+    Msh.tempA.assign(Msh.totNodes, {}); Msh.temp2A.assign(Msh.totNodes, {}); Msh.tempB.assign(Msh.totNodes, 0);
     int i{}, j{}, k{}; double gammaw{}, gammae{}, gammas{}, gamman{}, a0{}, tempStore{};
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
@@ -139,10 +139,10 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients Conv-Diff
                         Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
-                        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+                        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(Pw) + std::max(-Fw, 0.0); Msh.temp2A[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].aw * bC.value + (1 - beta) * Msh.tempA[k].aw * tempStore;
+                        Msh.tempB[k] += beta * Msh.tempA[k].aw * bC.value + (1 - beta) * Msh.temp2A[k].aw * tempStore;
                     }
 
                 } else if (bC.side == 1){
@@ -160,10 +160,10 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients Conv-Diff
                         De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
-                        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+                        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(Pe) + std::max(Fe, 0.0); Msh.temp2A[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].ae * bC.value + (1 - beta) * Msh.tempA[k].ae * tempStore;
+                        Msh.tempB[k] += beta * Msh.tempA[k].ae * bC.value + (1 - beta) * Msh.temp2A[k].ae * tempStore;
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
@@ -186,10 +186,10 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients Conv-Diff
                         Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-                        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+                        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ds) + std::max(-Fs, 0.0); Msh.temp2A[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].as * bC.value + (1 - beta) * Msh.tempA[k].as * tempStore;
+                        Msh.tempB[k] += beta * Msh.tempA[k].as * bC.value + (1 - beta) * Msh.temp2A[k].as * tempStore;
                     }
 
                 } else if (bC.side == 1){
@@ -207,10 +207,10 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients Conv-Diff
                         Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
-                        Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+                        Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(Pn) + std::max(Fn, 0.0); Msh.temp2A[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
                         // Coefficients B
-                        Msh.tempB[k] += beta * Msh.tempA[k].an * bC.value + (1 - beta) * Msh.tempA[k].an * tempStore;
+                        Msh.tempB[k] += beta * Msh.tempA[k].an * bC.value + (1 - beta) * Msh.temp2A[k].an * tempStore;
                     }
 
                 } else {std::cerr << "Boundary range not specified correctly.\n";}
@@ -222,9 +222,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
             // Neumann
             if (Pos0[0] == Pos1[0]){
 
-                // Control
-                double aTemp{};
-
                 // xBoundary
                 if (bC.side == 0){
 
@@ -235,13 +232,12 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         k = i * Msh.N[1] + j; gammaw = Mat.vMat[Msh.nMat[i][j]].gamma;
 
                         // Coefficients A
-                        Msh.tempA[k].aw = 0;
                         Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
-                        Pw = Fw / Dw; aTemp = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+                        Pw = Fw / Dw; Msh.tempA[k].aw = std::max(-Fw, 0.0); Msh.temp2A[k].aw = std::max(Fw, 0.0);
 
                         // Coefficients B
                         Msh.bcPhi[i][j] = (bC.value + Msh.vPhi[i][j] * gammaw / Msh.dX[0][i]) / (gammaw / Msh.dX[0][i]);
-                        Msh.tempB[k] += bC.value * Msh.Sw[i][j];
+                        Msh.tempB[k] += bC.value * Msh.Sw[i][j] + beta * Msh.tempA[k].aw * Msh.bcPhi[i][j] + (1 - beta) * Msh.temp2A[k].aw * Msh.bcPhi[i][j];
                     }
 
                 } else if (bC.side == 1){
@@ -250,24 +246,21 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                     i = Pos0[0]-1; 
                     for (size_t j = Pos0[1]; j < Pos1[1]; j++){
                         // Control
-                        k = i * Msh.N[1] + j;
+                        k = i * Msh.N[1] + j; gammae = Mat.vMat[Msh.nMat[i][j]].gamma;
 
                         // Coefficients A
                         Msh.tempA[k].ae = 0;
                         De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
-                        Pe = Fe / De; aTemp = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+                        Pe = Fe / De; Msh.tempA[k].ae = std::max(Fe, 0.0); Msh.temp2A[k].ae = std::max(-Fe, 0.0);
 
                         // Coefficients B
-                        Msh.bcPhi[i][j] = (bC.value + Msh.vPhi[i][j] * gammae / Msh.dX[0][i+1]) / (gammae / Msh.dX[0][i+1]); // CHECK SIGN, NOT SURE (PENDING)
-                        Msh.tempB[k] += bC.value * Msh.Se[i][j];
+                        Msh.bcPhi[i][j] = (bC.value + Msh.vPhi[i][j] * gammae / Msh.dX[0][i+1]) / (gammae / Msh.dX[0][i+1]);
+                        Msh.tempB[k] += bC.value * Msh.Se[i][j] + beta * Msh.tempA[k].ae * Msh.bcPhi[i][j] + (1 - beta) * Msh.temp2A[k].aw * Msh.bcPhi[i][j];
                     }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
                 
             } else if (Pos0[1] == Pos1[1]){
-
-                // Control
-                double aTemp{};
 
                 // yBoundary
                 if (bC.side == 0){
@@ -276,12 +269,12 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                     for (size_t i = Pos0[0]; i < Pos1[0]; i++){
                         // Control
-                        k = i * Msh.N[1] + j;
+                        k = i * Msh.N[1] + j; gammas = Mat.vMat[Msh.nMat[i][j]].gamma;
 
                         // Coefficients A
                         Msh.tempA[k].as = 0;
                         Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-                        Ps = Fs / Ds; aTemp = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+                        Ps = Fs / Ds; Msh.tempA[k].as = std::max(-Fs, 0.0); Msh.temp2A[k].as = std::max(Fs, 0.0);
 
                         // Coefficients B
                         Msh.bcPhi[i][j] = (bC.value + Msh.vPhi[i][j] * gammas / Msh.dX[1][j]) / (gammas / Msh.dX[1][j]);
@@ -294,12 +287,12 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                     j = Pos0[1]-1;
                     for (size_t i = Pos0[0]; i < Pos1[0]; i++){
                         // Control
-                        k = i * Msh.N[1] + j;
+                        k = i * Msh.N[1] + j; gamman = Mat.vMat[Msh.nMat[i][j]].gamma;
 
                         // Coefficients A
                         Msh.tempA[k].an = 0;
                         Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
-                        Pn = Fn / Dn; aTemp = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+                        Pn = Fn / Dn; Msh.tempA[k].an = std::max(Fn, 0.0); Msh.temp2A[k].an = std::max(-Fn, 0.0);
 
                         // Coefficients B
                         Msh.bcPhi[i][j] = (bC.value + Msh.vPhi[i][j] * gamman / Msh.dX[1][j+1]) / (gamman / Msh.dX[1][j+1]);
@@ -404,7 +397,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         if (j != 0){
             gammas = calcHarmonicMean(Msh.dX[1][j], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j-1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j-1]});
             Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-            Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+            Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j-1] * Msh.tempA[k].as;
         } 
 
@@ -412,14 +405,14 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         if (j != Msh.N[1]-1){
             gamman = calcHarmonicMean(Msh.dX[1][j+1], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j+1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j+1]});
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
-            Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+            Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j+1] * Msh.tempA[k].an;
         }
 
         // W Edge (ae)
         gammae = calcHarmonicMean(Msh.dX[0][i+1], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i+1][j]].gamma}, {Msh.DeltaX[0][i], Msh.DeltaX[0][i+1]});
         De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
-        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
        
         // Coefficients A
         a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
@@ -443,7 +436,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         if (j != 0){
             gammas = calcHarmonicMean(Msh.dX[1][j], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j-1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j-1]});
             Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-            Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+            Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j-1] * Msh.tempA[k].as;
         }
 
@@ -451,14 +444,14 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
         if (j != Msh.N[1]-1){
             gamman = calcHarmonicMean(Msh.dX[1][j+1], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i][j+1]].gamma}, {Msh.DeltaX[1][j], Msh.DeltaX[1][j+1]});
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
-            Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+            Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
             Msh.tempB[k] += (1 - beta) * Msh.vPhi[i][j+1] * Msh.tempA[k].an;
         }
 
         // East Edge (aw)
         gammaw = calcHarmonicMean(Msh.dX[0][i], {Mat.vMat[Msh.nMat[i][j]].gamma, Mat.vMat[Msh.nMat[i-1][j]].gamma}, {Msh.DeltaX[0][i], Msh.DeltaX[0][i-1]});
         Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
-        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
 
         // Coefficients A
         a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
@@ -485,11 +478,11 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
         // Coefficients Conv-Diff
         Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
-        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
         De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
-        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
         Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
-        Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+        Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
         
         // Coefficients A
         a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
@@ -516,11 +509,11 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
         // Coefficients Conv-Diff
         Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
-        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+        Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
         De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
-        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+        Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
         Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
         
         // Coefficients A
         a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
@@ -557,13 +550,13 @@ void Discretizer::newSetCoefficients(Material& Mat, Mesh& Msh){
 
             // Coefficients Conv-Diff
             Dw = gammaw * Msh.Sw[i][j] / Msh.dX[0][i]; Fw = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sw[i][j] * Msh.vConv[0][i][j].Vw;
-            Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(std::abs(Pw)) + std::max(-Fw, 0.0);
+            Pw = Fw / Dw; Msh.tempA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
             De = gammae * Msh.Se[i][j] / Msh.dX[0][i+1]; Fe = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Se[i][j] * Msh.vConv[0][i][j].Ve;
-            Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(std::abs(Pe)) + std::max(Fe, 0.0);
+            Pe = Fe / De; Msh.tempA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
             Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-            Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(std::abs(Ps)) + std::max(-Fs, 0.0);
+            Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
             Dn = gamman * Msh.Sn[i][j] / Msh.dX[1][j+1]; Fn = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Sn[i][j] * Msh.vConv[1][i][j].Vn;
-            Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(std::abs(Pn)) + std::max(Fn, 0.0);
+            Pn = Fn / Dn; Msh.tempA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
             // Coefficients A
             a0 = Mat.vMat[Msh.nMat[i][j]].rho * Mat.vMat[Msh.nMat[i][j]].cp * Msh.Vp[i][j] / dt;
