@@ -186,7 +186,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
 
                         // Coefficients Conv-Diff
                         Ds = gammas * Msh.Ss[i][j] / Msh.dX[1][j]; Fs = Mat.vMat[Msh.nMat[i][j]].rho * Msh.Ss[i][j] * Msh.vConv[1][i][j].Vs;
-                        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ds) + std::max(Fs, 0.0); Msh.temp2A[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
+                        Ps = Fs / Ds; Msh.tempA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0); Msh.temp2A[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
 
                         // Coefficients B
                         Msh.tempB[k] += beta * Msh.tempA[k].as * bC.Phi[i] + (1 - beta) * Msh.tempA[k].as * bC.oPhi[i];
