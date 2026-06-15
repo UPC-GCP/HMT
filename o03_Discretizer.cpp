@@ -105,7 +105,7 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.N.size()); Pos1.resize(Msh.N.size());
 
     ////////// Boundary Node Coefficients //////////
-    for (Boundary bC : Msh.boundaryConditions){
+    for (Boundary& bC : Msh.boundaryConditions){
 
         // Positions
         for (size_t i = 0; i < Msh.N.size(); i++){

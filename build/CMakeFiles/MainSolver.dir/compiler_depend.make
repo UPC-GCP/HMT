@@ -6,6 +6,7 @@ CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.o: /home/upc_gcp/TFM/HMT/o00_MainSo
   /home/upc_gcp/TFM/HMT/o01_Material.h \
   /home/upc_gcp/TFM/HMT/o02_Mesh.h \
   /home/upc_gcp/TFM/HMT/o03_Discretizer.h \
+  /home/upc_gcp/TFM/HMT/o04_BCG.h \
   /home/upc_gcp/TFM/HMT/o04_CG.h \
   /home/upc_gcp/TFM/HMT/o04_Solver.h \
   /home/upc_gcp/TFM/HMT/o05_Probe.h \
@@ -2846,8 +2847,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
@@ -2871,6 +2870,8 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
+
+/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
 /usr/include/c++/13/cmath:
 
@@ -2917,8 +2918,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/x86_64-linux-gnu/bits/stdint-least.h:
 
 /usr/include/c++/13/debug/assertions.h:
-
-/usr/include/jsoncpp/json/allocator.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
 
@@ -2972,10 +2971,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/locale_facets.tcc:
 
-/usr/include/c++/13/compare:
-
-/usr/include/c++/13/system_error:
-
 /usr/include/c++/13/bits/ptr_traits.h:
 
 /usr/include/c++/13/bits/stl_set.h:
@@ -2994,16 +2989,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/locale_facets_nonio.h:
 
-/usr/include/c++/13/bits/streambuf.tcc:
-
-/usr/include/c++/13/bits/specfun.h:
-
-/usr/include/c++/13/tr1/poly_laguerre.tcc:
-
-/usr/include/libintl.h:
-
-/usr/include/c++/13/bits/invoke.h:
-
 /usr/include/c++/13/bits/atomic_lockfree_defines.h:
 
 /usr/include/x86_64-linux-gnu/asm/errno.h:
@@ -3012,11 +2997,11 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/stringfwd.h:
 
+/usr/include/c++/13/bits/stl_stack.h:
+
 /home/upc_gcp/TFM/HMT/exprtk.hpp:
 
 /home/upc_gcp/TFM/HMT/o09_Medic.h:
-
-/usr/include/c++/13/bits/stl_stack.h:
 
 /usr/include/c++/13/backward/binders.h:
 
@@ -3049,10 +3034,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/c++/13/bits/basic_ios.tcc:
 
 /usr/include/c++/13/pstl/execution_defs.h:
-
-/usr/include/wchar.h:
-
-/usr/include/c++/13/bits/shared_ptr_base.h:
 
 /usr/include/c++/13/bits/basic_ios.h:
 
@@ -3100,6 +3081,14 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/stl_tree.h:
 
+/usr/include/c++/13/array:
+
+/usr/include/c++/13/bits/hash_bytes.h:
+
+/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
+
+/usr/include/asm-generic/errno-base.h:
+
 /usr/include/c++/13/bits/std_abs.h:
 
 /usr/include/c++/13/bits/parse_numbers.h:
@@ -3130,15 +3119,21 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/locale_classes.tcc:
 
-/usr/include/c++/13/bits/basic_string.h:
-
-/home/upc_gcp/TFM/HMT/o05_Probe.h:
-
 /usr/include/c++/13/tr1/ell_integral.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/include/c++/13/bits/locale_classes.h:
+
+/usr/include/c++/13/bits/localefwd.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/c++/13/bits/exception_defines.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
+
+/usr/include/math.h:
 
 /usr/include/c++/13/bits/locale_facets_nonio.tcc:
 
@@ -3150,19 +3145,35 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/limits:
 
-/usr/include/c++/13/array:
+/usr/include/c++/13/bits/streambuf.tcc:
 
-/usr/include/c++/13/bits/hash_bytes.h:
+/usr/include/c++/13/bits/specfun.h:
 
-/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
+/home/upc_gcp/TFM/HMT/o05_Probe.h:
 
-/usr/include/asm-generic/errno-base.h:
+/usr/include/c++/13/bits/basic_string.h:
+
+/usr/include/c++/13/tr1/poly_laguerre.tcc:
+
+/usr/include/libintl.h:
+
+/usr/include/c++/13/bits/shared_ptr_base.h:
+
+/usr/include/wchar.h:
+
+/usr/include/c++/13/bits/invoke.h:
 
 /usr/include/alloca.h:
 
 /usr/include/c++/13/bits/refwrap.h:
 
 /usr/include/c++/13/bits/fstream.tcc:
+
+/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
+
+/home/upc_gcp/TFM/HMT/o04_BCG.h:
+
+/usr/include/features.h:
 
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
@@ -3186,6 +3197,10 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/locale_conv.h:
 
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/usr/include/c++/13/bits/streambuf_iterator.h:
+
 /usr/include/c++/13/ostream:
 
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
@@ -3195,20 +3210,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/c++/13/bits/cpp_type_traits.h:
 
 /usr/include/c++/13/bits/cxxabi_forced.h:
-
-/usr/include/c++/13/bits/localefwd.h:
-
-/usr/include/c++/13/bits/streambuf_iterator.h:
-
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/usr/include/c++/13/bits/exception_defines.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
-
-/usr/include/math.h:
 
 /usr/include/c++/13/bits/cxxabi_init_exception.h:
 
@@ -3237,6 +3238,12 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
 /usr/include/c++/13/bits/hashtable.h:
+
+/usr/include/c++/13/system_error:
+
+/usr/include/c++/13/compare:
+
+/usr/include/jsoncpp/json/allocator.h:
 
 /usr/include/c++/13/cstring:
 
@@ -3318,8 +3325,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/strings.h:
 
-/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
-
 /usr/include/c++/13/pstl/pstl_config.h:
 
 /usr/include/c++/13/bits/shared_ptr_atomic.h:
@@ -3371,8 +3376,6 @@ CMakeFiles/MainSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/c++/13/vector:
 
 /usr/include/ctype.h:
-
-/usr/include/features.h:
 
 /usr/include/jsoncpp/json/config.h:
 

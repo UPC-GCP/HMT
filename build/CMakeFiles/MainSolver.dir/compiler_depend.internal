@@ -7,6 +7,7 @@ CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.o
  /home/upc_gcp/TFM/HMT/o01_Material.h
  /home/upc_gcp/TFM/HMT/o02_Mesh.h
  /home/upc_gcp/TFM/HMT/o03_Discretizer.h
+ /home/upc_gcp/TFM/HMT/o04_BCG.h
  /home/upc_gcp/TFM/HMT/o04_CG.h
  /home/upc_gcp/TFM/HMT/o04_Solver.h
  /home/upc_gcp/TFM/HMT/o05_Probe.h

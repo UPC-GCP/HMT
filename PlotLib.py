@@ -75,7 +75,7 @@ def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
 
     # Plot Map
     fig, ax = plt.subplots()
-    im = ax.imshow(np.transpose(frames[0]), cmap='jet', interpolation='bilinear', origin='lower', extent=[0, 1.1, 0, 0.8])
+    im = ax.imshow(np.transpose(frames[0]), cmap='jet', interpolation='bilinear', origin='lower', extent=[-1, 1, 0, 1])
     plt.xlabel('Length (m)'); plt.ylabel('Height (m)')
     cb = fig.colorbar(im, label="Temperature (°C)")
     ax.set_title(f"Temperature Evolution: Time {vTime[0]:.2f} s")

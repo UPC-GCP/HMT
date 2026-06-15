@@ -18,6 +18,7 @@ add_executable(MainSolver
     o03_Discretizer.cpp
     o04_Solver.cpp
     o04_CG.cpp
+    o04_BCG.cpp
     # GS.cpp
     o05_Probe.cpp
     o09_ExpressionParser.cpp

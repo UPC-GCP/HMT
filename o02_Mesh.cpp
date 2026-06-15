@@ -234,7 +234,7 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, Material Mat, Expressio
             // Store Values
             if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){
                 boundaryConditions[i].Phi.resize(N[1], boundaryConditions[i].value);
-                boundaryConditions[i].Phi.resize(N[1], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(N[1], boundaryConditions[i].value);
             } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){
                 boundaryConditions[i].Phi.resize(N[0], boundaryConditions[i].value);
                 boundaryConditions[i].oPhi.resize(N[0], boundaryConditions[i].value);

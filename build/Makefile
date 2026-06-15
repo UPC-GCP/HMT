@@ -225,6 +225,30 @@ o03_Discretizer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.s
 .PHONY : o03_Discretizer.cpp.s
 
+o04_BCG.o: o04_BCG.cpp.o
+.PHONY : o04_BCG.o
+
+# target to build an object file
+o04_BCG.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_BCG.cpp.o
+.PHONY : o04_BCG.cpp.o
+
+o04_BCG.i: o04_BCG.cpp.i
+.PHONY : o04_BCG.i
+
+# target to preprocess a source file
+o04_BCG.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_BCG.cpp.i
+.PHONY : o04_BCG.cpp.i
+
+o04_BCG.s: o04_BCG.cpp.s
+.PHONY : o04_BCG.s
+
+# target to generate assembly for a file
+o04_BCG.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_BCG.cpp.s
+.PHONY : o04_BCG.cpp.s
+
 o04_CG.o: o04_CG.cpp.o
 .PHONY : o04_CG.o
 
@@ -366,6 +390,9 @@ help:
 	@echo "... o03_Discretizer.o"
 	@echo "... o03_Discretizer.i"
 	@echo "... o03_Discretizer.s"
+	@echo "... o04_BCG.o"
+	@echo "... o04_BCG.i"
+	@echo "... o04_BCG.s"
 	@echo "... o04_CG.o"
 	@echo "... o04_CG.i"
 	@echo "... o04_CG.s"

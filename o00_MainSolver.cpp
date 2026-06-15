@@ -19,6 +19,7 @@
 #include "o04_Solver.h"
 /* #include "GS.h" // PENDING UPDATE */
 #include "o04_CG.h"
+#include "o04_BCG.h"
 #include "o05_Probe.h"
 #include "o09_ExpressionParser.h"
 #include "o09_Medic.h" // Diagnostic Tool: Activate if needed
@@ -99,6 +100,9 @@ int main(int argc, char* argv[]){
     } else if (data["solver"] == "GS"){
         // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
         std::cerr << "Currently unavailable.\n";
+    } else if (data["solver"] == "BCG"){
+        Sol = new BCG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+
     } else {
         std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
     } std::cout << "Solver configured.\n";

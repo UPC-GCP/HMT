@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MainSolver.dir/o02_Mesh.cpp.o.d"
   "CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o"
   "CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o.d"
+  "CMakeFiles/MainSolver.dir/o04_BCG.cpp.o"
+  "CMakeFiles/MainSolver.dir/o04_BCG.cpp.o.d"
   "CMakeFiles/MainSolver.dir/o04_CG.cpp.o"
   "CMakeFiles/MainSolver.dir/o04_CG.cpp.o.d"
   "CMakeFiles/MainSolver.dir/o04_Solver.cpp.o"
