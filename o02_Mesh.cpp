@@ -166,7 +166,7 @@ void Mesh::generateMesh(Material& Mat, Json::Value qNode, Json::Value sections, 
 
 }
 
-void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
+void Mesh::addBoundaryConditions(Json::Value boundaries, Material Mat, ExpressionParser& Prs){
 
     // Resize
     boundaryConditions.resize(boundaries.size());
@@ -174,6 +174,7 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
 
     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
 
+        // Control
         boundaryConditions[i].x0.resize(N.size()); boundaryConditions[i].x1.resize(N.size());
 
         if (boundaries[i]["type"] == "Dirichlet") {
@@ -197,13 +198,22 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
                 
                 sType = boundaries[i]["value"].asString();
                 if (sType.find(" t ") != std::string::npos){
-                    boundaryConditions[i].iEq = 0; // updateTime
+                    boundaryConditions[i].iEq = 0; boundaryConditions[i].value = Prs.evaluateTime(boundaryConditions[i].iEq, 0); // updateTime
                 } else if (sType.find(" x ") != std::string::npos || sType.find(" y ") != std::string::npos){
                     boundaryConditions[i].iEq = 1; // updateCoords
                 } else {boundaryConditions[i].iEq = 0;} // Generic uses updateTime
 
             } else {
                 boundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            }
+
+            // Store Values
+            if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){
+                boundaryConditions[i].Phi.resize(N[1], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(N[1], boundaryConditions[i].value); 
+            } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){
+                boundaryConditions[i].Phi.resize(N[0], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(N[0], boundaryConditions[i].value);
             }
 
         } else if (boundaries[i]["type"] == "Neumann") {
@@ -220,6 +230,15 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs){
             // Value
             boundaryConditions[i].value = boundaries[i]["value"].asDouble();
             boundaryConditions[i].side = boundaries[i]["side"].asInt();
+
+            // Store Values
+            if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){
+                boundaryConditions[i].Phi.resize(N[1], boundaryConditions[i].value);
+                boundaryConditions[i].Phi.resize(N[1], boundaryConditions[i].value);
+            } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){
+                boundaryConditions[i].Phi.resize(N[0], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(N[0], boundaryConditions[i].value);
+            }
 
         } else if (boundaries[i]["type"] == "Robin") {
             

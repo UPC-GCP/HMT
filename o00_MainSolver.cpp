@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
     std::cout << "Initializing mesh ...\n";
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.generateMesh(Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Mesh created with " << Msh.totNodes << " nodes.\n";
-    Msh.addBoundaryConditions(data["boundaries"], Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n";
+    Msh.addBoundaryConditions(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n";
     Msh.addVelocityField(data["velocityField"], Prs); std::cout << "Velocity field generated.\n";
 
     
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
     Dsc.newSetBoundaries(Mat, Msh, Prs); std::cout << "Boundary node coefficiens set.\n";
     Dsc.newSetCoefficients(Mat, Msh); std::cout << "Interior node coefficients set.\n";
 
-
+    
     ///// Solver /////
     std::cout << "Initializing solver ... \n";
     Solver* Sol = nullptr;

@@ -13,7 +13,7 @@ struct Matrix{
 
 struct Boundary{
     int type{}, side{}, iExpr{}, iEq{};
-    std::vector<double> x0{}, x1{};
+    std::vector<double> x0{}, x1{}, Phi{}, oPhi{}; // Phi, oPhi = 1D for their respective dimension 
     double value{}, alpha{};
     bool bUpdate = false;
     std::string expression;
@@ -52,7 +52,7 @@ public:
 
     // Functions
     void generateMesh(Material& Mat, Json::Value qNode, Json::Value sections, Json::Value refinement);
-    void addBoundaryConditions(Json::Value boundaries, ExpressionParser& Prs);
+    void addBoundaryConditions(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
     void addVelocityField(Json::Value nField, ExpressionParser& Prs);
 };
 
