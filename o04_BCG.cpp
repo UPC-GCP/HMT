@@ -11,16 +11,16 @@ bool BCG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x
     // Dimensions
     int n = matB.size(), m = x.size(), l = x[0].size();
 
-    // Flatten 2D x → 1D
+    // Control
     std::vector<double> xFlat(n);
     for (int i = 0; i < m; i++)
         for (int j = 0; j < l; j++)
             xFlat[i*l + j] = x[i][j];
 
-    // r = b - A·x₀
+    // Residual
     std::vector<double> r = operCombLinVec(matB, operProdMatVec(matA, xFlat, m, l), 1.0, -1.0);
 
-    // Shadow residual r̂ = r₀  (fixed for the entire solve)
+    // Shadow Residual
     std::vector<double> rHat = r;
 
     // Scalars
@@ -29,7 +29,7 @@ bool BCG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x
     // Vectors
     std::vector<double> v(n, 0.0), p(n, 0.0), s(n), t(n);
 
-    // ||b|| for relative convergence criterion
+    // Convergence Criterion
     double normB = std::sqrt(operDotProd(matB, matB));
     if (normB == 0.0) normB = 1.0;
 
@@ -60,7 +60,7 @@ bool BCG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x
         // s = r - alpha*v  (intermediate residual)
         s = operCombLinVec(r, v, 1.0, -alpha);
 
-        // Early exit if s is already small enough
+        // Control 
         double normS = std::sqrt(operDotProd(s, s));
         if (normS / normB < tolNum){
             xFlat = operCombLinVec(xFlat, p, 1.0, alpha);
@@ -89,7 +89,7 @@ bool BCG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x
         lastIter = k; lastRes = normR;
 
         if (std::isnan(normR) || std::isinf(normR)){
-            std::cerr << "BiCGSTAB diverges at iteration " << k << ", residual: " << normR << "\n";
+            std::cerr << "BCGS diverges at iteration " << k << ", residual: " << normR << "\n";
             return false;
         }
         if (normR / normB < tolNum){ break; }
@@ -97,7 +97,7 @@ bool BCG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x
         rhoOld = rhoNew;
     }
 
-    // Write 1D solution back to 2D field
+    // Control
     for (int i = 0; i < m; i++)
         for (int j = 0; j < l; j++)
             x[i][j] = xFlat[i*l + j];

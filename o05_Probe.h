@@ -58,7 +58,7 @@ public:
     std::vector<pBug> probeBug{};
 
     // Constructor
-    Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName);
+    Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string spatScheme, std::string fName);
     
     // Destructor
     ~Probe();

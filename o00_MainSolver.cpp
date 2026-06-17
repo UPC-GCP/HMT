@@ -110,7 +110,7 @@ int main(int argc, char* argv[]){
 
     ///// Probes /////
     std::cout << "Initializing probes ...\n";
-    Probe Prb(Msh, data["probes"], Dsc.tempScheme, argv[1]); std::cout << "Files configured.\n";
+    Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n";
     Prb.checkProbes(Msh, Sol);
 
 

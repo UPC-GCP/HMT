@@ -11,10 +11,10 @@
 #include "o02_Mesh.h"
 #include "o04_Solver.h"
 
-std::string createFolder(std::string scheme, std::string fName, std::string& dirName){
+std::string createFolder(std::string tempScheme, std::string spatScheme, std::string fName, std::string& dirName){
 
     // Control
-    if (scheme.find('-') != std::string::npos){scheme.erase(scheme.find('-'), 1);}
+    if (tempScheme.find('-') != std::string::npos){tempScheme.erase(tempScheme.find('-'), 1);}
 
     // Directory
     std::filesystem::path pBase = std::filesystem::current_path();
@@ -26,7 +26,7 @@ std::string createFolder(std::string scheme, std::string fName, std::string& dir
     char oName[35]; strftime(oName, sizeof(oName), "%Y%m%d%H%M%S_", &datetime);
     
     // Folder Name
-    int iPos = fName.find(".json"); dirName = oName + fName.substr(0, iPos) + "_" + scheme;
+    int iPos = fName.find(".json"); dirName = oName + fName.substr(0, iPos) + "_" + tempScheme + "_" + spatScheme;
     pBase /= dirName;
 
     // Create Folder
@@ -51,12 +51,12 @@ std::ofstream createFile(std::filesystem::path fName){
 
 }
 
-Probe::Probe(Mesh Msh, Json::Value probes, std::string scheme, std::string fName){
+Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string spatScheme, std::string fName){
     
     // Create Folder
     std::string tempString{};
     std::filesystem::path newPath(fName);
-    pathBase = createFolder(scheme, newPath.filename().string(), dirName);
+    pathBase = createFolder(tempScheme, spatScheme, newPath.filename().string(), dirName);
     newPath = pathBase;
     
     // Add Probes and Create Files

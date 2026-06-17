@@ -1,11 +1,11 @@
 ----------------------------------------------------
-Running simulations w/ 8 cores ... Mon May  4 08:06:06 -05 2026
+Running simulations w/ 6 cores ... Mon Jun 15 14:13:23 -05 2026
 ----------------------------------------------------
-Finished ./RunConfig/Case_21.json at 08:12:04
-Finished ./RunConfig/Case_20.json at 09:32:59
-Finished ./RunConfig/Case_17.json at 09:33:12
-Finished ./RunConfig/Case_22.json at 09:33:13
-Finished ./RunConfig/Case_19.json at 09:33:19
-Finished ./RunConfig/Case_18.json at 09:33:26
+Finished ./ioSrc/exConv4.json at 14:13:25
+Finished ./ioSrc/exConv1.json at 14:13:25
+Finished ./ioSrc/exConv2.json at 14:13:25
+Finished ./ioSrc/exConv3.json at 14:13:25
+Finished ./ioSrc/exConv5.json at 14:13:30
+Finished ./ioSrc/exConv6.json at 14:20:14
 ----------------------------------------------------
-All simulations complete ... Mon May  4 09:56:15 -05 2026
+All simulations complete ... Mon Jun 15 14:20:14 -05 2026

@@ -2,7 +2,7 @@
 
 # CONTROL
 EXECUTABLE="./build/MainSolver"
-INPUT_DIR="./RunConfig"
+INPUT_DIR="./ioSrc"
 
 # CORES
 CORES=${1:-6}
@@ -26,7 +26,7 @@ echo "Running simulations w/ $CORES cores ... $(date)" | tee -a simulation_log.t
 echo "----------------------------------------------------" >> simulation_log.txt
 
 # RUN SIMULATIONS
-eval ls "$INPUT_DIR"/Case_"$SIMRANGE".json | sort -V | parallel -u -j "$CORES" \
+eval ls "$INPUT_DIR"/exConv"$SIMRANGE".json | sort -V | parallel -u -j "$CORES" \
 	"$EXECUTABLE {} && echo Finished {} at \$(date '+%H:%M:%S') | tee -a simulation_log.txt"
 
 # FOOTNOTE

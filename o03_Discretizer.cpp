@@ -132,7 +132,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         // Control
                         k = i * Msh.N[1] + j;
                         if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Faces[0][i], Msh.Nodes[1][j]); tempStore = bC.value; bC.Phi[j] = bC.value; bC.oPhi[j] = bC.value;}
-                        /* Msh.bcPhi[i][j] = bC.value; */
                         
                         // Gamma
                         gammaw = Mat.vMat[Msh.nMat[i][j]].gamma;
@@ -153,7 +152,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         // Control
                         k = i * Msh.N[1] + j;
                         if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Faces[0][i+1], Msh.Nodes[1][j]); tempStore = bC.value; bC.Phi[j] = bC.value; bC.oPhi[j] = bC.value;}
-                        /* Msh.bcPhi[i][j] = bC.value; */
 
                         // Gamma
                         gammae = Mat.vMat[Msh.nMat[i][j]].gamma;
@@ -179,7 +177,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         // Control
                         k = i * Msh.N[1] + j;
                         if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Nodes[0][i], Msh.Faces[1][j]); tempStore = bC.value; bC.Phi[i] = bC.value; bC.oPhi[i] = bC.value;}
-                        /* Msh.bcPhi[i][j] = bC.value; */
 
                         // Gamma
                         gammas = Mat.vMat[Msh.nMat[i][j]].gamma;
@@ -200,7 +197,6 @@ void Discretizer::newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& P
                         // North Boundary
                         k = i * Msh.N[1] + j;
                         if (bC.bUpdate && bC.iEq == 1){bC.value = Prs.evaluateCoordinates(bC.iExpr, Msh.Nodes[0][i], Msh.Faces[1][j+1]); tempStore = bC.value; bC.Phi[i] = bC.value; bC.oPhi[i] = bC.value;}
-                        /* Msh.bcPhi[i][j] = bC.value; */
 
                         // Gamma
                         gamman = Mat.vMat[Msh.nMat[i][j]].gamma;
