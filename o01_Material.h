@@ -18,12 +18,14 @@ public:
 
     // Vectors
     std::vector<MatPhys> vMat{};
+    std::vector<double> VF0{};
 
     // Constructor
     Material(Json::Value materials);
     
     // Functions
     void setInitialConditions(double initPhi);
+    void setInitialConditions(double initPhi, Json::Value initVF);
 };
 
 #endif

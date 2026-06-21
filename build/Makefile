@@ -129,6 +129,19 @@ MainSolver/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/build
 .PHONY : MainSolver/fast
 
+#=============================================================================
+# Target rules for targets named NSSolver
+
+# Build rule for target.
+NSSolver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NSSolver
+.PHONY : NSSolver
+
+# fast build rule for target.
+NSSolver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/build
+.PHONY : NSSolver/fast
+
 o00_MainSolver.o: o00_MainSolver.cpp.o
 .PHONY : o00_MainSolver.o
 
@@ -153,12 +166,37 @@ o00_MainSolver.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o00_MainSolver.cpp.s
 .PHONY : o00_MainSolver.cpp.s
 
+o00_NSSolver.o: o00_NSSolver.cpp.o
+.PHONY : o00_NSSolver.o
+
+# target to build an object file
+o00_NSSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o
+.PHONY : o00_NSSolver.cpp.o
+
+o00_NSSolver.i: o00_NSSolver.cpp.i
+.PHONY : o00_NSSolver.i
+
+# target to preprocess a source file
+o00_NSSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.i
+.PHONY : o00_NSSolver.cpp.i
+
+o00_NSSolver.s: o00_NSSolver.cpp.s
+.PHONY : o00_NSSolver.s
+
+# target to generate assembly for a file
+o00_NSSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.s
+.PHONY : o00_NSSolver.cpp.s
+
 o01_Material.o: o01_Material.cpp.o
 .PHONY : o01_Material.o
 
 # target to build an object file
 o01_Material.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o01_Material.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o01_Material.cpp.o
 .PHONY : o01_Material.cpp.o
 
 o01_Material.i: o01_Material.cpp.i
@@ -167,6 +205,7 @@ o01_Material.i: o01_Material.cpp.i
 # target to preprocess a source file
 o01_Material.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o01_Material.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o01_Material.cpp.i
 .PHONY : o01_Material.cpp.i
 
 o01_Material.s: o01_Material.cpp.s
@@ -175,6 +214,7 @@ o01_Material.s: o01_Material.cpp.s
 # target to generate assembly for a file
 o01_Material.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o01_Material.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o01_Material.cpp.s
 .PHONY : o01_Material.cpp.s
 
 o02_Mesh.o: o02_Mesh.cpp.o
@@ -201,12 +241,37 @@ o02_Mesh.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o02_Mesh.cpp.s
 .PHONY : o02_Mesh.cpp.s
 
+o02_MeshNS.o: o02_MeshNS.cpp.o
+.PHONY : o02_MeshNS.o
+
+# target to build an object file
+o02_MeshNS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.o
+.PHONY : o02_MeshNS.cpp.o
+
+o02_MeshNS.i: o02_MeshNS.cpp.i
+.PHONY : o02_MeshNS.i
+
+# target to preprocess a source file
+o02_MeshNS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.i
+.PHONY : o02_MeshNS.cpp.i
+
+o02_MeshNS.s: o02_MeshNS.cpp.s
+.PHONY : o02_MeshNS.s
+
+# target to generate assembly for a file
+o02_MeshNS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.s
+.PHONY : o02_MeshNS.cpp.s
+
 o03_Discretizer.o: o03_Discretizer.cpp.o
 .PHONY : o03_Discretizer.o
 
 # target to build an object file
 o03_Discretizer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o
 .PHONY : o03_Discretizer.cpp.o
 
 o03_Discretizer.i: o03_Discretizer.cpp.i
@@ -215,6 +280,7 @@ o03_Discretizer.i: o03_Discretizer.cpp.i
 # target to preprocess a source file
 o03_Discretizer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.i
 .PHONY : o03_Discretizer.cpp.i
 
 o03_Discretizer.s: o03_Discretizer.cpp.s
@@ -223,6 +289,7 @@ o03_Discretizer.s: o03_Discretizer.cpp.s
 # target to generate assembly for a file
 o03_Discretizer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.s
 .PHONY : o03_Discretizer.cpp.s
 
 o04_BCG.o: o04_BCG.cpp.o
@@ -231,6 +298,7 @@ o04_BCG.o: o04_BCG.cpp.o
 # target to build an object file
 o04_BCG.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_BCG.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_BCG.cpp.o
 .PHONY : o04_BCG.cpp.o
 
 o04_BCG.i: o04_BCG.cpp.i
@@ -239,6 +307,7 @@ o04_BCG.i: o04_BCG.cpp.i
 # target to preprocess a source file
 o04_BCG.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_BCG.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_BCG.cpp.i
 .PHONY : o04_BCG.cpp.i
 
 o04_BCG.s: o04_BCG.cpp.s
@@ -247,6 +316,7 @@ o04_BCG.s: o04_BCG.cpp.s
 # target to generate assembly for a file
 o04_BCG.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_BCG.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_BCG.cpp.s
 .PHONY : o04_BCG.cpp.s
 
 o04_CG.o: o04_CG.cpp.o
@@ -255,6 +325,7 @@ o04_CG.o: o04_CG.cpp.o
 # target to build an object file
 o04_CG.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_CG.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CG.cpp.o
 .PHONY : o04_CG.cpp.o
 
 o04_CG.i: o04_CG.cpp.i
@@ -263,6 +334,7 @@ o04_CG.i: o04_CG.cpp.i
 # target to preprocess a source file
 o04_CG.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_CG.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CG.cpp.i
 .PHONY : o04_CG.cpp.i
 
 o04_CG.s: o04_CG.cpp.s
@@ -271,6 +343,7 @@ o04_CG.s: o04_CG.cpp.s
 # target to generate assembly for a file
 o04_CG.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_CG.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CG.cpp.s
 .PHONY : o04_CG.cpp.s
 
 o04_Solver.o: o04_Solver.cpp.o
@@ -279,6 +352,7 @@ o04_Solver.o: o04_Solver.cpp.o
 # target to build an object file
 o04_Solver.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_Solver.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_Solver.cpp.o
 .PHONY : o04_Solver.cpp.o
 
 o04_Solver.i: o04_Solver.cpp.i
@@ -287,6 +361,7 @@ o04_Solver.i: o04_Solver.cpp.i
 # target to preprocess a source file
 o04_Solver.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_Solver.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_Solver.cpp.i
 .PHONY : o04_Solver.cpp.i
 
 o04_Solver.s: o04_Solver.cpp.s
@@ -295,6 +370,7 @@ o04_Solver.s: o04_Solver.cpp.s
 # target to generate assembly for a file
 o04_Solver.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_Solver.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_Solver.cpp.s
 .PHONY : o04_Solver.cpp.s
 
 o05_Probe.o: o05_Probe.cpp.o
@@ -303,6 +379,7 @@ o05_Probe.o: o05_Probe.cpp.o
 # target to build an object file
 o05_Probe.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o05_Probe.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_Probe.cpp.o
 .PHONY : o05_Probe.cpp.o
 
 o05_Probe.i: o05_Probe.cpp.i
@@ -311,6 +388,7 @@ o05_Probe.i: o05_Probe.cpp.i
 # target to preprocess a source file
 o05_Probe.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o05_Probe.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_Probe.cpp.i
 .PHONY : o05_Probe.cpp.i
 
 o05_Probe.s: o05_Probe.cpp.s
@@ -319,6 +397,7 @@ o05_Probe.s: o05_Probe.cpp.s
 # target to generate assembly for a file
 o05_Probe.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o05_Probe.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_Probe.cpp.s
 .PHONY : o05_Probe.cpp.s
 
 o09_ExpressionParser.o: o09_ExpressionParser.cpp.o
@@ -327,6 +406,7 @@ o09_ExpressionParser.o: o09_ExpressionParser.cpp.o
 # target to build an object file
 o09_ExpressionParser.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_ExpressionParser.cpp.o
 .PHONY : o09_ExpressionParser.cpp.o
 
 o09_ExpressionParser.i: o09_ExpressionParser.cpp.i
@@ -335,6 +415,7 @@ o09_ExpressionParser.i: o09_ExpressionParser.cpp.i
 # target to preprocess a source file
 o09_ExpressionParser.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_ExpressionParser.cpp.i
 .PHONY : o09_ExpressionParser.cpp.i
 
 o09_ExpressionParser.s: o09_ExpressionParser.cpp.s
@@ -343,6 +424,7 @@ o09_ExpressionParser.s: o09_ExpressionParser.cpp.s
 # target to generate assembly for a file
 o09_ExpressionParser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_ExpressionParser.cpp.s
 .PHONY : o09_ExpressionParser.cpp.s
 
 o09_Medic.o: o09_Medic.cpp.o
@@ -351,6 +433,7 @@ o09_Medic.o: o09_Medic.cpp.o
 # target to build an object file
 o09_Medic.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_Medic.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_Medic.cpp.o
 .PHONY : o09_Medic.cpp.o
 
 o09_Medic.i: o09_Medic.cpp.i
@@ -359,6 +442,7 @@ o09_Medic.i: o09_Medic.cpp.i
 # target to preprocess a source file
 o09_Medic.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_Medic.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_Medic.cpp.i
 .PHONY : o09_Medic.cpp.i
 
 o09_Medic.s: o09_Medic.cpp.s
@@ -367,6 +451,7 @@ o09_Medic.s: o09_Medic.cpp.s
 # target to generate assembly for a file
 o09_Medic.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_Medic.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_Medic.cpp.s
 .PHONY : o09_Medic.cpp.s
 
 # Help Target
@@ -378,15 +463,22 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MainSolver"
+	@echo "... NSSolver"
 	@echo "... o00_MainSolver.o"
 	@echo "... o00_MainSolver.i"
 	@echo "... o00_MainSolver.s"
+	@echo "... o00_NSSolver.o"
+	@echo "... o00_NSSolver.i"
+	@echo "... o00_NSSolver.s"
 	@echo "... o01_Material.o"
 	@echo "... o01_Material.i"
 	@echo "... o01_Material.s"
 	@echo "... o02_Mesh.o"
 	@echo "... o02_Mesh.i"
 	@echo "... o02_Mesh.s"
+	@echo "... o02_MeshNS.o"
+	@echo "... o02_MeshNS.i"
+	@echo "... o02_MeshNS.s"
 	@echo "... o03_Discretizer.o"
 	@echo "... o03_Discretizer.i"
 	@echo "... o03_Discretizer.s"

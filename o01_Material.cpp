@@ -21,7 +21,18 @@ Material::Material(Json::Value materials){
 
 void Material::setInitialConditions(double initPhi){
 
-    // Initial Conditions
+    // Main Initial Conditions
     Phi0 = initPhi;
+    
+}
+
+void Material::setInitialConditions(double initPhi, Json::Value initVF){
+
+    // Main Initial Conditions
+    Phi0 = initPhi;
+    
+    // Velocity Field Initial Conditions
+    VF0.resize(initVF.size());
+    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++){VF0[i] = initVF[i].asDouble();}
 
 }

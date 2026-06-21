@@ -1,0 +1,269 @@
+// Imports
+/* #include "json/value.h" */
+/* #include <cstddef> */
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+/* #include <memory> */
+/* #include <pthread.h> */
+#include <string>
+#include <vector>
+#include <json/json.h>
+#include <cmath>
+/* #include <algorithm> */
+
+// Self-Imports
+/* #include "o01_Material.h" */
+#include "o02_MeshNS.h"
+/* #include "o09_ExpressionParser.h" */
+
+
+Mesh::Mesh(int algo, double W, double A, double xC, double kStr, double delta) {
+
+    // Geometry
+    this->W = W;
+
+    // Mesh Parameters
+    algorithm = algo;
+    strength = A; centering = xC; kStrength = kStr; this->delta = delta;
+    
+}
+
+
+bool isFormula(std::string value){
+
+    // Stringstream
+    std::stringstream ss; ss << value;
+
+    // Check
+    float num = 0; ss >> num;
+
+    // Return
+    if (ss.good()){
+        return true;
+    } else if (num == 0 && value[0] != 0){
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+void Mesh::calculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec) {
+
+    // General
+    double length = x1 - x0;
+
+    // Face Positions
+    if (algorithm == 0){
+        // Face Positions 0: Bidirectional Non-uniform (A, xC)
+        for (int i = cNode; i < cNode+NSec+1; i++) {
+            // fVec[i] = x0 + (i-cNode) * length / NSec + strength * (centering - (i-cNode) * length / NSec) * (1 - (i-cNode)/NSec) * (i-cNode) / NSec;
+		std::cerr << "Bidirectional Non-Uniform not currently working.\n";
+        }
+    } else if (algorithm == 1){
+        // Face Positions 1: Unidirectional Non-uniform (Kappa)
+        for (int i = cNode; i < cNode+NSec+1; i++) {
+            fVec[i] = x0 + pow(((i-cNode) * length / NSec), kStrength);
+        }
+    } else if(algorithm == 2){
+        // Face Positions 2: Hyperbolic Tangent (Single Side)
+        double A, B;
+        for (int i = cNode; i < cNode+NSec+1; i++){
+            A = tanh(delta * ((static_cast<double>(i) - cNode) / NSec - 1)); B = tanh(delta);
+            fVec[i] = x0 + length * (1 + A / B);
+        }
+    } else if(algorithm == 3){
+        // Face Positions 3: Hyperbolic Tangent (Double-Sided)
+        double A, B;
+        for (int i = cNode; i < cNode+NSec+1; i++){
+            A = tanh(delta*((static_cast<double>(i) - cNode)/NSec - 0.5));
+            B = tanh(0.5 * delta);
+            fVec[i] = x0 + 0.5 * length * (1 + A/B);
+        }
+    }
+
+}
+
+void Mesh::generateMesh(MeshSolver& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement){
+
+	// Control (nD)
+	Msh.N.resize(qNode.size());
+	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++){
+		Msh.N[i] = qNode[i].asInt();
+	}
+    for (int val : Msh.N){Msh.totNodes *= val;}
+
+	// Geometry Resize (nD)
+	Msh.Faces.resize(Msh.N.size()); Msh.Nodes.resize(Msh.N.size()); Msh.deltaX.resize(Msh.N.size()); Msh.dX.resize(Msh.N.size());
+	for (size_t i = 0; i < Msh.N.size(); i++){
+		Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1);
+	}
+    
+    // Faces Loop (nD)
+    std::vector<size_t> cNode; cNode.resize(Msh.N.size(), 0);
+    for (int i = 0; i < refinement.size(); i++){
+        // Calculate
+        calculateFaces(cNode[refinement[i]["axis"].asInt()], refinement[i]["N"].asInt(), refinement[i]["range"][0].asDouble(), refinement[i]["range"][1].asDouble(), Msh.Faces[refinement[i]["axis"].asInt()]);
+
+        // Control
+        cNode[refinement[i]["axis"].asInt()] += refinement[i]["N"].asInt();
+    }
+
+    // CV Positions (nD)
+    for (size_t i = 0; i < Msh.N.size(); i++){
+        for (size_t j = 0; j < Msh.N[i]; j++){
+            Msh.Nodes[i][j] = 0.5 * (Msh.Faces[i][j] + Msh.Faces[i][j+1]);
+        }
+    }
+    
+    // Deltas (nD)
+    for (size_t i = 0; i < Msh.N.size(); i++){
+        for (size_t j = 0; j < Msh.deltaX[i].size(); j++){
+            // Delta X
+            Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j];
+
+            // dX
+            if (j == Msh.deltaX[i].size()-1){continue;}
+            Msh.dX[i][j+1] = Msh.Nodes[i][j+1] - Msh.Nodes[i][j];
+        }
+
+        // dX
+        Msh.dX[i].front() = Msh.Nodes[i].front() - Msh.Faces[i].front();
+        Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back();
+    }
+
+    // Resize (Non-nD)
+    Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.sPhi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]);
+    for (size_t i = 0; i < Msh.N[0]; i++){
+        Msh.nMat[i].resize(Msh.N[1], 0); Msh.Phi[i].resize(Msh.N[1], Mat.Phi0); Msh.sPhi[i].resize(Msh.N[1], 0); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], Mat.Phi0);
+    }
+
+    // Sections
+    std::vector<int> Pos0(Msh.N.size()), Pos1(Msh.N.size());
+    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            Pos0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
+        }
+
+        // Internal Nodes (Non-nD)
+        for (int j = Pos0[0]; j < Pos1[0]; j++){
+            for (int k = Pos0[1]; k < Pos1[1]; k++){
+                // Material
+                Msh.nMat[j][k] = sections[i]["material"].asInt(); Msh.sPhi[j][k] = sections[i]["source"].asDouble();
+
+                /* // Geometry */
+                Msh.Sw[j][k] = Msh.deltaX[1][k] * W; Msh.Se[j][k] = Msh.deltaX[1][k] * W; Msh.Ss[j][k] = Msh.deltaX[0][j] * W; Msh.Sn[j][k] = Msh.deltaX[0][j] * W;
+                Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W;
+            }
+        }
+    }
+
+    // Coefficients (nD)
+    Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
+
+}
+
+
+
+void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit, Json::Value sections){
+
+    // Deltas (nD)
+    for (size_t i = 0; i < Msh.N.size(); i++){
+        std::cout << "i: " << i;
+        for (size_t j = 0; j < Msh.deltaX[i].size(); j++){
+            std::cout << " j: " << j;
+            // Delta X
+            Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j];
+
+            // dX
+            if (j == Msh.deltaX[i].size()-1){continue;}
+            Msh.dX[i][j+1] = Msh.Nodes[i][j+1] - Msh.Nodes[i][j];
+        }
+
+        // dX
+        Msh.dX[i].front() = Msh.Nodes[i].front() - Msh.Faces[i].front();
+        Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back();
+    }
+
+    /* Msh.sPhi.resize(Msh.N[0]); */  // missing for MeshSolver
+    /* Msh.sPhi[i].resize(Msh.N[1], 0); */ // inside the loop
+    // Resize (Non-nD)
+    Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]);
+    for (size_t i = 0; i < Msh.N[0]; i++){
+        Msh.nMat[i].resize(Msh.N[1], 0); Msh.Phi[i].resize(Msh.N[1], valInit); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], valInit);
+    }
+
+    std::cout << "Resize done\n";
+
+    // NEED TO CHECK THIS LOGIC PENDING 
+    // CHECK IF FIND POSITIONS ACTUALLY GOES THROUGH ALL THE RIGHT INDEXES FOR THIS CASE
+    // ENOUGH FOR TODAY WILL FINISH TOMORROW
+
+
+    // Sections
+    std::vector<int> Pos0(Msh.N.size()), Pos1(Msh.N.size());
+    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            Pos0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
+        }
+        
+        /* Msh.sPhi[j][k] = sections[i]["source"].asDouble(); */ // Missing from Material
+        // Internal Nodes (Non-nD)
+        for (int j = Pos0[0]; j < Pos1[0]; j++){
+            for (int k = Pos0[1]; k < Pos1[1]; k++){
+                // Material
+                Msh.nMat[j][k] = sections[i]["material"].asInt(); 
+                /* // Geometry */
+                Msh.Sw[j][k] = Msh.deltaX[1][k] * W; Msh.Se[j][k] = Msh.deltaX[1][k] * W; Msh.Ss[j][k] = Msh.deltaX[0][j] * W; Msh.Sn[j][k] = Msh.deltaX[0][j] * W;
+                Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W;
+            }
+        }
+    }
+
+    // Coefficients (nD)
+    Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); 
+    /* Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0); */ 
+
+}
+
+
+void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v, Json::Value sections){
+    
+	// Control (nD)
+	u.N.resize(p.N.size()); v.N.resize(p.N.size());
+    u.N[0] = p.N[0] + 1; u.N[1] = p.N[1]; for (int val : u.N){u.totNodes *= val;}
+    v.N[0] = p.N[0]; v.N[1] = p.N[1] + 1; for (int val : v.N){v.totNodes *= val;}
+    
+    // Geometry Resize (nD)
+    u.Faces.resize(p.N.size()); u.Nodes.resize(p.N.size()); u.deltaX.resize(p.N.size()); u.dX.resize(p.N.size());
+    v.Faces.resize(p.N.size()); v.Nodes.resize(p.N.size()); v.deltaX.resize(p.N.size()); v.dX.resize(p.N.size());
+	for (size_t i = 0; i < p.N.size(); i++){
+		u.Faces[i].resize(u.N[i]+1); u.Nodes[i].resize(u.N[i]); u.deltaX[i].resize(u.N[i]); u.dX[i].resize(u.N[i]);
+        v.Faces[i].resize(v.N[i]+1); v.Nodes[i].resize(v.N[i]); v.deltaX[i].resize(v.N[i]); v.dX[i].resize(v.N[i]);
+	}
+
+    // Geometry uNodes (non-nD)
+    for (size_t i = 0; i < u.Nodes[0].size(); i++){u.Nodes[0][i] = p.Faces[0][i]; u.Faces[0][i+1] = p.Nodes[0][i];} 
+    u.Faces[0][0] = u.Nodes[0].front() - u.Faces[0][1]; u.Faces[0].back() = u.Nodes[0].back() + u.Faces[0][1];
+    for (size_t i = 0; i < u.Nodes[1].size(); i++){u.Nodes[1][i] = p.Nodes[1][i]; u.Faces[1][i] = p.Faces[1][i];}
+    u.Faces[1].back() = p.Faces[1].back();
+
+    // Geometry vNodes (non-nD)
+    for (size_t i = 0; i < v.Nodes[0].size(); i++){v.Nodes[0][i] = p.Nodes[0][i]; v.Faces[0][i] = p.Faces[0][i];}
+    v.Faces[0].back() = p.Faces[0].back();
+    for (size_t i = 0; i < v.Nodes[1].size(); i++){v.Nodes[1][i] = p.Faces[1][i]; v.Faces[1][i+1] = p.Nodes[1][i];}
+    v.Faces[1][0] = v.Nodes[1].front() - v.Faces[1][1]; v.Faces[1].back() = v.Nodes[1].back() + v.Faces[1][1];
+
+    // Calculate Geometry
+    calculateMeshGeometry(u, Mat.VF0[0], sections);
+    calculateMeshGeometry(v, Mat.VF0[1], sections);
+
+}
+
+

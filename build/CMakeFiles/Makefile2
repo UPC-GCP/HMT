@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /home/upc_gcp/TFM/HMT/build
 
 # The main recursive "all" target.
 all: CMakeFiles/MainSolver.dir/all
+all: CMakeFiles/NSSolver.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,6 +73,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/MainSolver.dir/clean
+clean: CMakeFiles/NSSolver.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -99,6 +101,32 @@ MainSolver: CMakeFiles/MainSolver.dir/rule
 CMakeFiles/MainSolver.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/clean
 .PHONY : CMakeFiles/MainSolver.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/NSSolver.dir
+
+# All Build rule for target.
+CMakeFiles/NSSolver.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=12,13,14,15,16,17,18,19,20,21,22 "Built target NSSolver"
+.PHONY : CMakeFiles/NSSolver.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/NSSolver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 11
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/NSSolver.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 0
+.PHONY : CMakeFiles/NSSolver.dir/rule
+
+# Convenience name for target.
+NSSolver: CMakeFiles/NSSolver.dir/rule
+.PHONY : NSSolver
+
+# clean rule for target.
+CMakeFiles/NSSolver.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/clean
+.PHONY : CMakeFiles/NSSolver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
