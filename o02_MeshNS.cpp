@@ -1,12 +1,14 @@
 // Imports
 /* #include "json/value.h" */
 /* #include <cstddef> */
+#include <algorithm>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 /* #include <memory> */
 /* #include <pthread.h> */
+/* #include <iterator> */
 #include <string>
 #include <vector>
 #include <json/json.h>
@@ -169,13 +171,11 @@ void Mesh::generateMesh(MeshSolver& Msh, Material Mat, Json::Value qNode, Json::
 
 
 
-void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit, Json::Value sections){
+void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit){
 
     // Deltas (nD)
     for (size_t i = 0; i < Msh.N.size(); i++){
-        std::cout << "i: " << i;
         for (size_t j = 0; j < Msh.deltaX[i].size(); j++){
-            std::cout << " j: " << j;
             // Delta X
             Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j];
 
@@ -192,37 +192,16 @@ void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit, Json::Value sect
     /* Msh.sPhi.resize(Msh.N[0]); */  // missing for MeshSolver
     /* Msh.sPhi[i].resize(Msh.N[1], 0); */ // inside the loop
     // Resize (Non-nD)
-    Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]);
+    Msh.Phi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]);
     for (size_t i = 0; i < Msh.N[0]; i++){
-        Msh.nMat[i].resize(Msh.N[1], 0); Msh.Phi[i].resize(Msh.N[1], valInit); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], valInit);
+        Msh.Phi[i].resize(Msh.N[1], valInit); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], valInit);
     }
 
-    std::cout << "Resize done\n";
-
-    // NEED TO CHECK THIS LOGIC PENDING 
-    // CHECK IF FIND POSITIONS ACTUALLY GOES THROUGH ALL THE RIGHT INDEXES FOR THIS CASE
-    // ENOUGH FOR TODAY WILL FINISH TOMORROW
-
-
-    // Sections
-    std::vector<int> Pos0(Msh.N.size()), Pos1(Msh.N.size());
-    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
-        // Find Positions (nD)
-        for (int j = 0; j < Msh.N.size(); j++){
-            Pos0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
-            Pos1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
-        }
-        
-        /* Msh.sPhi[j][k] = sections[i]["source"].asDouble(); */ // Missing from Material
-        // Internal Nodes (Non-nD)
-        for (int j = Pos0[0]; j < Pos1[0]; j++){
-            for (int k = Pos0[1]; k < Pos1[1]; k++){
-                // Material
-                Msh.nMat[j][k] = sections[i]["material"].asInt(); 
-                /* // Geometry */
+    // Geometry
+    for (size_t j = 0; j < Msh.N[0]; j++){
+        for (size_t k = 0; k < Msh.N[1]; k++){
                 Msh.Sw[j][k] = Msh.deltaX[1][k] * W; Msh.Se[j][k] = Msh.deltaX[1][k] * W; Msh.Ss[j][k] = Msh.deltaX[0][j] * W; Msh.Sn[j][k] = Msh.deltaX[0][j] * W;
                 Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W;
-            }
         }
     }
 
@@ -233,7 +212,7 @@ void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit, Json::Value sect
 }
 
 
-void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v, Json::Value sections){
+void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v){
     
 	// Control (nD)
 	u.N.resize(p.N.size()); v.N.resize(p.N.size());
@@ -261,9 +240,106 @@ void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBas
     v.Faces[1][0] = v.Nodes[1].front() - v.Faces[1][1]; v.Faces[1].back() = v.Nodes[1].back() + v.Faces[1][1];
 
     // Calculate Geometry
-    calculateMeshGeometry(u, Mat.VF0[0], sections);
-    calculateMeshGeometry(v, Mat.VF0[1], sections);
+    calculateMeshGeometry(u, Mat.VF0[0]);
+    calculateMeshGeometry(v, Mat.VF0[1]);
 
 }
 
 
+void Mesh::addBoundaryConditions(Json::Value boundaries, Material Mat, ExpressionParser& Prs){
+
+    // Resize
+    boundaryConditions.resize(boundaries.size());
+    std::vector<double> Pos0, Pos1; std::string sType{};
+
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
+
+        // Control
+        boundaryConditions[i].x0.resize(p.N.size()); boundaryConditions[i].x1.resize(p.N.size());
+
+        if (boundaries[i]["type"] == "Dirichlet") {
+
+            // Control
+            boundaryConditions[i].type = 0;
+            boundaryConditions[i].side = boundaries[i]["side"].asInt();
+
+            // Position
+            for (int j = 0; j < p.N.size(); j++){
+                boundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
+                boundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
+            }
+
+            // Value
+            if (isFormula(boundaries[i]["value"].asString())){
+                
+                boundaryConditions[i].value = 0;
+                boundaryConditions[i].bUpdate = true;
+                boundaryConditions[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString()); // FutureWork: Store expressions as strings and check if same expression is already stored to reuse the index instead of saving it once more
+                
+                sType = boundaries[i]["value"].asString();
+                if (sType.find(" t ") != std::string::npos){
+                    boundaryConditions[i].iEq = 0; boundaryConditions[i].value = Prs.evaluateTime(boundaryConditions[i].iEq, 0); // updateTime
+                } else if (sType.find(" x ") != std::string::npos || sType.find(" y ") != std::string::npos){
+                    boundaryConditions[i].iEq = 1; // updateCoords
+                } else {boundaryConditions[i].iEq = 0;} // Generic uses updateTime
+
+            } else {
+                boundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            }
+
+            // Store Values
+            if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){
+                boundaryConditions[i].Phi.resize(p.N[1], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(p.N[1], boundaryConditions[i].value); 
+            } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){
+                boundaryConditions[i].Phi.resize(p.N[0], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(p.N[0], boundaryConditions[i].value);
+            }
+
+        } else if (boundaries[i]["type"] == "Neumann") {
+            
+            // Control
+            boundaryConditions[i].type = 1;
+
+            // Position
+            for (int j = 0; j < p.N.size(); j++){
+                boundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
+                boundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
+            }
+
+            // Value
+            boundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            boundaryConditions[i].side = boundaries[i]["side"].asInt();
+
+            // Store Values
+            if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){
+                boundaryConditions[i].Phi.resize(p.N[1], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(p.N[1], boundaryConditions[i].value);
+            } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){
+                boundaryConditions[i].Phi.resize(p.N[0], boundaryConditions[i].value);
+                boundaryConditions[i].oPhi.resize(p.N[0], boundaryConditions[i].value);
+            }
+
+        } else if (boundaries[i]["type"] == "Robin") {
+            
+            // Control
+            boundaryConditions[i].type = 2;
+            
+            // Position
+            for (int j = 0; j < p.N.size(); j++){
+                boundaryConditions[i].x0[j] = boundaries[i]["x0"][j].asDouble();
+                boundaryConditions[i].x1[j] = boundaries[i]["x1"][j].asDouble();
+            }
+
+            // Value
+            boundaryConditions[i].value = boundaries[i]["value"].asDouble();
+            boundaryConditions[i].side = boundaries[i]["side"].asInt();
+            boundaryConditions[i].alpha = boundaries[i]["alpha"].asDouble();
+
+        } else {
+            std::cerr << "Error: Invalid boundary condition type " << boundaries[i]["type"].asString() << std::endl;
+        }
+
+    }
+
+}

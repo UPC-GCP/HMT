@@ -14,7 +14,6 @@ struct Matrix{
 struct MeshBase{
     int totNodes=1;
     std::vector<int> N{};
-    std::vector<std::vector<int>> nMat{}; // Material
     std::vector<std::vector<double>> Faces{}, Nodes{}, deltaX{}, dX{}; // Coordinates, distances
     std::vector<std::vector<double>> Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // Geometry
     std::vector<std::vector<double>> Phi{}, oPhi{}; // Phi
@@ -23,6 +22,7 @@ struct MeshBase{
 };
 
 struct MeshSolver : MeshBase{
+    std::vector<std::vector<int>> nMat{}; // Material
     std::vector<std::vector<double>> sPhi{}; // Source-term
     std::vector<Matrix> tempA{}; // A
     std::vector<double> tempB{}; // b
@@ -30,7 +30,7 @@ struct MeshSolver : MeshBase{
 
 struct Boundary{
     int type{}, side{}, iExpr{}, iEq{};
-    std::vector<double> x0{}, x1{}, Phi{}, oPhi{}; // Phi, oPhi = 1D for their respective dimension 
+    std::vector<double> x0{}, x1{}, Phi{}, oPhi{}; // Phi, oPhi = 1D for their respective dimensionA
     double value{}, alpha{};
     bool bUpdate = false;
     std::string expression;
@@ -40,7 +40,7 @@ class Mesh
 {
 private:
     void calculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec);
-    void calculateMeshGeometry(MeshBase& Msh, double valInit, Json::Value sections);
+    void calculateMeshGeometry(MeshBase& Msh, double valInit);
 
 public:
     // Variables
@@ -57,8 +57,8 @@ public:
 
     // Functions
     void generateMesh(MeshSolver& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement); // generate p
+    void generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v); // generate u, v
     void addBoundaryConditions(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
-    void generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v, Json::Value sections); // generate u, v
 
     // How to organize Functions
     // generateMesh already creates MeshSolver. Should just use that one as is and let it return the solver. p as input;

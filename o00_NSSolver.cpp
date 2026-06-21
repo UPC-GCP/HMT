@@ -15,7 +15,7 @@
 // Self-Imports
 #include "o01_Material.h"
 #include "o02_MeshNS.h"
-/* #include "o03_Discretizer.h" */
+#include "o03_DiscretizerNS.h"
 /* #include "o04_Solver.h" */
 /* #include "o04_CG.h" */
 /* #include "o04_BCG.h" */
@@ -80,49 +80,21 @@ int main(int argc, char* argv[]){
     std::cout << "Initializing mesh ...\n";
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.generateMesh(Msh.p, Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes.\n";
-    Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v, data["sections"]); std::cout << "Secondary meshes created with " << Msh.u.totNodes << ", " << Msh.v.totNodes << " nodes.\n";
-    /* Msh.addBoundaryConditions(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n"; */
-
-
-    std::cout << "\np-xNodes: ";
-    for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "p-xFaces: ";
-    for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "p-yNodes: ";
-    for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "p-yFaces: ";
-    for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "\nu-xNodes: ";
-    for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "u-xFaces: ";
-    for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "u-yNodes: ";
-    for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "u-yFaces: ";
-    for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "\nv-xNodes: ";
-    for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "v-xFaces: ";
-    for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "v-yNodes: ";
-    for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n";
-    std::cout << "v-yFaces: ";
-    for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n";
-
-    return 0;
-
+    Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n";
+    Msh.addBoundaryConditions(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n";
 
     
     /* ///// Discretizer ///// */
-    /* std::cout << "Initializing discretizer ...\n"; */
-    /* Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); */
+    std::cout << "Initializing discretizer ...\n";
+    Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble());
     /* Dsc.setSchemeParameters(Mat, Msh); std::cout << "Temporal parameters set.\n"; */
     /* Dsc.newSetBoundaries(Mat, Msh, Prs); std::cout << "Boundary node coefficiens set.\n"; */
     /* Dsc.newSetCoefficients(Mat, Msh); std::cout << "Interior node coefficients set.\n"; */
 
     
+    return 0;
+
+
     /* ///// Solver ///// */
     /* std::cout << "Initializing solver ... \n"; */
     /* Solver* Sol = nullptr; */
@@ -196,3 +168,36 @@ int main(int argc, char* argv[]){
     /* std::cout << "Files saved to: " << Prb.dirName << "\n"; */
 
 }
+    
+
+    /* std::cout << "\np-xNodes: "; */
+    /* for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "p-xFaces: "; */
+    /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "p-yNodes: "; */
+    /* for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "p-yFaces: "; */
+    /* for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nu-xNodes: "; */
+    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-xFaces: "; */
+    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yNodes: "; */
+    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yFaces: "; */
+    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nv-xNodes: "; */
+    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-xFaces: "; */
+    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yNodes: "; */
+    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yFaces: "; */
+    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "pMat:\n"; */
+    /* for (std::vector<int> vec : Msh.p.nMat){ */
+    /*     for (int val : vec){std::cout << val << " ";} std::cout << "\n"; */
+    /* } */
