@@ -28,7 +28,7 @@ add_executable(NSSolver
     o00_NSSolver.cpp
     o01_Material.cpp
     o02_MeshNS.cpp
-    o03_Discretizer.cpp
+    o03_DiscretizerNS.cpp
     o04_Solver.cpp
     o04_CG.cpp
     o04_BCG.cpp

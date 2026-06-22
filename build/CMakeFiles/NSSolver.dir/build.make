@@ -111,19 +111,19 @@ CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o02_MeshNS.cpp -o CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.s
 
-CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o: CMakeFiles/NSSolver.dir/flags.make
-CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o: /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp
-CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o: CMakeFiles/NSSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o -MF CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o.d -o CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o -c /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp
+CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o: CMakeFiles/NSSolver.dir/flags.make
+CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o: /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp
+CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o: CMakeFiles/NSSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o -MF CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o.d -o CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp
 
-CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp > CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.i
+CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp > CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.i
 
-CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp -o CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.s
+CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp -o CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.s
 
 CMakeFiles/NSSolver.dir/o04_Solver.cpp.o: CMakeFiles/NSSolver.dir/flags.make
 CMakeFiles/NSSolver.dir/o04_Solver.cpp.o: /home/upc_gcp/TFM/HMT/o04_Solver.cpp
@@ -214,7 +214,7 @@ NSSolver_OBJECTS = \
 "CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o" \
 "CMakeFiles/NSSolver.dir/o01_Material.cpp.o" \
 "CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.o" \
-"CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o" \
+"CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o" \
 "CMakeFiles/NSSolver.dir/o04_Solver.cpp.o" \
 "CMakeFiles/NSSolver.dir/o04_CG.cpp.o" \
 "CMakeFiles/NSSolver.dir/o04_BCG.cpp.o" \
@@ -228,7 +228,7 @@ NSSolver_EXTERNAL_OBJECTS =
 NSSolver: CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o
 NSSolver: CMakeFiles/NSSolver.dir/o01_Material.cpp.o
 NSSolver: CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.o
-NSSolver: CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o
+NSSolver: CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o
 NSSolver: CMakeFiles/NSSolver.dir/o04_Solver.cpp.o
 NSSolver: CMakeFiles/NSSolver.dir/o04_CG.cpp.o
 NSSolver: CMakeFiles/NSSolver.dir/o04_BCG.cpp.o

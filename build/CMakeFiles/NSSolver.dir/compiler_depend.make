@@ -5,6 +5,7 @@ CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o: /home/upc_gcp/TFM/HMT/o00_NSSolver.c
   /home/upc_gcp/TFM/HMT/exprtk.hpp \
   /home/upc_gcp/TFM/HMT/o01_Material.h \
   /home/upc_gcp/TFM/HMT/o02_MeshNS.h \
+  /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.h \
   /home/upc_gcp/TFM/HMT/o09_ExpressionParser.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
@@ -858,11 +859,11 @@ CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.o: /home/upc_gcp/TFM/HMT/o02_MeshNS.cpp \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h
 
-CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o: /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp \
+CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o: /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp \
   /home/upc_gcp/TFM/HMT/exprtk.hpp \
   /home/upc_gcp/TFM/HMT/o01_Material.h \
-  /home/upc_gcp/TFM/HMT/o02_Mesh.h \
-  /home/upc_gcp/TFM/HMT/o03_Discretizer.h \
+  /home/upc_gcp/TFM/HMT/o02_MeshNS.h \
+  /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.h \
   /home/upc_gcp/TFM/HMT/o09_ExpressionParser.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
@@ -3024,6 +3025,8 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h
 
 
+/home/upc_gcp/TFM/HMT/o03_Discretizer.h:
+
 /home/upc_gcp/TFM/HMT/o09_Medic.cpp:
 
 /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp:
@@ -3087,10 +3090,6 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/linux/close_range.h:
 
 /usr/include/c++/13/csignal:
-
-/home/upc_gcp/TFM/HMT/o03_Discretizer.h:
-
-/home/upc_gcp/TFM/HMT/o03_Discretizer.cpp:
 
 /home/upc_gcp/TFM/HMT/o02_MeshNS.cpp:
 
@@ -3176,8 +3175,6 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
-/usr/include/x86_64-linux-gnu/bits/types.h:
-
 /usr/include/c++/13/cmath:
 
 /usr/include/c++/13/clocale:
@@ -3209,8 +3206,6 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 /usr/include/c++/13/bits/uses_allocator_args.h:
 
 /usr/include/c++/13/bits/atomic_base.h:
-
-/usr/include/c++/13/cstring:
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
@@ -3280,14 +3275,6 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/erase_if.h:
 
-/usr/include/c++/13/bits/stringfwd.h:
-
-/usr/include/c++/13/bits/stl_stack.h:
-
-/usr/include/c++/13/bits/shared_ptr.h:
-
-/usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
-
 /usr/include/c++/13/bits/stl_deque.h:
 
 /usr/include/c++/13/bits/locale_facets.tcc:
@@ -3312,15 +3299,17 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/c++/13/bits/move.h:
 
+/usr/include/c++/13/bits/memoryfwd.h:
+
 /usr/include/c++/13/bits/atomic_lockfree_defines.h:
 
 /usr/include/x86_64-linux-gnu/asm/errno.h:
 
 /usr/include/c++/13/bits/locale_facets.h:
 
-/usr/include/c++/13/bits/stl_vector.h:
+/usr/include/c++/13/bits/stringfwd.h:
 
-/usr/include/c++/13/bits/stl_tempbuf.h:
+/usr/include/c++/13/bits/stl_stack.h:
 
 /usr/include/c++/13/backward/binders.h:
 
@@ -3370,6 +3359,8 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /home/upc_gcp/TFM/HMT/o09_ExpressionParser.h:
 
+/home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp:
+
 /home/upc_gcp/TFM/HMT/o01_Material.cpp:
 
 /usr/include/c++/13/bits/enable_special_members.h:
@@ -3418,9 +3409,25 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/jsoncpp/json/forwards.h:
 
+/usr/include/c++/13/bits/shared_ptr.h:
+
+/usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
+
+/usr/include/x86_64-linux-gnu/bits/types.h:
+
+/home/upc_gcp/TFM/HMT/o03_DiscretizerNS.h:
+
+/usr/include/c++/13/bits/functional_hash.h:
+
+/usr/include/errno.h:
+
 /usr/include/c++/13/bits/basic_ios.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
+
+/usr/include/c++/13/bits/stl_vector.h:
+
+/usr/include/c++/13/bits/stl_tempbuf.h:
 
 /usr/include/alloca.h:
 
@@ -3494,10 +3501,6 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
-/usr/include/c++/13/bits/functional_hash.h:
-
-/usr/include/errno.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
 /usr/include/c++/13/bits/hashtable.h:
@@ -3532,7 +3535,7 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/wchar.h:
 
-/usr/include/c++/13/bits/memoryfwd.h:
+/usr/include/c++/13/cstring:
 
 /usr/include/c++/13/ctime:
 
@@ -3752,10 +3755,10 @@ CMakeFiles/NSSolver.dir/o09_Medic.cpp.o: /home/upc_gcp/TFM/HMT/o09_Medic.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 
-/usr/include/c++/13/bits/locale_classes.h:
-
-/usr/include/x86_64-linux-gnu/bits/timesize.h:
+/usr/include/x86_64-linux-gnu/bits/timex.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 
-/usr/include/x86_64-linux-gnu/bits/timex.h:
+/usr/include/c++/13/bits/locale_classes.h:
+
+/usr/include/x86_64-linux-gnu/bits/timesize.h:

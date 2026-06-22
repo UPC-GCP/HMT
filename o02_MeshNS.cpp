@@ -1,6 +1,4 @@
 // Imports
-/* #include "json/value.h" */
-/* #include <cstddef> */
 #include <algorithm>
 #include <cstddef>
 #include <cstdio>
@@ -8,12 +6,11 @@
 #include <iostream>
 /* #include <memory> */
 /* #include <pthread.h> */
-/* #include <iterator> */
+#include <iterator>
 #include <string>
 #include <vector>
 #include <json/json.h>
 #include <cmath>
-/* #include <algorithm> */
 
 // Self-Imports
 /* #include "o01_Material.h" */
@@ -249,8 +246,8 @@ void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBas
 void Mesh::addBoundaryConditions(Json::Value boundaries, Material Mat, ExpressionParser& Prs){
 
     // Resize
+    std::string sType{};
     boundaryConditions.resize(boundaries.size());
-    std::vector<double> Pos0, Pos1; std::string sType{};
 
     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
 
@@ -343,3 +340,71 @@ void Mesh::addBoundaryConditions(Json::Value boundaries, Material Mat, Expressio
     }
 
 }
+
+
+void Mesh::addBoundariesVelocity(Json::Value boundaries, Material Mat){
+
+    // Resize
+    boundaryVelocity.resize(boundaries.size());
+    std::vector<int> Pos0{}, Pos1{}; Pos0.resize(p.N.size()); Pos1.resize(p.N.size());
+
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
+
+        // Control
+        boundaryVelocity[i].i0.resize(p.N.size()); boundaryVelocity[i].i1.resize(p.N.size());
+
+        if (boundaries[i]["type"] == "Dirichlet") {
+
+            // Control
+            boundaryVelocity[i].type = 0;
+            boundaryVelocity[i].side = boundaries[i]["side"].asInt();
+            boundaryVelocity[i].uVal = boundaries[i]["uValue"].asDouble();
+            boundaryVelocity[i].vVal = boundaries[i]["vValue"].asDouble();
+            
+            // Positions
+            Pos0[0] = boundaries[i]["x0"][0].asInt(); Pos0[1] = boundaries[i]["x0"][1].asInt();
+            Pos1[0] = boundaries[i]["x1"][0].asInt(); Pos1[1] = boundaries[i]["x1"][1].asInt();
+
+            // xBoundary: xIndex = u.Nodes[0], yCoord = u.Faces[1]
+            // yBoundary: yIndex = v.Nodes[1], xCoord = v.Faces[0]
+
+            // Indexes    
+            if (Pos0[0] == Pos1[0]){
+
+                // First 
+                boundaryVelocity[i].i0[0] = std::distance(u.Nodes[0].begin(), std::find(u.Nodes[0].begin(), u.Nodes[0].end(), boundaries[i]["x0"][0].asDouble())); 
+                boundaryVelocity[i].i0[1] = std::distance(u.Faces[1].begin(), std::find(u.Faces[1].begin(), u.Faces[1].end(), boundaries[i]["x0"][1].asDouble()));
+
+                // Last
+                boundaryVelocity[i].i1[0] = std::distance(u.Nodes[0].begin(), std::find(u.Nodes[0].begin(), u.Nodes[0].end(), boundaries[i]["x1"][0].asDouble()));
+                boundaryVelocity[i].i1[1] = std::distance(u.Faces[1].begin(), std::find(u.Faces[1].begin(), u.Faces[1].end(), boundaries[i]["x1"][1].asDouble())) - 1;
+
+            } else if (Pos0[1] == Pos1[1]){
+
+                // First 
+                boundaryVelocity[i].i0[0] = std::distance(v.Faces[0].begin(), std::find(v.Faces[0].begin(), v.Faces[0].end(), boundaries[i]["x0"][0].asDouble()));
+                boundaryVelocity[i].i0[1] = std::distance(v.Nodes[1].begin(), std::find(v.Nodes[1].begin(), v.Nodes[1].end(), boundaries[i]["x1"][1].asDouble()));
+
+                // Last
+                boundaryVelocity[i].i1[0] = std::distance(v.Faces[0].begin(), std::find(v.Faces[0].begin(), v.Faces[0].end(), boundaries[i]["x1"][0].asDouble())) - 1;
+                boundaryVelocity[i].i1[1] = std::distance(v.Nodes[1].begin(), std::find(v.Nodes[1].begin(), v.Nodes[1].end(), boundaries[i]["x1"][1].asDouble()));
+
+            } else {std::cerr << "Boundary range not specified correctly.\n";}
+
+        } else if (boundaries[i]["type"] == "Neumann"){
+
+            // Control
+            boundaryVelocity[i].type = 1;
+            boundaryVelocity[i].side = boundaries[i]["side"].asInt();
+            boundaryVelocity[i].uVal = boundaries[i]["uValue"].asDouble();
+            boundaryVelocity[i].vVal = boundaries[i]["vValue"].asDouble();
+
+            // Positions
+            // PENDING IMPLEMENT LATER
+
+        } else {std::cerr << "Velocity only accepts Dirichlet at current build.\n";}
+
+    }
+
+}
+

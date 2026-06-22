@@ -11,7 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/upc_gcp/TFM/HMT/o00_NSSolver.cpp" "CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o.d"
   "/home/upc_gcp/TFM/HMT/o01_Material.cpp" "CMakeFiles/NSSolver.dir/o01_Material.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o01_Material.cpp.o.d"
   "/home/upc_gcp/TFM/HMT/o02_MeshNS.cpp" "CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o02_MeshNS.cpp.o.d"
-  "/home/upc_gcp/TFM/HMT/o03_Discretizer.cpp" "CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o.d"
+  "/home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp" "CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o.d"
   "/home/upc_gcp/TFM/HMT/o04_BCG.cpp" "CMakeFiles/NSSolver.dir/o04_BCG.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o04_BCG.cpp.o.d"
   "/home/upc_gcp/TFM/HMT/o04_CG.cpp" "CMakeFiles/NSSolver.dir/o04_CG.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o04_CG.cpp.o.d"
   "/home/upc_gcp/TFM/HMT/o04_Solver.cpp" "CMakeFiles/NSSolver.dir/o04_Solver.cpp.o" "gcc" "CMakeFiles/NSSolver.dir/o04_Solver.cpp.o.d"

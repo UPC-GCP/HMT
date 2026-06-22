@@ -5,7 +5,7 @@
 #include <json/json.h>
 
 struct MatPhys{
-    double rho=0, gamma=0, cp=1;
+    double rho=0, gamma=0, cp=1, mu=0;
 };
 
 class Material

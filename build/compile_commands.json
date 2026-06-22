@@ -79,9 +79,9 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o -c /home/upc_gcp/TFM/HMT/o03_Discretizer.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o03_Discretizer.cpp",
-  "output": "CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o"
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp",
+  "output": "CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",

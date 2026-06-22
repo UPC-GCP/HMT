@@ -271,7 +271,6 @@ o03_Discretizer.o: o03_Discretizer.cpp.o
 # target to build an object file
 o03_Discretizer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.o
 .PHONY : o03_Discretizer.cpp.o
 
 o03_Discretizer.i: o03_Discretizer.cpp.i
@@ -280,7 +279,6 @@ o03_Discretizer.i: o03_Discretizer.cpp.i
 # target to preprocess a source file
 o03_Discretizer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.i
 .PHONY : o03_Discretizer.cpp.i
 
 o03_Discretizer.s: o03_Discretizer.cpp.s
@@ -289,8 +287,31 @@ o03_Discretizer.s: o03_Discretizer.cpp.s
 # target to generate assembly for a file
 o03_Discretizer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o03_Discretizer.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_Discretizer.cpp.s
 .PHONY : o03_Discretizer.cpp.s
+
+o03_DiscretizerNS.o: o03_DiscretizerNS.cpp.o
+.PHONY : o03_DiscretizerNS.o
+
+# target to build an object file
+o03_DiscretizerNS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.o
+.PHONY : o03_DiscretizerNS.cpp.o
+
+o03_DiscretizerNS.i: o03_DiscretizerNS.cpp.i
+.PHONY : o03_DiscretizerNS.i
+
+# target to preprocess a source file
+o03_DiscretizerNS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.i
+.PHONY : o03_DiscretizerNS.cpp.i
+
+o03_DiscretizerNS.s: o03_DiscretizerNS.cpp.s
+.PHONY : o03_DiscretizerNS.s
+
+# target to generate assembly for a file
+o03_DiscretizerNS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o03_DiscretizerNS.cpp.s
+.PHONY : o03_DiscretizerNS.cpp.s
 
 o04_BCG.o: o04_BCG.cpp.o
 .PHONY : o04_BCG.o
@@ -482,6 +503,9 @@ help:
 	@echo "... o03_Discretizer.o"
 	@echo "... o03_Discretizer.i"
 	@echo "... o03_Discretizer.s"
+	@echo "... o03_DiscretizerNS.o"
+	@echo "... o03_DiscretizerNS.i"
+	@echo "... o03_DiscretizerNS.s"
 	@echo "... o04_BCG.o"
 	@echo "... o04_BCG.i"
 	@echo "... o04_BCG.s"

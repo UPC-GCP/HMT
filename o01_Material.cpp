@@ -15,6 +15,7 @@ Material::Material(Json::Value materials){
         vMat[i].rho = materials[i]["rho"].asDouble();
 		vMat[i].gamma = materials[i]["gamma"].asDouble();
         vMat[i].cp = materials[i]["cp"].asDouble();
+        vMat[i].mu = materials[i]["mu"].asDouble();
     }
 
 }

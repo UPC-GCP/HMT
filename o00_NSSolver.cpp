@@ -1,10 +1,10 @@
 // Imports
 /* #include <cstddef> */
 /* #include <ios> */
-#include <iostream>
 /* #include <iterator> */
 /* #include <vector> */
 /* #include <cstddef> */
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <json/json.h>
@@ -82,6 +82,7 @@ int main(int argc, char* argv[]){
     Msh.generateMesh(Msh.p, Mat, data["N"], data["sections"], data["refinement"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes.\n";
     Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n";
     Msh.addBoundaryConditions(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n";
+    Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n";
 
     
     /* ///// Discretizer ///// */
@@ -201,3 +202,29 @@ int main(int argc, char* argv[]){
     /* for (std::vector<int> vec : Msh.p.nMat){ */
     /*     for (int val : vec){std::cout << val << " ";} std::cout << "\n"; */
     /* } */
+
+
+    /* std::cout << "\nu-xNodes: "; */
+    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yNodes: "; */
+    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yFaces: "; */
+    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nv-xNodes: "; */
+    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yNodes: "; */
+    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-xFaces: "; */
+    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nVelocity Boundaries\n"; */
+    /* for (boundVelocity bnd : Msh.boundaryVelocity){ */
+    /*     std::cout << "BC: " << bnd.type << " " << bnd.side << "\n"; */
+    /*     std::cout << "u/v Index: " << bnd.x0[0] << " " << bnd.x0[1] << " - " << bnd.x1[0] << " " << bnd.x1[1] << "\n"; */
+    /* } */
+
+    /* std::cout << "u-xFaces: "; */
+    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yFaces: "; */
+    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */

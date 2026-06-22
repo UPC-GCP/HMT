@@ -34,6 +34,19 @@ public:
     void newSetCoefficients(Material& Mat, Mesh& Msh);
     void newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t = 0);
 
+
+
+    void checkStability(Material Mat, Mesh& Msh);
+
+
+    void setMomentumCoefficients();
+    void setMomentumBoundaries();
+
+    void setPressureCoefficients();
+    void setPressureBoundaries();
+
+    void correctVelocity();
+
 };
 
 #endif
