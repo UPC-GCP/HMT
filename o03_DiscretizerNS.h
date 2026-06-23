@@ -39,13 +39,13 @@ public:
     void checkStability(Material Mat, Mesh& Msh);
 
 
-    void setMomentumCoefficients();
-    void setMomentumBoundaries();
+    void setMomentumCoefficients(Material Mat, Mesh& Msh);
+    void setMomentumBoundaries(Material Mat, Mesh& Msh);
 
-    void setPressureCoefficients();
-    void setPressureBoundaries();
+    void setPressureCoefficients(Material Mat, Mesh& Msh);
+    void setPressureBoundaries(Material Mat, Mesh& Msh);
 
-    void correctVelocity();
+    void correctVelocity(Material Mat, Mesh& Msh);
 
 };
 
