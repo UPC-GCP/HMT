@@ -7,7 +7,11 @@ CMakeFiles/NSSolver.dir/o00_NSSolver.cpp.o
  /home/upc_gcp/TFM/HMT/o01_Material.h
  /home/upc_gcp/TFM/HMT/o02_MeshNS.h
  /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.h
+ /home/upc_gcp/TFM/HMT/o04_CGNS.h
+ /home/upc_gcp/TFM/HMT/o04_SolverNS.h
+ /home/upc_gcp/TFM/HMT/o05_ProbeNS.h
  /home/upc_gcp/TFM/HMT/o09_ExpressionParser.h
+ /home/upc_gcp/TFM/HMT/o09_MedicNS.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h

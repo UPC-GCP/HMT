@@ -44,7 +44,7 @@ double Solver::calcErr(std::vector<std::vector<double>> matA, std::vector<std::v
 
 }
 
-bool Solver::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
+bool Solver::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB){
     std::cout << "Virtual function \n";
     return false;
 }

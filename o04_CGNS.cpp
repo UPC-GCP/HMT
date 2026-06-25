@@ -17,7 +17,7 @@
 #include "o04_CGNS.h"
 #include "o09_libArithmeticNS.h"
 
-bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<int>> ignoreBC){
+bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB){
 
     // Control
     int n = matB.size(), m = x.size(), l = x[0].size(), iPos{}; double alpha, rsNew, beta;
