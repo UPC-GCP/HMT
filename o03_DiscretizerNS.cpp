@@ -142,18 +142,18 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
             k = i * Msh.u.N[1] + j;
 
             // Coefficients Convection-Diffusion 
-            Dw = mu * Msh.u.Sw[i][j] / Msh.u.dX[0][i]; Fw = rho * Msh.u.Sw[i][j] * 0.5 * (Msh.u.Phi[i][j] + Msh.u.Phi[i-1][j]);
+            Dw = mu * Msh.u.Sw[i][j] / Msh.u.dX[0][i]; Fw = rho * Msh.u.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i-1][j]);
             Pw = Fw / Dw; Msh.u.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
-            De = mu * Msh.u.Se[i][j] / Msh.u.dX[0][i+1]; Fe = rho * Msh.u.Se[i][j] * 0.5 * (Msh.u.Phi[i][j] + Msh.u.Phi[i+1][j]);
+            De = mu * Msh.u.Se[i][j] / Msh.u.dX[0][i+1]; Fe = rho * Msh.u.Se[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i+1][j]);
             Pe = Fe / De; Msh.u.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
-            Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Fs = rho * Msh.u.Ss[i][j] * 0.5 * (Msh.v.Phi[i][j] + Msh.v.Phi[i-1][j]);
+            Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Fs = rho * Msh.u.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i-1][j]);
             Ps = Fs / Ds; Msh.u.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
-            Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Fn = rho * Msh.u.Sn[i][j] * 0.5 * (Msh.v.Phi[i][j+1] + Msh.v.Phi[i-1][j+1]);
+            Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Fn = rho * Msh.u.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j+1] + Msh.v.oPhi[i-1][j+1]);
             Pn = Fn / Dn; Msh.u.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
             // Calculate
             a0 = rho * Msh.u.Vp[i][j] / dt;
-            Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] + Msh.u.matA[j].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]);
+            Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] + Msh.u.matA[k].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]);
         }
     }
 
@@ -164,18 +164,18 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
             k = i * Msh.v.N[1] + j;
 
             // Coefficients Convection-Diffusion
-            Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Fw = rho * Msh.v.Sw[i][j] * 0.5 * (Msh.u.Phi[i][j] + Msh.u.Phi[i][j-1]);
-            Pw = Fw / Dw; Msh.u.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
-            De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Fe = rho * Msh.v.Se[i][j] * 0.5 * (Msh.u.Phi[i+1][j] + Msh.u.Phi[i+1][j-1]);
-            Pe = Fe / De; Msh.u.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
-            Ds = mu * Msh.v.Ss[i][j] / Msh.v.dX[1][j]; Fs = rho * Msh.v.Ss[i][j] * 0.5 * (Msh.v.Phi[i][j] + Msh.v.Phi[i][j-1]);
-            Ps = Fs / Ds; Msh.u.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
-            Dn = mu * Msh.v.Sn[i][j] / Msh.v.dX[1][j+1]; Fn = rho * Msh.v.Sn[i][j] * 0.5 * (Msh.v.Phi[i][j] + Msh.v.Phi[i][j+1]);
-            Pn = Fn / Dn; Msh.u.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
+            Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Fw = rho * Msh.v.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i][j-1]);
+            Pw = Fw / Dw; Msh.v.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
+            De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Fe = rho * Msh.v.Se[i][j] * 0.5 * (Msh.u.oPhi[i+1][j] + Msh.u.oPhi[i+1][j-1]);
+            Pe = Fe / De; Msh.v.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
+            Ds = mu * Msh.v.Ss[i][j] / Msh.v.dX[1][j]; Fs = rho * Msh.v.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j-1]);
+            Ps = Fs / Ds; Msh.v.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
+            Dn = mu * Msh.v.Sn[i][j] / Msh.v.dX[1][j+1]; Fn = rho * Msh.v.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j+1]);
+            Pn = Fn / Dn; Msh.v.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
             // Calculate
-            a0 = rho * Msh.u.Vp[i][j] / dt;
-            Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] + Msh.u.matA[j].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]);
+            a0 = rho * Msh.v.Vp[i][j] / dt;
+            Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Msh.v.matA[k].aw * Msh.v.oPhi[i-1][j] + Msh.v.matA[k].ae * Msh.v.oPhi[i+1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j]);
         }
     }
 
@@ -199,7 +199,7 @@ void Discretizer::setPressureCoefficients(Material Mat, Mesh& Msh){
             Dw = Msh.p.Sw[i][j] / Msh.p.dX[0][i]; De = Msh.p.Se[i][j] / Msh.p.dX[0][i+1];
             Ds = Msh.p.Ss[i][j] / Msh.p.dX[1][j]; Dn = Msh.p.Sn[i][j] / Msh.p.dX[1][j+1];
             Msh.p.matA[k].aw = - Dw; Msh.p.matA[k].ae = - De; Msh.p.matA[k].as = - Ds; Msh.p.matA[k].an = - Dn;
-            Msh.p.matA[k].ap = Msh.p.matA[k].aw + Msh.p.matA[k].ae + Msh.p.matA[k].as + Msh.p.matA[k].an;
+            Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
     
             // Coefficients B
             Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
@@ -212,16 +212,219 @@ void Discretizer::setPressureCoefficients(Material Mat, Mesh& Msh){
 void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
     // Control
-    int i{}, j{}, k{}; double gammaw{}, gammae{}, gammas{}, gamman{}, a0{};
+    int i{}, j{}, k{}; double gammaw{}, gammae{}, gammas{}, gamman{}, a0{}, mu = Mat.vMat[Msh.p.nMat[0][0]].mu, rho = Mat.vMat[Msh.p.nMat[0][0]].rho;
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
 
     // Boundary Node Coefficients
     for (boundVelocity& bC : Msh.boundaryVelocity){
 
+        // Still loop over every boundary and do u, v for each one of them
 
+        // Boundaries
+        if (bC.type == 0){
+
+            // Dirichlet
+            if (bC.i0[0] == bC.i1[0]){
+
+                // xBoundary
+                if (bC.side == 0){
+                    
+                    // West Boundary
+                    i = 0;
+
+                    // uMesh
+                    for (size_t j = 0; j < Msh.u.N[1]; j++){
+                        // Control
+                        k = i * Msh.u.N[1] + j; Msh.u.Phi[i][j] = bC.uVal;
+                        Msh.u.matA[k].ap = 1; Msh.u.matB[k] = bC.uVal;
+                    }
+
+                    // vMesh
+                    for (size_t j = 1; j < Msh.v.N[1]-1; j++){
+                        // Control
+                        k = i * Msh.v.N[1] + j;
+
+                        // Coefficients Convection-Diffusion
+                        Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Msh.v.matA[k].aw = Dw;
+                        /* Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Fw = rho * Msh.v.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i][j-1]); */
+                        /* Pw = Fw / Dw; Msh.v.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0); */
+
+                        // Calculate
+                        a0 = rho * Msh.v.Vp[i][j] / dt;
+                        Msh.v.matB[k] = (1 / a0) * (Msh.v.matA[k].aw * bC.vVal);
+                    }
+                
+                } else if (bC.side == 1){
+
+                    // East Boundary
+
+                    // uMesh
+                    i = Msh.u.N[0]-1; 
+                    for (size_t j = 0; j < Msh.u.N[1]; j++){
+                        // Control
+                        k = i * Msh.u.N[1] + j; Msh.u.Phi[i][j] = bC.uVal;
+                        Msh.u.matA[k].ap = 1; Msh.u.matB[k] = bC.uVal;
+                    }
+
+                    // vMesh
+                    i = Msh.v.N[0]-1;
+                    for (size_t j = 1; j < Msh.v.N[1]-1; j++){
+                        // Control
+                        k = i * Msh.v.N[1] + j;
+
+                        // Coefficients
+                        De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Msh.v.matA[k].ae = De;
+                        /* De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Fe = rho * Msh.v.Se[i][j] * 0.5 * (Msh.u.oPhi[i+1][j] + Msh.u.oPhi[i+1][j-1]); */
+                        /* Pe = Fe / De; Msh.v.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0); */
+
+                        // Calculate
+                        a0 = rho * Msh.v.Vp[i][j] / dt;
+                        Msh.v.matB[k] = (1 / a0) * (Msh.v.matA[k].ae * bC.vVal);
+                    }
+
+                }
+
+            } else if (bC.i0[1] == bC.i1[1]){
+
+                // yBoundary
+                if (bC.side == 0){
+
+                    // South Boundary
+                    j = 0;
+
+                    // uMesh
+                    for (size_t i = 1; i < Msh.u.N[0]-1; i++){
+                        // Control
+                        k = i * Msh.u.N[1] + j;
+
+                        // Coefficients
+                        Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Msh.u.matA[k].as = Ds;
+                        /* Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Fs = rho * Msh.u.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i-1][j]); */
+                        /* Ps = Fs / Ds; Msh.u.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0); */
+
+                        // Calculate
+                        a0 = rho * Msh.u.Vp[i][j] / dt;
+                        Msh.u.matB[k] = (1 / a0) * (Msh.u.matA[k].as * bC.uVal);
+                    }
+
+                    // vMesh
+                    for (size_t i = 0; i < Msh.v.N[0]; i++){
+                        k = i * Msh.v.N[1] + j; Msh.v.Phi[i][j] = bC.vVal;
+                        Msh.v.matA[k].ap = 1; Msh.v.matB[k] = bC.vVal;
+                    }
+
+                } else if (bC.side == 1){
+
+                    // North Boundary
+
+                    // uMesh
+                    j = Msh.u.N[1]-1;
+                    for (size_t i = 1; i < Msh.u.N[0]-1; i++){
+                        // Control
+                        k = i * Msh.u.N[1] + j;
+
+                        // Coefficients
+                        Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Msh.u.matA[k].an = Dn;
+                        /* Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Fn = rho * Msh.u.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j+1] + Msh.v.oPhi[i-1][j+1]); */
+                        /* Pn = Fn / Dn; Msh.u.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0); */
+
+                        // Calculate
+                        a0 = rho * Msh.u.Vp[i][j] / dt;
+                        Msh.u.matB[k] = (1 / a0) * (Msh.u.matA[k].an * bC.uVal);
+                    }
+
+                    // vMesh
+                    j = Msh.v.N[1]-1; for (size_t i = 0; i < Msh.v.N[0]; i++){
+                        k = i * Msh.v.N[1] + j; Msh.v.Phi[i][j] = bC.vVal;
+                        Msh.v.matA[k].ap = 1; Msh.v.matB[k] = bC.vVal;
+                    }
+
+                }
+
+            }
+
+        } else {std::cerr << "Only Dirichlet BC accepted at this time.\n";}
 
     }
 
+    ///// Interior Node Coefficients
+    
+    /// West Boundary (Edges vMesh)
+    i = 0; 
+    for (size_t j = 1; j < Msh.v.N[1]-1; j++){
+        // Control
+        k = i * Msh.v.N[1] + j;
+
+        // Coefficients Convection-Diffusion
+        De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Fe = rho * Msh.v.Se[i][j] * 0.5 * (Msh.u.oPhi[i+1][j] + Msh.u.oPhi[i+1][j-1]);
+        Pe = Fe / De; Msh.v.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
+        Ds = mu * Msh.v.Ss[i][j] / Msh.v.dX[1][j]; Fs = rho * Msh.v.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j-1]);
+        Ps = Fs / Ds; Msh.v.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
+        Dn = mu * Msh.v.Sn[i][j] / Msh.v.dX[1][j+1]; Fn = rho * Msh.v.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j+1]);
+        Pn = Fn / Dn; Msh.v.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
+
+        // Calculate
+        a0 = rho * Msh.v.Vp[i][j] / dt;
+        Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Msh.v.matA[k].ae * Msh.v.oPhi[i+1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j]) + Msh.v.matB[k];
+    }
+
+
+    /// East Boundary (Edges vMesh)
+    i = Msh.v.N[0]-1;
+    for (size_t j = 1; j < Msh.v.N[1]-1; j++){
+        // Control
+        k = i * Msh.v.N[1] + j;
+
+        // Coefficients Convection-Diffusion
+        Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Fw = rho * Msh.v.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i][j-1]);
+        Pw = Fw / Dw; Msh.v.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
+        Ds = mu * Msh.v.Ss[i][j] / Msh.v.dX[1][j]; Fs = rho * Msh.v.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j-1]);
+        Ps = Fs / Ds; Msh.v.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
+        Dn = mu * Msh.v.Sn[i][j] / Msh.v.dX[1][j+1]; Fn = rho * Msh.v.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j+1]);
+        Pn = Fn / Dn; Msh.v.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
+
+        // Calculate
+        a0 = rho * Msh.v.Vp[i][j] / dt;
+        Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Msh.v.matA[k].aw * Msh.v.oPhi[i-1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j]) + Msh.v.matB[k];
+    }
+
+    /// South Boundary (Edges uMesh)
+    j = 0;
+    for (size_t i = 1; i < Msh.u.N[0]-1; i++){
+        // Control
+        k = i * Msh.u.N[1] + j;
+
+        // Coefficients Convection-Diffusion 
+        Dw = mu * Msh.u.Sw[i][j] / Msh.u.dX[0][i]; Fw = rho * Msh.u.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i-1][j]);
+        Pw = Fw / Dw; Msh.u.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
+        De = mu * Msh.u.Se[i][j] / Msh.u.dX[0][i+1]; Fe = rho * Msh.u.Se[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i+1][j]);
+        Pe = Fe / De; Msh.u.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
+        Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Fn = rho * Msh.u.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j+1] + Msh.v.oPhi[i-1][j+1]);
+        Pn = Fn / Dn; Msh.u.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
+
+        // Calculate
+        a0 = rho * Msh.u.Vp[i][j] / dt;
+        Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]) + Msh.u.matB[k];
+    }
+
+    /// North Boundary (Edges uMesh)
+    j = Msh.u.N[1]-1;
+    for (size_t i = 1; i < Msh.u.N[0]-1; i++){
+        // Control
+        k = i * Msh.u.N[1] + j;
+
+        // Coefficients Convection-Diffusion 
+        Dw = mu * Msh.u.Sw[i][j] / Msh.u.dX[0][i]; Fw = rho * Msh.u.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i-1][j]);
+        Pw = Fw / Dw; Msh.u.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
+        De = mu * Msh.u.Se[i][j] / Msh.u.dX[0][i+1]; Fe = rho * Msh.u.Se[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i+1][j]);
+        Pe = Fe / De; Msh.u.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0);
+        Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Fs = rho * Msh.u.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i-1][j]);
+        Ps = Fs / Ds; Msh.u.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0);
+
+        // Calculate
+        a0 = rho * Msh.u.Vp[i][j] / dt;
+        Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]) + Msh.u.matB[k];
+    }
 
 }
 
@@ -230,7 +433,7 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
 
     // Control
     Msh.p.tempA.assign(Msh.p.totNodes, {}); Msh.p.tempB.assign(Msh.p.totNodes, 0);
-    int i{}, j{}, k{}; double gammaw{}, gammae{}, gammas{}, gamman{}, a0{};
+    int i{}, j{}, k{}; double gammaw{}, gammae{}, gammas{}, gamman{}, a0{}, rho{};
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
     std::vector<int> Pos0{}, Pos1{}; Pos0.resize(Msh.p.N.size()); Pos1.resize(Msh.p.N.size());
 
@@ -248,32 +451,15 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
 
             // Dirichlet
             if (Pos0[0] == Pos1[0]){
-
                 // xBoundary
-                if (bC.side == 0){
-
-                    // West Boundary
-
-                } else if (bC.side == 1){
-
-                    // East Boundary
-
+                if (bC.side == 0){ // West Boundary
+                } else if (bC.side == 1){ // East Boundary
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
-
-
             } else if (Pos0[1] == Pos1[1]){
-
                 // yBoundary
-                if (bC.side == 0){
-
-                    // South Boundary
-
-                } else if (bC.side == 1){
-
-                    // North Boundary
-
+                if (bC.side == 0){ // South Boundary
+                } else if (bC.side == 1){ // North Boundary
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
-
             } else {std::cerr << "Boundary range not specified correctly.\n";}
 
         } else if (bC.type == 1){
@@ -285,10 +471,26 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
                 if (bC.side == 0){
 
                     // West Boundary
+                    i = Pos0[0];
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.p.N[1] + j;
+                            
+                        // Coefficients A 
+                        Msh.p.matA[k].aw = bC.value;
+                    }
 
                 } else if (bC.side == 1){
 
                     // East Boundary
+                    i = Pos0[0]-1;
+                    for (size_t j = Pos0[1]; j < Pos1[1]; j++){
+                        // Control
+                        k = i * Msh.p.N[1] + j;
+
+                        // Coefficients
+                        Msh.p.matA[k].ae = bC.value;
+                    }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
 
@@ -298,10 +500,26 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
                 if (bC.side == 0){
 
                     // South Boundary
+                    j = Pos0[1];
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.p.N[1] + j;
+
+                        // Coefficients
+                        Msh.p.matA[k].as = bC.value;
+                    }
 
                 } else if (bC.side == 1){
 
                     // North Boundary
+                    j = Pos0[1]-1;
+                    for (size_t i = Pos0[0]; i < Pos1[0]; i++){
+                        // Control
+                        k = i * Msh.p.N[1] + j;
+
+                        // Coefficients
+                        Msh.p.matA[k].an = bC.value;
+                    }
 
                 } else {std::cerr << "Boundary side not specified correctly.\n";}
 
@@ -311,8 +529,80 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
 
     }
 
-    // Corrections (Change 0,0 to Dirichlet for stability)
 
+    ///// Internal Node Coefficients /////
+
+    // West Boundary (Edges & Corners)
+    i = 0;
+    for (int j = 0; j < Msh.p.N[1]; j++){
+        // Index
+        k = i * Msh.p.N[1] + j; rho = Mat.vMat[Msh.p.nMat[i][j]].rho;
+
+        // Corners (~as/~an)
+        if (j != 0){Ds = Msh.p.Ss[i][j] / Msh.p.dX[1][j]; Msh.p.matA[k].as = -Ds;} 
+        if (j != Msh.p.N[1]-1){Dn = Msh.p.Sn[i][j] / Msh.p.dX[1][j+1]; Msh.p.matA[k].an = -Dn;}
+        
+        // Coefficients A
+        De = Msh.p.Se[i][j] / Msh.p.dX[0][i+1]; Msh.p.matA[k].ae = -De;
+        Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
+
+        // Coefficients B
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
+    }
+
+    // East Boundary (Edges & Corners)
+    i = Msh.p.N[0]-1;
+    for (int j = 0; j < Msh.p.N[1]; j++){
+        // Index
+        k = i * Msh.p.N[1] + j; rho = Mat.vMat[Msh.p.nMat[i][j]].rho;
+
+        // Corners (~as/~an)
+        if (j != 0){Ds = Msh.p.Ss[i][j] / Msh.p.dX[1][j]; Msh.p.matA[k].as = -Ds;}
+        if (j != Msh.p.N[1]-1){Dn = Msh.p.Sn[i][j] / Msh.p.dX[1][j+1]; Msh.p.matA[k].an = -Dn;}
+
+        // Coefficients A
+        Dw = Msh.p.Sw[i][j] / Msh.p.dX[0][i]; Msh.p.matA[k].aw = -Dw;
+        Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
+
+        // Coefficients B
+        Msh.p.matB[k] = (rho / dt) * (- Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
+    }
+    
+    // South Boundary (Edges)
+    j = 0;
+    for (int i = 1; i < Msh.p.N[0]-1; i++){
+        // Index
+        k = i * Msh.p.N[1] + j; rho = Mat.vMat[Msh.p.nMat[i][j]].rho;
+
+        // Coefficients A
+        Dw = Msh.p.Sw[i][j] / Msh.p.dX[0][i]; Msh.p.matA[k].aw = -Dw;
+        De = Msh.p.Se[i][j] / Msh.p.dX[0][i+1]; Msh.p.matA[k].ae = -De;
+        Dn = Msh.p.Sn[i][j] / Msh.p.dX[1][j+1]; Msh.p.matA[k].an = -Dn;
+        Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
+
+        // Coefficients B
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j]);
+    }
+
+    // North Boundary (Edges)
+    j = Msh.p.N[1]-1;
+    for (int i = 1; i < Msh.p.N[0]-1; i++){
+        // Index
+        k = i * Msh.p.N[1] + j; rho = Mat.vMat[Msh.p.nMat[i][j]].rho;
+
+        // Coefficients A
+        Dw = Msh.p.Sw[i][j] / Msh.p.dX[0][i]; Msh.p.matA[k].aw = -Dw;
+        De = Msh.p.Se[i][j] / Msh.p.dX[0][i+1]; Msh.p.matA[k].ae = -De;
+        Ds = Msh.p.Ss[i][j] / Msh.p.dX[1][j]; Msh.p.matA[k].as = -Ds;
+        Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
+
+        // Coefficients B
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
+    }
+
+    // Corrections
+    Msh.p.matA[0].aw = 0; Msh.p.matA[0].ae = 0; Msh.p.matA[0].as = 0; Msh.p.matA[0].an = 0;
+    Msh.p.matA[0].ap = 1; Msh.p.matB[0] = 0;
 
 }
 
@@ -325,14 +615,14 @@ void Discretizer::correctVelocity(Material Mat, Mesh& Msh){
     // u Interior Nodes
     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
         for (size_t j = 1; j < Msh.u.N[1]-1; j++){
-            Msh.u.Phi[i][j] -= (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i-1][j]) / Msh.u.dX[0][i];
+            Msh.u.Phi[i][j] -= (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i-1][j]) / Msh.p.dX[0][i];
         }
     }
 
     // v Interior Nodes
     for (size_t i = 1; i < Msh.v.N[0]-1; i++){
         for (size_t j = 1; j < Msh.v.N[1]-1; j++){
-            Msh.v.Phi[i][j] -= (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i][j-1]) / Msh.v.dX[1][j];    
+            Msh.v.Phi[i][j] -= (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i][j-1]) / Msh.p.dX[1][j];    
         }
     }
 

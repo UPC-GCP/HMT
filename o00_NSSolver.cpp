@@ -16,10 +16,10 @@
 #include "o01_Material.h"
 #include "o02_MeshNS.h"
 #include "o03_DiscretizerNS.h"
-/* #include "o04_Solver.h" */
-/* #include "o04_CG.h" */
+#include "o04_SolverNS.h"
+#include "o04_CGNS.h"
 /* #include "o04_BCG.h" */
-/* #include "o05_Probe.h" */
+#include "o05_ProbeNS.h"
 #include "o09_ExpressionParser.h"
 /* #include "o09_Medic.h" // Diagnostic Tool: Activate if needed */
 
@@ -88,34 +88,29 @@ int main(int argc, char* argv[]){
     /* ///// Discretizer ///// */
     std::cout << "Initializing discretizer ...\n";
     Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble());
-    /* Dsc.setSchemeParameters(Mat, Msh); std::cout << "Temporal parameters set.\n"; */
-    /* Dsc.newSetBoundaries(Mat, Msh, Prs); std::cout << "Boundary node coefficiens set.\n"; */
-    /* Dsc.newSetCoefficients(Mat, Msh); std::cout << "Interior node coefficients set.\n"; */
-
+    Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n";
+    Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n";
     
-    return 0;
 
-
-    /* ///// Solver ///// */
-    /* std::cout << "Initializing solver ... \n"; */
-    /* Solver* Sol = nullptr; */
-    /* if (data["solver"] == "CG"){ */
-    /*     Sol = new CG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
-    /* } else if (data["solver"] == "GS"){ */
-    /*     // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
-    /*     std::cerr << "Currently unavailable.\n"; */
-    /* } else if (data["solver"] == "BCG"){ */
-    /*     Sol = new BCG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
-
-    /* } else { */
-    /*     std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n"; */
-    /* } std::cout << "Solver configured.\n"; */
+    ///// Solver /////
+    std::cout << "Initializing solver ... \n";
+    Solver* Sol = nullptr;
+    if (data["solver"] == "CG"){
+        Sol = new CG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+    } else if (data["solver"] == "GS"){
+        // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+        std::cerr << "Currently unavailable.\n";
+    } else if (data["solver"] == "BCG"){
+        /* Sol = new BCG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
+    } else {
+        std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
+    } std::cout << "Solver configured.\n";
 
 
     /* ///// Probes ///// */
-    /* std::cout << "Initializing probes ...\n"; */
-    /* Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n"; */
-    /* Prb.checkProbes(Msh, Sol); */
+    std::cout << "Initializing probes ...\n";
+    Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n";
+    Prb.checkProbes(Msh, Sol);
 
 
     /* ///// Medic ///// */
