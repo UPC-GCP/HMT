@@ -85,15 +85,15 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o04_Solver.cpp.o -c /home/upc_gcp/TFM/HMT/o04_Solver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_Solver.cpp",
-  "output": "CMakeFiles/NSSolver.dir/o04_Solver.cpp.o"
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o04_SolverNS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverNS.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_SolverNS.cpp",
+  "output": "CMakeFiles/NSSolver.dir/o04_SolverNS.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o04_CG.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CG.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_CG.cpp",
-  "output": "CMakeFiles/NSSolver.dir/o04_CG.cpp.o"
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o04_CGNS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CGNS.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_CGNS.cpp",
+  "output": "CMakeFiles/NSSolver.dir/o04_CGNS.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
@@ -103,9 +103,9 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o05_Probe.cpp.o -c /home/upc_gcp/TFM/HMT/o05_Probe.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o05_Probe.cpp",
-  "output": "CMakeFiles/NSSolver.dir/o05_Probe.cpp.o"
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o05_ProbeNS.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp",
+  "output": "CMakeFiles/NSSolver.dir/o05_ProbeNS.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
@@ -115,8 +115,8 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o09_Medic.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Medic.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_Medic.cpp",
-  "output": "CMakeFiles/NSSolver.dir/o09_Medic.cpp.o"
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -o CMakeFiles/NSSolver.dir/o09_MedicNS.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
+  "output": "CMakeFiles/NSSolver.dir/o09_MedicNS.cpp.o"
 }
 ]

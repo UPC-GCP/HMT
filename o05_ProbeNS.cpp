@@ -58,7 +58,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
     std::filesystem::path newPath(fName);
     pathBase = createFolder(tempScheme, spatScheme, newPath.filename().string(), dirName);
     newPath = pathBase;
-    
+
     // Add Probes and Create Files
     pMap tempMap{}; pBug tempBug{}; pFld tempFld{};
     for (Json::Value::ArrayIndex i = 0; i < probes.size(); i++){
@@ -106,6 +106,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
         
         } else if (probes[i]["type"].asString() == "Field"){
 
+            std::cout << "Field: " << i << "\n";
+
             // Create File - uMesh
             tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "u_Field.csv";
             tempFld.file = createFile(newPath / tempString);
@@ -114,8 +116,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             tempFld.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
 
             // Position - uMesh
-            tempMap.xPos = {static_cast<size_t>(std::lower_bound(Msh.u.Nodes[0].begin(), Msh.u.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.u.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.u.Nodes[0].begin(), Msh.u.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.u.Nodes[0].begin())};
-            tempMap.yPos = {static_cast<size_t>(std::lower_bound(Msh.u.Nodes[1].begin(), Msh.u.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.u.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.u.Nodes[1].begin(), Msh.u.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.u.Nodes[1].begin())};
+            tempFld.xPos = {static_cast<size_t>(std::lower_bound(Msh.u.Nodes[0].begin(), Msh.u.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.u.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.u.Nodes[0].begin(), Msh.u.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.u.Nodes[0].begin())};
+            tempFld.yPos = {static_cast<size_t>(std::lower_bound(Msh.u.Nodes[1].begin(), Msh.u.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.u.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.u.Nodes[1].begin(), Msh.u.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.u.Nodes[1].begin())};
 
             // Header - uMesh
             for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){
@@ -128,7 +130,6 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             probeFld.push_back(std::move(tempFld));
             tempFld = {};
 
-
             // Create File - vMesh
             tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "v_Field.csv";
             tempFld.file = createFile(newPath / tempString);
@@ -137,8 +138,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             tempFld.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
 
             // Position - vMesh
-            tempMap.xPos = {static_cast<size_t>(std::lower_bound(Msh.v.Nodes[0].begin(), Msh.v.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.v.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.v.Nodes[0].begin(), Msh.v.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.v.Nodes[0].begin())};
-            tempMap.yPos = {static_cast<size_t>(std::lower_bound(Msh.v.Nodes[1].begin(), Msh.v.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.v.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.v.Nodes[1].begin(), Msh.v.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.v.Nodes[1].begin())};
+            tempFld.xPos = {static_cast<size_t>(std::lower_bound(Msh.v.Nodes[0].begin(), Msh.v.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.v.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.v.Nodes[0].begin(), Msh.v.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.v.Nodes[0].begin())};
+            tempFld.yPos = {static_cast<size_t>(std::lower_bound(Msh.v.Nodes[1].begin(), Msh.v.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.v.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.v.Nodes[1].begin(), Msh.v.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.v.Nodes[1].begin())};
 
             // Header - vMesh
             for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){
@@ -150,6 +151,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             // Control
             probeFld.push_back(std::move(tempFld));
             tempFld = {};
+
+            std::cout << "vMesh done.\n";
 
         } else if (probes[i]["type"].asString() == "Debug"){
 

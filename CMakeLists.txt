@@ -29,12 +29,12 @@ add_executable(NSSolver
     o01_Material.cpp
     o02_MeshNS.cpp
     o03_DiscretizerNS.cpp
-    o04_Solver.cpp
-    o04_CG.cpp
+    o04_SolverNS.cpp
+    o04_CGNS.cpp
     o04_BCG.cpp
-    o05_Probe.cpp
+    o05_ProbeNS.cpp
     o09_ExpressionParser.cpp
-    o09_Medic.cpp
+    o09_MedicNS.cpp
 )
 
 # 4. Linking

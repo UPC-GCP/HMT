@@ -5,6 +5,7 @@
 /* #include <vector> */
 /* #include <cstddef> */
 #include <iostream>
+#include <json/forwards.h>
 #include <string>
 #include <fstream>
 #include <json/json.h>
@@ -22,6 +23,65 @@
 #include "o05_ProbeNS.h"
 #include "o09_ExpressionParser.h"
 #include "o09_MedicNS.h" // Diagnostic Tool: Activate if needed
+
+
+    /* std::cout << "\np-xNodes: "; */
+    /* for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "p-xFaces: "; */
+    /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "p-yNodes: "; */
+    /* for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "p-yFaces: "; */
+    /* for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nu-xNodes: "; */
+    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-xFaces: "; */
+    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yNodes: "; */
+    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yFaces: "; */
+    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nv-xNodes: "; */
+    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-xFaces: "; */
+    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yNodes: "; */
+    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yFaces: "; */
+    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "pMat:\n"; */
+    /* for (std::vector<int> vec : Msh.p.nMat){ */
+    /*     for (int val : vec){std::cout << val << " ";} std::cout << "\n"; */
+    /* } */
+
+
+    /* std::cout << "\nu-xNodes: "; */
+    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yNodes: "; */
+    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "u-yFaces: "; */
+    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nv-xNodes: "; */
+    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yNodes: "; */
+    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-xFaces: "; */
+    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "\nVelocity Boundaries\n"; */
+    /* for (boundVelocity bnd : Msh.boundaryVelocity){ */
+    /*     std::cout << "BC: " << bnd.type << " " << bnd.side << "\n"; */
+    /*     std::cout << "u/v Index: " << bnd.x0[0] << " " << bnd.x0[1] << " - " << bnd.x1[0] << " " << bnd.x1[1] << "\n"; */
+    /* } */
+
+    /* std::cout << "u-xFaces: "; */
+    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+    /* std::cout << "v-yFaces: "; */
+    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
 
 Json::Value getParsedData(std::string fileName){
     
@@ -113,7 +173,7 @@ int main(int argc, char* argv[]){
     /* ///// Probes ///// */
     std::cout << "Initializing probes ...\n";
     Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n";
-    Prb.checkProbes(Msh, Sol);
+    Prb.checkProbes(Msh, Sol); std::cout << "Initial conditions stored.\n";
 
 
     /* ///// Medic ///// */
@@ -129,19 +189,20 @@ int main(int argc, char* argv[]){
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
         // Control
-        Msh.p.oPhi = Msh.p.Phi; Msh.u.oPhi = Msh.u.Phi; Msh.v.oPhi = Msh.v.Phi;
+        Msh.p.oPhi = Msh.p.Phi;
         
         // Solver
         if (!Sol->newSolve(Msh.p.matA, Msh.p.Phi, Msh.p.matB)){std::cerr << "Simulation diverges @ t = " << t; break;}
 
-        // Diagnostics
-        /* if (bMdc){ */
-        /*     Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, cbPhi, t); */
-        /*     /1* Mdc.getSystemResidual(Mat, Msh, Dsc, t); *1/ */
-        /* } */
-
         // Correct Velocity
         Dsc.correctVelocity(Mat, Msh);
+        Msh.u.oPhi = Msh.u.Phi; Msh.v.oPhi = Msh.v.Phi;
+
+        // Diagnostics
+        if (bMdc){
+            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, cbPhi, t);
+            Mdc.getSystemResidual(Mat, Msh, Dsc, t);
+        }
 
         // Write Data
         Prb.checkProbes(Msh, Sol, t);
@@ -154,12 +215,12 @@ int main(int argc, char* argv[]){
         Dsc.setPressureCoefficients(Mat, Msh);
 
         // Convergence
-        if (std::sqrt(Sol->calcErr(Msh.u.oPhi, Msh.u.Phi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;}
+        if (std::sqrt(Sol->calcErr(Msh.p.oPhi, Msh.p.Phi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;}
 
     } std::cout << "\n";
 
-    /* // Global Energy Balance */
-    /* /1* Mdc.getGlobalBalance(Mat, Msh, Dsc); *1/ */
+    // Global Energy Balance
+    Mdc.getGlobalBalance(Mat, Msh, Dsc);
 
     // Time
     auto t2 = std::chrono::high_resolution_clock::now();
@@ -173,60 +234,3 @@ int main(int argc, char* argv[]){
 }
     
 
-    /* std::cout << "\np-xNodes: "; */
-    /* for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "p-xFaces: "; */
-    /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "p-yNodes: "; */
-    /* for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "p-yFaces: "; */
-    /* for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nu-xNodes: "; */
-    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-xFaces: "; */
-    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yNodes: "; */
-    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yFaces: "; */
-    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nv-xNodes: "; */
-    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-xFaces: "; */
-    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yNodes: "; */
-    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yFaces: "; */
-    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "pMat:\n"; */
-    /* for (std::vector<int> vec : Msh.p.nMat){ */
-    /*     for (int val : vec){std::cout << val << " ";} std::cout << "\n"; */
-    /* } */
-
-
-    /* std::cout << "\nu-xNodes: "; */
-    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yNodes: "; */
-    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yFaces: "; */
-    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nv-xNodes: "; */
-    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yNodes: "; */
-    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-xFaces: "; */
-    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nVelocity Boundaries\n"; */
-    /* for (boundVelocity bnd : Msh.boundaryVelocity){ */
-    /*     std::cout << "BC: " << bnd.type << " " << bnd.side << "\n"; */
-    /*     std::cout << "u/v Index: " << bnd.x0[0] << " " << bnd.x0[1] << " - " << bnd.x1[0] << " " << bnd.x1[1] << "\n"; */
-    /* } */
-
-    /* std::cout << "u-xFaces: "; */
-    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yFaces: "; */
-    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */

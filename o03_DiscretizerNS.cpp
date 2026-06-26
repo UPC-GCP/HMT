@@ -215,15 +215,11 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
     int i{}, j{}, k{}; double gammaw{}, gammae{}, gammas{}, gamman{}, a0{}, mu = Mat.vMat[Msh.p.nMat[0][0]].mu, rho = Mat.vMat[Msh.p.nMat[0][0]].rho;
     double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{};
 
-    std::cout << "Velocity boundaries\n";
-
     // Boundary Node Coefficients
     for (boundVelocity& bC : Msh.boundaryVelocity){
 
         // Boundaries
         if (bC.type == 0){
-
-            std::cout << "Dirichlet\n";
 
             // Dirichlet
             if (bC.i0[0] == bC.i1[0]){
@@ -349,8 +345,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
     }
 
-    std::cout << "Boundaries done\n";
-
     ///// Interior Node Coefficients
     
     /// West Boundary (Edges vMesh)
@@ -358,7 +352,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
     for (size_t j = 1; j < Msh.v.N[1]-1; j++){
         // Control
         k = i * Msh.v.N[1] + j;
-        std::cout << k << ": " << i << " " << j << "\n";
 
         // Coefficients Convection-Diffusion
         De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Fe = rho * Msh.v.Se[i][j] * 0.5 * (Msh.u.oPhi[i+1][j] + Msh.u.oPhi[i+1][j-1]);
@@ -372,8 +365,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
         a0 = rho * Msh.v.Vp[i][j] / dt;
         Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Msh.v.matA[k].ae * Msh.v.oPhi[i+1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j]) + Msh.v.matB[k];
     }
-
-    std::cout << "West v done.\n";
 
     /// East Boundary (Edges vMesh)
     i = Msh.v.N[0]-1;
@@ -394,8 +385,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
         Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Msh.v.matA[k].aw * Msh.v.oPhi[i-1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j]) + Msh.v.matB[k];
     }
 
-    std::cout << "East v done.\n";
-
     /// South Boundary (Edges uMesh)
     j = 0;
     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
@@ -415,8 +404,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
         Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]) + Msh.u.matB[k];
     }
 
-    std::cout << "South u done.\n";
-
     /// North Boundary (Edges uMesh)
     j = Msh.u.N[1]-1;
     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
@@ -435,8 +422,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
         a0 = rho * Msh.u.Vp[i][j] / dt;
         Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]) + Msh.u.matB[k];
     }
-
-    std::cout << "North u done.\n";
 
 }
 

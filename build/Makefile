@@ -346,7 +346,6 @@ o04_CG.o: o04_CG.cpp.o
 # target to build an object file
 o04_CG.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_CG.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CG.cpp.o
 .PHONY : o04_CG.cpp.o
 
 o04_CG.i: o04_CG.cpp.i
@@ -355,7 +354,6 @@ o04_CG.i: o04_CG.cpp.i
 # target to preprocess a source file
 o04_CG.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_CG.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CG.cpp.i
 .PHONY : o04_CG.cpp.i
 
 o04_CG.s: o04_CG.cpp.s
@@ -364,8 +362,31 @@ o04_CG.s: o04_CG.cpp.s
 # target to generate assembly for a file
 o04_CG.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_CG.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CG.cpp.s
 .PHONY : o04_CG.cpp.s
+
+o04_CGNS.o: o04_CGNS.cpp.o
+.PHONY : o04_CGNS.o
+
+# target to build an object file
+o04_CGNS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CGNS.cpp.o
+.PHONY : o04_CGNS.cpp.o
+
+o04_CGNS.i: o04_CGNS.cpp.i
+.PHONY : o04_CGNS.i
+
+# target to preprocess a source file
+o04_CGNS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CGNS.cpp.i
+.PHONY : o04_CGNS.cpp.i
+
+o04_CGNS.s: o04_CGNS.cpp.s
+.PHONY : o04_CGNS.s
+
+# target to generate assembly for a file
+o04_CGNS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_CGNS.cpp.s
+.PHONY : o04_CGNS.cpp.s
 
 o04_Solver.o: o04_Solver.cpp.o
 .PHONY : o04_Solver.o
@@ -373,7 +394,6 @@ o04_Solver.o: o04_Solver.cpp.o
 # target to build an object file
 o04_Solver.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_Solver.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_Solver.cpp.o
 .PHONY : o04_Solver.cpp.o
 
 o04_Solver.i: o04_Solver.cpp.i
@@ -382,7 +402,6 @@ o04_Solver.i: o04_Solver.cpp.i
 # target to preprocess a source file
 o04_Solver.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_Solver.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_Solver.cpp.i
 .PHONY : o04_Solver.cpp.i
 
 o04_Solver.s: o04_Solver.cpp.s
@@ -391,8 +410,31 @@ o04_Solver.s: o04_Solver.cpp.s
 # target to generate assembly for a file
 o04_Solver.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_Solver.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_Solver.cpp.s
 .PHONY : o04_Solver.cpp.s
+
+o04_SolverNS.o: o04_SolverNS.cpp.o
+.PHONY : o04_SolverNS.o
+
+# target to build an object file
+o04_SolverNS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_SolverNS.cpp.o
+.PHONY : o04_SolverNS.cpp.o
+
+o04_SolverNS.i: o04_SolverNS.cpp.i
+.PHONY : o04_SolverNS.i
+
+# target to preprocess a source file
+o04_SolverNS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_SolverNS.cpp.i
+.PHONY : o04_SolverNS.cpp.i
+
+o04_SolverNS.s: o04_SolverNS.cpp.s
+.PHONY : o04_SolverNS.s
+
+# target to generate assembly for a file
+o04_SolverNS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o04_SolverNS.cpp.s
+.PHONY : o04_SolverNS.cpp.s
 
 o05_Probe.o: o05_Probe.cpp.o
 .PHONY : o05_Probe.o
@@ -400,7 +442,6 @@ o05_Probe.o: o05_Probe.cpp.o
 # target to build an object file
 o05_Probe.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o05_Probe.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_Probe.cpp.o
 .PHONY : o05_Probe.cpp.o
 
 o05_Probe.i: o05_Probe.cpp.i
@@ -409,7 +450,6 @@ o05_Probe.i: o05_Probe.cpp.i
 # target to preprocess a source file
 o05_Probe.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o05_Probe.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_Probe.cpp.i
 .PHONY : o05_Probe.cpp.i
 
 o05_Probe.s: o05_Probe.cpp.s
@@ -418,8 +458,31 @@ o05_Probe.s: o05_Probe.cpp.s
 # target to generate assembly for a file
 o05_Probe.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o05_Probe.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_Probe.cpp.s
 .PHONY : o05_Probe.cpp.s
+
+o05_ProbeNS.o: o05_ProbeNS.cpp.o
+.PHONY : o05_ProbeNS.o
+
+# target to build an object file
+o05_ProbeNS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_ProbeNS.cpp.o
+.PHONY : o05_ProbeNS.cpp.o
+
+o05_ProbeNS.i: o05_ProbeNS.cpp.i
+.PHONY : o05_ProbeNS.i
+
+# target to preprocess a source file
+o05_ProbeNS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_ProbeNS.cpp.i
+.PHONY : o05_ProbeNS.cpp.i
+
+o05_ProbeNS.s: o05_ProbeNS.cpp.s
+.PHONY : o05_ProbeNS.s
+
+# target to generate assembly for a file
+o05_ProbeNS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o05_ProbeNS.cpp.s
+.PHONY : o05_ProbeNS.cpp.s
 
 o09_ExpressionParser.o: o09_ExpressionParser.cpp.o
 .PHONY : o09_ExpressionParser.o
@@ -454,7 +517,6 @@ o09_Medic.o: o09_Medic.cpp.o
 # target to build an object file
 o09_Medic.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_Medic.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_Medic.cpp.o
 .PHONY : o09_Medic.cpp.o
 
 o09_Medic.i: o09_Medic.cpp.i
@@ -463,7 +525,6 @@ o09_Medic.i: o09_Medic.cpp.i
 # target to preprocess a source file
 o09_Medic.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_Medic.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_Medic.cpp.i
 .PHONY : o09_Medic.cpp.i
 
 o09_Medic.s: o09_Medic.cpp.s
@@ -472,8 +533,31 @@ o09_Medic.s: o09_Medic.cpp.s
 # target to generate assembly for a file
 o09_Medic.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_Medic.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_Medic.cpp.s
 .PHONY : o09_Medic.cpp.s
+
+o09_MedicNS.o: o09_MedicNS.cpp.o
+.PHONY : o09_MedicNS.o
+
+# target to build an object file
+o09_MedicNS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_MedicNS.cpp.o
+.PHONY : o09_MedicNS.cpp.o
+
+o09_MedicNS.i: o09_MedicNS.cpp.i
+.PHONY : o09_MedicNS.i
+
+# target to preprocess a source file
+o09_MedicNS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_MedicNS.cpp.i
+.PHONY : o09_MedicNS.cpp.i
+
+o09_MedicNS.s: o09_MedicNS.cpp.s
+.PHONY : o09_MedicNS.s
+
+# target to generate assembly for a file
+o09_MedicNS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSSolver.dir/build.make CMakeFiles/NSSolver.dir/o09_MedicNS.cpp.s
+.PHONY : o09_MedicNS.cpp.s
 
 # Help Target
 help:
@@ -512,18 +596,30 @@ help:
 	@echo "... o04_CG.o"
 	@echo "... o04_CG.i"
 	@echo "... o04_CG.s"
+	@echo "... o04_CGNS.o"
+	@echo "... o04_CGNS.i"
+	@echo "... o04_CGNS.s"
 	@echo "... o04_Solver.o"
 	@echo "... o04_Solver.i"
 	@echo "... o04_Solver.s"
+	@echo "... o04_SolverNS.o"
+	@echo "... o04_SolverNS.i"
+	@echo "... o04_SolverNS.s"
 	@echo "... o05_Probe.o"
 	@echo "... o05_Probe.i"
 	@echo "... o05_Probe.s"
+	@echo "... o05_ProbeNS.o"
+	@echo "... o05_ProbeNS.i"
+	@echo "... o05_ProbeNS.s"
 	@echo "... o09_ExpressionParser.o"
 	@echo "... o09_ExpressionParser.i"
 	@echo "... o09_ExpressionParser.s"
 	@echo "... o09_Medic.o"
 	@echo "... o09_Medic.i"
 	@echo "... o09_Medic.s"
+	@echo "... o09_MedicNS.o"
+	@echo "... o09_MedicNS.i"
+	@echo "... o09_MedicNS.s"
 .PHONY : help
 
 
