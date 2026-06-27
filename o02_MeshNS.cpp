@@ -220,9 +220,14 @@ void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBas
     u.Faces.resize(p.N.size()); u.Nodes.resize(p.N.size()); u.deltaX.resize(p.N.size()); u.dX.resize(p.N.size());
     v.Faces.resize(p.N.size()); v.Nodes.resize(p.N.size()); v.deltaX.resize(p.N.size()); v.dX.resize(p.N.size());
 	for (size_t i = 0; i < p.N.size(); i++){
-		u.Faces[i].resize(u.N[i]+1); u.Nodes[i].resize(u.N[i]); u.deltaX[i].resize(u.N[i]); u.dX[i].resize(u.N[i]);
-        v.Faces[i].resize(v.N[i]+1); v.Nodes[i].resize(v.N[i]); v.deltaX[i].resize(v.N[i]); v.dX[i].resize(v.N[i]);
+		u.Faces[i].resize(u.N[i]+1); u.Nodes[i].resize(u.N[i]); u.deltaX[i].resize(u.N[i]); u.dX[i].resize(u.N[i]+1);
+        v.Faces[i].resize(v.N[i]+1); v.Nodes[i].resize(v.N[i]); v.deltaX[i].resize(v.N[i]); v.dX[i].resize(v.N[i]+1);
 	}
+
+	/* Msh.Faces.resize(Msh.N.size()); Msh.Nodes.resize(Msh.N.size()); Msh.deltaX.resize(Msh.N.size()); Msh.dX.resize(Msh.N.size()); */
+	/* for (size_t i = 0; i < Msh.N.size(); i++){ */
+	/* 	Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1); */
+	/* } */
 
     // Geometry uNodes (non-nD)
     for (size_t i = 0; i < u.Nodes[0].size(); i++){u.Nodes[0][i] = p.Faces[0][i]; u.Faces[0][i+1] = p.Nodes[0][i];} 

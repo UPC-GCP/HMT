@@ -72,8 +72,8 @@ void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionPar
     file << t;
 
     // Write Values
-    for (size_t i = 0; i < Msh.p.N[0]; i++){
-        for (size_t j = 0; j < Msh.p.N[1]; j++){
+    for (size_t i = 1; i < Msh.p.N[0]-1; i++){
+        for (size_t j = 1; j < Msh.p.N[1]-1; j++){
             file << "," << (rho / Dsc.dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
         }
     } file << "\n";

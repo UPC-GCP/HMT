@@ -29,7 +29,7 @@ bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
 
     // Direction
     std::vector<double> p = r;
-    double rsOld = operDotProd(r, r);
+    double rsOld = operDotProd(r, r); if (std::sqrt(rsOld) < tolNum){lastIter = 0; lastRes = rsOld; return true;}
 
     // Conjugate Gradient Loop
     for (int k = 0; k < maxIter; k++){
@@ -53,12 +53,12 @@ bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
         double maxTemp = 0;
         for (std::vector<double> vec : x){
             for (double val : vec){
-                if (val > maxTemp){maxTemp = val;}
+                if (std::abs(val) > maxTemp){maxTemp = std::abs(val);}
             }
         }
 
         if (std::isnan(rsNew) || std::isinf(rsNew) || maxTemp > 1e6){
-            std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << "\n";
+            std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << ", maxAbsValue: " << maxTemp << "\n";
             lastIter = k; lastRes = rsNew; return false;
         }
 

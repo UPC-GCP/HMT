@@ -1,4 +1,5 @@
 // Imports
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -106,8 +107,6 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
         
         } else if (probes[i]["type"].asString() == "Field"){
 
-            std::cout << "Field: " << i << "\n";
-
             // Create File - uMesh
             tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "u_Field.csv";
             tempFld.file = createFile(newPath / tempString);
@@ -120,8 +119,8 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             tempFld.yPos = {static_cast<size_t>(std::lower_bound(Msh.u.Nodes[1].begin(), Msh.u.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.u.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.u.Nodes[1].begin(), Msh.u.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.u.Nodes[1].begin())};
 
             // Header - uMesh
-            for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){
-                for (int k = tempFld.yPos[0]; k <= tempFld.yPos[1]; k++){
+            for (int j = tempFld.xPos[0]; j < tempFld.xPos[1]; j++){
+                for (int k = tempFld.yPos[0]; k < tempFld.yPos[1]; k++){
                     tempFld.file << "," << Msh.u.Faces[0][j] << " " << Msh.u.Faces[1][k];
                 }
             }
@@ -151,8 +150,6 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             // Control
             probeFld.push_back(std::move(tempFld));
             tempFld = {};
-
-            std::cout << "vMesh done.\n";
 
         } else if (probes[i]["type"].asString() == "Debug"){
 
@@ -227,6 +224,36 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
         } probeMap[i].file << "\n";
     }
 
+
+    // Field Probe
+    bSave = {}; bSave.resize(probeFld.size(), false);
+    for (size_t i = 0; i < probeFld.size(); i++){
+        if (t >= probeFld[i].t[0] && t <= probeFld[i].t[1]){
+            bSave[i] = true;
+        }
+    }
+
+    // Save uMesh
+    if (bSave[0]){
+        probeFld[0].file << t;
+        for (size_t i = probeFld[0].xPos[0]; i < probeFld[0].xPos[1]; i++){
+            for (size_t j = probeFld[0].yPos[0]; j < probeFld[0].yPos[1]; j++){
+                probeFld[0].file << "," << Msh.u.Phi[i][j];
+            }
+        } probeFld[0].file << "\n";
+    }
+
+    // Save vMesh
+    if (bSave[1]){
+        probeFld[1].file << t;
+        for (size_t i = probeFld[1].xPos[0]; i < probeFld[1].xPos[1]; i++){
+            for (size_t j = probeFld[1].yPos[0]; j < probeFld[1].yPos[1]; j++){
+                probeFld[1].file << "," << Msh.v.Phi[i][j];
+            }
+        } probeFld[1].file << "\n";
+    }
+
+
     // Bug Probe
     bSave = {}; bSave.resize(probeBug.size(), false);
     for (size_t i = 0; i < probeBug.size(); i++){
@@ -254,6 +281,13 @@ Probe::~Probe(){
     if (!probeMap.empty()){
         for (int i = 0; i < probeMap.size(); i++){
             probeMap[i].file.close();
+        }
+    }
+
+    // Field Probes
+    if (!probeFld.empty()){
+        for (int i = 0; i < probeFld.size(); i++){
+            probeFld[i].file.close();
         }
     }
 
