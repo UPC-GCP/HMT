@@ -1,7 +1,6 @@
 #ifndef MEDICNS_H_
 #define MEDICNS_H_
 
-#include <vector>
 #include <string>
 
 #include "o01_Material.h"
@@ -26,7 +25,7 @@ public:
     ~Medic();
 
     // Functions
-    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, std::vector<std::vector<double>> oldPhi, std::vector<std::vector<double>> bcPhi, double t);
+    void getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, double t);
     void getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc);
     void getSystemResidual(Material Mat, Mesh Msh, Discretizer Dsc, double t);
 };

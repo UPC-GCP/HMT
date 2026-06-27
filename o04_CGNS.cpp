@@ -75,7 +75,7 @@ bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x,
     }
 
     // Control
-    return true;
+    lastIter = maxIter; lastRes = rsNew; return true;
 
 }
 

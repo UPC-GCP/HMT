@@ -612,14 +612,14 @@ void Discretizer::correctVelocity(Material Mat, Mesh& Msh){
     // u Interior Nodes
     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
         for (size_t j = 1; j < Msh.u.N[1]-1; j++){
-            Msh.u.Phi[i][j] -= (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i-1][j]) / Msh.p.dX[0][i];
+            Msh.u.Phi[i][j] += (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i-1][j]) / Msh.p.dX[0][i];
         }
     }
 
     // v Interior Nodes
     for (size_t i = 1; i < Msh.v.N[0]-1; i++){
         for (size_t j = 1; j < Msh.v.N[1]-1; j++){
-            Msh.v.Phi[i][j] -= (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i][j-1]) / Msh.p.dX[1][j];    
+            Msh.v.Phi[i][j] += (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i][j-1]) / Msh.p.dX[1][j];
         }
     }
 

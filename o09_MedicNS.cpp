@@ -65,7 +65,7 @@ Medic::~Medic(){
 }
 
 
-void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, std::vector<std::vector<double>> oldPhi, std::vector<std::vector<double>> bcPhi, double t){
+void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, double t){
 
     // Control
     double rho = Mat.vMat[Msh.p.nMat[0][0]].rho;

@@ -22,66 +22,8 @@
 /* #include "o04_BCG.h" */
 #include "o05_ProbeNS.h"
 #include "o09_ExpressionParser.h"
-#include "o09_MedicNS.h" // Diagnostic Tool: Activate if needed
+#include "o09_MedicNS.h"
 
-
-    /* std::cout << "\np-xNodes: "; */
-    /* for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "p-xFaces: "; */
-    /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "p-yNodes: "; */
-    /* for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "p-yFaces: "; */
-    /* for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nu-xNodes: "; */
-    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-xFaces: "; */
-    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yNodes: "; */
-    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yFaces: "; */
-    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nv-xNodes: "; */
-    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-xFaces: "; */
-    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yNodes: "; */
-    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yFaces: "; */
-    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "pMat:\n"; */
-    /* for (std::vector<int> vec : Msh.p.nMat){ */
-    /*     for (int val : vec){std::cout << val << " ";} std::cout << "\n"; */
-    /* } */
-
-
-    /* std::cout << "\nu-xNodes: "; */
-    /* for (double val : Msh.u.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yNodes: "; */
-    /* for (double val : Msh.u.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "u-yFaces: "; */
-    /* for (double val : Msh.u.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nv-xNodes: "; */
-    /* for (double val : Msh.v.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yNodes: "; */
-    /* for (double val : Msh.v.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-xFaces: "; */
-    /* for (double val : Msh.v.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "\nVelocity Boundaries\n"; */
-    /* for (boundVelocity bnd : Msh.boundaryVelocity){ */
-    /*     std::cout << "BC: " << bnd.type << " " << bnd.side << "\n"; */
-    /*     std::cout << "u/v Index: " << bnd.x0[0] << " " << bnd.x0[1] << " - " << bnd.x1[0] << " " << bnd.x1[1] << "\n"; */
-    /* } */
-
-    /* std::cout << "u-xFaces: "; */
-    /* for (double val : Msh.u.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "v-yFaces: "; */
-    /* for (double val : Msh.v.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
 
 Json::Value getParsedData(std::string fileName){
     
@@ -182,10 +124,10 @@ int main(int argc, char* argv[]){
     Medic Mdc(Msh, Prb, bMdc); std::cout << "Diagnostic tools configured.\n";
 
 
+
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
     
-    std::vector<std::vector<double>> cPhi{}, cbPhi{};
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
         // Control
@@ -193,6 +135,7 @@ int main(int argc, char* argv[]){
         
         // Solver
         if (!Sol->newSolve(Msh.p.matA, Msh.p.Phi, Msh.p.matB)){std::cerr << "Simulation diverges @ t = " << t; break;}
+        if (std::sqrt(Sol->lastRes) >= data["tolNumeric"].asDouble()){std::cerr << "\nWARN: CG unconverged @ t=" << t << " lastIter=" << Sol->lastIter << " lastRes=" << std::sqrt(Sol->lastRes);}
 
         // Correct Velocity
         Dsc.correctVelocity(Mat, Msh);
@@ -200,7 +143,7 @@ int main(int argc, char* argv[]){
 
         // Diagnostics
         if (bMdc){
-            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, cbPhi, t);
+            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, t);
             Mdc.getSystemResidual(Mat, Msh, Dsc, t);
         }
 
