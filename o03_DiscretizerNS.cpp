@@ -1,23 +1,16 @@
 // Imports
-/* #include "json/value.h" */
 #include <csignal>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-/* #include <sys/ucontext.h> */
-/* #include <iterator> */
-/* #include <random> */
 #include <vector>
 #include <json/json.h>
 #include <cmath>
 #include <algorithm>
 
 // Self-Imports
-#include "o01_Material.h"
-#include "o02_MeshNS.h"
 #include "o03_DiscretizerNS.h"
-/* #include "o09_ExpressionParser.h" */
 
 
 double Discretizer::calcHarmonicMean(double dPF, std::vector<double> lambda, std::vector<double> deltaX) {

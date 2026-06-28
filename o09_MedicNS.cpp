@@ -6,12 +6,7 @@
 #include <fstream>
 #include <filesystem>
 
-#include "o01_Material.h"
-#include "o02_MeshNS.h"
-#include "o03_DiscretizerNS.h"
-#include "o05_ProbeNS.h"
 #include "o09_MedicNS.h"
-#include "o09_ExpressionParser.h"
 
 std::ofstream createDiagnostic(std::filesystem::path fName){
 
@@ -65,7 +60,7 @@ Medic::~Medic(){
 }
 
 
-void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, ExpressionParser& Prs, double t){
+void Medic::getDiagnostic(Material Mat, Mesh Msh, Discretizer Dsc, double t){
 
     // Control
     double rho = Mat.vMat[Msh.p.nMat[0][0]].rho;

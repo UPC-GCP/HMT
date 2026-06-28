@@ -3,13 +3,8 @@
 
 #include <string>
 #include <vector>
-/* #include <fstream> */
 
-/* #include "o01_Material.h" */
 #include "o02_MeshNS.h"
-/* #include "o03_Discretizer.h" */
-
-// PENDING CLEAN VARIABLES AND FUNCTIONS
 
 class Solver
 {

@@ -8,8 +8,6 @@
 #include <ctime>
 #include <filesystem>
 
-#include "o02_MeshNS.h"
-#include "o04_SolverNS.h"
 #include "o05_ProbeNS.h"
 
 std::string createFolder(std::string tempScheme, std::string spatScheme, std::string fName, std::string& dirName){

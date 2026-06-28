@@ -52,9 +52,11 @@ if len(sys.argv) == 5: quit()
 ### Numerical Study
 if bool(int(sys.argv[5])):
     # Parse Data
-    # Por ahora va a estar hard coded como 4-4 para dt y N, pero debería ponerlo con inputs (sVar=dt, lVar=[0.5,1,2,5])
+    # Hard coded 4-4 para dt y N, pero debería ponerlo con inputs (sVar=dt, lVar=[0.5,1,2,5])
     fileName = 'Probe_1_Bug.csv'
     PL.createNumericalStudy(fileName, sys.argv[6])
+    
+    # Need to change this so it works with any variable
 
 
 

@@ -4,9 +4,7 @@
 #include <string>
 #include <vector>
 
-/* #include "o01_Material.h" */
 #include "o02_MeshNS.h"
-/* #include "o03_Discretizer.h" */
 #include "o04_SolverNS.h"
 
 class CG: public Solver{

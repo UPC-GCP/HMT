@@ -4,8 +4,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-/* #include <memory> */
-/* #include <pthread.h> */
 #include <iterator>
 #include <string>
 #include <vector>
@@ -13,9 +11,7 @@
 #include <cmath>
 
 // Self-Imports
-/* #include "o01_Material.h" */
 #include "o02_MeshNS.h"
-/* #include "o09_ExpressionParser.h" */
 
 
 Mesh::Mesh(int algo, double W, double A, double xC, double kStr, double delta) {

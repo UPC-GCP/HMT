@@ -1,9 +1,4 @@
 // Imports
-/* #include <cstddef> */
-/* #include <ios> */
-/* #include <iterator> */
-/* #include <vector> */
-/* #include <cstddef> */
 #include <iostream>
 #include <json/forwards.h>
 #include <string>
@@ -143,7 +138,7 @@ int main(int argc, char* argv[]){
 
         // Diagnostics
         if (bMdc){
-            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, t);
+            Mdc.getDiagnostic(Mat, Msh, Dsc, t);
             Mdc.getSystemResidual(Mat, Msh, Dsc, t);
         }
 
