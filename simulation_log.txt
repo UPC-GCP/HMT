@@ -4,3 +4,6 @@ Running simulations w/ 4 cores ... Mon Jun 29 06:25:46 -05 2026
 Finished ./ioSrc/exNS1.json at 09:13:50
 Finished ./ioSrc/exNS3.json at 09:18:59
 Finished ./ioSrc/exNS2.json at 11:58:08
+Finished ./ioSrc/exNS4.json at 12:19:11
+----------------------------------------------------
+All simulations complete ... Mon Jun 29 12:19:11 -05 2026
