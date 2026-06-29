@@ -1,41 +1,6 @@
-MONITOR STARTED ... Mon May  4 08:09:35 -05 2026
-CONTROL: 08:09:35
-RAM Used: 836Mi / 7.7Gi
-Load Avg: 7.77, 4.03, 1.61
-Disk Used: 824G / 1007G (14% free)
-
-CONTROL: 08:24:38
-RAM Used: 849Mi / 7.7Gi
-Load Avg: 7.03, 6.94, 5.08
-Disk Used: 807G / 1007G (16% free)
-
-CONTROL: 08:39:44
-RAM Used: 956Mi / 7.7Gi
-Load Avg: 7.42, 7.12, 6.36
-Disk Used: 789G / 1007G (18% free)
-
-CONTROL: 08:55:01
-RAM Used: 783Mi / 7.7Gi
-Load Avg: 7.00, 7.07, 6.88
-Disk Used: 772G / 1007G (20% free)
-
-CONTROL: 09:10:19
-RAM Used: 782Mi / 7.7Gi
-Load Avg: 7.02, 7.03, 7.00
-Disk Used: 754G / 1007G (22% free)
-
-CONTROL: 09:25:29
-RAM Used: 782Mi / 7.7Gi
-Load Avg: 7.00, 7.00, 7.00
-Disk Used: 737G / 1007G (23% free)
-
-CONTROL: 09:40:43
-RAM Used: 761Mi / 7.7Gi
-Load Avg: 2.00, 3.13, 5.08
-Disk Used: 724G / 1007G (25% free)
-
-CONTROL: 09:56:01
-RAM Used: 762Mi / 7.7Gi
-Load Avg: 2.00, 2.05, 3.15
-Disk Used: 715G / 1007G (26% free)
+MONITOR STARTED ... Mon Jun 29 08:17:30 -05 2026
+CONTROL: 08:17:30
+RAM Used: 855Mi / 7.7Gi
+Load Avg: 4.05, 4.04, 4.01
+Disk Used: 923G / 1007G (4% free)
 
