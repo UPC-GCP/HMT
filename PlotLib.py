@@ -69,6 +69,34 @@ def getFrames(fPath:str):
 
     return vRet, vTime, xRet, yRet
 
+def getLastFrame(fPath):
+    """Read header and last data row from a probe CSV line-by-line (O(1) memory)."""
+    with open(fPath, 'rb') as f:
+        header = f.readline().decode().rstrip()
+        lastLine = b''
+        for line in f:
+            if line.strip(): lastLine = line
+    vTitle = header.split(',')
+
+    # If the Field probe header is missing its trailing newline, the first data row
+    # is merged onto the header line. Trim vTitle to only coordinate columns
+    # (format "X Y" — contain a space); plain data values never do.
+    lastCoord = max((idx for idx in range(1, len(vTitle)) if ' ' in vTitle[idx]), default=0)
+    vTitle = vTitle[:lastCoord + 1]
+
+    vals   = lastLine.decode().rstrip().split(',')
+    t      = float(vals[0])
+    data   = np.array([float(v) for v in vals[1:] if v])
+
+    i = 1; xFirst = vTitle[i].split(' ')[0]
+    xRet = [float(vTitle[i].split(' ')[0])]; yRet = [float(vTitle[i].split(' ')[1])]
+    while i + 1 < len(vTitle) and vTitle[i+1].split(' ')[0] == xFirst:
+        i += 1; yRet.append(float(vTitle[i].split(' ')[1]))
+    nY = i; nX = (len(vTitle) - 1) // nY
+    for j in range(1, nX): xRet.append(float(vTitle[1 + j*nY].split(' ')[0]))
+
+    return data.reshape(nX, nY), t, xRet, yRet
+
 def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
 
     global idAnimation
@@ -111,34 +139,35 @@ def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
 
     print(f"Elapsed Time: {time.time() - tStart:.3f}")
 
-def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1): # FUNCTIONAL
+def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1, extent=None, label="Value"): # FUNCTIONAL
 
     global idPlot
 
     # Index
-    if tStep == -1: tPos = int(tStep)
+    if tStep == -1: tPos = -1
     else:
-        # Find index and plot that step
         tPos = min(range(len(vTime)), key=lambda i: abs(vTime[i] - tStep))
 
-    # Levels
-    if tStep == 2000: levels = [15, 16, 17, 18, 19, 20, 21, 22]
-    elif tStep == 3000: levels = [18.5, 19, 19.5, 20, 20.5, 21, 21.5, 22, 22.5]
-    elif tStep == 4000: levels = [21, 22, 23, 24, 25, 26, 27]
-    elif tStep == 5000: levels = [23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+    # Levels — predefined for known diffusion timesteps, auto otherwise
+    levelsMap = {2000: [15,16,17,18,19,20,21,22], 3000: [18.5,19,19.5,20,20.5,21,21.5,22,22.5], 4000: [21,22,23,24,25,26,27], 5000: [23,24,25,26,27,28,29,30,31,32]}
+    levels = levelsMap.get(tStep, None)
 
-    # Axis
+    # Frame
     framePlot = np.transpose(frames[tPos])
 
+    # Extent
+    if extent is None: extent = [0, 1.1, 0, 0.8]
+
     # Plot Map
-    plt.figure(); im = plt.imshow(framePlot, cmap='jet', extent=[0, 1.1, 0, 0.8], origin='lower', aspect='auto')
-    plt.colorbar(im, label="Temperature (°C)")
-    plt.xlabel('Length (m)'); plt.ylabel('Height (m)')
-    plt.title(f'Temperature map @ t = {tStep}')
-    
-    # Isotherms
-    contours = plt.contour(framePlot, levels=levels, colors='black', origin='lower', linewidths=0.8, alpha=0.7, extent=[0, 1.1, 0, 0.8])
-    plt.clabel(contours, inline=True, fontsize=8, fmt='%.1f °C')
+    plt.figure(); im = plt.imshow(framePlot, cmap='jet', extent=extent, origin='lower', aspect='auto')
+    plt.colorbar(im, label=label)
+    plt.xlabel('x (m)'); plt.ylabel('y (m)')
+    plt.title(f'{label} map @ t = {vTime[tPos]:.4f} s')
+
+    # Isotherms — only when levels are defined
+    if levels is not None:
+        contours = plt.contour(framePlot, levels=levels, colors='black', origin='lower', linewidths=0.8, alpha=0.7, extent=extent)
+        plt.clabel(contours, inline=True, fontsize=8, fmt='%.1f')
 
     # Save Plot
     tempName = "Plot_" + str(idPlot + 1) + ".png"
@@ -195,7 +224,7 @@ def createPoint(filePath:str): # FUNCTIONAL
         print(f"File saved to: {filePath / tempName}")
 
     
-def createNumericalStudy(fileName:str, sVar:str) :
+def numStudyDiff(fileName:str, sVar:str) :
 
     # Range
     if sVar == 'dt':
@@ -242,9 +271,177 @@ def createNumericalStudy(fileName:str, sVar:str) :
             print(f"File saved to: {dirPath / tempName}")
 
 
-def compConvDiff(sCase:int):
-    
-    xAnal = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 10]
-    if sCase == 0: yAnal = [1.989, 1.402, 1.146, 0.946, 0.775, 0.621, 0.480, 0.349, 0.227, 0.111, 0.000]
-    elif sCase == 1: yAnal = [2.0000, 1.9990, 1.9997, 1.9850, 1.8410, 0.9510, 0.1540, 0.0010, 0.0000, 0.0000, 0.0000]
-    elif sCase == 2: yAnal = [2.000, 2.000, 2.000, 1.999, 1.964, 1.000, 0.036, 0.001, 0.000, 0.000, 0.000]
+def numStudyConv(dirPath: Path):
+
+    # Reference data: Case 0: rho/Gamma=10, Case 1: rho/Gamma=1000, Case 2: rho/Gamma=1e6
+    # xAnal covers the Neumann half of the South wall (x in [0, 1])
+    xAnal  = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    yAnal  = [
+        [1.989, 1.402, 1.146, 0.946, 0.775, 0.621, 0.480, 0.349, 0.227, 0.111, 0.000],
+        [2.0000, 1.9990, 1.9997, 1.9850, 1.8410, 0.9510, 0.1540, 0.0010, 0.0000, 0.0000, 0.0000],
+        [2.000, 2.000, 2.000, 1.999, 1.964, 1.000, 0.036, 0.001, 0.000, 0.000, 0.000],
+    ]
+    rhoGamma = [10, 1000, 1000000]
+    nCases   = len(rhoGamma)
+    schemes  = ['UDS', 'CDS']
+    aColor   = {'UDS': 'b', 'CDS': 'r'}
+
+    # Output folder for comparison plots
+    outPath = dirPath / "ConvStudy"
+    os.makedirs(outPath, exist_ok=True)
+
+    # Build case→directory map: caseDirs[scheme][sCase] → Path
+    # UDS: exConv{1,2,3}; CDS: exConv{4,5,6}
+    caseDirs = {s: {} for s in schemes}
+    for sCase in range(nCases):
+        for scheme, num in [('UDS', sCase+1), ('CDS', sCase+4)]:
+            matches = sorted([d for d in os.listdir(dirPath) if f"exConv{num}_" in d])
+            if matches: caseDirs[scheme][sCase] = dirPath / matches[-1]
+
+    # ---- 1. Colormap snapshot (all 6 cases, saved per case directory) ----
+    for scheme in schemes:
+        for sCase in range(nCases):
+            if sCase not in caseDirs[scheme]: continue
+            cDir = caseDirs[scheme][sCase]
+            frames, vTime, xVec, yVec = getFrames(cDir / "Probe_1_Map.csv")
+            extent = [xVec[0], xVec[-1], yVec[0], yVec[-1]]
+            createSnapshot(outPath, frames, vTime, extent=extent, label='Φ')
+            plt.close()
+
+    # ---- 2. Mean iterations and residue vs rho/Gamma (one figure each) ----
+    vIter = {s: [] for s in schemes}
+    vRes  = {s: [] for s in schemes}
+    for scheme in schemes:
+        for sCase in range(nCases):
+            if sCase not in caseDirs[scheme]: continue
+            data = pd.read_csv(caseDirs[scheme][sCase] / "Probe_3_Bug.csv")
+            vIter[scheme].append(data['lastIter'].mean())
+            vRes[scheme].append(data['lastRes'].mean())
+
+    xTicks = [str(r) for r in rhoGamma]
+    for metric, vData, yLabel in [('Iterations', vIter, 'Mean Iterations'), ('Residue', vRes, 'Mean Residue')]:
+        plt.figure()
+        for scheme in schemes:
+            if vData[scheme]:
+                plt.plot(range(len(vData[scheme])), vData[scheme], color=aColor[scheme], marker='o', label=scheme)
+        plt.xticks(range(nCases), xTicks)
+        plt.xlabel('ρ/Γ'); plt.ylabel(yLabel)
+        plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+        plt.savefig(outPath / f"Conv_{metric}.png"); print(f"Saved: Conv_{metric}.png"); plt.close()
+
+    # ---- 3. South boundary Phi profile vs reference (one figure per material case) ----
+    for sCase in range(nCases):
+        plt.figure()
+        plt.plot(xAnal, yAnal[sCase], 'k--', marker='x', markersize=6, label='Reference')
+        for scheme in schemes:
+            if sCase not in caseDirs[scheme]: continue
+            data = pd.read_csv(caseDirs[scheme][sCase] / "Probe_2_Boundary.csv")
+            xCoords = np.array([float(col.split(' ')[0]) for col in data.columns[1:]])
+            phiVals = data.iloc[-1, 1:].values.astype(float)
+            plt.plot(xCoords, phiVals, color=aColor[scheme], label=scheme)
+        plt.xlabel('x (m)'); plt.ylabel('Φ')
+        plt.title(f'South Boundary Profile — ρ/Γ = {rhoGamma[sCase]}')
+        plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+        plt.savefig(outPath / f"Conv_Boundary_case{sCase}.png"); print(f"Saved: Conv_Boundary_case{sCase}.png"); plt.close()
+
+
+def numStudyNS(dirPath: Path):
+
+    # Reference data: Ghia et al. (1982), lid-driven cavity
+    # u at x=0.5: yU=y-positions (0=bottom, 1=lid), xURef=u-velocity
+    yU   = [1, 0.9766, 0.9688, 0.9609, 0.9531, 0.8516, 0.7344, 0.6172, 0.5, 0.4531, 0.2813, 0.1719, 0.1016, 0.0703, 0.0625, 0.0547, 0]
+    xURef = [
+        [1, 0.84123, 0.78871, 0.73722, 0.68717, 0.23151, 0.00332, -0.13641, -0.20581, -0.21090, -0.15662, -0.10150, -0.06434, -0.04775, -0.04192, -0.03717, 0],
+        [1, 0.75837, 0.68439, 0.61756, 0.55892, 0.29093, 0.16256, 0.02135, -0.11477, -0.17119, -0.32726, -0.24299, -0.14612, -0.10338, -0.09266, -0.8186, 0]
+    ]
+    # v at y=0.5: xV=x-positions (0=left, 1=right), yVRef=v-velocity
+    xV   = [0, 0.0625, 0.0703, 0.0781, 0.0938, 0.1563, 0.2266, 0.2344, 0.5, 0.8047, 0.8594, 0.9063, 0.9453, 0.9531, 0.9609, 0.9688, 1]
+    yVRef = [
+        [0, 0.09233, 0.10091, 0.10890, 0.12317, 0.16077, 0.17507, 0.17527, 0.05454, -0.24533, -0.22445, -0.16914, -0.10313, -0.08864, -0.07391, -0.05906, 0],
+        [0, 0.18360, 0.19713, 0.20920, 0.22965, 0.28124, 0.30203, 0.30174, 0.5186, -0.38598, -0.44993, -0.23827, -0.22847, -0.19254, -0.15663, -0.12146, 0]
+    ]
+    Re      = [100, 400]
+    schemes = ['UDS', 'CDS']
+    aColor  = {'UDS': 'b', 'CDS': 'r'}
+
+    outPath = dirPath / "NSStudy"
+    os.makedirs(outPath, exist_ok=True)
+
+    # Case dirs: exNS1=UDS/Re100, exNS2=UDS/Re400, exNS3=CDS/Re100, exNS4=CDS/Re400
+    caseDirs = {s: {} for s in schemes}
+    for sCase in range(2):
+        for scheme, num in [('UDS', sCase+1), ('CDS', sCase+3)]:
+            matches = sorted([d for d in os.listdir(dirPath) if f"exNS{num}_" in d])
+            if matches: caseDirs[scheme][sCase] = dirPath / matches[-1]
+
+    # ---- 1. Velocity magnitude colormaps + vector maps (one per case) ----
+    for scheme in schemes:
+        for sCase in range(2):
+            if sCase not in caseDirs[scheme]: continue
+            cDir = caseDirs[scheme][sCase]
+            print(f"Reading {scheme} Re={Re[sCase]} ...")
+            uFrame, _, uX, uY = getLastFrame(cDir / "Probe_2u_Field.csv")
+            vFrame, _, vX, vY = getLastFrame(cDir / "Probe_2v_Field.csv")
+
+            # Interpolate staggered faces to p-grid cell centres:
+            # u: pad x=1 wall face (u=0), average adjacent faces in x
+            # v: pad y=1 lid face (v=0), average adjacent faces in y
+            N     = uFrame.shape[0]
+            u_pad = np.vstack([uFrame, np.zeros((1, N))])
+            v_pad = np.hstack([vFrame, np.zeros((N, 1))])
+            u_p   = 0.5 * (u_pad[:-1] + u_pad[1:])
+            v_p   = 0.5 * (v_pad[:, :-1] + v_pad[:, 1:])
+            mag   = np.sqrt(u_p**2 + v_p**2)
+            pX    = np.array(uX) + 0.5/N   # face positions → cell centres
+            pY    = np.array(uY)            # u-mesh y is already at cell centres
+
+            # Velocity magnitude colormap
+            plt.figure()
+            im = plt.imshow(mag.T, cmap='jet', origin='lower', aspect='equal', extent=[0, 1, 0, 1])
+            plt.colorbar(im, label='|V| (m/s)')
+            plt.xlabel('x (m)'); plt.ylabel('y (m)')
+            plt.title(f'Velocity Magnitude — Re={Re[sCase]}, {scheme}')
+            plt.savefig(outPath / f"NS_Magnitude_Re{Re[sCase]}_{scheme}.png")
+            plt.close(); print(f"Saved: NS_Magnitude_Re{Re[sCase]}_{scheme}.png")
+
+            # Velocity vector map (subsampled for clarity)
+            step = max(1, N // 16)
+            XX, YY = np.meshgrid(pX[::step], pY[::step], indexing='ij')
+            plt.figure()
+            plt.quiver(XX, YY, u_p[::step, ::step], v_p[::step, ::step])
+            plt.xlabel('x (m)'); plt.ylabel('y (m)')
+            plt.title(f'Velocity Field — Re={Re[sCase]}, {scheme}')
+            plt.savefig(outPath / f"NS_Vectors_Re{Re[sCase]}_{scheme}.png")
+            plt.close(); print(f"Saved: NS_Vectors_Re{Re[sCase]}_{scheme}.png")
+
+    # ---- 2. Centerline profiles vs Ghia reference (one figure per Re per component) ----
+    for sCase in range(2):
+
+        # u along vertical centerline x=0.5
+        plt.figure()
+        plt.plot(xURef[sCase], yU, 'k--', marker='x', markersize=5, label='Ghia et al.')
+        for scheme in schemes:
+            if sCase not in caseDirs[scheme]: continue
+            uFrame, _, uX, uY = getLastFrame(caseDirs[scheme][sCase] / "Probe_2u_Field.csv")
+            iX = np.argmin(np.abs(np.array(uX) - 0.5))
+            plt.plot(uFrame[iX, :], uY, color=aColor[scheme], label=scheme)
+        plt.xlabel('u (m/s)'); plt.ylabel('y (m)')
+        plt.title(f'u at x=0.5 — Re={Re[sCase]}')
+        plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+        plt.savefig(outPath / f"NS_u_Re{Re[sCase]}.png"); plt.close()
+        print(f"Saved: NS_u_Re{Re[sCase]}.png")
+
+        # v along horizontal centerline y=0.5
+        plt.figure()
+        plt.plot(xV, yVRef[sCase], 'k--', marker='x', markersize=5, label='Ghia et al.')
+        for scheme in schemes:
+            if sCase not in caseDirs[scheme]: continue
+            vFrame, _, vX, vY = getLastFrame(caseDirs[scheme][sCase] / "Probe_2v_Field.csv")
+            jY = np.argmin(np.abs(np.array(vY) - 0.5))
+            plt.plot(vX, vFrame[:, jY], color=aColor[scheme], label=scheme)
+        plt.xlabel('x (m)'); plt.ylabel('v (m/s)')
+        plt.title(f'v at y=0.5 — Re={Re[sCase]}')
+        plt.legend(); plt.grid(which='both', alpha=0.2); plt.minorticks_on()
+        plt.savefig(outPath / f"NS_v_Re{Re[sCase]}.png"); plt.close()
+        print(f"Saved: NS_v_Re{Re[sCase]}.png")
+

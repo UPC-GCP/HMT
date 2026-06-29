@@ -34,6 +34,14 @@ struct pMap{
     std::vector<double> t;
 };
 
+struct pBnd{
+    std::ofstream file{};
+    int side{}, nPos{};
+    std::vector<size_t> iBC{}, iPos{};
+    std::vector<double> t;
+    std::vector<double> xPos{}, yPos{};
+};
+
 struct pPoint{
     bool bFile = true;
     std::ofstream file{};
@@ -56,6 +64,7 @@ public:
     std::vector<pMap> probeMap{};
     std::vector<pFld> probeFld{};
     std::vector<pBug> probeBug{};
+    std::vector<pBnd> probeBnd{};
 
     // Constructor
     Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string spatScheme, std::string fName);

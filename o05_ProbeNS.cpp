@@ -121,7 +121,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
                 for (int k = tempFld.yPos[0]; k < tempFld.yPos[1]; k++){
                     tempFld.file << "," << Msh.u.Faces[0][j] << " " << Msh.u.Faces[1][k];
                 }
-            }
+            } tempFld.file << "\n";
 
             // Control
             probeFld.push_back(std::move(tempFld));
@@ -139,11 +139,11 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             tempFld.yPos = {static_cast<size_t>(std::lower_bound(Msh.v.Nodes[1].begin(), Msh.v.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.v.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.v.Nodes[1].begin(), Msh.v.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.v.Nodes[1].begin())};
 
             // Header - vMesh
-            for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){
-                for (int k = tempFld.yPos[0]; k <= tempFld.yPos[1]; k++){
+            for (int j = tempFld.xPos[0]; j < tempFld.xPos[1]; j++){
+                for (int k = tempFld.yPos[0]; k < tempFld.yPos[1]; k++){
                     tempFld.file << "," << Msh.v.Faces[0][j] << " " << Msh.v.Faces[1][k];
                 }
-            }
+            } tempFld.file << "\n";
 
             // Control
             probeFld.push_back(std::move(tempFld));

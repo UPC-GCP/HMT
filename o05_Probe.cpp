@@ -1,6 +1,9 @@
 // Imports
+#include <algorithm>
+#include <cstddef>
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 #include <json/json.h>
 #include <fstream>
@@ -60,7 +63,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
     newPath = pathBase;
     
     // Add Probes and Create Files
-    pMap tempMap{}; pBug tempBug{}; pFld tempFld{};
+    pMap tempMap{}; pBug tempBug{}; pFld tempFld{}; pBnd tempBnd{};
     for (Json::Value::ArrayIndex i = 0; i < probes.size(); i++){
 
         if (probes[i]["type"].asString() == "Point"){
@@ -108,30 +111,81 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
 
             // Not using this one for now since I am using a static field and I can calculate it again later but will fully add it later
 
-            // Create File
-            tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Field.csv";
-            tempFld.file = createFile(newPath / tempString);
+            /* // Create File */
+            /* tempString = "Probe_" + std::to_string(probeMap.size() + probeFld.size() + 1) + "_Field.csv"; */
+            /* tempFld.file = createFile(newPath / tempString); */
 
-            // Time
-            tempFld.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
+            /* // Time */
+            /* tempFld.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()}; */
+
+            /* // Position */
+
+            /* // Header */
+            /* for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){ */
+            /*     for (int k = tempFld.yPos[0]; k <= tempFld.yPos[1]; k++){ */
+            /*         tempFld.file << "," << Msh.Faces[0][j] << " " << Msh.Faces[1][k]; */
+            /*     } */
+            /* } */
+
+            /* // Control */
+            /* probeFld.push_back(std::move(tempFld)); */
+            /* tempFld = {}; */
+            
+
+        } else if (probes[i]["type"].asString() == "Boundary"){
+
+            // Create File
+            tempString = "Probe_" + std::to_string(probeMap.size() + probeBnd.size() + 1) + "_Boundary.csv";
+            tempBnd.file = createFile(newPath / tempString);
+
+            // Data
+            tempBnd.side = probes[i]["side"].asInt(); double epsFind = 1e-5;
+            tempBnd.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
 
             // Position
+            tempBnd.xPos = {probes[i]["x0"][0].asDouble(), probes[i]["x1"][0].asDouble()};
+            tempBnd.yPos = {probes[i]["x0"][1].asDouble(), probes[i]["x1"][1].asDouble()};
 
-            // Header
-            for (int j = tempFld.xPos[0]; j <= tempFld.xPos[1]; j++){
-                for (int k = tempFld.yPos[0]; k <= tempFld.yPos[1]; k++){
-                    tempFld.file << "," << Msh.Faces[0][j] << " " << Msh.Faces[1][k];
+
+            // Boundaries
+            for (size_t k = 0; k < Msh.boundaryConditions.size(); k++){
+
+                // Headers
+                if (Msh.boundaryConditions[k].x0[0] >= tempBnd.xPos[0] && Msh.boundaryConditions[k].x1[0] <= tempBnd.xPos[1] && Msh.boundaryConditions[k].x0[1] >= tempBnd.yPos[0] && Msh.boundaryConditions[k].x1[1] <= tempBnd.yPos[1]){
+
+                    // Control
+                    tempBnd.iBC.push_back(k); int l{}, m{};
+
+                    if (tempBnd.xPos[0] == tempBnd.xPos[1]){
+                        // xBoundary
+                        if (Msh.boundaryConditions[k].side == 0){l = 0;} else if (Msh.boundaryConditions[k].side == 1){l = Msh.Faces[0].size()-1;}
+                        /* tempBnd.iPos = {static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), Msh.boundaryConditions[k].x0[1] - epsFind) - Msh.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), Msh.boundaryConditions[k].x1[1] - epsFind) - Msh.Nodes[1].begin())}; */
+                        tempBnd.iPos.push_back(static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), Msh.boundaryConditions[k].x0[1] - epsFind) - Msh.Nodes[1].begin()));
+                        tempBnd.iPos.push_back(static_cast<size_t>(std::lower_bound(Msh.Nodes[1].begin(), Msh.Nodes[1].end(), Msh.boundaryConditions[k].x1[1] - epsFind) - Msh.Nodes[1].begin()));
+                        for (int m = tempBnd.iPos[tempBnd.iPos.size()-2]; m < tempBnd.iPos.back(); m++){tempBnd.file << "," << Msh.Faces[0][l] << " " << Msh.Nodes[1][m];}
+
+                    } else if (tempBnd.yPos[0] == tempBnd.yPos[1]){
+                        // yBoundary
+                        if (Msh.boundaryConditions[k].side == 0){m = 0;} else if (Msh.boundaryConditions[k].side == 1){m = Msh.Faces[1].size()-1;}
+                        /* tempBnd.iPos = {static_cast<size_t>(std::lower_bound(Msh.Nodes[0].begin(), Msh.Nodes[0].end(), Msh.boundaryConditions[k].x0[0] - epsFind) - Msh.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.Nodes[0].begin(), Msh.Nodes[0].end(), Msh.boundaryConditions[k].x1[0] - epsFind) - Msh.Nodes[0].begin())}; */
+                        tempBnd.iPos.push_back(static_cast<size_t>(std::lower_bound(Msh.Nodes[0].begin(), Msh.Nodes[0].end(), Msh.boundaryConditions[k].x0[0] - epsFind) - Msh.Nodes[0].begin()));
+                        tempBnd.iPos.push_back(static_cast<size_t>(std::lower_bound(Msh.Nodes[0].begin(), Msh.Nodes[0].end(), Msh.boundaryConditions[k].x1[0] - epsFind) - Msh.Nodes[0].begin()));
+                        for (int l = tempBnd.iPos[tempBnd.iPos.size()-2]; l < tempBnd.iPos.back(); l++){tempBnd.file << "," << Msh.Nodes[0][l] << " " << Msh.Faces[1][m];}
+                    } else {std::cerr << "Probe range not specified correctly\n";}
+
                 }
-            }
+
+
+            } tempBnd.file << "\n";
 
             // Control
-            probeFld.push_back(std::move(tempFld));
-            tempFld = {};
+            probeBnd.push_back(std::move(tempBnd));
+            tempBnd = {};
 
         } else if (probes[i]["type"].asString() == "Debug"){
 
             // Create File
-            tempString = "Probe_" + std::to_string(probeMap.size() + probeBug.size() + 1) + "_Bug.csv";
+            tempString = "Probe_" + std::to_string(probeMap.size() + probeBnd.size() + probeBug.size() + 1) + "_Bug.csv";
             tempBug.file = createFile(newPath / tempString);
 
             // Time
@@ -201,6 +255,26 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
         } probeMap[i].file << "\n";
     }
 
+    // Boundary Probe
+    bSave = {}; bSave.resize(probeBnd.size(), false);
+    for (size_t i = 0; i < probeBnd.size(); i++){
+        if (t >= probeBnd[i].t[0] && t <= probeBnd[i].t[1]){
+            bSave[i] = true;
+        }
+    }
+
+    // Save Values
+    for (size_t i = 0; i < probeBnd.size(); i++){
+        if (!bSave[i]){continue;}
+
+        probeBnd[i].file << t;
+        for (size_t j = 0; j < probeBnd[i].iBC.size(); j++){
+            for (size_t k = probeBnd[i].iPos[2*j]; k < probeBnd[i].iPos[2*j+1]; k++){
+                probeBnd[i].file << "," << Msh.boundaryConditions[probeBnd[i].iBC[j]].Phi[k];
+            }
+        } probeBnd[i].file << "\n";
+    }
+
     // Bug Probe
     bSave = {}; bSave.resize(probeBug.size(), false);
     for (size_t i = 0; i < probeBug.size(); i++){
@@ -212,7 +286,6 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
     // Save Values
     for (size_t i = 0; i < probeBug.size(); i++){
         if (!bSave[i]){continue;}
-
         probeBug[i].file << t << "," << Sol->lastIter << "," << Sol->lastRes << "\n";
     }
 
@@ -229,6 +302,13 @@ Probe::~Probe(){
     if (!probeMap.empty()){
         for (int i = 0; i < probeMap.size(); i++){
             probeMap[i].file.close();
+        }
+    }
+
+    // Boundary Probes
+    if (!probeBnd.empty()){
+        for (int i = 0; i < probeBnd.size(); i++){
+            probeBnd[i].file.close();
         }
     }
 

@@ -1,10 +1,6 @@
 // Imports
-/* #include <cstddef> */
 #include <ios>
 #include <iostream>
-/* #include <iterator> */
-/* #include <vector> */
-/* #include <cstddef> */
 #include <string>
 #include <fstream>
 #include <json/json.h>
@@ -120,12 +116,6 @@ int main(int argc, char* argv[]){
     Medic Mdc(Msh, Prb, bMdc); std::cout << "Diagnostic tools configured.\n";
 
 
-    /* std::cout << "phi:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         std::cout << Msh.vPhi[i][j] << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
 
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
@@ -140,17 +130,10 @@ int main(int argc, char* argv[]){
         // Solver
         if (!Sol->newSolve(Msh.matA, Msh.vPhi, Msh.bp, Msh.nIgnore)){std::cerr << "Simulation diverges @ t = " << t; break;}
 
-        /* std::cout << "phi:\n"; */
-        /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-        /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-        /*         std::cout << Msh.vPhi[i][j] << " "; */
-        /*     } std::cout << "\n"; */
-        /* } std::cout << "\n"; */
-
         // Diagnostics
         if (bMdc){
-            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, cPhi, cbPhi, t);
-            /* Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
+            Mdc.getDiagnostic(Mat, Msh, Dsc, Prs, t);
+            Mdc.getSystemResidual(Mat, Msh, Dsc, t);
         }
 
         // Write Data
@@ -180,138 +163,3 @@ int main(int argc, char* argv[]){
 
 }
 
-
-
-
-    /* std::cout << "Phi:\n"; */
-    /* for (std::vector<double> vec : vPhi){ */
-    /*     for (double val : vec){std::cout << val << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-
-    /* std::cout << k << " " << i << " " << j << ":\n"; */
-    /* std::cout << "Vw: " << Faces[0][i] << " " << Nodes[1][j] << " " << vConv[k][i][j].Vw << "\n"; */
-    /* std::cout << "Ve: " << Faces[0][i+1] << " " << Nodes[1][j] << " " << vConv[k][i][j].Ve << "\n"; */
-    /* std::cout << "Vs: " << Nodes[0][i] << " " << Faces[1][j] << " " << vConv[k][i][j].Vs << "\n"; */
-    /* std::cout << "Vn: " << Nodes[0][i] << " " << Faces[1][j+1] << " " << vConv[k][i][j].Vn << "\n"; */
-
-
-    /* std::cout << "xFaces: "; */
-    /* for (double val : Msh.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "xNodes: "; */
-    /* for (double val : Msh.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "yFaces: "; */
-    /* for (double val : Msh.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "yNodes: "; */
-    /* for (double val : Msh.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-
-    /* std::cout << "xFaces: "; */
-    /* for (double val : Msh.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "yFaces: "; */
-    /* for (double val : Msh.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "xNodes: "; */
-    /* for (double val : Msh.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "yNodes: "; */
-    /* for (double val : Msh.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-
-
-    /* std::cout << "Vx_w:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[0]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Vw << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vx_e:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[0]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Ve << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vx_s:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[0]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Vs << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vx_n:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[0]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Vn << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vy_w:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[1]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Vw << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vy_e:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[1]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Ve << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vy_s:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[1]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Vs << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "Vy_n:\n"; */
-    /* for (std::vector<VelocityField> vec : Msh.vConv[1]){ */
-    /*     for (VelocityField val : vec){std::cout << val.Vn << " ";} std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-
-
-
-    /* std::cout << "ap:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         size_t k = i * Msh.N[1] + j; */
-    /*         std::cout << Msh.matA[k].ap << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "aw:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         size_t k = i * Msh.N[1] + j; */
-    /*         std::cout << Msh.matA[k].aw << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "ae:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         size_t k = i * Msh.N[1] + j; */
-    /*         std::cout << Msh.matA[k].ae << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "as:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         size_t k = i * Msh.N[1] + j; */
-    /*         std::cout << Msh.matA[k].as << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "an:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         size_t k = i * Msh.N[1] + j; */
-    /*         std::cout << Msh.matA[k].an << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* std::cout << "bp:\n"; */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-    /*     for (size_t j = 0; j < Msh.N[1]; j++){ */
-    /*         size_t k = i * Msh.N[1] + j; */
-    /*         std::cout << Msh.bp[k] << " "; */
-    /*     } std::cout << "\n"; */
-    /* } std::cout << "\n"; */
-
-    /* return 0; */

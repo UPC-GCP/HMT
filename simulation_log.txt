@@ -1,11 +1,3 @@
 ----------------------------------------------------
-Running simulations w/ 6 cores ... Mon Jun 15 14:13:23 -05 2026
+Running simulations w/ 4 cores ... Mon Jun 29 06:25:46 -05 2026
 ----------------------------------------------------
-Finished ./ioSrc/exConv4.json at 14:13:25
-Finished ./ioSrc/exConv1.json at 14:13:25
-Finished ./ioSrc/exConv2.json at 14:13:25
-Finished ./ioSrc/exConv3.json at 14:13:25
-Finished ./ioSrc/exConv5.json at 14:13:30
-Finished ./ioSrc/exConv6.json at 14:20:14
-----------------------------------------------------
-All simulations complete ... Mon Jun 15 14:20:14 -05 2026
