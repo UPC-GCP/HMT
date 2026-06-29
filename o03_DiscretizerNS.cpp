@@ -57,7 +57,7 @@ void Discretizer::checkStability(Material Mat, Mesh& Msh){
             if (dtMin < dt){dt = dtMin;}
 
             // Diffusive
-            dtMin = (0.5 / nu) * std::pow(Msh.u.deltaX[0][i], 2) * std::pow(Msh.u.deltaX[1][j], 2) / (std::pow(Msh.u.deltaX[0][i], 2) + std::pow(Msh.u.deltaX[1][j], 2));
+            dtMin = (0.25 / nu) * std::pow(Msh.u.deltaX[0][i], 2) * std::pow(Msh.u.deltaX[1][j], 2) / (std::pow(Msh.u.deltaX[0][i], 2) + std::pow(Msh.u.deltaX[1][j], 2));
             if (dtMin < dt){dt = dtMin;}
 
         }
@@ -79,7 +79,7 @@ void Discretizer::checkStability(Material Mat, Mesh& Msh){
             if (dtMin < dt){dt = dtMin;}
 
             // Diffusive
-            dtMin = (0.5 / nu) * std::pow(Msh.v.deltaX[0][i], 2) * std::pow(Msh.v.deltaX[1][j], 2) / (std::pow(Msh.v.deltaX[0][i], 2) + std::pow(Msh.v.deltaX[1][j], 2));
+            dtMin = (0.25 / nu) * std::pow(Msh.v.deltaX[0][i], 2) * std::pow(Msh.v.deltaX[1][j], 2) / (std::pow(Msh.v.deltaX[0][i], 2) + std::pow(Msh.v.deltaX[1][j], 2));
             if (dtMin < dt){dt = dtMin;}
 
         }
