@@ -18,7 +18,7 @@ struct MeshBase{
     std::vector<std::vector<double>> Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // Geometry
     std::vector<std::vector<double>> Phi{}, oPhi{}; // Phi
     std::vector<Matrix> matA{}; // A
-    std::vector<double> matB{};
+    std::vector<double> matB{}, oR{}; // b
 };
 
 struct MeshSolver : MeshBase{

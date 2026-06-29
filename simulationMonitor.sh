@@ -11,7 +11,7 @@ rm -f "$MFILE"
 echo "MONITOR STARTED ... $(date)" > "$MFILE"
 
 # LOOP
-while pgrep -f "MainSolver" > /dev/null; do
+while pgrep -f "NSSolver" > /dev/null; do
 
 	# METRICS
 	echo "CONTROL: $(date '+%H:%M:%S')" >> "$MFILE"

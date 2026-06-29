@@ -125,8 +125,9 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
 
     // Control
     int k{};
-    double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{}, a0{};
+    double Fw{}, Fe{}, Fs{}, Fn{}, Dw{}, De{}, Ds{}, Dn{}, Pw{}, Pe{}, Ps{}, Pn{}, a0{}, Rn{};
     double mu = Mat.vMat[Msh.p.nMat[0][0]].mu, rho = Mat.vMat[Msh.p.nMat[0][0]].rho; // simplification because of single material
+    double Cn = bStep ? 1 : 1.5, Co = bStep ? 0 : -0.5;
 
     // u Interior Nodes
     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
@@ -145,8 +146,11 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
             Pn = Fn / Dn; Msh.u.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
             // Calculate
-            a0 = rho * Msh.u.Vp[i][j] / dt;
-            Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] + Msh.u.matA[k].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j]);
+            a0 = rho * Msh.u.Vp[i][j] / dt; Rn = Msh.u.matA[k].aw * Msh.u.oPhi[i-1][j] + Msh.u.matA[k].ae * Msh.u.oPhi[i+1][j] + Msh.u.matA[k].as * Msh.u.oPhi[i][j-1] + Msh.u.matA[k].an * Msh.u.oPhi[i][j+1] - (Msh.u.matA[k].aw + Msh.u.matA[k].ae + Msh.u.matA[k].as + Msh.u.matA[k].an) * Msh.u.oPhi[i][j];
+            Msh.u.Phi[i][j] = Msh.u.oPhi[i][j] + (1 / a0) * (Cn * Rn + Co * Msh.u.oR[k]);
+            
+            // Control
+            Msh.u.oR[k] = Rn;
         }
     }
 
@@ -167,10 +171,16 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
             Pn = Fn / Dn; Msh.v.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
             // Calculate
-            a0 = rho * Msh.v.Vp[i][j] / dt;
-            Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Msh.v.matA[k].aw * Msh.v.oPhi[i-1][j] + Msh.v.matA[k].ae * Msh.v.oPhi[i+1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j]);
+            a0 = rho * Msh.v.Vp[i][j] / dt; Rn = Msh.v.matA[k].aw * Msh.v.oPhi[i-1][j] + Msh.v.matA[k].ae * Msh.v.oPhi[i+1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j];
+            Msh.v.Phi[i][j] = Msh.v.oPhi[i][j] + (1 / a0) * (Cn * Rn + Co * Msh.v.oR[k]);
+
+            // Control
+            Msh.v.oR[k] = Rn;
         }
     }
+
+    // Control
+    bStep = false;
 
 }
 

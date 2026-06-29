@@ -6,7 +6,6 @@
 
 #include "o01_Material.h"
 #include "o02_MeshNS.h"
-#include "o09_ExpressionParser.h"
 
 
 class Discretizer
@@ -15,7 +14,7 @@ private:
 
 public:
     // Variables
-    bool bIgnore=true;
+    bool bStep=true;
     std::string tempScheme{}, spatScheme{};
     double beta{}, endTime{}, dt{}, epsFind{};
     std::function<double(double)> funcScheme{};
@@ -26,18 +25,7 @@ public:
     // Functions
     double calcHarmonicMean(double dPF, std::vector<double> lambda, std::vector<double> deltaX);
     void setSchemeParameters(Material& Mat, Mesh& Msh);
-    void setBoundaryConditions(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t = 0);
-    void setCoefficients(Material& Mat, Mesh& Msh);
-    void setRHS(Material& Mat, Mesh& Msh);
-
-    void newSetRHS(Material& Mat, Mesh& Msh);
-    void newSetCoefficients(Material& Mat, Mesh& Msh);
-    void newSetBoundaries(Material& Mat, Mesh& Msh, ExpressionParser& Prs, double t = 0);
-
-
-
     void checkStability(Material Mat, Mesh& Msh);
-
 
     void setMomentumCoefficients(Material Mat, Mesh& Msh);
     void setMomentumBoundaries(Material Mat, Mesh& Msh);
