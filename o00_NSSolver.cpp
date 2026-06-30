@@ -147,6 +147,7 @@ int main(int argc, char* argv[]){
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
 	
 	    // Update Coefficients
+        Dsc.checkStability(Mat, Msh);
         Dsc.setMomentumBoundaries(Mat, Msh);
         Dsc.setMomentumCoefficients(Mat, Msh);
         Dsc.setPressureBoundaries(Mat, Msh);
