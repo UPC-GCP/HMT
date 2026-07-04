@@ -48,5 +48,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/MainSolver.dir/DependInfo.cmake"
-  "CMakeFiles/NSSolver.dir/DependInfo.cmake"
+  "CMakeFiles/LDCSolver.dir/DependInfo.cmake"
+  "CMakeFiles/DHCSolver.dir/DependInfo.cmake"
   )

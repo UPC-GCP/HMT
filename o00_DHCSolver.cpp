@@ -64,8 +64,8 @@ int main(int argc, char* argv[]){
 
     ///// Material /////
     std::cout << "Initializing Materials ...\n";
-    Material Mat(data["materials"]); std::cout << "Material properties set.\n";
-    Mat.setInitialConditions(data["PHI0"].asDouble(), data["VF0"]); std::cout << "Initial conditions set.\n";
+    Material Mat(data["materials"], data["g"].asDouble()); std::cout << "Material properties set.\n";
+    Mat.setInitialConditions(data["T0"].asDouble(), data["P0"].asDouble(), data["VF0"]); std::cout << "Initial conditions set.\n";
 
 
     ///// Parser /////
@@ -76,10 +76,12 @@ int main(int argc, char* argv[]){
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n";
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
-    Msh.generateMesh(Msh.p, data["PHI0"].asDouble(), data["N"], data["sections"], data["refinement"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes.\n";
+    Msh.generateMesh(Msh.T, Mat.T0, data["N"], data["sections"], data["refinement"]); std::cout << "Energy mesh created with " << Msh.T.totNodes << " nodes.\n";
+    Msh.generateMesh(Msh.p, Mat.P0, data["N"], data["sections"], data["refinement"]); std::cout << "Mass mesh created with " << Msh.p.totNodes << " nodes.\n";
     Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n";
-    Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n";
+    Msh.addBoundariesPressure(data["boundariesPressure"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n";
     Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n";
+    Msh.addBoundariesEnergy(data["boundariesEnergy"], Mat, Prs); std::cout << Msh.boundaryEnergy.size() << " boundary conditions added.\n";
 
     
     /* ///// Discretizer ///// */
@@ -90,6 +92,8 @@ int main(int argc, char* argv[]){
     Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n";
     Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n";
     Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n";
+    Dsc.setEnergyBoundaries(Mat, Msh); std::cout << "Energy boundaries set.\n";
+    Dsc.setEnergyCoefficients(Mat, Msh); Dsc.setEnergyBoundaries(Mat, Msh); std::cout << "Energy coefficients set.\n";
     
 
     ///// Solver /////
@@ -123,18 +127,24 @@ int main(int argc, char* argv[]){
     ////////// Temporal Loop //////////
     std::cout << "Processing ...\n";
     
+    std::vector<std::vector<double>> T_old;
     for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
-        // Control
+        // Control (snapshot previous-step values before solving)
         Msh.p.oPhi = Msh.p.Phi;
-        
-        // Solver
+        T_old = Msh.T.Phi;            // for convergence check at end of step
+
+        // Solver Pressure
         if (!Sol->newSolve(Msh.p.matA, Msh.p.Phi, Msh.p.matB)){std::cerr << "Simulation diverges @ t = " << t; break;}
         if (std::sqrt(Sol->lastRes) >= data["tolNumeric"].asDouble()){std::cerr << "\nWARN: CG unconverged @ t=" << t << " lastIter=" << Sol->lastIter << " lastRes=" << std::sqrt(Sol->lastRes);}
 
         // Correct Velocity
         Dsc.correctVelocity(Mat, Msh);
         Msh.u.oPhi = Msh.u.Phi; Msh.v.oPhi = Msh.v.Phi;
+
+        // Solver Energy
+        Sol->newSolve(Msh.T.matA, Msh.T.Phi, Msh.T.matB);
+        Msh.T.oPhi = Msh.T.Phi;      // update oPhi after solve for next step's coefficient assembly
 
         // Diagnostics
         if (bMdc){
@@ -145,16 +155,18 @@ int main(int argc, char* argv[]){
         // Write Data
         Prb.checkProbes(Msh, Sol, t);
         std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
-	
+
 	    // Update Coefficients
         Dsc.checkStability(Mat, Msh);
         Dsc.setMomentumBoundaries(Mat, Msh);
         Dsc.setMomentumCoefficients(Mat, Msh);
         Dsc.setPressureBoundaries(Mat, Msh);
         Dsc.setPressureCoefficients(Mat, Msh);
+        Dsc.setEnergyBoundaries(Mat, Msh);
+        Dsc.setEnergyCoefficients(Mat, Msh);
 
-        // Convergence
-        if (std::sqrt(Sol->calcErr(Msh.p.oPhi, Msh.p.Phi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;}
+        // Convergence: compare T before and after energy solve
+        if (std::sqrt(Sol->calcErr(T_old, Msh.T.Phi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;}
 
     } std::cout << "\n";
 

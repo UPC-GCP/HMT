@@ -43,6 +43,7 @@
 # Directories
 ioSrc/
 ioRes/
+*.png
 
 # Reports
 *.tex

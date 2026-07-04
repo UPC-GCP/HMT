@@ -33,6 +33,9 @@ public:
     void setPressureCoefficients(Material Mat, Mesh& Msh);
     void setPressureBoundaries(Material Mat, Mesh& Msh);
 
+    void setEnergyCoefficients(Material Mat, Mesh& Msh);
+    void setEnergyBoundaries(Material Mat, Mesh& Msh);
+
     void correctVelocity(Material Mat, Mesh& Msh);
 
 };

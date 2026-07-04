@@ -52,26 +52,23 @@ public:
     // Variables
     int algorithm{};
     double W{}, strength{}, centering{}, kStrength{}, delta{}; // Config
-    MeshBase u{}, v{}; MeshSolver p{}; // Meshes
+    MeshBase u{}, v{}; MeshSolver p{}, T{}; // Meshes
 
     // Vectors
     std::vector<int> vExpr{}; // dimension
-    std::vector<boundMain> boundaryConditions{};
+    std::vector<boundMain> boundaryConditions{}, boundaryEnergy{};
     std::vector<boundVelocity> boundaryVelocity{};
 
     // Constructor
     Mesh(int algo, double W = 1, double A = 0, double xC = 0.5, double kStr = 1, double delta = 0.001);
 
     // Functions
-    void generateMesh(MeshSolver& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement); // generate p
+    void generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement); // generate p
     void generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v); // generate u, v
-    void addBoundaryConditions(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
+    void addBoundariesPressure(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
+    void addBoundariesEnergy(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
     void addBoundariesVelocity(Json::Value boundaries, Material Mat);
 
-    // How to organize Functions
-    // generateMesh already creates MeshSolver. Should just use that one as is and let it return the solver. p as input;
-    // generateVelocityField (NEW) - create Mesh for velocity fields (u, v) use p as an input since it already has all values needed.
-    // addBoundaryConditions should now take all three meshes and update them all
 };
 
 #endif

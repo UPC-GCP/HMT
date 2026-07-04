@@ -80,7 +80,32 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             probePoint.yPos.push_back(std::lower_bound(Msh.p.Nodes[1].begin(), Msh.p.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.p.Nodes[1].begin());
 
         } else if (probes[i]["type"].asString() == "Map"){
+
+            ///// Energy /////
+            // Create File
+            tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv";
+            tempMap.file = createFile(newPath / tempString);
+
+            // Time
+            tempMap.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()};
+
+            // Position
+            tempMap.xPos = {static_cast<size_t>(std::lower_bound(Msh.T.Nodes[0].begin(), Msh.T.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.T.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.T.Nodes[0].begin(), Msh.T.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.T.Nodes[0].begin())};
+            tempMap.yPos = {static_cast<size_t>(std::lower_bound(Msh.T.Nodes[1].begin(), Msh.T.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.T.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.T.Nodes[1].begin(), Msh.T.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.T.Nodes[1].begin())};
             
+            // Header
+            for (int j = tempMap.xPos[0]; j < tempMap.xPos[1]; j++){
+                for (int k = tempMap.yPos[0]; k < tempMap.yPos[1]; k++){
+                    tempMap.file << "," << Msh.T.Nodes[0][j] << " " << Msh.T.Nodes[1][k];
+                }
+            } tempMap.file << "\n";
+
+            // Control
+            probeMap.push_back(std::move(tempMap));
+            tempMap = {};
+
+
+            ///// Pressure /////
             // Create File
             tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv";
             tempMap.file = createFile(newPath / tempString);
@@ -210,16 +235,25 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
         }
     }
     
-    // Save Values
+    // Save Values (even index = T-map, odd index = p-map)
     for (size_t i = 0; i < probeMap.size(); i++){
         if (!bSave[i]){continue;}
 
         probeMap[i].file << t;
-        for (size_t j = probeMap[i].xPos[0]; j < probeMap[i].xPos[1]; j++){
-            for (size_t k = probeMap[i].yPos[0]; k < probeMap[i].yPos[1]; k++){
-                probeMap[i].file << "," << Msh.p.Phi[j][k];
+        if (i % 2 == 0){
+            for (size_t j = probeMap[i].xPos[0]; j < probeMap[i].xPos[1]; j++){
+                for (size_t k = probeMap[i].yPos[0]; k < probeMap[i].yPos[1]; k++){
+                    probeMap[i].file << "," << Msh.T.Phi[j][k];
+                }
             }
-        } probeMap[i].file << "\n";
+        } else {
+            for (size_t j = probeMap[i].xPos[0]; j < probeMap[i].xPos[1]; j++){
+                for (size_t k = probeMap[i].yPos[0]; k < probeMap[i].yPos[1]; k++){
+                    probeMap[i].file << "," << Msh.p.Phi[j][k];
+                }
+            }
+        }
+        probeMap[i].file << "\n";
     }
 
 
@@ -232,7 +266,7 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
     }
 
     // Save uMesh
-    if (bSave[0]){
+    if (probeFld.size() > 0 && bSave[0]){
         probeFld[0].file << t;
         for (size_t i = probeFld[0].xPos[0]; i < probeFld[0].xPos[1]; i++){
             for (size_t j = probeFld[0].yPos[0]; j < probeFld[0].yPos[1]; j++){
@@ -242,7 +276,7 @@ void Probe::checkProbes(Mesh Msh, Solver* Sol, double t){
     }
 
     // Save vMesh
-    if (bSave[1]){
+    if (probeFld.size() > 1 && bSave[1]){
         probeFld[1].file << t;
         for (size_t i = probeFld[1].xPos[0]; i < probeFld[1].xPos[1]; i++){
             for (size_t j = probeFld[1].yPos[0]; j < probeFld[1].yPos[1]; j++){
