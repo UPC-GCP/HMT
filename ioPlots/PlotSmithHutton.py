@@ -138,13 +138,14 @@ def _infer_scheme(dirname):
     return dirname
 
 
-def mode_compare(dirs_flat):
+def mode_compare(dirs_flat, out_dir="ioRes/DataNew"):
     """
     dirs_flat: 9 directories in order Pe1_UDS Pe1_Hybrid Pe1_CDS
                                        Pe2_UDS Pe2_Hybrid Pe2_CDS
                                        Pe3_UDS Pe3_Hybrid Pe3_CDS
     Produces one figure with 3 subplots (one per Pe), each showing 3 schemes.
     """
+    os.makedirs(out_dir, exist_ok=True)
     if len(dirs_flat) != 9:
         raise ValueError(f"--compare needs exactly 9 dirs (3 Pe × 3 schemes), got {len(dirs_flat)}")
 
@@ -178,8 +179,9 @@ def mode_compare(dirs_flat):
     axes[0].set_ylabel(r"$\varphi(x,\, y=0)$")
     plt.suptitle("Smith-Hutton outlet profile — scheme comparison", fontsize=12)
     plt.tight_layout()
-    fig.savefig("SH_scheme_comparison.png", dpi=150)
-    print("Saved SH_scheme_comparison.png")
+    out1 = os.path.join(out_dir, "SH_scheme_comparison.png")
+    fig.savefig(out1, dpi=150)
+    print(f"Saved {out1}")
 
     # Separate 3×3 grid of 2-D φ fields
     fig2, axs = plt.subplots(3, 3, figsize=(13, 10))
@@ -198,15 +200,17 @@ def mode_compare(dirs_flat):
             ax.set_xlabel("x", fontsize=7); ax.set_ylabel("y", fontsize=7)
     plt.suptitle("Smith-Hutton φ fields", fontsize=11)
     plt.tight_layout()
-    fig2.savefig("SH_scheme_fields.png", dpi=150)
-    print("Saved SH_scheme_fields.png")
+    out2 = os.path.join(out_dir, "SH_scheme_fields.png")
+    fig2.savefig(out2, dpi=150)
+    print(f"Saved {out2}")
     plt.show()
 
 
 # ── Mode: mesh refinement ─────────────────────────────────────────────────────
 
-def mode_refine(dirs):
+def mode_refine(dirs, out_dir="ioRes/DataNew"):
     """Convergence study: outlet L2 error vs N (Hybrid)."""
+    os.makedirs(out_dir, exist_ok=True)
     Ns        = []
     outlets   = []   # (x, phi) per case
     for d in dirs:
@@ -257,8 +261,78 @@ def mode_refine(dirs):
 
     plt.suptitle("Smith-Hutton mesh refinement", fontsize=11)
     plt.tight_layout()
-    fig.savefig("SH_refine.png", dpi=150)
-    print("\nSaved SH_refine.png")
+    out = os.path.join(out_dir, "SH_refine.png")
+    fig.savefig(out, dpi=150)
+    print(f"\nSaved {out}")
+    plt.show()
+
+
+# ── Mode: multi-scheme mesh refinement (Pe3) ──────────────────────────────────
+
+def mode_refine_multischeme(dirs_by_scheme, out_dir="ioRes/DataNew"):
+    """
+    Convergence study for multiple schemes at Pe3.
+    dirs_by_scheme: list of (scheme_label, [dir_N016, dir_N032, dir_N064, dir_N128])
+    Produces SH_refine_multischeme.png.
+    """
+    os.makedirs(out_dir, exist_ok=True)
+    x_ref = np.linspace(0, 1, 300)
+    phi_ref = outlet_ref_inf(x_ref)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+    scheme_colors = {"UDS": "tab:blue", "Hybrid": "tab:orange", "CDS": "tab:red"}
+
+    for scheme, dirs in dirs_by_scheme:
+        color = scheme_colors.get(scheme, "black")
+        Ns, outlets = [], []
+        for d in dirs:
+            Ns.append(N_from_dir(d))
+            outlets.append(outlet_profile(d))
+
+        # Outlet profiles (finest only for clarity)
+        x_f, phi_f = outlets[-1]
+        ax1.plot(x_f, phi_f, color=color, lw=1.8, label=f"{scheme} N={Ns[-1]}")
+
+        # Convergence: L2 error vs ref for all N
+        errors = []
+        for x_c, phi_c in outlets:
+            err = l2_error(phi_c, x_c, phi_ref, x_ref[x_ref >= 0])
+            errors.append(err)
+        hs = [2.0 / N for N in Ns]
+        ax2.loglog(hs, errors, "o-", color=color, label=scheme)
+
+        print(f"{scheme}: N={Ns}  errors={[f'{e:.4f}' for e in errors]}")
+
+    # Analytical reference
+    ax1.plot(x_ref, phi_ref, "k--", lw=1.2, label="Ref. (Pe→∞)")
+    ax1.axhline(PHI_WALL, ls=":", color="gray", lw=0.8)
+    ax1.set_xlabel("x"); ax1.set_ylabel(r"$\varphi(x,\, y=0)$")
+    ax1.set_title(r"Outlet profile vs mesh — Pe = $\rho/\gamma = 10^6$")
+    ax1.legend(fontsize=8); ax1.grid(True, ls=":")
+
+    # Reference slopes on convergence plot
+    hs_arr = np.array([max(h for _, dirs in dirs_by_scheme for h in [2.0/N_from_dir(d) for d in dirs]),
+                       min(h for _, dirs in dirs_by_scheme for h in [2.0/N_from_dir(d) for d in dirs])])
+    # pick a representative error baseline from first scheme first N
+    first_errs = []
+    for scheme, dirs in dirs_by_scheme:
+        x_c, phi_c = outlet_profile(dirs[0])
+        first_errs.append(l2_error(phi_c, x_c, phi_ref, x_ref[x_ref >= 0]))
+    e0 = np.mean(first_errs)
+    h0 = 2.0 / N_from_dir(dirs_by_scheme[0][1][0])
+    ax2.loglog([h0, hs_arr[-1]], e0 * (np.array([h0, hs_arr[-1]]) / h0) ** 1, "k--", lw=1, label="slope 1")
+    ax2.loglog([h0, hs_arr[-1]], e0 * (np.array([h0, hs_arr[-1]]) / h0) ** 2, "k:",  lw=1, label="slope 2")
+    ax2.set_xlabel("h = 2/Nx"); ax2.set_ylabel("L2 error vs analytical ref")
+    ax2.set_title(r"Mesh convergence — all schemes — Pe = $\rho/\gamma = 10^6$")
+    ax2.legend(fontsize=8); ax2.grid(True, which="both", ls=":")
+    ax2.invert_xaxis()
+
+    plt.suptitle("Smith-Hutton mesh refinement — scheme comparison", fontsize=11)
+    plt.tight_layout()
+    out = os.path.join(out_dir, "SH_refine_multischeme.png")
+    fig.savefig(out, dpi=150)
+    print(f"\nSaved {out}")
     plt.show()
 
 
@@ -271,9 +345,23 @@ if __name__ == "__main__":
                      help="9 dirs: Pe1_UDS Pe1_Hybrid Pe1_CDS Pe2_UDS ... Pe3_CDS")
     grp.add_argument("--refine", nargs="+", metavar="DIR",
                      help="dirs for mesh refinement study (coarse → fine, Hybrid)")
+    grp.add_argument("--refine-multi", nargs="+", metavar="DIR",
+                     help="12 dirs: UDS_N016 UDS_N032 UDS_N064 UDS_N128 Hybrid_N016 ... CDS_N128")
+    parser.add_argument("--out-dir", default="ioRes/DataNew",
+                        help="output directory for PNG files (default: ioRes/DataNew)")
     args = parser.parse_args()
 
     if args.compare:
-        mode_compare(args.compare)
+        mode_compare(args.compare, out_dir=args.out_dir)
     elif args.refine:
-        mode_refine(args.refine)
+        mode_refine(args.refine, out_dir=args.out_dir)
+    elif args.refine_multi:
+        dirs = args.refine_multi
+        if len(dirs) != 12:
+            parser.error("--refine-multi needs exactly 12 dirs: 4 per scheme (UDS, Hybrid, CDS)")
+        dirs_by_scheme = [
+            ("UDS",    dirs[0:4]),
+            ("Hybrid", dirs[4:8]),
+            ("CDS",    dirs[8:12]),
+        ]
+        mode_refine_multischeme(dirs_by_scheme, out_dir=args.out_dir)

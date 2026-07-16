@@ -43,6 +43,12 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MainSolver.dir/o04_GS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_GS.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_GS.cpp",
+  "output": "CMakeFiles/MainSolver.dir/o04_GS.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MainSolver.dir/o05_Probe.cpp.o -c /home/upc_gcp/TFM/HMT/o05_Probe.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o05_Probe.cpp",
   "output": "CMakeFiles/MainSolver.dir/o05_Probe.cpp.o"
@@ -178,5 +184,29 @@
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
   "output": "CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_SCSolver.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o00_SCSolver.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o01_Material.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshSC.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o02_MeshSC.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o"
 }
 ]

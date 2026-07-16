@@ -1,6 +1,7 @@
-#ifndef MESHNS_H_
-#define MESHNS_H_
+#ifndef MESHSC_H_
+#define MESHSC_H_
 
+#include <json/value.h>
 #include <vector>
 #include <json/json.h>
 
@@ -26,20 +27,27 @@ struct MeshSolver : MeshBase{
     std::vector<std::vector<double>> sPhi{}; // Source-term
     std::vector<Matrix> tempA{}; // A
     std::vector<double> tempB{}; // b
+    std::vector<std::vector<bool>> bObs{}; // initialized
 };
 
 struct boundMain{
     int type{}, side{}, iExpr{}, iEq{};
     std::vector<double> x0{}, x1{}, Phi{}, oPhi{}; // Phi, oPhi = 1D for their respective dimension
-    double value{}, alpha{};
     bool bUpdate = false;
-    std::string expression;
+    std::string expression{};
 };
 
 struct boundVelocity{
     int type{}, side{};
     double uVal{}, vVal{};
     std::vector<int> i0{}, i1{}; // each one stores the x-y coordinates of their position
+    std::vector<double> Phi{}, oPhi{}; // bound velocity modified to check the other 
+    bool bUpdate = false;
+    std::string expression{};
+};
+
+struct Obstacle{
+    std::vector<int> i0{}, i1{}; // Indexes for blocked region
 };
 
 class Mesh
@@ -58,17 +66,19 @@ public:
     std::vector<int> vExpr{}; // dimension
     std::vector<boundMain> boundaryConditions{}, boundaryEnergy{};
     std::vector<boundVelocity> boundaryVelocity{};
+    std::vector<Obstacle> obstacles{}; // new Obstacle storage, don't really know if I need this or if I can just use bObs from the start. Maybe it could be useful for moving objects?
 
     // Constructor
     Mesh(int algo, double W = 1, double A = 0, double xC = 0.5, double kStr = 1, double delta = 0.001);
 
     // Functions
-    void generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement); // generate p
+    void generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs); // generate p, T
     void generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v); // generate u, v
     void addBoundariesPressure(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
     void addBoundariesEnergy(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
     void addBoundariesVelocity(Json::Value boundaries, Material Mat);
-
+    void addObstacles(Json::Value obs);
 };
 
 #endif
+

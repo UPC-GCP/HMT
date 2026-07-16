@@ -66,6 +66,7 @@ CMAKE_BINARY_DIR = /home/upc_gcp/TFM/HMT/build
 all: CMakeFiles/MainSolver.dir/all
 all: CMakeFiles/LDCSolver.dir/all
 all: CMakeFiles/DHCSolver.dir/all
+all: CMakeFiles/SCSolver.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -76,6 +77,7 @@ preinstall:
 clean: CMakeFiles/MainSolver.dir/clean
 clean: CMakeFiles/LDCSolver.dir/clean
 clean: CMakeFiles/DHCSolver.dir/clean
+clean: CMakeFiles/SCSolver.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -85,12 +87,12 @@ clean: CMakeFiles/DHCSolver.dir/clean
 CMakeFiles/MainSolver.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=23,24,25,26,27,28,29,30,31,32,33 "Built target MainSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=23,24,25,26,27,28,29,30,31,32,33,34 "Built target MainSolver"
 .PHONY : CMakeFiles/MainSolver.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/MainSolver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/MainSolver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 0
 .PHONY : CMakeFiles/MainSolver.dir/rule
@@ -155,6 +157,32 @@ DHCSolver: CMakeFiles/DHCSolver.dir/rule
 CMakeFiles/DHCSolver.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/clean
 .PHONY : CMakeFiles/DHCSolver.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/SCSolver.dir
+
+# All Build rule for target.
+CMakeFiles/SCSolver.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=35,36,37,38,39 "Built target SCSolver"
+.PHONY : CMakeFiles/SCSolver.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/SCSolver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/SCSolver.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 0
+.PHONY : CMakeFiles/SCSolver.dir/rule
+
+# Convenience name for target.
+SCSolver: CMakeFiles/SCSolver.dir/rule
+.PHONY : SCSolver
+
+# clean rule for target.
+CMakeFiles/SCSolver.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/clean
+.PHONY : CMakeFiles/SCSolver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

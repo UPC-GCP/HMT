@@ -13,7 +13,7 @@
 #include "o02_Mesh.h"
 #include "o03_Discretizer.h"
 #include "o04_Solver.h"
-/* #include "GS.h" // PENDING UPDATE */
+#include "o04_GS.h"
 #include "o04_CG.h"
 #include "o04_BCG.h"
 #include "o05_Probe.h"
@@ -94,8 +94,7 @@ int main(int argc, char* argv[]){
     if (data["solver"] == "CG"){
         Sol = new CG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
     } else if (data["solver"] == "GS"){
-        // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
-        std::cerr << "Currently unavailable.\n";
+        Sol = new GS(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
     } else if (data["solver"] == "BCG"){
         Sol = new BCG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
 

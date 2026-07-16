@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MainSolver.dir/o04_BCG.cpp.o.d"
   "CMakeFiles/MainSolver.dir/o04_CG.cpp.o"
   "CMakeFiles/MainSolver.dir/o04_CG.cpp.o.d"
+  "CMakeFiles/MainSolver.dir/o04_GS.cpp.o"
+  "CMakeFiles/MainSolver.dir/o04_GS.cpp.o.d"
   "CMakeFiles/MainSolver.dir/o04_Solver.cpp.o"
   "CMakeFiles/MainSolver.dir/o04_Solver.cpp.o.d"
   "CMakeFiles/MainSolver.dir/o05_Probe.cpp.o"

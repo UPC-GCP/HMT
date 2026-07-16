@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/TFM/HMT/ioSrc/exDHC.json.html</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="syntax" content="json">
+<meta name="settings" content="use_css,no_foldcolumn,expand_tabs,pre_wrap,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="none">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #ffffff; background-color: #000000; }
+body { font-family: monospace; color: #ffffff; background-color: #000000; }
+* { font-size: 1em; }
+.Special { color: #ffd7d7; }
+.Constant { color: #ff40ff; }
+.Statement { color: #ffff00; }
+-->
+</style>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Special">{</span>
+    &quot;<span class="Statement">_dataNum</span>&quot;: &quot;<span class="Constant">Numerical Data</span>&quot;,
+    &quot;<span class="Statement">tempScheme</span>&quot;: &quot;<span class="Constant">implicit</span>&quot;, &quot;<span class="Statement">spatScheme</span>&quot;: &quot;<span class="Constant">UDS</span>&quot;, &quot;<span class="Statement">solver</span>&quot;: &quot;<span class="Constant">CG</span>&quot;,
+    &quot;<span class="Statement">tolNumeric</span>&quot;: <span class="Constant">1e-8</span>, &quot;<span class="Statement">tolTemporal</span>&quot;: <span class="Constant">1e-3</span>, &quot;<span class="Statement">maxIterations</span>&quot;: <span class="Constant">2000</span>,
+    &quot;<span class="Statement">endTime</span>&quot;: <span class="Constant">100</span>, &quot;<span class="Statement">timeStep</span>&quot;: <span class="Constant">1e-3</span>,
+
+    &quot;<span class="Statement">_dataPhys</span>&quot;: &quot;<span class="Constant">Physical Data</span>&quot;,
+    &quot;<span class="Statement">T0</span>&quot;: <span class="Constant">0.5</span>, &quot;<span class="Statement">P0</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">VF0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">g</span>&quot;: <span class="Constant">9.81</span>,
+    &quot;<span class="Statement">materials</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">rho</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">gamma</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">cp</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">mu</span>&quot;: <span class="Constant">0.01</span>, &quot;<span class="Statement">beta</span>&quot;: <span class="Constant">1</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">rho</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">gamma</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">cp</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">mu</span>&quot;: <span class="Constant">0.0025</span>, &quot;<span class="Statement">beta</span>&quot;: <span class="Constant">1</span><span class="Special">}</span>
+    <span class="Special">]</span>,
+
+    &quot;<span class="Statement">_dataGeom</span>&quot;: &quot;<span class="Constant">Geometrical Data</span>&quot;,
+    &quot;<span class="Statement">width</span>&quot;: <span class="Constant">1</span>,
+    &quot;<span class="Statement">sections</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">material</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">source</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>
+    <span class="Special">]</span>,
+
+    &quot;<span class="Statement">_dataMesh</span>&quot;: &quot;<span class="Constant">Mesh Data</span>&quot;,
+    &quot;<span class="Statement">strength</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">centering</span>&quot;: <span class="Constant">0.5</span>, &quot;<span class="Statement">kappa</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">delta</span>&quot;: <span class="Constant">0.1</span>,
+    &quot;<span class="Statement">meshAlgorithm</span>&quot;: <span class="Constant">3</span>, &quot;<span class="Statement">N</span>&quot;: <span class="Special">[</span><span class="Constant">128</span>, <span class="Constant">128</span><span class="Special">]</span>,
+    &quot;<span class="Statement">refinement</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">axis</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">N</span>&quot;: <span class="Constant">128</span>, &quot;<span class="Statement">range</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">axis</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">N</span>&quot;: <span class="Constant">128</span>, &quot;<span class="Statement">range</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]}</span>
+    <span class="Special">]</span>,
+
+    &quot;<span class="Statement">_dataBnd</span>&quot;: &quot;<span class="Constant">Boundary Conditions</span>&quot;,
+    &quot;<span class="Statement">boundariesEnergy</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Dirichlet</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">1</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Dirichlet</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Neumann</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Neumann</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>
+
+    <span class="Special">]</span>,
+    &quot;<span class="Statement">boundariesPressure</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Neumann</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Neumann</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Neumann</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Neumann</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">value</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>
+    <span class="Special">]</span>,
+    &quot;<span class="Statement">boundariesVelocity</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Dirichlet</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">uValue</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">vValue</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Dirichlet</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">uValue</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">vValue</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Dirichlet</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">uValue</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">vValue</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Dirichlet</span>&quot;, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]</span>, &quot;<span class="Statement">side</span>&quot;: <span class="Constant">1</span>, &quot;<span class="Statement">uValue</span>&quot;: <span class="Constant">0</span>, &quot;<span class="Statement">vValue</span>&quot;: <span class="Constant">0</span><span class="Special">}</span>
+    <span class="Special">]</span>,
+
+    &quot;<span class="Statement">_dataProbe</span>&quot;: &quot;<span class="Constant">Probe Data</span>&quot;,
+    &quot;<span class="Statement">probes</span>&quot;: <span class="Special">[</span>
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Map</span>&quot;, &quot;<span class="Statement">t</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">100</span><span class="Special">]</span>, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]}</span>,
+        <span class="Special">{</span>&quot;<span class="Statement">type</span>&quot;: &quot;<span class="Constant">Field</span>&quot;, &quot;<span class="Statement">t</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">100</span><span class="Special">]</span>, &quot;<span class="Statement">x0</span>&quot;: <span class="Special">[</span><span class="Constant">0</span>, <span class="Constant">0</span><span class="Special">]</span>, &quot;<span class="Statement">x1</span>&quot;: <span class="Special">[</span><span class="Constant">1</span>, <span class="Constant">1</span><span class="Special">]}</span>
+    <span class="Special">]</span>,
+
+    &quot;<span class="Statement">_dataMedic</span>&quot;: &quot;<span class="Constant">Medic Data</span>&quot;,
+    &quot;<span class="Statement">medicOn</span>&quot;: <span class="Constant">true</span>
+<span class="Special">}</span>
+
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

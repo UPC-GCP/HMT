@@ -1,5 +1,6 @@
 /home/upc_gcp/TFM/HMT/build/CMakeFiles/MainSolver.dir
 /home/upc_gcp/TFM/HMT/build/CMakeFiles/LDCSolver.dir
 /home/upc_gcp/TFM/HMT/build/CMakeFiles/DHCSolver.dir
+/home/upc_gcp/TFM/HMT/build/CMakeFiles/SCSolver.dir
 /home/upc_gcp/TFM/HMT/build/CMakeFiles/edit_cache.dir
 /home/upc_gcp/TFM/HMT/build/CMakeFiles/rebuild_cache.dir

@@ -19,6 +19,7 @@ add_executable(MainSolver
     o04_Solver.cpp
     o04_CG.cpp
     o04_BCG.cpp
+    o04_GS.cpp
     o05_Probe.cpp
     o09_ExpressionParser.cpp
     o09_Medic.cpp
@@ -50,8 +51,21 @@ add_executable(DHCSolver
     o09_MedicNS.cpp
 )
 
+add_executable(SCSolver
+    o00_SCSolver.cpp
+    o01_Material.cpp
+    o02_MeshSC.cpp
+    # o03_DiscretizerSC.cpp
+    # o04_SolverSC.cpp
+    # o04_CGNS.cpp
+    # o04_BCG.cpp
+    # o05_ProbeNS.cpp
+    o09_ExpressionParser.cpp
+    # o09_MedicNS.cpp
+)
+
 # 4. Linking
-foreach (target MainSolver LDCSolver DHCSolver)
+foreach (target MainSolver LDCSolver DHCSolver SCSolver)
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP)
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()

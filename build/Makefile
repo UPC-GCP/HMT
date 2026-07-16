@@ -155,6 +155,19 @@ DHCSolver/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/build
 .PHONY : DHCSolver/fast
 
+#=============================================================================
+# Target rules for targets named SCSolver
+
+# Build rule for target.
+SCSolver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SCSolver
+.PHONY : SCSolver
+
+# fast build rule for target.
+SCSolver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/build
+.PHONY : SCSolver/fast
+
 o00_DHCSolver.o: o00_DHCSolver.cpp.o
 .PHONY : o00_DHCSolver.o
 
@@ -227,6 +240,30 @@ o00_NSSolver.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o00_NSSolver.cpp.s
 .PHONY : o00_NSSolver.cpp.s
 
+o00_SCSolver.o: o00_SCSolver.cpp.o
+.PHONY : o00_SCSolver.o
+
+# target to build an object file
+o00_SCSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.o
+.PHONY : o00_SCSolver.cpp.o
+
+o00_SCSolver.i: o00_SCSolver.cpp.i
+.PHONY : o00_SCSolver.i
+
+# target to preprocess a source file
+o00_SCSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.i
+.PHONY : o00_SCSolver.cpp.i
+
+o00_SCSolver.s: o00_SCSolver.cpp.s
+.PHONY : o00_SCSolver.s
+
+# target to generate assembly for a file
+o00_SCSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.s
+.PHONY : o00_SCSolver.cpp.s
+
 o01_Material.o: o01_Material.cpp.o
 .PHONY : o01_Material.o
 
@@ -235,6 +272,7 @@ o01_Material.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o01_Material.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.o
 .PHONY : o01_Material.cpp.o
 
 o01_Material.i: o01_Material.cpp.i
@@ -245,6 +283,7 @@ o01_Material.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o01_Material.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.i
 .PHONY : o01_Material.cpp.i
 
 o01_Material.s: o01_Material.cpp.s
@@ -255,6 +294,7 @@ o01_Material.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o01_Material.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.s
 .PHONY : o01_Material.cpp.s
 
 o02_Mesh.o: o02_Mesh.cpp.o
@@ -307,6 +347,30 @@ o02_MeshNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o02_MeshNS.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.s
 .PHONY : o02_MeshNS.cpp.s
+
+o02_MeshSC.o: o02_MeshSC.cpp.o
+.PHONY : o02_MeshSC.o
+
+# target to build an object file
+o02_MeshSC.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.o
+.PHONY : o02_MeshSC.cpp.o
+
+o02_MeshSC.i: o02_MeshSC.cpp.i
+.PHONY : o02_MeshSC.i
+
+# target to preprocess a source file
+o02_MeshSC.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.i
+.PHONY : o02_MeshSC.cpp.i
+
+o02_MeshSC.s: o02_MeshSC.cpp.s
+.PHONY : o02_MeshSC.s
+
+# target to generate assembly for a file
+o02_MeshSC.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.s
+.PHONY : o02_MeshSC.cpp.s
 
 o03_Discretizer.o: o03_Discretizer.cpp.o
 .PHONY : o03_Discretizer.o
@@ -440,6 +504,30 @@ o04_CGNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.s
 .PHONY : o04_CGNS.cpp.s
 
+o04_GS.o: o04_GS.cpp.o
+.PHONY : o04_GS.o
+
+# target to build an object file
+o04_GS.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_GS.cpp.o
+.PHONY : o04_GS.cpp.o
+
+o04_GS.i: o04_GS.cpp.i
+.PHONY : o04_GS.i
+
+# target to preprocess a source file
+o04_GS.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_GS.cpp.i
+.PHONY : o04_GS.cpp.i
+
+o04_GS.s: o04_GS.cpp.s
+.PHONY : o04_GS.s
+
+# target to generate assembly for a file
+o04_GS.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o04_GS.cpp.s
+.PHONY : o04_GS.cpp.s
+
 o04_Solver.o: o04_Solver.cpp.o
 .PHONY : o04_Solver.o
 
@@ -550,6 +638,7 @@ o09_ExpressionParser.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o
 .PHONY : o09_ExpressionParser.cpp.o
 
 o09_ExpressionParser.i: o09_ExpressionParser.cpp.i
@@ -560,6 +649,7 @@ o09_ExpressionParser.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.i
 .PHONY : o09_ExpressionParser.cpp.i
 
 o09_ExpressionParser.s: o09_ExpressionParser.cpp.s
@@ -570,6 +660,7 @@ o09_ExpressionParser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o09_ExpressionParser.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.s
 .PHONY : o09_ExpressionParser.cpp.s
 
 o09_Medic.o: o09_Medic.cpp.o
@@ -634,6 +725,7 @@ help:
 	@echo "... DHCSolver"
 	@echo "... LDCSolver"
 	@echo "... MainSolver"
+	@echo "... SCSolver"
 	@echo "... o00_DHCSolver.o"
 	@echo "... o00_DHCSolver.i"
 	@echo "... o00_DHCSolver.s"
@@ -643,6 +735,9 @@ help:
 	@echo "... o00_NSSolver.o"
 	@echo "... o00_NSSolver.i"
 	@echo "... o00_NSSolver.s"
+	@echo "... o00_SCSolver.o"
+	@echo "... o00_SCSolver.i"
+	@echo "... o00_SCSolver.s"
 	@echo "... o01_Material.o"
 	@echo "... o01_Material.i"
 	@echo "... o01_Material.s"
@@ -652,6 +747,9 @@ help:
 	@echo "... o02_MeshNS.o"
 	@echo "... o02_MeshNS.i"
 	@echo "... o02_MeshNS.s"
+	@echo "... o02_MeshSC.o"
+	@echo "... o02_MeshSC.i"
+	@echo "... o02_MeshSC.s"
 	@echo "... o03_Discretizer.o"
 	@echo "... o03_Discretizer.i"
 	@echo "... o03_Discretizer.s"
@@ -667,6 +765,9 @@ help:
 	@echo "... o04_CGNS.o"
 	@echo "... o04_CGNS.i"
 	@echo "... o04_CGNS.s"
+	@echo "... o04_GS.o"
+	@echo "... o04_GS.i"
+	@echo "... o04_GS.s"
 	@echo "... o04_Solver.o"
 	@echo "... o04_Solver.i"
 	@echo "... o04_Solver.s"
