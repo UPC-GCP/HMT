@@ -149,12 +149,20 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
 
     // Sections
     std::vector<int> Pos0(Msh.N.size()), Pos1(Msh.N.size());
+
+    std::cout << "Test5\n";
+
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        
+        std::cout << i << ": " << Msh.nMat.size() << " " << Msh.nMat[0].size() << "\n";
+
         // Find Positions (nD)
         for (int j = 0; j < Msh.N.size(); j++){
             Pos0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
             Pos1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
         }
+
+        std::cout << i << ": [" << Pos0[0] << "," << Pos0[1] << "] [" << Pos1[0] << "," << Pos1[1] << "]\n";
 
         // Internal Nodes (Non-nD)
         for (int j = Pos0[0]; j < Pos1[0]; j++){
@@ -167,11 +175,13 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
                 Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W;
             }
         }
+
+        std::cout << "Values initialized with no issues\n";
+
     }
 
+    std::cout << "Test6\n";
 
-
-    std::exit(0);
 
 
     // Obstacles

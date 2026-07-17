@@ -90,6 +90,8 @@ int main(int argc, char* argv[]){
     for (std::vector<bool> vec : Msh.p.bObs){
         for (bool val : vec){std::cout << val << " ";} std::cout << "\n";
     } std::cout << "\n";
+
+    return 0;
     
     /* /1* ///// Discretizer ///// *1/ */
     /* std::cout << "Initializing discretizer ...\n"; */
