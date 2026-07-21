@@ -1,6 +1,5 @@
 // Imports
-/* #include <algorithm> */
-/* #include <cstddef> */
+#include <cstddef>
 #include <algorithm>
 #include <cstddef>
 #include <cstdio>
@@ -94,18 +93,12 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
 	}
     for (int val : Msh.N){Msh.totNodes *= val;}
 
-    std::cout << "Test1\n";
-
 	// Geometry Resize (nD)
-	Msh.Faces.resize(Msh.N.size()); Msh.Nodes.resize(Msh.N.size()); Msh.deltaX.resize(Msh.N.size()); Msh.dX.resize(Msh.N.size()); Msh.bObs.resize(Msh.N.size());
-
-    std::cout << "Test2\n";
-
+	Msh.Faces.resize(Msh.N.size()); Msh.Nodes.resize(Msh.N.size()); Msh.deltaX.resize(Msh.N.size()); Msh.dX.resize(Msh.N.size()); 
 	for (size_t i = 0; i < Msh.N.size(); i++){
-		Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1); Msh.bObs[i].resize(Msh.N[i], false);
+		Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1); 
 	}
     
-    std::cout << "Test3\n";
     // Faces Loop (nD)
     std::vector<size_t> cNode; cNode.resize(Msh.N.size(), 0);
     for (int i = 0; i < refinement.size(); i++){
@@ -140,29 +133,19 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
     }
 
     // Resize (Non-nD)
-    Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.sPhi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]);
+    Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.sPhi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]); Msh.bObs.resize(Msh.N[0]);
     for (size_t i = 0; i < Msh.N[0]; i++){
-        Msh.nMat[i].resize(Msh.N[1], 0); Msh.Phi[i].resize(Msh.N[1], Phi0); Msh.sPhi[i].resize(Msh.N[1], 0); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], Phi0);
+        Msh.nMat[i].resize(Msh.N[1], 0); Msh.Phi[i].resize(Msh.N[1], Phi0); Msh.sPhi[i].resize(Msh.N[1], 0); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], Phi0); Msh.bObs[i].resize(Msh.N[1]);
     }
-
-    std::cout << "Test4\n";
 
     // Sections
     std::vector<int> Pos0(Msh.N.size()), Pos1(Msh.N.size());
-
-    std::cout << "Test5\n";
-
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
-        
-        std::cout << i << ": " << Msh.nMat.size() << " " << Msh.nMat[0].size() << "\n";
-
         // Find Positions (nD)
         for (int j = 0; j < Msh.N.size(); j++){
-            Pos0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
-            Pos1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos0[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos1[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
         }
-
-        std::cout << i << ": [" << Pos0[0] << "," << Pos0[1] << "] [" << Pos1[0] << "," << Pos1[1] << "]\n";
 
         // Internal Nodes (Non-nD)
         for (int j = Pos0[0]; j < Pos1[0]; j++){
@@ -175,38 +158,330 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
                 Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W;
             }
         }
-
-        std::cout << "Values initialized with no issues\n";
-
     }
 
-    std::cout << "Test6\n";
-
-
-
     // Obstacles
-    Obstacle tempObs{}; 
+    Obstacle tempObs{}; tempObs.i0.resize(Msh.N.size()); tempObs.i1.resize(Msh.N.size());
     for (Json::Value::ArrayIndex i = 0; i < obs.size(); i++){
-        // This needs to find positions and store them in obstacles
-        // bObs = true for all nodes in range
-        
         // Find Positions (nD)
         for (int j = 0; j < Msh.N.size(); j++){
             tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
             tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
-        } obstacles.push_back(std::move(tempObs)); tempObs = {};
+        } 
 
         // bObs
+        for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
+            for (size_t k = tempObs.i0[1]; k < tempObs.i1[1]; k++){
+                Msh.bObs[j][k] = true;
+            }
+        }
 
-
-
+        // Control
+        obstacles.push_back(std::move(tempObs)); tempObs = {}; 
+        tempObs.i0.resize(Msh.N.size()); tempObs.i1.resize(Msh.N.size());
     }
-
-
-
-
 
     // Coefficients (nD)
     Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
 
 }
+
+
+
+void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit){
+
+    // Deltas (nD)
+    for (size_t i = 0; i < Msh.N.size(); i++){
+        for (size_t j = 0; j < Msh.deltaX[i].size(); j++){
+            // Delta X
+            Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j];
+
+            // dX
+            if (j == Msh.deltaX[i].size()-1){continue;}
+            Msh.dX[i][j+1] = Msh.Nodes[i][j+1] - Msh.Nodes[i][j];
+        }
+
+        // dX
+        Msh.dX[i].front() = Msh.Nodes[i].front() - Msh.Faces[i].front();
+        Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back();
+    }
+
+    // Resize (Non-nD)
+    Msh.Phi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]);
+    for (size_t i = 0; i < Msh.N[0]; i++){
+        Msh.Phi[i].resize(Msh.N[1], valInit); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], valInit);
+    }
+
+    // Geometry
+    for (size_t j = 0; j < Msh.N[0]; j++){
+        for (size_t k = 0; k < Msh.N[1]; k++){
+                Msh.Sw[j][k] = Msh.deltaX[1][k] * W; Msh.Se[j][k] = Msh.deltaX[1][k] * W; Msh.Ss[j][k] = Msh.deltaX[0][j] * W; Msh.Sn[j][k] = Msh.deltaX[0][j] * W;
+                Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W;
+        }
+    }
+
+    // Coefficients (nD)
+    Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.oR.resize(Msh.totNodes, 0);
+
+}
+
+
+
+void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v){
+    
+	// Control (nD)
+	u.N.resize(p.N.size()); v.N.resize(p.N.size());
+    u.N[0] = p.N[0] + 1; u.N[1] = p.N[1]; for (int val : u.N){u.totNodes *= val;}
+    v.N[0] = p.N[0]; v.N[1] = p.N[1] + 1; for (int val : v.N){v.totNodes *= val;}
+    
+    // Geometry Resize (nD)
+    u.Faces.resize(p.N.size()); u.Nodes.resize(p.N.size()); u.deltaX.resize(p.N.size()); u.dX.resize(p.N.size());
+    v.Faces.resize(p.N.size()); v.Nodes.resize(p.N.size()); v.deltaX.resize(p.N.size()); v.dX.resize(p.N.size());
+	for (size_t i = 0; i < p.N.size(); i++){
+		u.Faces[i].resize(u.N[i]+1); u.Nodes[i].resize(u.N[i]); u.deltaX[i].resize(u.N[i]); u.dX[i].resize(u.N[i]+1);
+        v.Faces[i].resize(v.N[i]+1); v.Nodes[i].resize(v.N[i]); v.deltaX[i].resize(v.N[i]); v.dX[i].resize(v.N[i]+1);
+	}
+
+    // Geometry uNodes (non-nD)
+    // u nodes sit on p faces; u faces sit on p nodes (u has one more x-node than p)
+    for (size_t i = 0; i < u.Nodes[0].size(); i++){u.Nodes[0][i] = p.Faces[0][i];}
+    for (size_t i = 0; i < p.Nodes[0].size(); i++){u.Faces[0][i+1] = p.Nodes[0][i];}
+    u.Faces[0][0] = u.Nodes[0].front() - u.Faces[0][1]; u.Faces[0].back() = u.Nodes[0].back() + u.Faces[0][1];
+    for (size_t i = 0; i < u.Nodes[1].size(); i++){u.Nodes[1][i] = p.Nodes[1][i]; u.Faces[1][i] = p.Faces[1][i];}
+    u.Faces[1].back() = p.Faces[1].back();
+
+    // Geometry vNodes (non-nD)
+    // v nodes sit on p faces; v faces sit on p nodes (v has one more y-node than p)
+    for (size_t i = 0; i < v.Nodes[0].size(); i++){v.Nodes[0][i] = p.Nodes[0][i]; v.Faces[0][i] = p.Faces[0][i];}
+    v.Faces[0].back() = p.Faces[0].back();
+    for (size_t i = 0; i < v.Nodes[1].size(); i++){v.Nodes[1][i] = p.Faces[1][i];}
+    for (size_t i = 0; i < p.Nodes[1].size(); i++){v.Faces[1][i+1] = p.Nodes[1][i];}
+    v.Faces[1][0] = v.Nodes[1].front() - v.Faces[1][1]; v.Faces[1].back() = v.Nodes[1].back() + v.Faces[1][1];
+
+    // Calculate Geometry
+    calculateMeshGeometry(u, Mat.VF0[0]);
+    calculateMeshGeometry(v, Mat.VF0[1]);
+
+}
+
+
+void Mesh::addBoundariesPressure(Json::Value boundaries, Material Mat, ExpressionParser& Prs){
+
+    // Resize
+    std::string sType{}; boundaryPressure.resize(boundaries.size());
+    std::vector<double> Pos0{}, Pos1{}; Pos0.resize(p.N.size()); Pos1.resize(p.N.size());
+
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
+
+        // Control
+        boundaryPressure[i].i0.resize(p.N.size()); boundaryPressure[i].i1.resize(p.N.size());
+        boundaryPressure[i].side = boundaries[i]["side"].asInt();
+
+        // Positions
+        Pos0[0] = boundaries[i]["x0"][0].asDouble(); Pos0[1] = boundaries[i]["x0"][1].asDouble();
+        Pos1[0] = boundaries[i]["x1"][0].asDouble(); Pos1[1] = boundaries[i]["x1"][1].asDouble();
+        for (int k = 0; k < p.N.size(); k++){
+            boundaryPressure[i].i0[k] = std::lower_bound(p.Faces[k].begin(), p.Faces[k].end(), Pos0[k]) - p.Faces[k].begin();
+            boundaryPressure[i].i1[k] = std::lower_bound(p.Faces[k].begin(), p.Faces[k].end(), Pos1[k]) - p.Faces[k].begin();
+        }
+
+        // Type
+        if (boundaries[i]["type"] == "Dirichlet") {
+
+            // Control
+            boundaryPressure[i].type = 0;
+
+            // Value
+            if (isFormula(boundaries[i]["value"].asString())){
+                
+                // Parser 
+                boundaryPressure[i].value = 0; 
+                boundaryPressure[i].bUpdate = true;
+                boundaryPressure[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString());
+                
+                // Variable Index 
+                sType = boundaries[i]["value"].asString();
+                if (sType.find(" t ") != std::string::npos){
+                    boundaryPressure[i].iEq = 0; boundaryPressure[i].value = Prs.evaluateTime(boundaryPressure[i].iExpr, 0); // updateTime
+                } else if (sType.find(" x ") != std::string::npos || sType.find(" y ") != std::string::npos){
+                    boundaryPressure[i].iEq = 1; // updateCoords
+                } else {std::cerr << "Boundary equation not supported.\n";} 
+
+            } else {
+                boundaryPressure[i].value = boundaries[i]["value"].asDouble();
+            }
+
+        } else if (boundaries[i]["type"] == "Neumann") {
+            boundaryPressure[i].type = 1;
+            boundaryPressure[i].value = boundaries[i]["value"].asDouble();
+        } else if (boundaries[i]["type"] == "Robin") {
+            boundaryPressure[i].type = 2;
+            boundaryPressure[i].value = boundaries[i]["value"].asDouble();
+        } else {std::cerr << "Error: Invalid boundary condition type " << boundaries[i]["type"].asString() << std::endl;}
+
+        // Store Values
+        if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){
+            boundaryPressure[i].Phi.resize(boundaryPressure[i].i1[1] - boundaryPressure[i].i0[1], boundaryPressure[i].value);
+            boundaryPressure[i].oPhi.resize(boundaryPressure[i].i1[1] - boundaryPressure[i].i0[1], boundaryPressure[i].value);
+        } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){
+            boundaryPressure[i].Phi.resize(boundaryPressure[i].i1[0] - boundaryPressure[i].i0[0], boundaryPressure[i].value);
+            boundaryPressure[i].oPhi.resize(boundaryPressure[i].i1[0] - boundaryPressure[i].i0[0], boundaryPressure[i].value);
+        }
+
+    }
+
+}
+
+
+
+void Mesh::addBoundariesVelocity(Json::Value boundaries, Material Mat){
+
+    // Resize
+    boundaryVelocity.resize(boundaries.size());
+    std::vector<double> Pos0{}, Pos1{}; Pos0.resize(p.N.size()); Pos1.resize(p.N.size());
+
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
+
+        // Control
+        boundaryVelocity[i].i0.resize(p.N.size()); boundaryVelocity[i].i1.resize(p.N.size());
+        Pos0[0] = boundaries[i]["x0"][0].asDouble(); Pos0[1] = boundaries[i]["x0"][1].asDouble();
+        Pos1[0] = boundaries[i]["x1"][0].asDouble(); Pos1[1] = boundaries[i]["x1"][1].asDouble();
+
+        // General
+        boundaryVelocity[i].side = boundaries[i]["side"].asInt();
+        boundaryVelocity[i].uVal = boundaries[i]["uValue"].asDouble();
+        boundaryVelocity[i].vVal = boundaries[i]["vValue"].asDouble();
+
+        // xBoundary: xIndex = u.Nodes[0], yCoord = u.Faces[1]
+        // yBoundary: yIndex = v.Nodes[1], xCoord = v.Faces[0]
+        // Indexes    
+        if (Pos0[0] == Pos1[0]){
+
+            // First 
+            boundaryVelocity[i].i0[0] = std::distance(u.Nodes[0].begin(), std::find(u.Nodes[0].begin(), u.Nodes[0].end(), boundaries[i]["x0"][0].asDouble())); 
+            boundaryVelocity[i].i0[1] = std::distance(u.Faces[1].begin(), std::find(u.Faces[1].begin(), u.Faces[1].end(), boundaries[i]["x0"][1].asDouble()));
+
+            // Last
+            boundaryVelocity[i].i1[0] = std::distance(u.Nodes[0].begin(), std::find(u.Nodes[0].begin(), u.Nodes[0].end(), boundaries[i]["x1"][0].asDouble()));
+            boundaryVelocity[i].i1[1] = std::distance(u.Faces[1].begin(), std::find(u.Faces[1].begin(), u.Faces[1].end(), boundaries[i]["x1"][1].asDouble())) - 1;
+
+        } else if (Pos0[1] == Pos1[1]){
+
+            // First 
+            boundaryVelocity[i].i0[0] = std::distance(v.Faces[0].begin(), std::find(v.Faces[0].begin(), v.Faces[0].end(), boundaries[i]["x0"][0].asDouble()));
+            boundaryVelocity[i].i0[1] = std::distance(v.Nodes[1].begin(), std::find(v.Nodes[1].begin(), v.Nodes[1].end(), boundaries[i]["x1"][1].asDouble()));
+
+            // Last
+            boundaryVelocity[i].i1[0] = std::distance(v.Faces[0].begin(), std::find(v.Faces[0].begin(), v.Faces[0].end(), boundaries[i]["x1"][0].asDouble())) - 1;
+            boundaryVelocity[i].i1[1] = std::distance(v.Nodes[1].begin(), std::find(v.Nodes[1].begin(), v.Nodes[1].end(), boundaries[i]["x1"][1].asDouble()));
+
+        } else {std::cerr << "Boundary range not specified correctly.\n";}
+
+        if (boundaries[i]["type"] == "Dirichlet") {boundaryVelocity[i].type = 0;}
+        else if (boundaries[i]["type"] == "Neumann"){boundaryVelocity[i].type = 1;}
+        else {std::cerr << "Velocity only accepts Dirichlet at current build.\n";}
+
+    }
+
+}
+
+
+/* void Mesh::addBoundariesEnergy(Json::Value boundaries, Material Mat, ExpressionParser& Prs){ */
+
+/*     // Resize */
+/*     std::string sType{}; */
+/*     boundaryEnergy.resize(boundaries.size()); */
+
+/*     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){ */
+
+/*         // Control */
+/*         boundaryEnergy[i].x0.resize(T.N.size()); boundaryEnergy[i].x1.resize(T.N.size()); */
+
+/*         if (boundaries[i]["type"] == "Dirichlet") { */
+
+/*             // Control */
+/*             boundaryEnergy[i].type = 0; */
+/*             boundaryEnergy[i].side = boundaries[i]["side"].asInt(); */
+
+/*             // Position */
+/*             for (int j = 0; j < T.N.size(); j++){ */
+/*                 boundaryEnergy[i].x0[j] = boundaries[i]["x0"][j].asDouble(); */
+/*                 boundaryEnergy[i].x1[j] = boundaries[i]["x1"][j].asDouble(); */
+/*             } */
+
+/*             // Value */
+/*             if (isFormula(boundaries[i]["value"].asString())){ */
+                
+/*                 boundaryEnergy[i].value = 0; */
+/*                 boundaryEnergy[i].bUpdate = true; */
+/*                 boundaryEnergy[i].iExpr = Prs.registerExpression(boundaries[i]["value"].asString()); // FutureWork: Store expressions as strings and check if same expression is already stored to reuse the index instead of saving it once more */
+                
+/*                 sType = boundaries[i]["value"].asString(); */
+/*                 if (sType.find(" t ") != std::string::npos){ */
+/*                     boundaryEnergy[i].iEq = 0; boundaryEnergy[i].value = Prs.evaluateTime(boundaryEnergy[i].iEq, 0); // updateTime */
+/*                 } else if (sType.find(" x ") != std::string::npos || sType.find(" y ") != std::string::npos){ */
+/*                     boundaryEnergy[i].iEq = 1; // updateCoords */
+/*                 } else {boundaryEnergy[i].iEq = 0;} // Generic uses updateTime */
+
+/*             } else { */
+/*                 boundaryEnergy[i].value = boundaries[i]["value"].asDouble(); */
+/*             } */
+
+/*             // Store Values */
+/*             if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){ */
+/*                 boundaryEnergy[i].Phi.resize(T.N[1], boundaryEnergy[i].value); */
+/*                 boundaryEnergy[i].oPhi.resize(T.N[1], boundaryEnergy[i].value); */ 
+/*             } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){ */
+/*                 boundaryEnergy[i].Phi.resize(T.N[0], boundaryEnergy[i].value); */
+/*                 boundaryEnergy[i].oPhi.resize(T.N[0], boundaryEnergy[i].value); */
+/*             } */
+
+/*         } else if (boundaries[i]["type"] == "Neumann") { */
+            
+/*             // Control */
+/*             boundaryEnergy[i].type = 1; */
+
+/*             // Position */
+/*             for (int j = 0; j < T.N.size(); j++){ */
+/*                 boundaryEnergy[i].x0[j] = boundaries[i]["x0"][j].asDouble(); */
+/*                 boundaryEnergy[i].x1[j] = boundaries[i]["x1"][j].asDouble(); */
+/*             } */
+
+/*             // Value */
+/*             boundaryEnergy[i].value = boundaries[i]["value"].asDouble(); */
+/*             boundaryEnergy[i].side = boundaries[i]["side"].asInt(); */
+
+/*             // Store Values */
+/*             if (boundaries[i]["x0"][0].asDouble() == boundaries[i]["x1"][0].asDouble()){ */
+/*                 boundaryEnergy[i].Phi.resize(T.N[1], boundaryEnergy[i].value); */
+/*                 boundaryEnergy[i].oPhi.resize(T.N[1], boundaryEnergy[i].value); */
+/*             } else if (boundaries[i]["x0"][1].asDouble() == boundaries[i]["x1"][1].asDouble()){ */
+/*                 boundaryEnergy[i].Phi.resize(T.N[0], boundaryEnergy[i].value); */
+/*                 boundaryEnergy[i].oPhi.resize(T.N[0], boundaryEnergy[i].value); */
+/*             } */
+
+/*         } else if (boundaries[i]["type"] == "Robin") { */
+            
+/*             // Control */
+/*             boundaryEnergy[i].type = 2; */
+            
+/*             // Position */
+/*             for (int j = 0; j < T.N.size(); j++){ */
+/*                 boundaryEnergy[i].x0[j] = boundaries[i]["x0"][j].asDouble(); */
+/*                 boundaryEnergy[i].x1[j] = boundaries[i]["x1"][j].asDouble(); */
+/*             } */
+
+/*             // Value */
+/*             boundaryEnergy[i].value = boundaries[i]["value"].asDouble(); */
+/*             boundaryEnergy[i].side = boundaries[i]["side"].asInt(); */
+/*             boundaryEnergy[i].alpha = boundaries[i]["alpha"].asDouble(); */
+
+/*         } else { */
+/*             std::cerr << "Error: Invalid boundary condition type " << boundaries[i]["type"].asString() << std::endl; */
+/*         } */
+
+/*     } */
+
+/* } */
+
+

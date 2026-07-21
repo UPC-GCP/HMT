@@ -1,4 +1,5 @@
 // Imports
+#include <cstddef>
 #include <vector>
 
 #define _USE_MATH_DEFINES
@@ -25,9 +26,9 @@ ExpressionParser::ExpressionParser(){
 
 int ExpressionParser::registerExpression(std::string exprStr){
 
-    // Check if expression already registered in sExpr
-    // If yes, return index instead of doing anything else
-    
+    // Control
+    size_t iPos = std::find(sExpr.begin(), sExpr.end(), exprStr) - sExpr.begin();
+    if (iPos < sExpr.size()){return iPos;}
 
     // Parse Expression
     exprtk::expression<double> exprTemp;

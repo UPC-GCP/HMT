@@ -31,8 +31,9 @@ struct MeshSolver : MeshBase{
 };
 
 struct boundMain{
-    int type{}, side{}, iExpr{}, iEq{};
-    std::vector<double> x0{}, x1{}, Phi{}, oPhi{}; // Phi, oPhi = 1D for their respective dimension
+    int type{}, side{}, iExpr{}, iEq{}; double value{};
+    std::vector<int> i0{}, i1{};
+    std::vector<double> Phi{}, oPhi{}; // Phi, oPhi = 1D for their respective dimension
     bool bUpdate = false;
     std::string expression{};
 };
@@ -59,14 +60,14 @@ private:
 public:
     // Variables
     int algorithm{};
-    double W{}, strength{}, centering{}, kStrength{}, delta{}; // Config
+    double W{}, strength{}, centering{}, kStrength{}, delta{}, epsFind=1e-5; // Config
     MeshBase u{}, v{}; MeshSolver p{}, T{}; // Meshes
 
     // Vectors
     std::vector<int> vExpr{}; // dimension
-    std::vector<boundMain> boundaryConditions{}, boundaryEnergy{};
+    std::vector<boundMain> boundaryPressure{}, boundaryEnergy{};
     std::vector<boundVelocity> boundaryVelocity{};
-    std::vector<Obstacle> obstacles{}; // new Obstacle storage, don't really know if I need this or if I can just use bObs from the start. Maybe it could be useful for moving objects?
+    std::vector<Obstacle> obstacles{}; // new Obstacle storage, will be needed to impose boundaries at obstacles
 
     // Constructor
     Mesh(int algo, double W = 1, double A = 0, double xC = 0.5, double kStr = 1, double delta = 0.001);
@@ -77,7 +78,6 @@ public:
     void addBoundariesPressure(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
     void addBoundariesEnergy(Json::Value boundaries, Material Mat, ExpressionParser& Prs);
     void addBoundariesVelocity(Json::Value boundaries, Material Mat);
-    void addObstacles(Json::Value obs);
 };
 
 #endif

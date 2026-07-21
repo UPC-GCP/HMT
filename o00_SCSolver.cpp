@@ -77,19 +77,11 @@ int main(int argc, char* argv[]){
     std::cout << "Initializing mesh ...\n";
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.generateMesh(Msh.p, data["PHI0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes.\n";
-    /* Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n"; */
+    Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n";
     /* Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n"; */
     /* Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n"; */
 
-    std::cout << "nMat:\n";
-    for (std::vector<int> vec : Msh.p.nMat){
-        for (int val : vec){std::cout << val << " ";} std::cout << "\n";
-    } std::cout << "\n";
 
-    std::cout << "bObs:\n";
-    for (std::vector<bool> vec : Msh.p.bObs){
-        for (bool val : vec){std::cout << val << " ";} std::cout << "\n";
-    } std::cout << "\n";
 
     return 0;
     
