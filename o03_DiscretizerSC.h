@@ -29,6 +29,7 @@ public:
 
     void setMomentumCoefficients(Material Mat, Mesh& Msh);
     void setMomentumBoundaries(Material Mat, Mesh& Msh);
+    void setObstacles(Material Mat, Mesh& Msh);
 
     void setPressureCoefficients(Material Mat, Mesh& Msh);
     void setPressureBoundaries(Material Mat, Mesh& Msh);

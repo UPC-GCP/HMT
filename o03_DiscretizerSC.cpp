@@ -135,6 +135,13 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
             // Control
             k = i * Msh.u.N[1] + j;
 
+            // Obstacles
+            if (Msh.p.bObs[i-1][j] || Msh.p.bObs[i][j]){
+                Msh.u.matA[k] = {}; Msh.u.matA[k].ap = 1;
+                Msh.u.matB[k] = 0; Msh.u.Phi[i][j] = 0; Msh.u.oR[k] = 0;
+                continue;
+            }
+
             // Coefficients Convection-Diffusion 
             Dw = mu * Msh.u.Sw[i][j] / Msh.u.dX[0][i]; Fw = rho * Msh.u.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i-1][j]);
             Pw = Fw / Dw; Msh.u.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0);
@@ -160,6 +167,13 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
         for (size_t j = 1; j < Msh.v.N[1]-1; j++){
             // Control
             k = i * Msh.v.N[1] + j;
+
+            // Obstacles
+            if (Msh.p.bObs[i][j-1] || Msh.p.bObs[i][j]){
+                Msh.v.matA[k] = {}; Msh.v.matA[k].ap = 1;
+                Msh.v.matB[k] = 0; Msh.v.Phi[i][j] = 0; Msh.v.oR[k] = 0;
+                continue;
+            }
 
             // Coefficients Convection-Diffusion
             Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Fw = rho * Msh.v.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i][j-1]);
@@ -207,10 +221,17 @@ void Discretizer::setPressureCoefficients(Material Mat, Mesh& Msh){
             // Control
             k = i * Msh.p.N[1] + j;
 
+            // Obstacles
+            if (Msh.p.bObs[i][j]){
+                Msh.p.matA[k] = {}; Msh.p.matA[k].ap = 1; Msh.p.matB[k] = 0;
+                continue;
+            }
+
             // Coefficients A
             Dw = Msh.p.Sw[i][j] / Msh.p.dX[0][i]; De = Msh.p.Se[i][j] / Msh.p.dX[0][i+1];
             Ds = Msh.p.Ss[i][j] / Msh.p.dX[1][j]; Dn = Msh.p.Sn[i][j] / Msh.p.dX[1][j+1];
-            Msh.p.matA[k].aw = - Dw; Msh.p.matA[k].ae = - De; Msh.p.matA[k].as = - Ds; Msh.p.matA[k].an = - Dn;
+            Msh.p.matA[k].aw = Msh.p.bObs[i-1][j] ? 0 : -Dw; Msh.p.matA[k].ae = Msh.p.bObs[i+1][j] ? 0 : -De;
+            Msh.p.matA[k].as = Msh.p.bObs[i][j-1] ? 0 : -Ds; Msh.p.matA[k].an = Msh.p.bObs[i][j+1] ? 0 : -Dn;
             Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
     
             // Coefficients B
@@ -471,19 +492,19 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
 
                 // xBoundary
                 if (bC.side == 0){
-
+                    
                     // West Boundary
                     i = bC.i0[0];
                     for (size_t j = bC.i0[1]; j < bC.i1[1]; j++){
                         // Control
                         k = i * Msh.p.N[1] + j;
-                            
+                        
                         // Coefficients A 
                         Msh.p.matA[k].aw = bC.value;
                     }
 
                 } else if (bC.side == 1){
-
+                    
                     // East Boundary
                     i = bC.i0[0]-1;
                     for (size_t j = bC.i0[1]; j < bC.i1[1]; j++){
@@ -617,6 +638,7 @@ void Discretizer::correctVelocity(Material Mat, Mesh& Msh){
     // u Interior Nodes
     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
         for (size_t j = 1; j < Msh.u.N[1]-1; j++){
+            if (Msh.p.bObs[i-1][j] || Msh.p.bObs[i][j]){continue;}
             Msh.u.Phi[i][j] += (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i-1][j]) / Msh.p.dX[0][i];
         }
     }
@@ -624,6 +646,7 @@ void Discretizer::correctVelocity(Material Mat, Mesh& Msh){
     // v Interior Nodes
     for (size_t i = 1; i < Msh.v.N[0]-1; i++){
         for (size_t j = 1; j < Msh.v.N[1]-1; j++){
+            if (Msh.p.bObs[i][j-1] || Msh.p.bObs[i][j]){continue;}
             Msh.v.Phi[i][j] += (dt / rho) * (Msh.p.Phi[i][j] - Msh.p.Phi[i][j-1]) / Msh.p.dX[1][j];
         }
     }

@@ -248,7 +248,6 @@ void Mesh::addBoundariesPressure(Json::Value boundaries, Material Mat, Expressio
     // Resize
     std::string sType{};
     boundaryConditions.resize(boundaries.size());
-    std::vector<int> Pos0{}, Pos1{}; Pos0.resize(p.N.size()); Pos1.resize(p.N.size());
 
     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++){
 
