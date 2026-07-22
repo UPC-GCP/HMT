@@ -423,6 +423,30 @@ o03_DiscretizerNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.s
 .PHONY : o03_DiscretizerNS.cpp.s
 
+o03_DiscretizerSC.o: o03_DiscretizerSC.cpp.o
+.PHONY : o03_DiscretizerSC.o
+
+# target to build an object file
+o03_DiscretizerSC.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.o
+.PHONY : o03_DiscretizerSC.cpp.o
+
+o03_DiscretizerSC.i: o03_DiscretizerSC.cpp.i
+.PHONY : o03_DiscretizerSC.i
+
+# target to preprocess a source file
+o03_DiscretizerSC.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.i
+.PHONY : o03_DiscretizerSC.cpp.i
+
+o03_DiscretizerSC.s: o03_DiscretizerSC.cpp.s
+.PHONY : o03_DiscretizerSC.s
+
+# target to generate assembly for a file
+o03_DiscretizerSC.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.s
+.PHONY : o03_DiscretizerSC.cpp.s
+
 o04_BCG.o: o04_BCG.cpp.o
 .PHONY : o04_BCG.o
 
@@ -504,6 +528,30 @@ o04_CGNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.s
 .PHONY : o04_CGNS.cpp.s
 
+o04_CGSC.o: o04_CGSC.cpp.o
+.PHONY : o04_CGSC.o
+
+# target to build an object file
+o04_CGSC.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_CGSC.cpp.o
+.PHONY : o04_CGSC.cpp.o
+
+o04_CGSC.i: o04_CGSC.cpp.i
+.PHONY : o04_CGSC.i
+
+# target to preprocess a source file
+o04_CGSC.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_CGSC.cpp.i
+.PHONY : o04_CGSC.cpp.i
+
+o04_CGSC.s: o04_CGSC.cpp.s
+.PHONY : o04_CGSC.s
+
+# target to generate assembly for a file
+o04_CGSC.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_CGSC.cpp.s
+.PHONY : o04_CGSC.cpp.s
+
 o04_GS.o: o04_GS.cpp.o
 .PHONY : o04_GS.o
 
@@ -579,6 +627,30 @@ o04_SolverNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.s
 .PHONY : o04_SolverNS.cpp.s
 
+o04_SolverSC.o: o04_SolverSC.cpp.o
+.PHONY : o04_SolverSC.o
+
+# target to build an object file
+o04_SolverSC.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.o
+.PHONY : o04_SolverSC.cpp.o
+
+o04_SolverSC.i: o04_SolverSC.cpp.i
+.PHONY : o04_SolverSC.i
+
+# target to preprocess a source file
+o04_SolverSC.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.i
+.PHONY : o04_SolverSC.cpp.i
+
+o04_SolverSC.s: o04_SolverSC.cpp.s
+.PHONY : o04_SolverSC.s
+
+# target to generate assembly for a file
+o04_SolverSC.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.s
+.PHONY : o04_SolverSC.cpp.s
+
 o05_Probe.o: o05_Probe.cpp.o
 .PHONY : o05_Probe.o
 
@@ -629,6 +701,30 @@ o05_ProbeNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o05_ProbeNS.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.s
 .PHONY : o05_ProbeNS.cpp.s
+
+o05_ProbeSC.o: o05_ProbeSC.cpp.o
+.PHONY : o05_ProbeSC.o
+
+# target to build an object file
+o05_ProbeSC.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.o
+.PHONY : o05_ProbeSC.cpp.o
+
+o05_ProbeSC.i: o05_ProbeSC.cpp.i
+.PHONY : o05_ProbeSC.i
+
+# target to preprocess a source file
+o05_ProbeSC.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.i
+.PHONY : o05_ProbeSC.cpp.i
+
+o05_ProbeSC.s: o05_ProbeSC.cpp.s
+.PHONY : o05_ProbeSC.s
+
+# target to generate assembly for a file
+o05_ProbeSC.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.s
+.PHONY : o05_ProbeSC.cpp.s
 
 o09_ExpressionParser.o: o09_ExpressionParser.cpp.o
 .PHONY : o09_ExpressionParser.o
@@ -714,6 +810,30 @@ o09_MedicNS.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.s
 .PHONY : o09_MedicNS.cpp.s
 
+o09_MedicSC.o: o09_MedicSC.cpp.o
+.PHONY : o09_MedicSC.o
+
+# target to build an object file
+o09_MedicSC.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o
+.PHONY : o09_MedicSC.cpp.o
+
+o09_MedicSC.i: o09_MedicSC.cpp.i
+.PHONY : o09_MedicSC.i
+
+# target to preprocess a source file
+o09_MedicSC.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.i
+.PHONY : o09_MedicSC.cpp.i
+
+o09_MedicSC.s: o09_MedicSC.cpp.s
+.PHONY : o09_MedicSC.s
+
+# target to generate assembly for a file
+o09_MedicSC.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.s
+.PHONY : o09_MedicSC.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -756,6 +876,9 @@ help:
 	@echo "... o03_DiscretizerNS.o"
 	@echo "... o03_DiscretizerNS.i"
 	@echo "... o03_DiscretizerNS.s"
+	@echo "... o03_DiscretizerSC.o"
+	@echo "... o03_DiscretizerSC.i"
+	@echo "... o03_DiscretizerSC.s"
 	@echo "... o04_BCG.o"
 	@echo "... o04_BCG.i"
 	@echo "... o04_BCG.s"
@@ -765,6 +888,9 @@ help:
 	@echo "... o04_CGNS.o"
 	@echo "... o04_CGNS.i"
 	@echo "... o04_CGNS.s"
+	@echo "... o04_CGSC.o"
+	@echo "... o04_CGSC.i"
+	@echo "... o04_CGSC.s"
 	@echo "... o04_GS.o"
 	@echo "... o04_GS.i"
 	@echo "... o04_GS.s"
@@ -774,12 +900,18 @@ help:
 	@echo "... o04_SolverNS.o"
 	@echo "... o04_SolverNS.i"
 	@echo "... o04_SolverNS.s"
+	@echo "... o04_SolverSC.o"
+	@echo "... o04_SolverSC.i"
+	@echo "... o04_SolverSC.s"
 	@echo "... o05_Probe.o"
 	@echo "... o05_Probe.i"
 	@echo "... o05_Probe.s"
 	@echo "... o05_ProbeNS.o"
 	@echo "... o05_ProbeNS.i"
 	@echo "... o05_ProbeNS.s"
+	@echo "... o05_ProbeSC.o"
+	@echo "... o05_ProbeSC.i"
+	@echo "... o05_ProbeSC.s"
 	@echo "... o09_ExpressionParser.o"
 	@echo "... o09_ExpressionParser.i"
 	@echo "... o09_ExpressionParser.s"
@@ -789,6 +921,9 @@ help:
 	@echo "... o09_MedicNS.o"
 	@echo "... o09_MedicNS.i"
 	@echo "... o09_MedicNS.s"
+	@echo "... o09_MedicSC.o"
+	@echo "... o09_MedicSC.i"
+	@echo "... o09_MedicSC.s"
 .PHONY : help
 
 

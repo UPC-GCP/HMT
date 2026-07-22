@@ -11,13 +11,13 @@
 // Self-Imports
 #include "o01_Material.h"
 #include "o02_MeshSC.h"
-/* #include "o03_DiscretizerNS.h" */
-/* #include "o04_SolverNS.h" */
-/* #include "o04_CGNS.h" */
+#include "o03_DiscretizerSC.h"
+#include "o04_SolverSC.h"
+#include "o04_CGSC.h"
 /* #include "o04_BCG.h" */
-/* #include "o05_ProbeNS.h" */
-/* #include "o09_ExpressionParser.h" */
-/* #include "o09_MedicNS.h" */
+#include "o05_ProbeSC.h"
+#include "o09_ExpressionParser.h"
+#include "o09_MedicSC.h"
 
 
 Json::Value getParsedData(std::string fileName){
@@ -78,99 +78,96 @@ int main(int argc, char* argv[]){
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
     Msh.generateMesh(Msh.p, data["PHI0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes.\n";
     Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n";
-    /* Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryConditions.size() << " boundary conditions added.\n"; */
-    /* Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n"; */
+    Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryPressure.size() << " boundary conditions added.\n";
+    Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n";
 
-
-
-    return 0;
     
-    /* /1* ///// Discretizer ///// *1/ */
-    /* std::cout << "Initializing discretizer ...\n"; */
-    /* Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n"; */
-    /* Dsc.setSchemeParameters(Mat, Msh); std::cout << "Scheme parameters set.\n"; */
-    /* Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity boundaries set.\n"; */
-    /* Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n"; */
-    /* Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n"; */
-    /* Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n"; */
+    /* ///// Discretizer ///// */
+    std::cout << "Initializing discretizer ...\n";
+    Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n";
+    Dsc.setSchemeParameters(Mat, Msh); std::cout << "Scheme parameters set.\n";
+    Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity boundaries set.\n";
+    Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n";
+    Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n";
+    Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n";
     
 
-    /* ///// Solver ///// */
-    /* std::cout << "Initializing solver ... \n"; */
-    /* Solver* Sol = nullptr; */
-    /* if (data["solver"] == "CG"){ */
-    /*     Sol = new CG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
-    /* } else if (data["solver"] == "GS"){ */
-    /*     // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
-    /*     std::cerr << "Currently unavailable.\n"; */
-    /* } else if (data["solver"] == "BCG"){ */
-    /*     /1* Sol = new BCG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); *1/ */
-    /* } else { */
-    /*     std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n"; */
-    /* } std::cout << "Solver configured.\n"; */
+    ///// Solver /////
+    std::cout << "Initializing solver ... \n";
+    Solver* Sol = nullptr;
+    if (data["solver"] == "CG"){
+        Sol = new CG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+    } else if (data["solver"] == "GS"){
+        // Sol = new GS(Dsc.scheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString());
+        std::cerr << "Currently unavailable.\n";
+    } else if (data["solver"] == "BCG"){
+        /* Sol = new BCG(Dsc.tempScheme, data["maxIterations"].asDouble(), data["tolNumeric"].asDouble(), data["tolTemporal"].asDouble(), argv[1], data["solver"].asString()); */
+    } else {
+        std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n";
+    } std::cout << "Solver configured.\n";
 
 
-    /* /1* ///// Probes ///// *1/ */
-    /* std::cout << "Initializing probes ...\n"; */
-    /* Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n"; */
-    /* Prb.checkProbes(Msh, Sol); std::cout << "Initial conditions stored.\n"; */
+    /* ///// Probes ///// */
+    std::cout << "Initializing probes ...\n";
+    Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n";
+    Prb.checkProbes(Msh, Sol); std::cout << "Initial conditions stored.\n";
 
 
-    /* /1* ///// Medic ///// *1/ */
-    /* std::cout << "Initializing medic ...\n"; */
-    /* bool bMdc = data["medicOn"].asBool(); */
-    /* Medic Mdc(Msh, Prb, bMdc); std::cout << "Diagnostic tools configured.\n"; */
+    /* ///// Medic ///// */
+    std::cout << "Initializing medic ...\n";
+    bool bMdc = data["medicOn"].asBool();
+    Medic Mdc(Msh, Prb, bMdc); std::cout << "Diagnostic tools configured.\n";
 
 
 
-    /* ////////// Temporal Loop ////////// */
-    /* std::cout << "Processing ...\n"; */
+    ////////// Temporal Loop //////////
+    std::cout << "Processing ...\n";
     
-    /* for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){ */
+    for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){
 
-    /*     // Control */
-    /*     Msh.p.oPhi = Msh.p.Phi; */
+        // Control
+        Msh.p.oPhi = Msh.p.Phi;
         
-    /*     // Solver */
-    /*     if (!Sol->newSolve(Msh.p.matA, Msh.p.Phi, Msh.p.matB)){std::cerr << "Simulation diverges @ t = " << t; break;} */
-    /*     if (std::sqrt(Sol->lastRes) >= data["tolNumeric"].asDouble()){std::cerr << "\nWARN: CG unconverged @ t=" << t << " lastIter=" << Sol->lastIter << " lastRes=" << std::sqrt(Sol->lastRes);} */
+        // Solver
+        if (!Sol->newSolve(Msh.p.matA, Msh.p.Phi, Msh.p.matB, Msh.p.bObs)){std::cerr << "Simulation diverges @ t = " << t; break;}
+        if (std::sqrt(Sol->lastRes) >= data["tolNumeric"].asDouble()){std::cerr << "\nWARN: CG unconverged @ t=" << t << " lastIter=" << Sol->lastIter << " lastRes=" << std::sqrt(Sol->lastRes);}
 
-    /*     // Correct Velocity */
-    /*     Dsc.correctVelocity(Mat, Msh); */
-    /*     Msh.u.oPhi = Msh.u.Phi; Msh.v.oPhi = Msh.v.Phi; */
+        // Correct Velocity
+        Dsc.correctVelocity(Mat, Msh);
+        Msh.u.oPhi = Msh.u.Phi; Msh.v.oPhi = Msh.v.Phi;
 
-    /*     // Diagnostics */
-    /*     if (bMdc){ */
-    /*         Mdc.getDiagnostic(Mat, Msh, Dsc, t); */
-    /*         Mdc.getSystemResidual(Mat, Msh, Dsc, t); */
-    /*     } */
+        // Diagnostics
+        if (bMdc){
+            Mdc.getDiagnostic(Mat, Msh, Dsc, t);
+            Mdc.getSystemResidual(Mat, Msh, Dsc, t);
+        }
 
-    /*     // Write Data */
-    /*     Prb.checkProbes(Msh, Sol, t); */
-    /*     std::cout << "\r" << double(100 * t / Dsc.endTime) << " %"; */
+        // Write Data
+        Prb.checkProbes(Msh, Sol, t);
+        std::cout << "\r" << double(100 * t / Dsc.endTime) << " %";
 	
-	    /* // Update Coefficients */
-    /*     Dsc.checkStability(Mat, Msh); */
-    /*     Dsc.setMomentumBoundaries(Mat, Msh); */
-    /*     Dsc.setMomentumCoefficients(Mat, Msh); */
-    /*     Dsc.setPressureBoundaries(Mat, Msh); */
-    /*     Dsc.setPressureCoefficients(Mat, Msh); */
+	    // Update Coefficients
+        Dsc.checkStability(Mat, Msh);
+        Dsc.setMomentumBoundaries(Mat, Msh);
+        Dsc.setMomentumCoefficients(Mat, Msh);
+        Dsc.setPressureBoundaries(Mat, Msh);
+        Dsc.setPressureCoefficients(Mat, Msh);
 
-    /*     // Convergence */
-    /*     if (std::sqrt(Sol->calcErr(Msh.p.oPhi, Msh.p.Phi)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;} */
+        // Convergence
+        if (std::sqrt(Sol->calcErr(Msh.p.oPhi, Msh.p.Phi, Msh.p.bObs)) < data["tolTemporal"].asDouble()){std::cout << "\nSteady-state achieved @ t = " << std::setprecision(2) << t << " seconds."; break;}
 
-    /* } std::cout << "\n"; */
+    } std::cout << "\n";
 
-    /* // Global Energy Balance */
-    /* Mdc.getGlobalBalance(Mat, Msh, Dsc); */
+    // Global Energy Balance
+    Mdc.getGlobalBalance(Mat, Msh, Dsc);
 
-    /* // Time */
-    /* auto t2 = std::chrono::high_resolution_clock::now(); */
-    /* std::chrono::duration<double, std::milli> msDoub = t2 - t1; */
-    /* double tTime = msDoub.count()/1000/60; */
+    // Time
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> msDoub = t2 - t1;
+    double tTime = msDoub.count()/1000/60;
 
-    /* // End */
-    /* std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n"; */
-    /* std::cout << "Files saved to: " << Prb.dirName << "\n"; */
+    // End
+    std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n";
+    std::cout << "Files saved to: " << Prb.dirName << "\n";
 
 }

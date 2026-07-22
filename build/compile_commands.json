@@ -205,8 +205,38 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerSC.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o03_DiscretizerSC.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverSC.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_SolverSC.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o04_CGSC.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CGSC.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_CGSC.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o04_CGSC.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeSC.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o05_ProbeSC.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
   "output": "CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicSC.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_MedicSC.cpp",
+  "output": "CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o"
 }
 ]

@@ -6,7 +6,7 @@
 #include <fstream>
 #include <filesystem>
 
-#include "o09_MedicNS.h"
+#include "o09_MedicSC.h"
 
 std::ofstream createDiagnostic(std::filesystem::path fName){
 
@@ -110,4 +110,3 @@ void Medic::getGlobalBalance(Material Mat, Mesh Msh, Discretizer Dsc){
     std::cout << "Global imbalance: " << (rho / Dsc.dt) * totDiv << "\n";
 
 }
-

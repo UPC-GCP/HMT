@@ -47,6 +47,7 @@ bool isFormula(std::string value){
 
 }
 
+
 void Mesh::calculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec) {
 
     // General
@@ -187,7 +188,6 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
 }
 
 
-
 void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit){
 
     // Deltas (nD)
@@ -226,7 +226,6 @@ void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit){
 }
 
 
-
 void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v){
     
 	// Control (nD)
@@ -243,7 +242,6 @@ void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBas
 	}
 
     // Geometry uNodes (non-nD)
-    // u nodes sit on p faces; u faces sit on p nodes (u has one more x-node than p)
     for (size_t i = 0; i < u.Nodes[0].size(); i++){u.Nodes[0][i] = p.Faces[0][i];}
     for (size_t i = 0; i < p.Nodes[0].size(); i++){u.Faces[0][i+1] = p.Nodes[0][i];}
     u.Faces[0][0] = u.Nodes[0].front() - u.Faces[0][1]; u.Faces[0].back() = u.Nodes[0].back() + u.Faces[0][1];
@@ -251,7 +249,6 @@ void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBas
     u.Faces[1].back() = p.Faces[1].back();
 
     // Geometry vNodes (non-nD)
-    // v nodes sit on p faces; v faces sit on p nodes (v has one more y-node than p)
     for (size_t i = 0; i < v.Nodes[0].size(); i++){v.Nodes[0][i] = p.Nodes[0][i]; v.Faces[0][i] = p.Faces[0][i];}
     v.Faces[0].back() = p.Faces[0].back();
     for (size_t i = 0; i < v.Nodes[1].size(); i++){v.Nodes[1][i] = p.Faces[1][i];}
@@ -331,7 +328,6 @@ void Mesh::addBoundariesPressure(Json::Value boundaries, Material Mat, Expressio
     }
 
 }
-
 
 
 void Mesh::addBoundariesVelocity(Json::Value boundaries, Material Mat){

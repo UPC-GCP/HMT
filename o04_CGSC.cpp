@@ -1,0 +1,74 @@
+// Imports
+#include <iostream>
+#include <vector>
+#include <json/json.h>
+#include <cmath>
+#include <math.h>
+#include <ctime>
+
+// Self-Imports
+#include "o04_CGSC.h"
+#include "o09_libArithmeticSC.h"
+
+bool CG::newSolve(std::vector<Matrix> matA, std::vector<std::vector<double>>& x, std::vector<double> matB, std::vector<std::vector<bool>> bObs){
+
+    // Control
+    int n = matB.size(), m = x.size(), l = x[0].size(), iPos{}; double alpha, rsNew, beta;
+    std::vector<double> r = matB, Ap(n);
+
+    // Residual
+    std::vector<double> Ax = newProdMatVec(matA, x);
+    for (int i = 0; i < n; i++){r[i] -= Ax[i];}
+
+    // Direction
+    std::vector<double> p = r;
+    double rsOld = operDotProd(r, r); if (std::sqrt(rsOld) < tolNum){lastIter = 0; lastRes = rsOld; return true;}
+
+    // Conjugate Gradient Loop
+    for (int k = 0; k < maxIter; k++){
+
+        // Step Size
+        Ap = operProdMatVec(matA, p, m, l);
+        alpha = rsOld / operDotProd(p, Ap);
+
+        // Update Values
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < l; j++){
+                if (bObs[i][j]){continue;} iPos = i * l + j;
+                x[i][j] += alpha * p[iPos]; r[iPos] -= alpha * Ap[iPos];
+            }
+        }
+        
+        // Control
+        rsNew = operDotProd(r, r);
+
+        // Diagnostics
+        double maxTemp = 0;
+        for (std::vector<double> vec : x){
+            for (double val : vec){
+                if (std::abs(val) > maxTemp){maxTemp = std::abs(val);}
+            }
+        }
+
+        if (std::isnan(rsNew) || std::isinf(rsNew) || maxTemp > 1e6){
+            std::cerr << "CG diverges @ iteration " << k << ", residual: " << rsNew << ", maxAbsValue: " << maxTemp << "\n";
+            lastIter = k; lastRes = rsNew; return false;
+        }
+
+        // Error
+        if (std::sqrt(rsNew) < tolNum){lastIter = k; lastRes = rsNew; return true;}
+
+        // Direction
+        beta = rsNew / rsOld;
+        for (int i = 0; i < n; i++){p[i] = r[i] + beta * p[i];}
+
+        // Control
+        rsOld = rsNew;
+
+    }
+
+    // Control
+    lastIter = maxIter; lastRes = rsNew; return true;
+
+}
+

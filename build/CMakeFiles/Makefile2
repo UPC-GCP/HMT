@@ -165,12 +165,12 @@ CMakeFiles/DHCSolver.dir/clean:
 CMakeFiles/SCSolver.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=35,36,37,38,39 "Built target SCSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=35,36,37,38,39,40,41,42,43,44 "Built target SCSolver"
 .PHONY : CMakeFiles/SCSolver.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/SCSolver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 10
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/SCSolver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/upc_gcp/TFM/HMT/build/CMakeFiles 0
 .PHONY : CMakeFiles/SCSolver.dir/rule

@@ -52,11 +52,11 @@ void Discretizer::checkStability(Material Mat, Mesh& Msh){
                 mu = Mat.vMat[Msh.p.nMat[i-1][j]].mu; rho = Mat.vMat[Msh.p.nMat[i-1][j]].rho;
             } nu = mu / rho;
 
-            // Convective (always applies: AB2 momentum predictor is explicit)
+            // Convective
             dtMin = 0.35 * Msh.u.deltaX[0][i] / std::max(std::abs(Msh.u.Phi[i][j]), epsFind);
             if (dtMin < dt){dt = dtMin;}
 
-            // Diffusive (applies when viscous diffusion is discretized explicitly)
+            // Diffusive
             dtMin = (0.25 / nu) * std::pow(Msh.u.deltaX[0][i], 2) * std::pow(Msh.u.deltaX[1][j], 2) / (std::pow(Msh.u.deltaX[0][i], 2) + std::pow(Msh.u.deltaX[1][j], 2));
             if (dtMin < dt){dt = dtMin;}
 
@@ -185,13 +185,11 @@ void Discretizer::setMomentumCoefficients(Material Mat, Mesh& Msh){
             Dn = mu * Msh.v.Sn[i][j] / Msh.v.dX[1][j+1]; Fn = rho * Msh.v.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i][j+1]);
             Pn = Fn / Dn; Msh.v.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0);
 
-            // Buoyancy (only active when energy mesh is initialised, i.e. DHCSolver)
+            // Buoyancy
             if (!Msh.T.Phi.empty()){
                 Tv = 0.5 * (Msh.T.Phi[i][j-1] + Msh.T.Phi[i][j]);
                 buoyancy = beta * Mat.g * (Tv - Mat.T0) * dt;
-            } else {
-                buoyancy = 0.0;
-            }
+            } else {buoyancy = 0.0;}
 
             // Calculate
             a0 = rho * Msh.v.Vp[i][j] / dt; Rn = Msh.v.matA[k].aw * Msh.v.oPhi[i-1][j] + Msh.v.matA[k].ae * Msh.v.oPhi[i+1][j] + Msh.v.matA[k].as * Msh.v.oPhi[i][j-1] + Msh.v.matA[k].an * Msh.v.oPhi[i][j+1] - (Msh.v.matA[k].aw + Msh.v.matA[k].ae + Msh.v.matA[k].as + Msh.v.matA[k].an) * Msh.v.oPhi[i][j];
@@ -277,8 +275,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
                         // Coefficients Convection-Diffusion
                         Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Msh.v.matA[k].aw = Dw;
-                        /* Dw = mu * Msh.v.Sw[i][j] / Msh.v.dX[0][i]; Fw = rho * Msh.v.Sw[i][j] * 0.5 * (Msh.u.oPhi[i][j] + Msh.u.oPhi[i][j-1]); */
-                        /* Pw = Fw / Dw; Msh.v.matA[k].aw = Dw * funcScheme(Pw) + std::max(Fw, 0.0); */
 
                         // Calculate
                         a0 = rho * Msh.v.Vp[i][j] / dt;
@@ -288,7 +284,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
                 } else if (bC.side == 1){
 
                     // East Boundary
-
                     // uMesh
                     i = Msh.u.N[0]-1; 
                     for (size_t j = 0; j < Msh.u.N[1]; j++){
@@ -305,8 +300,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
                         // Coefficients
                         De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Msh.v.matA[k].ae = De;
-                        /* De = mu * Msh.v.Se[i][j] / Msh.v.dX[0][i+1]; Fe = rho * Msh.v.Se[i][j] * 0.5 * (Msh.u.oPhi[i+1][j] + Msh.u.oPhi[i+1][j-1]); */
-                        /* Pe = Fe / De; Msh.v.matA[k].ae = De * funcScheme(Pe) + std::max(-Fe, 0.0); */
 
                         // Calculate
                         a0 = rho * Msh.v.Vp[i][j] / dt;
@@ -330,8 +323,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
                         // Coefficients
                         Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Msh.u.matA[k].as = Ds;
-                        /* Ds = mu * Msh.u.Ss[i][j] / Msh.u.dX[1][j]; Fs = rho * Msh.u.Ss[i][j] * 0.5 * (Msh.v.oPhi[i][j] + Msh.v.oPhi[i-1][j]); */
-                        /* Ps = Fs / Ds; Msh.u.matA[k].as = Ds * funcScheme(Ps) + std::max(Fs, 0.0); */
 
                         // Calculate
                         a0 = rho * Msh.u.Vp[i][j] / dt;
@@ -347,7 +338,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
                 } else if (bC.side == 1){
 
                     // North Boundary
-
                     // uMesh
                     j = Msh.u.N[1]-1;
                     for (size_t i = 1; i < Msh.u.N[0]-1; i++){
@@ -356,8 +346,6 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
                         // Coefficients
                         Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Msh.u.matA[k].an = Dn;
-                        /* Dn = mu * Msh.u.Sn[i][j] / Msh.u.dX[1][j+1]; Fn = rho * Msh.u.Sn[i][j] * 0.5 * (Msh.v.oPhi[i][j+1] + Msh.v.oPhi[i-1][j+1]); */
-                        /* Pn = Fn / Dn; Msh.u.matA[k].an = Dn * funcScheme(Pn) + std::max(-Fn, 0.0); */
 
                         // Calculate
                         a0 = rho * Msh.u.Vp[i][j] / dt;

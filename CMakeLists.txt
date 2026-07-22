@@ -55,13 +55,13 @@ add_executable(SCSolver
     o00_SCSolver.cpp
     o01_Material.cpp
     o02_MeshSC.cpp
-    # o03_DiscretizerSC.cpp
-    # o04_SolverSC.cpp
-    # o04_CGNS.cpp
+    o03_DiscretizerSC.cpp
+    o04_SolverSC.cpp
+    o04_CGSC.cpp
     # o04_BCG.cpp
-    # o05_ProbeNS.cpp
+    o05_ProbeSC.cpp
     o09_ExpressionParser.cpp
-    # o09_MedicNS.cpp
+    o09_MedicSC.cpp
 )
 
 # 4. Linking

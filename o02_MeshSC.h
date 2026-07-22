@@ -2,7 +2,7 @@
 #define MESHSC_H_
 
 #include <json/value.h>
-#include <vector>
+/* #include <vector> */
 #include <json/json.h>
 
 #include "o01_Material.h"
@@ -41,7 +41,7 @@ struct boundMain{
 struct boundVelocity{
     int type{}, side{};
     double uVal{}, vVal{};
-    std::vector<int> i0{}, i1{}; // each one stores the x-y coordinates of their position
+    std::vector<int> i0{}, i1{}; // indexes
     std::vector<double> Phi{}, oPhi{}; // bound velocity modified to check the other 
     bool bUpdate = false;
     std::string expression{};
@@ -67,7 +67,7 @@ public:
     std::vector<int> vExpr{}; // dimension
     std::vector<boundMain> boundaryPressure{}, boundaryEnergy{};
     std::vector<boundVelocity> boundaryVelocity{};
-    std::vector<Obstacle> obstacles{}; // new Obstacle storage, will be needed to impose boundaries at obstacles
+    std::vector<Obstacle> obstacles{}; 
 
     // Constructor
     Mesh(int algo, double W = 1, double A = 0, double xC = 0.5, double kStr = 1, double delta = 0.001);
