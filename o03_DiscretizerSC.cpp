@@ -353,7 +353,8 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
                     }
 
                     // vMesh
-                    j = Msh.v.N[1]-1; for (size_t i = 0; i < Msh.v.N[0]; i++){
+                    j = Msh.v.N[1]-1;
+                    for (size_t i = 0; i < Msh.v.N[0]; i++){
                         k = i * Msh.v.N[1] + j; Msh.v.Phi[i][j] = bC.vVal;
                         Msh.v.matA[k].ap = 1; Msh.v.matB[k] = bC.vVal;
                     }
@@ -362,7 +363,58 @@ void Discretizer::setMomentumBoundaries(Material Mat, Mesh& Msh){
 
             }
 
-        } else {std::cerr << "Only Dirichlet BC accepted at this time.\n";}
+        } else if (bC.type == 1){
+
+            // Neumann
+            if (bC.i0[0] == bC.i1[0]){
+
+                // xBoundary
+                if (bC.side == 0){
+
+                    // West Boundary
+                    // uMesh
+
+                    // vMesh
+
+                } else if (bC.side == 1){
+
+                    // East Boundary
+                    // uMesh
+                    i = Msh.u.N[0]-1;
+                    for (size_t j = 0; j < Msh.u.N[1]; j++){
+                        Msh.u.Phi[i][j] = Msh.u.oPhi[i-1][j];
+                    }
+                    // vMesh
+                    i = Msh.v.N[0]-1;
+                    for (size_t j = 1; j < Msh.v.N[1]-1; j++){
+                        k = i * Msh.v.N[1] + j;
+                        Msh.v.matA[k].ae = 0; Msh.v.matB[k] = bC.vVal;
+                    }
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
+
+            } else if (bC.i0[1] == bC.i1[1]){
+
+                // yBoundary
+                if (bC.side == 0){
+
+                    // South Boundary
+                    // uMesh
+
+                    // vMesh
+
+                } else if (bC.side == 1){
+
+                    // North Boundary
+                    // uMesh
+
+                    // vMesh
+
+                } else {std::cerr << "Boundary side not specified correctly.\n";}
+
+            } else {std::cerr << "Boundary range not specified correctly.\n";}
+
+        } else {std::cerr << "Boundary type not recognized.\n";}
 
     }
 
@@ -611,9 +663,10 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
         Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
     }
 
-    // Corrections
-    Msh.p.matA[0].aw = 0; Msh.p.matA[0].ae = 0; Msh.p.matA[0].as = 0; Msh.p.matA[0].an = 0;
-    Msh.p.matA[0].ap = 1; Msh.p.matB[0] = 0;
+    /* // Corrections */
+    /* Msh.p.matA[0].aw = 0; Msh.p.matA[0].ae = 0; Msh.p.matA[0].as = 0; Msh.p.matA[0].an = 0; */
+    /* Msh.p.matA[0].ap = 1; Msh.p.matB[0] = 0; */    
+
 
 }
 
