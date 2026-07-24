@@ -30,7 +30,8 @@ from pathlib import Path
 
 ##### Directory #####
 # dirPath = Path.cwd() / "ioRes" / sys.argv[1]
-dirPath = Path.cwd() / 'ioRes'
+dirPath  = Path.cwd() / 'ioRes'
+plotPath = Path.cwd() / 'ioPlots'
 
 
 # ### Plot Points
@@ -45,11 +46,11 @@ dirPath = Path.cwd() / 'ioRes'
 #     # cleanFrames = frames
 
 #     ### Animate Map
-#     if bool(int(sys.argv[3])): PL.createAnimation(dirPath, cleanFrames, vTime)
-    
+#     if bool(int(sys.argv[3])): PL.createAnimation(dirPath, cleanFrames, vTime, outPath=plotPath / sys.argv[1])
+
 #     ### Plot Snapshots
 #     if len(sys.argv[4]) > 2:
-#         for iSnap in sys.argv[4][1:-1].split(","): PL.createSnapshot(dirPath, cleanFrames, vTime, float(iSnap))
+#         for iSnap in sys.argv[4][1:-1].split(","): PL.createSnapshot(dirPath, cleanFrames, vTime, float(iSnap), outPath=plotPath / sys.argv[1])
 
 # if len(sys.argv) == 5: quit()
 

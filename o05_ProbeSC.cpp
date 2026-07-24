@@ -148,7 +148,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             // Header - uMesh
             for (int j = tempFld.xPos[0]; j < tempFld.xPos[1]; j++){
                 for (int k = tempFld.yPos[0]; k < tempFld.yPos[1]; k++){
-                    tempFld.file << "," << Msh.u.Faces[0][j] << " " << Msh.u.Faces[1][k];
+                    tempFld.file << "," << Msh.u.Nodes[0][j] << " " << Msh.u.Nodes[1][k];
                 }
             } tempFld.file << "\n";
 
@@ -171,7 +171,7 @@ Probe::Probe(Mesh Msh, Json::Value probes, std::string tempScheme, std::string s
             // Header - vMesh
             for (int j = tempFld.xPos[0]; j < tempFld.xPos[1]; j++){
                 for (int k = tempFld.yPos[0]; k < tempFld.yPos[1]; k++){
-                    tempFld.file << "," << Msh.v.Faces[0][j] << " " << Msh.v.Faces[1][k];
+                    tempFld.file << "," << Msh.v.Nodes[0][j] << " " << Msh.v.Nodes[1][k];
                 }
             } tempFld.file << "\n";
 

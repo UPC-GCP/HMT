@@ -610,7 +610,7 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
         Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
 
         // Coefficients B
-        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
     }
 
     // East Boundary (Edges & Corners)
@@ -628,9 +628,9 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
         Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
 
         // Coefficients B
-        Msh.p.matB[k] = (rho / dt) * (- Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
     }
-    
+
     // South Boundary (Edges)
     j = 0;
     for (int i = 1; i < Msh.p.N[0]-1; i++){
@@ -644,7 +644,7 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
         Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
 
         // Coefficients B
-        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j]);
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
     }
 
     // North Boundary (Edges)
@@ -660,13 +660,44 @@ void Discretizer::setPressureBoundaries(Material Mat, Mesh& Msh){
         Msh.p.matA[k].ap = - Msh.p.matA[k].aw - Msh.p.matA[k].ae - Msh.p.matA[k].as - Msh.p.matA[k].an;
 
         // Coefficients B
-        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
+        Msh.p.matB[k] = (rho / dt) * (Msh.u.Phi[i+1][j] * Msh.p.Se[i][j] - Msh.u.Phi[i][j] * Msh.p.Sw[i][j] + Msh.v.Phi[i][j+1] * Msh.p.Sn[i][j] - Msh.v.Phi[i][j] * Msh.p.Ss[i][j]);
     }
 
     /* // Corrections */
     /* Msh.p.matA[0].aw = 0; Msh.p.matA[0].ae = 0; Msh.p.matA[0].as = 0; Msh.p.matA[0].an = 0; */
     /* Msh.p.matA[0].ap = 1; Msh.p.matB[0] = 0; */    
 
+    // Corrections Dirichlet
+    bool bPinSet = false;
+    for (boundMain& bC : Msh.boundaryPressure){
+        
+        // Filter Neumann
+        if (bC.type != 0){continue;}
+        bPinSet = true;
+
+        if (bC.i0[0] == bC.i1[0]){
+            // xBoundary
+            i = (bC.side == 0) ? bC.i0[0] : bC.i1[0]-1;
+            for (int j = bC.i0[1]; j < bC.i1[1]; j++){
+                k = i * Msh.p.N[1] + j;
+                Msh.p.matA[k] = {}; Msh.p.matA[k].ap = 1; Msh.p.matB[k] = bC.value;
+            }
+        } else if (bC.i0[1] == bC.i1[1]){
+            // yBoundary
+            j = (bC.side == 0) ? bC.i0[1] : bC.i0[1]-1;
+            for (int i = bC.i0[0]; i < bC.i1[0]; i++){
+                k = i * Msh.p.N[1] + j;
+                Msh.p.matA[k] = {}; Msh.p.matA[k].ap = 1; Msh.p.matB[k] = bC.value;
+            }
+        }
+
+    }
+    
+    // Corrections Neumann 
+    if (!bPinSet){
+        k = (Msh.p.N[0]-1) * Msh.p.N[1] + (Msh.p.N[1]-1);
+        Msh.p.matA[k] = {}; Msh.p.matA[k].ap = 1; Msh.p.matB[k] = 0;
+    }
 
 }
 

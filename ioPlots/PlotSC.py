@@ -102,52 +102,50 @@ def speed_frames(u_frames, v_frames, u_bc_east=1.0, v_bc_north=0.0):
 
 # ── animation ────────────────────────────────────────────────────────────────
 
-def animate(result_path, fps=30, dpi=150,
-            obs_x=(0.4, 0.6), obs_y=(0.65, 0.85)):
+def animate(result_path, plot_dir, fps=30, dpi=150,
+            obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), show_pressure=False):
 
     result_path = Path(result_path)
     print(f"\nResult directory: {result_path.name}")
 
-    p_frames, times, xP, yP = parse_probe(result_path / "Probe_1_Map.csv")
-    u_frames, _,     xU, yU = parse_probe(result_path / "Probe_2u_Field.csv")
+    u_frames, times, xU, yU = parse_probe(result_path / "Probe_2u_Field.csv")
     v_frames, _,     xV, yV = parse_probe(result_path / "Probe_2v_Field.csv")
+    if show_pressure:
+        p_frames, _, xP, yP = parse_probe(result_path / "Probe_1_Map.csv")
 
     spd = speed_frames(u_frames, v_frames)
 
     n_frames = len(times)
     print(f"  Frames: {n_frames}  |  t = [{times[0]:.3f}, {times[-1]:.3f}] s")
 
-    # Fixed colour limits (consistent across all frames)
-    p_min, p_max = float(p_frames.min()), float(p_frames.max())
-    p_mid  = 0.5 * (p_min + p_max)
-    p_half = max(abs(p_min - p_mid), abs(p_max - p_mid), 1e-6)
     s_min, s_max = 0.0, float(spd.max())
-
-    # Spatial extent for imshow (use pressure grid positions)
-    ext = [xP[0], xP[-1], yP[0], yP[-1]]
+    ext = [xU[0], xU[-1], yU[0], yU[-1]]
 
     # ── figure ────────────────────────────────────────────────────────────
-    fig, axes = plt.subplots(1, 2, figsize=(14, 4.2))
+    ncols = 2 if show_pressure else 1
+    fig, axes = plt.subplots(1, ncols, figsize=(7 * ncols, 4.2), squeeze=False)
     fig.subplots_adjust(left=0.07, right=0.97, bottom=0.12, top=0.88, wspace=0.35)
 
-    # Panel 1: pressure
-    ax1 = axes[0]
-    im1 = ax1.imshow(p_frames[0].T, cmap="RdBu_r", origin="lower",
-                     aspect="auto", extent=ext,
-                     vmin=p_mid - p_half, vmax=p_mid + p_half)
-    cb1 = fig.colorbar(im1, ax=ax1, fraction=0.03, pad=0.02)
-    cb1.set_label("p (Pa)", fontsize=9)
-    ax1.set_title("Pressure", fontsize=10)
-    ax1.set_xlabel("x (m)"); ax1.set_ylabel("y (m)")
-    _add_obstacle(ax1, obs_x, obs_y)
+    if show_pressure:
+        p_min, p_max = float(p_frames.min()), float(p_frames.max())
+        p_mid  = 0.5 * (p_min + p_max)
+        p_half = max(abs(p_min - p_mid), abs(p_max - p_mid), 1e-6)
+        ext_p  = [xP[0], xP[-1], yP[0], yP[-1]]
 
-    # Panel 2: speed
-    ax2 = axes[1]
+        ax1 = axes[0, 0]
+        im1 = ax1.imshow(p_frames[0].T, cmap="RdBu_r", origin="lower",
+                         aspect="auto", extent=ext_p,
+                         vmin=p_mid - p_half, vmax=p_mid + p_half)
+        fig.colorbar(im1, ax=ax1, fraction=0.03, pad=0.02).set_label("p (Pa)", fontsize=9)
+        ax1.set_title("Pressure", fontsize=10)
+        ax1.set_xlabel("x (m)"); ax1.set_ylabel("y (m)")
+        _add_obstacle(ax1, obs_x, obs_y)
+
+    ax2 = axes[0, -1]
     im2 = ax2.imshow(spd[0].T, cmap="viridis", origin="lower",
                      aspect="auto", extent=ext,
                      vmin=s_min, vmax=s_max)
-    cb2 = fig.colorbar(im2, ax=ax2, fraction=0.03, pad=0.02)
-    cb2.set_label("|V| (m/s)", fontsize=9)
+    fig.colorbar(im2, ax=ax2, fraction=0.03, pad=0.02).set_label("|V| (m/s)", fontsize=9)
     ax2.set_title("Velocity Magnitude", fontsize=10)
     ax2.set_xlabel("x (m)"); ax2.set_ylabel("y (m)")
     _add_obstacle(ax2, obs_x, obs_y)
@@ -155,17 +153,19 @@ def animate(result_path, fps=30, dpi=150,
     title = fig.suptitle(_title(times[0]), fontsize=11, y=0.97)
 
     def update(k):
-        im1.set_data(p_frames[k].T)
         im2.set_data(spd[k].T)
         title.set_text(_title(times[k]))
-        return im1, im2, title
+        if show_pressure:
+            im1.set_data(p_frames[k].T)
+            return im1, im2, title
+        return im2, title
 
     print(f"\nRendering {n_frames} frames at {fps} fps, dpi={dpi} ...")
     t0 = time.time()
     ani = anim.FuncAnimation(fig, update, frames=n_frames,
                              interval=1000 / fps, blit=True, repeat=False)
 
-    out = result_path / "Animation_SC.mp4"
+    out = plot_dir / "Animation_SC.mp4"
     ani.save(str(out), writer="ffmpeg", fps=fps, dpi=dpi,
              extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
     print(f"Saved → {out}  ({time.time()-t0:.0f}s)")
@@ -188,7 +188,7 @@ def _title(t):
 
 # ── static snapshot ──────────────────────────────────────────────────────────
 
-def snapshot(result_path, t_target=-1, obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), dpi=150):
+def snapshot(result_path, plot_dir, t_target=-1, obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), dpi=150):
     """Save a single 4-panel snapshot (p, u, v, |V|) at the closest time step."""
 
     result_path = Path(result_path)
@@ -230,7 +230,7 @@ def snapshot(result_path, t_target=-1, obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), dpi
         ax.set_title(label.split("(")[0].strip(), fontsize=9)
         _add_obstacle(ax, obs_x, obs_y)
 
-    out = result_path / f"Snapshot_SC_t{t_actual:.3f}.png"
+    out = plot_dir / f"Snapshot_SC_t{t_actual:.3f}.png"
     fig.savefig(str(out), dpi=dpi)
     print(f"Saved → {out}")
     plt.close(fig)
@@ -260,9 +260,12 @@ def main():
                     metavar="T",
                     help="Save a 4-panel snapshot at time T instead of animating "
                          "(use -1 for last frame)")
+    ap.add_argument("--pressure", action="store_true",
+                    help="Add pressure panel alongside velocity magnitude in the animation")
     args = ap.parse_args()
 
-    ioRes = Path.cwd() / "ioRes"
+    ioRes   = Path.cwd() / "ioRes"
+    ioPlots = Path.cwd() / "ioPlots"
     if args.result_dir is None:
         result = _latest_sc(ioRes)
     elif Path(args.result_dir).is_absolute():
@@ -270,13 +273,17 @@ def main():
     else:
         result = ioRes / args.result_dir
 
+    plot_dir = ioPlots / result.name
+    plot_dir.mkdir(parents=True, exist_ok=True)
+
     obs_x = (args.obs[0], args.obs[1])
     obs_y = (args.obs[2], args.obs[3])
 
     if args.snapshot is not None:
-        snapshot(result, t_target=args.snapshot, obs_x=obs_x, obs_y=obs_y, dpi=args.dpi)
+        snapshot(result, plot_dir, t_target=args.snapshot, obs_x=obs_x, obs_y=obs_y, dpi=args.dpi)
     else:
-        animate(result, fps=args.fps, dpi=args.dpi, obs_x=obs_x, obs_y=obs_y)
+        animate(result, plot_dir, fps=args.fps, dpi=args.dpi, obs_x=obs_x, obs_y=obs_y,
+                show_pressure=args.pressure)
 
 
 if __name__ == "__main__":

@@ -97,7 +97,7 @@ def getLastFrame(fPath):
 
     return data.reshape(nX, nY), t, xRet, yRet
 
-def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
+def createAnimation(filePath:str, frames:list, vTime:list, outPath:str=None): # TRANSPOSE PENDING
 
     global idAnimation
 
@@ -130,16 +130,18 @@ def createAnimation(filePath:str, frames:list, vTime:list): # TRANSPOSE PENDING
     ani = animate.FuncAnimation(fig, update, frames=len(frames), interval=0.5, blit=True, repeat=False)
 
     # Save Video
+    writePath = Path(outPath) if outPath else Path(filePath)
+    writePath.mkdir(parents=True, exist_ok=True)
     tempName = "Animation_" + str(idAnimation+1) + ".mp4"
-    if not os.path.exists(filePath / tempName):
+    if not os.path.exists(writePath / tempName):
         print("Exporting video ...")
         idAnimation += 1
-        ani.save(filePath / tempName, writer='ffmpeg', fps=30)
-        print(f"File saved to: {filePath / tempName}")
+        ani.save(writePath / tempName, writer='ffmpeg', fps=30)
+        print(f"File saved to: {writePath / tempName}")
 
     print(f"Elapsed Time: {time.time() - tStart:.3f}")
 
-def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1, extent=None, label="Value"): # FUNCTIONAL
+def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1, extent=None, label="Value", outPath:str=None): # FUNCTIONAL
 
     global idPlot
 
@@ -170,17 +172,21 @@ def createSnapshot(filePath:str, frames:list, vTime:list, tStep:float = -1, exte
         plt.clabel(contours, inline=True, fontsize=8, fmt='%.1f')
 
     # Save Plot
+    writePath = Path(outPath) if outPath else Path(filePath)
+    writePath.mkdir(parents=True, exist_ok=True)
     tempName = "Plot_" + str(idPlot + 1) + ".png"
-    if not os.path.exists(filePath / tempName):
+    if not os.path.exists(writePath / tempName):
         print("Exporting image ...")
         idPlot += 1
-        plt.savefig(filePath / tempName)
-        print(f"File saved to: {filePath / tempName}")
+        plt.savefig(writePath / tempName)
+        print(f"File saved to: {writePath / tempName}")
 
 
-def createPoint(filePath:str): # FUNCTIONAL
-    
+def createPoint(filePath:str, outPath:str=None): # FUNCTIONAL
+
     global idPlot
+    writePath = Path(outPath) if outPath else Path(filePath)
+    writePath.mkdir(parents=True, exist_ok=True)
 
     # Read Data
     print("Parsing file: Probe_0_Point.csv")
@@ -202,10 +208,10 @@ def createPoint(filePath:str): # FUNCTIONAL
 
     # Save Plot
     tempName = "Plot_" + str(idPlot+1) + ".png"
-    if not os.path.exists(filePath / tempName):
+    if not os.path.exists(writePath / tempName):
         print("Exporting image ..."); idPlot += 1
-        plt.savefig(filePath / tempName)
-        print(f"File saved to: {filePath / tempName}")
+        plt.savefig(writePath / tempName)
+        print(f"File saved to: {writePath / tempName}")
 
     # Plot Secondary
     plt.figure()
@@ -218,10 +224,10 @@ def createPoint(filePath:str): # FUNCTIONAL
 
     # Save Secondary
     tempName = "Plot_" + str(idPlot+1) + ".png"
-    if not os.path.exists(filePath / tempName):
+    if not os.path.exists(writePath / tempName):
         print("Exporting image ..."); idPlot += 1
-        plt.savefig(filePath / tempName)
-        print(f"File saved to: {filePath / tempName}")
+        plt.savefig(writePath / tempName)
+        print(f"File saved to: {writePath / tempName}")
 
     
 def numStudyDiff(fileName:str, sVar:str) :
@@ -235,19 +241,22 @@ def numStudyDiff(fileName:str, sVar:str) :
         rVar = [50, 100, 200, 400]
     else: print('Variable not recognized ...'); quit
     
-    # Directory 
-    dirPath = Path.cwd() / "TestData"; vRes, vIter = [], []; 
-    fileList = [f for f in sorted(os.listdir(dirPath)) if "Case" in f]
-    
+    # Directory
+    dataPath = Path.cwd() / "TestData"
+    outPath  = Path(__file__).parent / "DiffStudy"
+    outPath.mkdir(parents=True, exist_ok=True)
+    vRes, vIter = [], []
+    fileList = [f for f in sorted(os.listdir(dataPath)) if "Case" in f]
+
     # File Loop
     for file in fileList:
-        
+
         # Filter
         if not int(file[20:22]) in rCase: continue
 
         # Read Data
-        data = pd.read_csv(dirPath / file / fileName)
-        
+        data = pd.read_csv(dataPath / file / fileName)
+
         # Log
         vRes.append(data['lastRes'].mean())
         vIter.append(data['lastIter'].mean())
@@ -265,9 +274,10 @@ def numStudyDiff(fileName:str, sVar:str) :
 
         # Save
         tempName = "Plot_" + sVar + "_" + aVal[i] + ".png"
-        if not os.path.exists(dirPath / tempName):
+        if not os.path.exists(outPath / tempName):
             print("Exporting image ...")
-            plt.savefig(dirPath / tempName)
+            plt.savefig(outPath / tempName)
+            print(f"File saved to: {outPath / tempName}")
             print(f"File saved to: {dirPath / tempName}")
 
 
@@ -287,7 +297,7 @@ def numStudyConv(dirPath: Path):
     aColor   = {'UDS': 'b', 'CDS': 'r'}
 
     # Output folder for comparison plots
-    outPath = dirPath / "ConvStudy"
+    outPath = Path(__file__).parent / "ConvStudy"
     os.makedirs(outPath, exist_ok=True)
 
     # Build case→directory map: caseDirs[scheme][sCase] → Path
@@ -364,7 +374,7 @@ def numStudyNS(dirPath: Path):
     schemes = ['UDS', 'CDS']
     aColor  = {'UDS': 'b', 'CDS': 'r'}
 
-    outPath = dirPath / "NSStudy"
+    outPath = Path(__file__).parent / "NSStudy"
     os.makedirs(outPath, exist_ok=True)
 
     # Case dirs: exNS1=UDS/Re100, exNS2=UDS/Re400, exNS3=CDS/Re100, exNS4=CDS/Re400
