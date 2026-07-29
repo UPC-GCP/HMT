@@ -1,0 +1,58 @@
+{
+    "_dataNum": "Numerical Data",
+    "tempScheme": "implicit", "spatScheme": "UDS", "solver": "CG",
+    "tolNumeric": 1e-8, "tolTemporal": 1e-3, "maxIterations": 2000,
+    "endTime": 100, "timeStep": 1e-3,
+    
+    "_dataPhys": "Physical Data",
+    "PHI0": 0, "VF0": [0, 0],
+    "materials": [
+	    {"rho": 1, "gamma": 1, "mu": 0.01},
+    	{"rho": 1, "gamma": 1, "mu": 0.0025},
+        {"rho": 50, "gamma": 50, "mu": 0}
+    ],
+    
+    "_dataGeom": "Geometrical Data",
+    "width": 1,
+    "sections": [
+        {"material": 2, "x0": [0.4, 0.4], "x1": [0.6, 0.6], "source": 10},
+        {"material": 0, "x0": [0, 0], "x1": [0.4, 1], "source": 20},
+        {"material": 0, "x0": [0.6, 0], "x1": [1, 1], "source": 30},
+        {"material": 1, "x0": [0.4, 0], "x1": [0.6, 0.4], "source": 40},
+        {"material": 1, "x0": [0.4, 0.6], "x1": [0.6, 1], "source": 50}
+    ],
+    "obstacles": [
+        {"x0": [0.4, 0.4], "x1": [0.6,0.6]}
+    ],
+
+    "_dataMesh": "Mesh Data",
+    "strength": 0, "centering": 0.5, "kappa": 1, "delta": 0.001,
+    "meshAlgorithm": 1, "N": [5, 5],
+    "refinement": [
+        {"axis": 0, "N": 5, "range": [0, 1]},
+        {"axis": 1, "N": 5, "range": [0, 1]}
+    ],
+
+    "_dataBnd": "Boundary Conditions",
+    "boundaries": [
+        {"type": "Neumann", "x0": [0, 0], "x1": [0, 1], "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [1, 0], "x1": [1, 1], "side": 1, "value": 0},
+        {"type": "Neumann", "x0": [0, 0], "x1": [1, 0], "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [0, 1], "x1": [1, 1], "side": 1, "value": 0}
+    ],
+    "boundariesVelocity": [
+        {"type": "Dirichlet", "x0": [0, 0], "x1": [0, 1], "side": 0, "uValue": 0, "vValue": 0},
+        {"type": "Dirichlet", "x0": [1, 0], "x1": [1, 1], "side": 1, "uValue": 0, "vValue": 0},
+        {"type": "Dirichlet", "x0": [0, 0], "x1": [1, 0], "side": 0, "uValue": 0, "vValue": 0},
+        {"type": "Dirichlet", "x0": [0, 1], "x1": [1, 1], "side": 1, "uValue": 1, "vValue": 0}
+    ],
+
+    "_dataProbe": "Probe Data",
+    "probes": [
+        {"type": "Map", "t": [0, 100], "x0": [0, 0], "x1": [1, 1]},
+        {"type": "Field", "t": [0, 100], "x0": [0, 0], "x1": [1, 1]}
+    ],
+
+    "_dataMedic": "Medic Data",
+    "medicOn": true
+}

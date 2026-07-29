@@ -1,0 +1,157 @@
+{
+    "tempScheme": "implicit",
+    "spatScheme": "UDS",
+    "solver": "CG",
+    "tolNumeric": 1e-08,
+    "tolTemporal": 1e-15,
+    "maxIterations": 2000,
+    "endTime": 0.5,
+    "timeStep": 0.01,
+    "PHI0": 0.0,
+    "materials": [
+        {
+            "rho": 1.0,
+            "gamma": 1.0,
+            "cp": 1.0,
+            "mu": 0.0,
+            "beta": 0.0
+        }
+    ],
+    "velocityField": [
+        {
+            "value": "0"
+        },
+        {
+            "value": "0"
+        }
+    ],
+    "width": 1.0,
+    "sections": [
+        {
+            "material": 0,
+            "x0": [
+                0,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ],
+            "source": 0
+        }
+    ],
+    "strength": 0,
+    "centering": 0.5,
+    "kappa": 1,
+    "delta": 0.001,
+    "meshAlgorithm": 3,
+    "N": [
+        64,
+        2
+    ],
+    "refinement": [
+        {
+            "axis": 0,
+            "N": 64,
+            "range": [
+                0,
+                1
+            ]
+        },
+        {
+            "axis": 1,
+            "N": 2,
+            "range": [
+                0,
+                1
+            ]
+        }
+    ],
+    "boundaries": [
+        {
+            "type": "Dirichlet",
+            "x0": [
+                0,
+                0
+            ],
+            "x1": [
+                0,
+                1
+            ],
+            "value": 100,
+            "side": 0
+        },
+        {
+            "type": "Dirichlet",
+            "x0": [
+                1,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ],
+            "value": 0,
+            "side": 1
+        },
+        {
+            "type": "Neumann",
+            "x0": [
+                0,
+                0
+            ],
+            "x1": [
+                1,
+                0
+            ],
+            "value": 0,
+            "side": 0
+        },
+        {
+            "type": "Neumann",
+            "x0": [
+                0,
+                1
+            ],
+            "x1": [
+                1,
+                1
+            ],
+            "value": 0,
+            "side": 1
+        }
+    ],
+    "probes": [
+        {
+            "type": "Map",
+            "t": [
+                0.485,
+                0.5
+            ],
+            "x0": [
+                0,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ]
+        },
+        {
+            "type": "Debug",
+            "t": [
+                0,
+                0.5
+            ],
+            "x0": [
+                0,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ]
+        }
+    ],
+    "medicOn": false
+}

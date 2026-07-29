@@ -41,7 +41,6 @@
 *.dwo
 
 # Directories
-ioSrc/
 ioRes/
 *.png
 

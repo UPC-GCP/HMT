@@ -1,0 +1,198 @@
+{
+    "_comment": "Smith-Hutton scheme comparison + refinement N064 | N=64x32 | Hybrid",
+    "_dataNum": "Numerical Data",
+    "tempScheme": "implicit",
+    "spatScheme": "Hybrid",
+    "solver": "BCG",
+    "tolNumeric": 1e-08,
+    "tolTemporal": 1e-06,
+    "maxIterations": 2000,
+    "endTime": 5,
+    "timeStep": 0.01,
+    "_dataPhys": "Physical Data",
+    "PHI0": 0,
+    "materials": [
+        {
+            "rho": 10,
+            "gamma": 1
+        },
+        {
+            "rho": 1000,
+            "gamma": 1
+        },
+        {
+            "rho": 1000000,
+            "gamma": 1
+        }
+    ],
+    "velocityField": [
+        {
+            "value": "2 * y * (1 - x^2)"
+        },
+        {
+            "value": "- 2 * x * (1 - y^2)"
+        }
+    ],
+    "_dataGeom": "Geometrical Data",
+    "width": 1,
+    "sections": [
+        {
+            "material": 2,
+            "x0": [
+                -1,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ],
+            "source": 0
+        }
+    ],
+    "_dataMesh": "Mesh Data",
+    "strength": 0,
+    "centering": 0.5,
+    "kappa": 1,
+    "delta": 0.001,
+    "meshAlgorithm": 3,
+    "N": [
+        64,
+        32
+    ],
+    "refinement": [
+        {
+            "axis": 0,
+            "N": 64,
+            "range": [
+                -1,
+                1
+            ]
+        },
+        {
+            "axis": 1,
+            "N": 32,
+            "range": [
+                0,
+                1
+            ]
+        }
+    ],
+    "_dataBnd": "Boundary Conditions",
+    "boundaries": [
+        {
+            "type": "Dirichlet",
+            "x0": [
+                -1,
+                0
+            ],
+            "x1": [
+                0,
+                0
+            ],
+            "value": "1 + tanh(10 * (2 * x + 1))",
+            "side": 0
+        },
+        {
+            "type": "Neumann",
+            "x0": [
+                0,
+                0
+            ],
+            "x1": [
+                1,
+                0
+            ],
+            "value": 0,
+            "side": 0
+        },
+        {
+            "type": "Dirichlet",
+            "x0": [
+                -1,
+                0
+            ],
+            "x1": [
+                -1,
+                1
+            ],
+            "value": "1 - tanh(10)",
+            "side": 0
+        },
+        {
+            "type": "Dirichlet",
+            "x0": [
+                -1,
+                1
+            ],
+            "x1": [
+                1,
+                1
+            ],
+            "value": "1 - tanh(10)",
+            "side": 1
+        },
+        {
+            "type": "Dirichlet",
+            "x0": [
+                1,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ],
+            "value": "1 - tanh(10)",
+            "side": 1
+        }
+    ],
+    "_dataProbe": "Probe Data",
+    "probes": [
+        {
+            "type": "Map",
+            "t": [
+                0,
+                5
+            ],
+            "x0": [
+                -1,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ]
+        },
+        {
+            "type": "Boundary",
+            "t": [
+                0,
+                5
+            ],
+            "x0": [
+                -1,
+                0
+            ],
+            "x1": [
+                1,
+                0
+            ]
+        },
+        {
+            "type": "Debug",
+            "t": [
+                0,
+                5
+            ],
+            "x0": [
+                -1,
+                0
+            ],
+            "x1": [
+                1,
+                1
+            ]
+        }
+    ],
+    "_dataMedic": "Medic Data",
+    "medicOn": false
+}
