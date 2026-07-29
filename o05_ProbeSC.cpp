@@ -7,6 +7,7 @@
 #include <fstream>
 #include <ctime>
 #include <filesystem>
+#include <unistd.h>
 
 #include "o05_ProbeSC.h"
 
@@ -14,6 +15,21 @@ std::string createFolder(std::string tempScheme, std::string spatScheme, std::st
 
     // Control
     if (tempScheme.find('-') != std::string::npos){tempScheme.erase(tempScheme.find('-'), 1);}
+
+    // User
+
+    /* char *lgn; lgn = getuid(); */
+
+    /* char *getlogin(void); */
+    /* int getlogin_r(char *getlogin, size_t namesize); */
+
+    std::cout << "Username:\n";
+    /* std::cout << lgn << "\n"; */
+    std::cout << "Test end.\n";
+
+    // NEED TO GET USERNAME SO IT CAN DETECT IF IT IS MY OWN LAPTOP OR THE UPC COMPUTER AND SAVE THE FILES ON THE CORRESPONDING DIRECTORIES
+
+    std::exit(0);
 
     // Directory
     std::filesystem::path pBase = std::filesystem::current_path();

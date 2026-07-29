@@ -166,8 +166,8 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
     for (Json::Value::ArrayIndex i = 0; i < obs.size(); i++){
         // Find Positions (nD)
         for (int j = 0; j < Msh.N.size(); j++){
-            tempObs.i0[j] = std::find(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
-            tempObs.i1[j] = std::find(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
+            tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
+            tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
         } 
 
         // bObs

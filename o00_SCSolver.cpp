@@ -1,4 +1,5 @@
 // Imports
+/* #include <cstddef> */
 #include <iostream>
 #include <json/forwards.h>
 #include <string>
@@ -14,7 +15,6 @@
 #include "o03_DiscretizerSC.h"
 #include "o04_SolverSC.h"
 #include "o04_CGSC.h"
-/* #include "o04_BCG.h" */
 #include "o05_ProbeSC.h"
 #include "o09_ExpressionParser.h"
 #include "o09_MedicSC.h"
@@ -76,12 +76,12 @@ int main(int argc, char* argv[]){
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n";
     Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n";
-    Msh.generateMesh(Msh.p, data["PHI0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes.\n";
+    Msh.generateMesh(Msh.p, data["PHI0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes and " << Msh.obstacles.size() << " obstacles.\n";
     Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n";
     Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryPressure.size() << " boundary conditions added.\n";
     Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n";
 
-    
+
     /* ///// Discretizer ///// */
     std::cout << "Initializing discretizer ...\n";
     Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n";
@@ -111,6 +111,8 @@ int main(int argc, char* argv[]){
     std::cout << "Initializing probes ...\n";
     Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n";
     Prb.checkProbes(Msh, Sol); std::cout << "Initial conditions stored.\n";
+
+    return 0;
 
 
     /* ///// Medic ///// */
