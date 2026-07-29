@@ -28,7 +28,7 @@ std::string Probe::createFolder(std::string tempScheme, std::string spatScheme, 
         pBase /= "ioRes";
         std::cout << "Directory LAPTOP: " << pBase << "\n";
     } else if (uName == "gonzalo"){
-        pBase /= "../../../ioRes";
+        pBase /= "../../../home_nobck/ioRes"; pBase = pBase.lexically_normal();
         std::cout << "Directory DEKTOP: " << pBase << "\n";
     } else {std::cerr << "User not recognized, unidentified directory.\n";}
 
