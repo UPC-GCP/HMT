@@ -87,9 +87,7 @@ int main(int argc, char* argv[]){
     Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n";
     Dsc.setSchemeParameters(Mat, Msh); std::cout << "Scheme parameters set.\n";
     Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity boundaries set.\n";
-    Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n";
-    Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n";
-    Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n";
+    Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n"; Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n"; Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n";
     
 
     ///// Solver /////
@@ -110,7 +108,13 @@ int main(int argc, char* argv[]){
     /* ///// Probes ///// */
     std::cout << "Initializing probes ...\n";
     Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n";
+
+
+    return 0;
+
+
     Prb.checkProbes(Msh, Sol); std::cout << "Initial conditions stored.\n";
+
 
     return 0;
 

@@ -1,5 +1,5 @@
-#ifndef PROBENS_H_
-#define PROBENS_H_
+#ifndef PROBESC_H_
+#define PROBESC_H_
 
 #include <cstddef>
 #include <fstream>
@@ -46,12 +46,14 @@ struct pPoint{
 class Probe
 {
 private:
+    std::string createFolder(std::string tempScheme, std::string spatScheme, std::string fName, std::string& dirName);
 
 public:
 
     // Variables
     std::string pathBase{};
     std::string dirName{};
+    std::string uName{};
     pPoint probePoint{};
 
     // Vectors

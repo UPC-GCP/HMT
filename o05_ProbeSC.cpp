@@ -1,39 +1,38 @@
 // Imports
 #include <cstddef>
+#include <cstdlib>
 #include <iostream>
 #include <string>
+/* #include <type_traits> */
 #include <vector>
 #include <json/json.h>
 #include <fstream>
 #include <ctime>
 #include <filesystem>
-#include <unistd.h>
 
 #include "o05_ProbeSC.h"
 
-std::string createFolder(std::string tempScheme, std::string spatScheme, std::string fName, std::string& dirName){
+std::string Probe::createFolder(std::string tempScheme, std::string spatScheme, std::string fName, std::string& dirName){
 
     // Control
     if (tempScheme.find('-') != std::string::npos){tempScheme.erase(tempScheme.find('-'), 1);}
 
     // User
-
-    /* char *lgn; lgn = getuid(); */
-
-    /* char *getlogin(void); */
-    /* int getlogin_r(char *getlogin, size_t namesize); */
-
-    std::cout << "Username:\n";
-    /* std::cout << lgn << "\n"; */
-    std::cout << "Test end.\n";
-
-    // NEED TO GET USERNAME SO IT CAN DETECT IF IT IS MY OWN LAPTOP OR THE UPC COMPUTER AND SAVE THE FILES ON THE CORRESPONDING DIRECTORIES
-
-    std::exit(0);
+    const char* user = std::getenv("USER");
+    (user == nullptr) ? user = std::getenv("LOGNAME") : nullptr;
+    uName = std::string(user);
 
     // Directory
     std::filesystem::path pBase = std::filesystem::current_path();
-    pBase /= "ioRes";
+    if (uName == "upc_gcp"){
+        pBase /= "ioRes";
+        std::cout << "Directory LAPTOP: " << pBase << "\n";
+    } else if (uName == "gonzalo"){
+        pBase /= "../../../ioRes";
+        std::cout << "Directory DEKTOP: " << pBase << "\n";
+    } else {std::cerr << "User not recognized, unidentified directory.\n";}
+
+    std::exit(0);
 
     // Timestamp
     time_t timeStamp = std::time(nullptr);
