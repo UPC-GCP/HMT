@@ -51,16 +51,12 @@ def parse_map(fpath):
     return frames, times, xc, yc
 
 
-def speed_frames(u_frames, v_frames, u_bc_east=1.0, v_bc_north=0.0):
+def speed_frames(u_frames, v_frames):
     n, nx, ny = u_frames.shape
-    east_pad  = np.full((n, 1, ny), u_bc_east)
-    u_pad     = np.concatenate([u_frames, east_pad], axis=1)
-    u_p       = 0.5 * (u_pad[:, :-1, :] + u_pad[:, 1:, :])
-
-    north_pad = np.full((n, nx, 1), v_bc_north)
-    v_pad     = np.concatenate([v_frames, north_pad], axis=2)
-    v_p       = 0.5 * (v_pad[:, :, :-1] + v_pad[:, :, 1:])
-
+    u_pad = np.concatenate([u_frames, u_frames[:, -1:, :]], axis=1)
+    u_p   = 0.5 * (u_pad[:, :-1, :] + u_pad[:, 1:, :])
+    v_pad = np.concatenate([v_frames, v_frames[:, :, -1:]], axis=2)
+    v_p   = 0.5 * (v_pad[:, :, :-1] + v_pad[:, :, 1:])
     return np.sqrt(u_p**2 + v_p**2)
 
 
@@ -84,15 +80,17 @@ def add_obstacle(ax):
     ax.add_patch(rect)
 
 
-def imshow_panel(fig, ax, data, ext, cmap, label, sym=True):
+def pcolor_panel(fig, ax, xc, yc, data, cmap, label, sym=True):
     vabs = max(abs(data.min()), abs(data.max()), 1e-6)
     vmin = -vabs if sym else 0.0
     vmax =  vabs if sym else data.max()
-    im = ax.imshow(data.T, cmap=cmap, origin="lower", aspect="auto",
-                   extent=ext, vmin=vmin, vmax=vmax)
+    im = ax.pcolormesh(xc, yc, data.T, cmap=cmap, vmin=vmin, vmax=vmax,
+                       shading='nearest')
     fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02).set_label(label, fontsize=8)
     ax.set_xlabel("x (m)", fontsize=8)
     ax.set_ylabel("y (m)", fontsize=8)
+    ax.set_xlim(xc[0], xc[-1])
+    ax.set_ylim(yc[0], yc[-1])
     add_obstacle(ax)
     return im
 
@@ -102,8 +100,6 @@ def imshow_panel(fig, ax, data, ext, cmap, label, sym=True):
 def plot_snapshots(datasets, out_dir, ioRes):
     for (label, dname), ds in zip(MESHES, datasets):
         t_end = ds["times"][-1]
-        ext_p = [ds["xp"][0], ds["xp"][-1], ds["yp"][0], ds["yp"][-1]]
-        ext_u = [ds["xu"][0], ds["xu"][-1], ds["yu"][0], ds["yu"][-1]]
 
         fig, axes = plt.subplots(2, 2, figsize=(14, 7))
         fig.suptitle(
@@ -113,14 +109,14 @@ def plot_snapshots(datasets, out_dir, ioRes):
                             hspace=0.38, wspace=0.35)
 
         panels = [
-            (axes[0, 0], ds["p"][-1],   ext_p, "RdBu_r", "p (Pa)",    True),
-            (axes[0, 1], ds["spd"][-1], ext_p, "viridis", "|V| (m/s)", False),
-            (axes[1, 0], ds["u"][-1],   ext_u, "RdBu_r", "u (m/s)",   True),
-            (axes[1, 1], ds["v"][-1],   ext_u, "RdBu_r", "v (m/s)",   True),
+            (axes[0, 0], ds["xp"], ds["yp"], ds["p"][-1],   "RdBu_r",  "p (Pa)",    True),
+            (axes[0, 1], ds["xu"], ds["yu"], ds["spd"][-1], "viridis",  "|V| (m/s)", False),
+            (axes[1, 0], ds["xu"], ds["yu"], ds["u"][-1],   "RdBu_r",  "u (m/s)",   True),
+            (axes[1, 1], ds["xu"], ds["yu"], ds["v"][-1],   "RdBu_r",  "v (m/s)",   True),
         ]
         titles = ["Pressure", "Velocity Magnitude", "u", "v"]
-        for (ax, data, ext, cmap, lbl, sym), title in zip(panels, titles):
-            imshow_panel(fig, ax, data, ext, cmap, lbl, sym)
+        for (ax, xc, yc, data, cmap, lbl, sym), title in zip(panels, titles):
+            pcolor_panel(fig, ax, xc, yc, data, cmap, lbl, sym)
             ax.set_title(title, fontsize=9)
 
         tag = dname.split("_")[2]  # coarse / medium / fine
@@ -150,13 +146,16 @@ def plot_comparison(datasets, out_dir):
 
         for ax, (label, _), ds in zip(axes, MESHES, datasets):
             data = ds[field_key][-1]
-            ext  = [ds["xp"][0], ds["xp"][-1], ds["yp"][0], ds["yp"][-1]]
-            im = ax.imshow(data.T, cmap=cmap, origin="lower", aspect="auto",
-                           extent=ext, vmin=vmin, vmax=vmax)
+            xc   = ds["xp"] if field_key == "p" else ds["xu"]
+            yc   = ds["yp"] if field_key == "p" else ds["yu"]
+            im = ax.pcolormesh(xc, yc, data.T, cmap=cmap, vmin=vmin, vmax=vmax,
+                               shading='nearest')
             fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02).set_label(cb_label, fontsize=8)
             ax.set_title(f"{label}\nt = {ds['times'][-1]:.2f} s", fontsize=9)
             ax.set_xlabel("x (m)", fontsize=8)
             ax.set_ylabel("y (m)", fontsize=8)
+            ax.set_xlim(xc[0], xc[-1])
+            ax.set_ylim(yc[0], yc[-1])
             add_obstacle(ax)
 
         fname = "MeshComparison_Pressure.png" if field_key == "p" \

@@ -9,7 +9,8 @@ Usage:
     cd /path/to/HMT
     source .venv/bin/activate
     python ioPlots/PlotSC.py [result_dir] [--fps N] [--dpi N]
-                             [--obs X0 X1 Y0 Y1]
+                             [--obs X0 X1 Y0 Y1] [--re N]
+                             [--snapshot T] [--pressure]
 
 result_dir: directory name under ioRes/, or an absolute path.
             Defaults to the most recent exSC* run.
@@ -35,15 +36,14 @@ def parse_probe(fpath):
     Read a Map or Field CSV probe.
 
     CSV layout: rows = time frames; columns = Time, (x0 y0), (x0 y1), …
-    The C++ probe writes outer loop x, inner loop y — so y varies fastest
-    (ny consecutive columns share the same x value).
+    The C++ probe writes outer loop x, inner loop y — so y varies fastest.
 
     Returns
     -------
     frames : ndarray (n_frames, nx, ny)
     times  : ndarray (n_frames,)
-    xcoords: ndarray (nx,)   — from header (Faces positions)
-    ycoords: ndarray (ny,)   — from header (Faces positions)
+    xcoords: ndarray (nx,)
+    ycoords: ndarray (ny,)
     """
     t0 = time.time()
     name = Path(fpath).name
@@ -53,11 +53,10 @@ def parse_probe(fpath):
         header = f.readline().rstrip("\n")
 
     cols = header.split(",")
-    pairs = [c.split(" ") for c in cols[1:]]   # each entry = ["x", "y"]
+    pairs = [c.split(" ") for c in cols[1:]]
     all_x = [float(p[0]) for p in pairs]
     all_y = [float(p[1]) for p in pairs]
 
-    # y is the inner (fast) loop: count how many columns share the same x
     x0 = all_x[0]
     ny = 1
     while ny < len(all_x) and all_x[ny] == x0:
@@ -77,100 +76,26 @@ def parse_probe(fpath):
 
 # ── velocity interpolation ───────────────────────────────────────────────────
 
-def speed_frames(u_frames, v_frames, u_bc_east=1.0, v_bc_north=0.0):
+def speed_frames(u_frames, v_frames):
     """
-    Interpolate face-centred u, v to pressure-cell centres and return |V|.
+    Interpolate face-centred u, v to cell centres (Neumann outflow at East/North)
+    and return |V|.
 
-    The probe writes nx values in x for u (missing the East boundary face).
-    Padding with the outlet BC and averaging adjacent faces gives the p-cell
-    centre value.  Same logic applies to v in y.
-
-    u_frames : (n, nx, ny)
-    v_frames : (n, nx, ny)
+    u_frames : (n, nx, ny)   — u-face values written by Field probe
+    v_frames : (n, nx, ny)   — v-face values written by Field probe
     """
     n, nx, ny = u_frames.shape
-    east_pad = np.full((n, 1, ny), u_bc_east)
-    u_pad    = np.concatenate([u_frames, east_pad], axis=1)  # (n, nx+1, ny)
-    u_p      = 0.5 * (u_pad[:, :-1, :] + u_pad[:, 1:, :])   # (n, nx, ny)
+    # Neumann outflow: duplicate last face value for the boundary
+    u_pad = np.concatenate([u_frames, u_frames[:, -1:, :]], axis=1)
+    u_p   = 0.5 * (u_pad[:, :-1, :] + u_pad[:, 1:, :])
 
-    north_pad = np.full((n, nx, 1), v_bc_north)
-    v_pad     = np.concatenate([v_frames, north_pad], axis=2)  # (n, nx, ny+1)
-    v_p       = 0.5 * (v_pad[:, :, :-1] + v_pad[:, :, 1:])    # (n, nx, ny)
+    v_pad = np.concatenate([v_frames, v_frames[:, :, -1:]], axis=2)
+    v_p   = 0.5 * (v_pad[:, :, :-1] + v_pad[:, :, 1:])
 
     return np.sqrt(u_p**2 + v_p**2)
 
 
-# ── animation ────────────────────────────────────────────────────────────────
-
-def animate(result_path, plot_dir, fps=30, dpi=150,
-            obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), show_pressure=False):
-
-    result_path = Path(result_path)
-    print(f"\nResult directory: {result_path.name}")
-
-    u_frames, times, xU, yU = parse_probe(result_path / "Probe_2u_Field.csv")
-    v_frames, _,     xV, yV = parse_probe(result_path / "Probe_2v_Field.csv")
-    if show_pressure:
-        p_frames, _, xP, yP = parse_probe(result_path / "Probe_1_Map.csv")
-
-    spd = speed_frames(u_frames, v_frames)
-
-    n_frames = len(times)
-    print(f"  Frames: {n_frames}  |  t = [{times[0]:.3f}, {times[-1]:.3f}] s")
-
-    s_min, s_max = 0.0, float(spd.max())
-    ext = [xU[0], xU[-1], yU[0], yU[-1]]
-
-    # ── figure ────────────────────────────────────────────────────────────
-    ncols = 2 if show_pressure else 1
-    fig, axes = plt.subplots(1, ncols, figsize=(7 * ncols, 4.2), squeeze=False)
-    fig.subplots_adjust(left=0.07, right=0.97, bottom=0.12, top=0.88, wspace=0.35)
-
-    if show_pressure:
-        p_min, p_max = float(p_frames.min()), float(p_frames.max())
-        p_mid  = 0.5 * (p_min + p_max)
-        p_half = max(abs(p_min - p_mid), abs(p_max - p_mid), 1e-6)
-        ext_p  = [xP[0], xP[-1], yP[0], yP[-1]]
-
-        ax1 = axes[0, 0]
-        im1 = ax1.imshow(p_frames[0].T, cmap="RdBu_r", origin="lower",
-                         aspect="auto", extent=ext_p,
-                         vmin=p_mid - p_half, vmax=p_mid + p_half)
-        fig.colorbar(im1, ax=ax1, fraction=0.03, pad=0.02).set_label("p (Pa)", fontsize=9)
-        ax1.set_title("Pressure", fontsize=10)
-        ax1.set_xlabel("x (m)"); ax1.set_ylabel("y (m)")
-        _add_obstacle(ax1, obs_x, obs_y)
-
-    ax2 = axes[0, -1]
-    im2 = ax2.imshow(spd[0].T, cmap="viridis", origin="lower",
-                     aspect="auto", extent=ext,
-                     vmin=s_min, vmax=s_max)
-    fig.colorbar(im2, ax=ax2, fraction=0.03, pad=0.02).set_label("|V| (m/s)", fontsize=9)
-    ax2.set_title("Velocity Magnitude", fontsize=10)
-    ax2.set_xlabel("x (m)"); ax2.set_ylabel("y (m)")
-    _add_obstacle(ax2, obs_x, obs_y)
-
-    title = fig.suptitle(_title(times[0]), fontsize=11, y=0.97)
-
-    def update(k):
-        im2.set_data(spd[k].T)
-        title.set_text(_title(times[k]))
-        if show_pressure:
-            im1.set_data(p_frames[k].T)
-            return im1, im2, title
-        return im2, title
-
-    print(f"\nRendering {n_frames} frames at {fps} fps, dpi={dpi} ...")
-    t0 = time.time()
-    ani = anim.FuncAnimation(fig, update, frames=n_frames,
-                             interval=1000 / fps, blit=True, repeat=False)
-
-    out = plot_dir / "Animation_SC.mp4"
-    ani.save(str(out), writer="ffmpeg", fps=fps, dpi=dpi,
-             extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
-    print(f"Saved → {out}  ({time.time()-t0:.0f}s)")
-    plt.close(fig)
-
+# ── helpers ──────────────────────────────────────────────────────────────────
 
 def _add_obstacle(ax, obs_x, obs_y):
     rect = mpatches.Rectangle(
@@ -182,15 +107,102 @@ def _add_obstacle(ax, obs_x, obs_y):
     ax.add_patch(rect)
 
 
-def _title(t):
-    return f"Square Cylinder — Re = 50   |   t = {t:.3f} s"
+def _pcol(fig, ax, xc, yc, data, cmap, label, vmin, vmax, obs_x, obs_y):
+    """pcolormesh panel — correctly handles non-uniform meshes."""
+    im = ax.pcolormesh(xc, yc, data.T, cmap=cmap, vmin=vmin, vmax=vmax,
+                       shading='nearest')
+    fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02).set_label(label, fontsize=9)
+    ax.set_xlabel("x (m)", fontsize=8)
+    ax.set_ylabel("y (m)", fontsize=8)
+    ax.set_xlim(xc[0], xc[-1])
+    ax.set_ylim(yc[0], yc[-1])
+    _add_obstacle(ax, obs_x, obs_y)
+    return im
+
+
+def _title(t, re):
+    return f"Square Cylinder — Re = {re}   |   t = {t:.3f} s"
+
+
+# ── animation ────────────────────────────────────────────────────────────────
+
+def animate(result_path, plot_dir, fps=30, dpi=150,
+            obs_x=(0.4, 0.6), obs_y=(0.65, 0.85),
+            show_pressure=False, show_u=False, re=50):
+
+    result_path = Path(result_path)
+    print(f"\nResult directory: {result_path.name}")
+
+    u_frames, times, xU, yU = parse_probe(result_path / "Probe_2u_Field.csv")
+    v_frames, _,     _,  _  = parse_probe(result_path / "Probe_2v_Field.csv")
+    if show_pressure:
+        p_frames, _, xP, yP = parse_probe(result_path / "Probe_1_Map.csv")
+
+    spd = speed_frames(u_frames, v_frames)
+
+    n_frames = len(times)
+    print(f"  Frames: {n_frames}  |  t = [{times[0]:.3f}, {times[-1]:.3f}] s")
+
+    s_max = float(spd.max())
+    if show_u:
+        u_abs = max(abs(u_frames.min()), abs(u_frames.max()), 1e-6)
+
+    ncols = 1 + int(show_pressure) + int(show_u)
+    fig, axes = plt.subplots(1, ncols, figsize=(8 * ncols, 4.5), squeeze=False)
+    fig.subplots_adjust(left=0.10, right=0.92, bottom=0.12, top=0.87, wspace=0.45)
+
+    col = 0
+    if show_pressure:
+        p_abs = max(abs(p_frames.min()), abs(p_frames.max()), 1e-6)
+        ax_p  = axes[0, col]
+        im_p  = _pcol(fig, ax_p, xP, yP, p_frames[0], "RdBu_r", "p (Pa)",
+                      -p_abs, p_abs, obs_x, obs_y)
+        ax_p.set_title("Pressure", fontsize=10)
+        col += 1
+
+    if show_u:
+        ax_u = axes[0, col]
+        im_u = _pcol(fig, ax_u, xU, yU, u_frames[0], "RdBu_r", "u (m/s)",
+                     -u_abs, u_abs, obs_x, obs_y)
+        ax_u.set_title("u velocity", fontsize=10)
+        col += 1
+
+    ax_s = axes[0, col]
+    im_s = _pcol(fig, ax_s, xU, yU, spd[0], "viridis", "|V| (m/s)",
+                 0.0, s_max, obs_x, obs_y)
+    ax_s.set_title("Velocity Magnitude", fontsize=10)
+
+    title = fig.suptitle(_title(times[0], re), fontsize=11, y=0.97)
+
+    def update(k):
+        artists = []
+        if show_pressure:
+            im_p.set_array(p_frames[k].T.ravel())
+            artists.append(im_p)
+        if show_u:
+            im_u.set_array(u_frames[k].T.ravel())
+            artists.append(im_u)
+        im_s.set_array(spd[k].T.ravel())
+        title.set_text(_title(times[k], re))
+        return artists + [im_s, title]
+
+    print(f"\nRendering {n_frames} frames at {fps} fps, dpi={dpi} ...")
+    t0 = time.time()
+    ani_obj = anim.FuncAnimation(fig, update, frames=n_frames,
+                                 interval=1000 / fps, blit=True, repeat=False)
+
+    out = plot_dir / "Animation_SC.mp4"
+    ani_obj.save(str(out), writer="ffmpeg", fps=fps, dpi=dpi,
+                 extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
+    print(f"Saved → {out}  ({time.time()-t0:.0f}s)")
+    plt.close(fig)
 
 
 # ── static snapshot ──────────────────────────────────────────────────────────
 
-def snapshot(result_path, plot_dir, t_target=-1, obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), dpi=150):
-    """Save a single 4-panel snapshot (p, u, v, |V|) at the closest time step."""
-
+def snapshot(result_path, plot_dir, t_target=-1,
+             obs_x=(0.4, 0.6), obs_y=(0.65, 0.85), dpi=150, re=50):
+    """Save a 4-panel snapshot (p, |V|, u, v) at the closest time step."""
     result_path = Path(result_path)
     print(f"\nSnapshot from: {result_path.name}")
 
@@ -203,32 +215,24 @@ def snapshot(result_path, plot_dir, t_target=-1, obs_x=(0.4, 0.6), obs_y=(0.65, 
     t_actual = times[k]
     print(f"  Using frame {k}  (t = {t_actual:.4f} s)")
 
-    ext_p = [xP[0], xP[-1], yP[0], yP[-1]]
-    ext_u = [xU[0], xU[-1], yU[0], yU[-1]]
-    ext_v = [xV[0], xV[-1], yV[0], yV[-1]]
-
     fig, axes = plt.subplots(2, 2, figsize=(14, 7))
-    fig.suptitle(f"Square Cylinder — Re = 50   |   t = {t_actual:.4f} s", fontsize=12)
+    fig.suptitle(f"Square Cylinder — Re = {re}   |   t = {t_actual:.4f} s", fontsize=12)
     fig.subplots_adjust(left=0.07, right=0.97, bottom=0.08, top=0.92,
                         hspace=0.38, wspace=0.35)
 
     panels = [
-        (axes[0, 0], p_frames[k],  ext_p, "RdBu_r", "Pressure  p (Pa)"),
-        (axes[0, 1], spd[k],       ext_p, "viridis", "|V|  (m/s)"),
-        (axes[1, 0], u_frames[k],  ext_u, "RdBu_r", "u  (m/s)"),
-        (axes[1, 1], v_frames[k],  ext_v, "RdBu_r", "v  (m/s)"),
+        (axes[0, 0], xP, yP, p_frames[k],  "RdBu_r",  "Pressure  p (Pa)", True),
+        (axes[0, 1], xU, yU, spd[k],        "viridis",  "|V|  (m/s)",       False),
+        (axes[1, 0], xU, yU, u_frames[k],   "RdBu_r",  "u  (m/s)",         True),
+        (axes[1, 1], xV, yV, v_frames[k],   "RdBu_r",  "v  (m/s)",         True),
     ]
-    for ax, data, ext, cmap, label in panels:
+    titles = ["Pressure", "|V|", "u", "v"]
+    for (ax, xc, yc, data, cmap, label, sym), ttl in zip(panels, titles):
         vabs = max(abs(data.min()), abs(data.max()), 1e-6)
-        sym  = cmap == "RdBu_r"
-        vmin = -vabs if sym else 0
-        vmax = vabs  if sym else data.max()
-        im = ax.imshow(data.T, cmap=cmap, origin="lower", aspect="auto",
-                       extent=ext, vmin=vmin, vmax=vmax)
-        fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02).set_label(label, fontsize=8)
-        ax.set_xlabel("x (m)", fontsize=8); ax.set_ylabel("y (m)", fontsize=8)
-        ax.set_title(label.split("(")[0].strip(), fontsize=9)
-        _add_obstacle(ax, obs_x, obs_y)
+        vmin = -vabs if sym else 0.0
+        vmax =  vabs if sym else data.max()
+        _pcol(fig, ax, xc, yc, data, cmap, label, vmin, vmax, obs_x, obs_y)
+        ax.set_title(ttl, fontsize=9)
 
     out = plot_dir / f"Snapshot_SC_t{t_actual:.3f}.png"
     fig.savefig(str(out), dpi=dpi)
@@ -252,6 +256,7 @@ def main():
                     help="Result dir name (under ioRes/) or absolute path")
     ap.add_argument("--fps",  type=int,   default=30,  help="Frames per second (default 30)")
     ap.add_argument("--dpi",  type=int,   default=150, help="Output DPI (default 150)")
+    ap.add_argument("--re",   type=int,   default=50,  help="Reynolds number for title (default 50)")
     ap.add_argument("--obs",  type=float, nargs=4,
                     metavar=("X0", "X1", "Y0", "Y1"),
                     default=[0.4, 0.6, 0.65, 0.85],
@@ -261,7 +266,9 @@ def main():
                     help="Save a 4-panel snapshot at time T instead of animating "
                          "(use -1 for last frame)")
     ap.add_argument("--pressure", action="store_true",
-                    help="Add pressure panel alongside velocity magnitude in the animation")
+                    help="Add a pressure panel to the animation")
+    ap.add_argument("--u", action="store_true",
+                    help="Add a u-velocity panel to the animation")
     args = ap.parse_args()
 
     ioRes   = Path.cwd() / "ioRes"
@@ -280,10 +287,12 @@ def main():
     obs_y = (args.obs[2], args.obs[3])
 
     if args.snapshot is not None:
-        snapshot(result, plot_dir, t_target=args.snapshot, obs_x=obs_x, obs_y=obs_y, dpi=args.dpi)
+        snapshot(result, plot_dir, t_target=args.snapshot,
+                 obs_x=obs_x, obs_y=obs_y, dpi=args.dpi, re=args.re)
     else:
-        animate(result, plot_dir, fps=args.fps, dpi=args.dpi, obs_x=obs_x, obs_y=obs_y,
-                show_pressure=args.pressure)
+        animate(result, plot_dir, fps=args.fps, dpi=args.dpi,
+                obs_x=obs_x, obs_y=obs_y,
+                show_pressure=args.pressure, show_u=args.u, re=args.re)
 
 
 if __name__ == "__main__":
