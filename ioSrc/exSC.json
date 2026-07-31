@@ -7,7 +7,7 @@
     "_dataPhys": "Physical Data",
     "PHI0": 0, "VF0": [1, 0],
     "materials": [
-        {"rho": 1, "gamma": 1, "mu": 0.004}
+        {"rho": 1, "gamma": 1, "mu": 0.0008}
     ],
 
     "_dataGeom": "Geometrical Data",
@@ -21,31 +21,23 @@
 
     "_dataMesh": "Mesh Data",
     "strength": 0, "centering": 0.5, "kappa": 1, "delta": 0.1,
-    "meshAlgorithm": 1, "N": [120, 40],
+    "meshAlgorithm": 1, "N": [200, 40],
     "refinement": [
-        {"axis": 0, "N": 5,  "range": [0,    0.15]},
-        {"axis": 0, "N": 15, "range": [0.15, 0.4]},
-        {"axis": 0, "N": 35, "range": [0.4,  0.6]},
-        {"axis": 0, "N": 55, "range": [0.6,  1.75]},
-        {"axis": 0, "N": 10, "range": [1.75, 2.5]},
-        {"axis": 1, "N": 5,  "range": [0,    0.35]},
-        {"axis": 1, "N": 12, "range": [0.35, 0.65]},
-        {"axis": 1, "N": 6,  "range": [0.65, 0.85]},
-        {"axis": 1, "N": 12, "range": [0.85, 1.15]},
-        {"axis": 1, "N": 5,  "range": [1.15, 1.5]}
+        {"axis": 0, "N": 200, "range": [0, 2.5]},
+        {"axis": 1, "N": 40, "range": [0, 1.5]}
     ],
 
     "_dataBnd": "Boundary Conditions",
     "boundaries": [
-        {"type": "Neumann", "x0": [0,   0], "x1": [0,   1.5], "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [0, 0], "x1": [0, 1.5], "side": 0, "value": 0},
         {"type": "Dirichlet", "x0": [2.5, 0], "x1": [2.5, 1.5], "side": 1, "value": 0},
-        {"type": "Neumann", "x0": [0,   0], "x1": [2.5, 0],   "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [0, 0], "x1": [2.5, 0], "side": 0, "value": 0},
         {"type": "Neumann", "x0": [0, 1.5], "x1": [2.5, 1.5], "side": 1, "value": 0}
     ],
     "boundariesVelocity": [
-        {"type": "Dirichlet", "x0": [0, 0], "x1": [0,   1.5], "side": 0, "uValue": 1, "vValue": 0},
+        {"type": "Dirichlet", "x0": [0, 0], "x1": [0, 1.5], "side": 0, "uValue": 1, "vValue": 0},
         {"type": "Neumann", "x0": [2.5, 0], "x1": [2.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},
-        {"type": "Neumann", "x0": [0,   0], "x1": [2.5,   0], "side": 0, "uValue": 0, "vValue": 0},
+        {"type": "Neumann", "x0": [0, 0], "x1": [2.5, 0], "side": 0, "uValue": 0, "vValue": 0},
         {"type": "Neumann", "x0": [0, 1.5], "x1": [2.5, 1.5], "side": 1, "uValue": 0, "vValue": 0}
     ],
 

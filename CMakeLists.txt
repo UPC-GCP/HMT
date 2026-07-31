@@ -64,6 +64,19 @@ add_executable(SCSolver
     o09_MedicSC.cpp
 )
 
+# add_executable(3DSolver
+#     o00_3DSolver.cpp
+#     o01_Material.cpp
+#     o02_Mesh3D.cpp
+#     o03_Discretizer3D.cpp
+#     o04_Solver3D.cpp
+#     o04_CG3D.cpp
+#     o04_BCG3D.cpp
+#     o05_Probe3D.cpp
+#     o09_Medic3D.cpp
+#     o09_ExpressionParser.cpp
+# )
+
 # 4. Linking
 foreach (target MainSolver LDCSolver DHCSolver SCSolver)
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP)
