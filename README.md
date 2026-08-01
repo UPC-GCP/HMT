@@ -14,8 +14,11 @@ Summary of the current capabilities of the model and the possible configuration 
 8. **timeStep**: Time interval between instants.
     
 > "_dataNum": "Numerical Data",
+>
 > "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG",
+>
 > "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,
+>
 > "endTime": 50, "timeStep": 1e-3,
 
 ### Physical Data
