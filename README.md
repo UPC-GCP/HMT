@@ -26,7 +26,7 @@ Summary of the current capabilities of the model and the possible configuration 
 3. **V0**: Initial value for the Velocity field.
 4. **materials**: Registry of all materials with their corresponding properties. (Accepted Values: rho, gamma, mu)
 
-> [!PHYSICAL DATA]
+> [!PHYSICALDATA]
 >
 > "P0": 0, "T0": 0, "V0": [1, 0, 0],\
 > "materials": [\
@@ -36,6 +36,14 @@ Summary of the current capabilities of the model and the possible configuration 
 ### Geometrical Data
 1. **sections**: Definition of geometric regions with the corresponding material index and source term for each one.
 2. **obstacles**: Definition of geometric regions blocked by an obstacle.
+
+> [!NOTE]
+> "sections": [\
+>   {"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}
+> ],
+> "obstacles": [
+>   {"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}
+> ],
 
 ### Mesh Data
 1. **N**: Total amount of nodes for each axis.
