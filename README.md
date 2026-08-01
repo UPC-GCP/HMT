@@ -18,6 +18,7 @@ Summary of the current capabilities of the model and the possible configuration 
 > "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,\
 > "endTime": 50, "timeStep": 1e-3,
 
+
 ### Physical Data
 1. **P0**: Initial value for the Pressure map.
 2. **T0**: Initial value for the Temperature map.
@@ -27,8 +28,9 @@ Summary of the current capabilities of the model and the possible configuration 
 > [!NOTE]
 > "P0": 0, "T0": 0, "V0": [1, 0, 0],\
 > "materials": [\
->   &ensp;{"rho": 1, "gamma": 1, "mu": 0.0008}\
+>   &ensp;&ensp;&ensp;{"rho": 1, "gamma": 1, "mu": 0.0008}\
 > ],
+
 
 ### Geometrical Data
 1. **sections**: Definition of geometric regions with the corresponding material index and source term for each one.
@@ -36,11 +38,12 @@ Summary of the current capabilities of the model and the possible configuration 
 
 > [!NOTE]
 > "sections": [\
->   &ensp;&ensp;{"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
+>   &ensp;&ensp;&ensp;{"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
 > ],\
 > "obstacles": [\
->   &ensp;&ensp;{"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}\
+>   &ensp;&ensp;&ensp;{"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}\
 > ],
+
 
 ### Mesh Data
 1. **N**: Total amount of nodes for each axis.
@@ -54,21 +57,40 @@ Summary of the current capabilities of the model and the possible configuration 
 >   &ensp;&ensp;&ensp;{"axis": 2, "N": 40,  "range": [0, 1.5], "algorithm": "HyperSingle",     "delta": 0.1}\
 > ],
 
+
 ### Boundary Conditions
 1. **boundariesPressure**: Boundary conditions for the Pressure map.
 2. **boundariesVelocity**: Boundary conditions for the Velocity field.
 3. **boundariesTemperature** : Boundary conditions for the Temperature map.
 
 > [!NOTE]
+> "boundariesPressure": [\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [0, 1.5, 1.5],   "side": 0, "value": 0},\
+> &ensp;&ensp;&ensp;{"type": "Dirichlet", "x0": [2.5, 0, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "value": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 0, 1.5],   "side": 0, "value": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 1.5, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "value": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 1.5, 0],   "side": 0, "value": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 1.5], "x1": [2.5, 1.5, 1.5], "side": 1, "value": 0}\
+> ],\
+> "boundariesVelocity": [\
+> &ensp;&ensp;&ensp;{"type": "Dirichlet", "x0": [0, 0, 0],   "x1": [0, 1.5, 1.5],   "side": 0, "uValue": 1, "vValue": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [2.5, 0, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 0, 1.5],   "side": 0, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 1.5, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 1.5, 0],   "side": 0, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 0, 1.5], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0}\
+> ],\
+
 
 ### Probe Data
 1. **probes**: Definition of probe types for data logging, requires specifying the time interval and geometric region for each probe. (Accepted Values: Map, Field, Debug)
 
 > [!NOTE]
 > "probes": [\
-> {"type": "Map",   "t": [0, 100], "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "nWrite": 100},\
-> {"type": "Field", "t": [0, 100], "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "nWrite": 100}\
+> &ensp;&ensp;&ensp;{"type": "Map",   "t": [0, 100], "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "nWrite": 100},\
+> &ensp;&ensp;&ensp;{"type": "Field", "t": [0, 100], "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "nWrite": 100}\
 > ],
+
 
 ### Medic Data
 1. **medicOn**: Boolean that activates/deactivates the diagnostic tool.
