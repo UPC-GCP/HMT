@@ -79,7 +79,7 @@ Summary of the current capabilities of the model and the possible configuration 
 > &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 1.5, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},\
 > &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 1.5, 0],   "side": 0, "uValue": 0, "vValue": 0},\
 > &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 1.5], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0}\
-> ],\
+> ],
 
 
 ### Probe Data
