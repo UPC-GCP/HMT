@@ -50,6 +50,6 @@ ioRes/
 
 # Bash
 *.sh
-*.swp
+.*.swp
 *.md
 !README.md
