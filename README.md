@@ -75,15 +75,15 @@ Summary of the current capabilities of the model and the possible configuration 
 > "boundariesVelocity": [\
 > &ensp;&ensp;&ensp;{"type": "Dirichlet", "x0": [0, 0, 0],   "x1": [0, 1.5, 1.5],   "side": 0, "uValue": 1, "vValue": 0},\
 > &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [2.5, 0, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},\
-> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 0, 1.5],   "side": 0, "uValue": 0, "vValue": 0},\
-> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 1.5, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},\
-> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 1.5, 0],   "side": 0, "uValue": 0, "vValue": 0},\
-> &ensp;&ensp;&ebsp;{"type": "Neumann",   "x0": [0, 0, 1.5], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0}\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 0, 1.5],   "side": 0, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 1.5, 0], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 0],   "x1": [2.5, 1.5, 0],   "side": 0, "uValue": 0, "vValue": 0},\
+> &ensp;&ensp;&ensp;{"type": "Neumann",   "x0": [0, 0, 1.5], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0}\
 > ],\
 
 
 ### Probe Data
-1. **probes**: Definition of probe types for data logging, requires specifying the time interval and geometric region for each probe. (Accepted Values: Map, Field, Debug)
+1. **probes**: Definition of probe types for data logging, requires specifying the time interval, logging skips and geometric region for each probe. (Accepted Values: Map, Field, Debug)
 
 > [!NOTE]
 > "probes": [\
