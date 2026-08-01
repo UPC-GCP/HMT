@@ -12,13 +12,14 @@ Summary of the current capabilities of the model and the possible configuration 
 6. **maxIterations**: Limit of iterations per time-step for the numerical solver.
 7. **endTime**: Total duration of the simulation.
 8. **timeStep**: Time interval between instants.
-    
+
+> [!NOTE]
+>
 > "_dataNum": "Numerical Data",
 >
 > "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG",
 >
 > "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,
->
 > "endTime": 50, "timeStep": 1e-3,
 
 ### Physical Data
