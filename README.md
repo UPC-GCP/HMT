@@ -15,8 +15,8 @@ Summary of the current capabilities of the model and the possible configuration 
 
 > [!NOTE]
 >
-> "_dataNum": "Numerical Data", \\
-> "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG", \\
+> "_dataNum": "Numerical Data",\
+> "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG",\
 > "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,\
 > "endTime": 50, "timeStep": 1e-3,
 
@@ -25,6 +25,13 @@ Summary of the current capabilities of the model and the possible configuration 
 2. **T0**: Initial value for the Temperature map.
 3. **V0**: Initial value for the Velocity field.
 4. **materials**: Registry of all materials with their corresponding properties. (Accepted Values: rho, gamma, mu)
+
+> [!PHYSICAL DATA]
+>
+> "P0": 0, "T0": 0, "V0": [1, 0, 0],\
+> "materials": [\
+>   {"rho": 1, "gamma": 1, "mu": 0.0008}\
+> ],
 
 ### Geometrical Data
 1. **sections**: Definition of geometric regions with the corresponding material index and source term for each one.
