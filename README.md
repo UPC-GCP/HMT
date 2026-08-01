@@ -27,7 +27,7 @@ Summary of the current capabilities of the model and the possible configuration 
 > [!NOTE]
 > "P0": 0, "T0": 0, "V0": [1, 0, 0],\
 > "materials": [\
->   :{"rho": 1, "gamma": 1, "mu": 0.0008}\
+>   &ensp;{"rho": 1, "gamma": 1, "mu": 0.0008}\
 > ],
 
 ### Geometrical Data
@@ -36,10 +36,10 @@ Summary of the current capabilities of the model and the possible configuration 
 
 > [!NOTE]
 > "sections": [\
->   &nbsp;{"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
+>   &ensp;&ensp;{"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
 > ],\
 > "obstacles": [\
->   &nbsp;&nbsp;{"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}\
+>   &ensp;&ensp;{"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}\
 > ],
 
 ### Mesh Data
@@ -49,8 +49,8 @@ Summary of the current capabilities of the model and the possible configuration 
 > [!NOTE]
 > "N": [200, 40, 40],\
 > "refinement": [\
->   {"axis": 0, "N": 200, "range": [0, 2.5], "algorithm": "Bidirectional",  "strength": 0, "centering": 0.5},\
->   &nbsp;&nbsp;&nbsp;{"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "Unidirectional", "kappa": 1},\
+>   &ensp;&ensp;&ensp;{"axis": 0, "N": 200, "range": [0, 2.5], "algorithm": "Bidirectional",  "strength": 0, "centering": 0.5},\
+>   &ensp;&ensp;&ensp;{"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "Unidirectional", "kappa": 1},\
 >   &ensp;&ensp;&ensp;{"axis": 2, "N": 40,  "range": [0, 1.5], "algorithm": "HyperSingle",     "delta": 0.1}\
 > ],
 
@@ -59,7 +59,7 @@ Summary of the current capabilities of the model and the possible configuration 
 2. **boundariesVelocity**: Boundary conditions for the Velocity field.
 3. **boundariesTemperature** : Boundary conditions for the Temperature map.
 
-
+> [!NOTE]
 
 ### Probe Data
 1. **probes**: Definition of probe types for data logging, requires specifying the time interval and geometric region for each probe. (Accepted Values: Map, Field, Debug)
