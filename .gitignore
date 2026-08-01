@@ -51,3 +51,4 @@ ioRes/
 # Bash
 *.sh
 *.md
+!README.md
