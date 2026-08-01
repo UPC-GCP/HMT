@@ -36,7 +36,7 @@ Summary of the current capabilities of the model and the possible configuration 
 
 > [!NOTE]
 > "sections": [\
->   &nbsp;;{"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
+>   &nbsp;{"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
 > ],\
 > "obstacles": [\
 >   &nbsp;&nbsp;{"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}\
@@ -49,8 +49,8 @@ Summary of the current capabilities of the model and the possible configuration 
 > [!NOTE]
 > "N": [200, 40, 40],\
 > "refinement": [\
->   &ensp;{"axis": 0, "N": 200, "range": [0, 2.5], "algorithm": "Bidirectional",  "strength": 0, "centering": 0.5},\
->   &ensp;&ensp;{"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "Unidirectional", "kappa": 1},\
+>   {"axis": 0, "N": 200, "range": [0, 2.5], "algorithm": "Bidirectional",  "strength": 0, "centering": 0.5},\
+>   &nbsp;&nbsp;&nbsp;{"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "Unidirectional", "kappa": 1},\
 >   &ensp;&ensp;&ensp;{"axis": 2, "N": 40,  "range": [0, 1.5], "algorithm": "HyperSingle",     "delta": 0.1}\
 > ],
 
@@ -59,8 +59,19 @@ Summary of the current capabilities of the model and the possible configuration 
 2. **boundariesVelocity**: Boundary conditions for the Velocity field.
 3. **boundariesTemperature** : Boundary conditions for the Temperature map.
 
+
+
 ### Probe Data
 1. **probes**: Definition of probe types for data logging, requires specifying the time interval and geometric region for each probe. (Accepted Values: Map, Field, Debug)
 
+> [!NOTE]
+> "probes": [\
+> {"type": "Map",   "t": [0, 100], "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "nWrite": 100},\
+> {"type": "Field", "t": [0, 100], "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "nWrite": 100}\
+> ],
+
 ### Medic Data
 1. **medicOn**: Boolean that activates/deactivates the diagnostic tool.
+
+> [!NOTE]
+> "medicOn": false
