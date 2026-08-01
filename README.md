@@ -14,11 +14,9 @@ Summary of the current capabilities of the model and the possible configuration 
 8. **timeStep**: Time interval between instants.
 
 > [!NOTE]
->
-> "_dataNum": "Numerical Data",\
 > "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG",\
 > "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,\
-> "endTime": 50, "timeStep": 1e-3,
+> "endTime": 50, "timeStep": 1e-3,\
 
 ### Physical Data
 1. **P0**: Initial value for the Pressure map.
@@ -26,8 +24,7 @@ Summary of the current capabilities of the model and the possible configuration 
 3. **V0**: Initial value for the Velocity field.
 4. **materials**: Registry of all materials with their corresponding properties. (Accepted Values: rho, gamma, mu)
 
-> [!PHYSICALDATA]
->
+> [!NOTE]
 > "P0": 0, "T0": 0, "V0": [1, 0, 0],\
 > "materials": [\
 >   {"rho": 1, "gamma": 1, "mu": 0.0008}\
@@ -39,15 +36,23 @@ Summary of the current capabilities of the model and the possible configuration 
 
 > [!NOTE]
 > "sections": [\
->   {"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}
-> ],
-> "obstacles": [
->   {"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}
+>   {"material": 0, "x0": [0, 0, 0], "x1": [2.5, 1.5, 1.5], "source": 0}\
+> ],\
+> "obstacles": [\
+>   {"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}\
 > ],
 
 ### Mesh Data
 1. **N**: Total amount of nodes for each axis.
 2. **refinement**: Definition of mesh refinement with number of nodes and ranges defined for each refinement region. Needs to include the refinement algorithm and their corresponding parameters. (Accepted Values: Bidirectional [strength, centering], Unidirectional [kappa], HyperSingle [delta], HyperDouble [delta])
+
+> [!NOTE]
+> "N": [200, 40, 40],\
+> "refinement": [\
+>   {"axis": 0, "N": 200, "range": [0, 2.5], "algorithm": "Bidirectional",  "strength": 0, "centering": 0.5},\
+>   {"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "Unidirectional", "kappa": 1},\
+>   {"axis": 2, "N": 40,  "range": [0, 1.5], "algorithm": "HyperSingle",     "delta": 0.1}\
+> ],
 
 ### Boundary Conditions
 1. **boundariesPressure**: Boundary conditions for the Pressure map.
