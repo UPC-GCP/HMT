@@ -14,19 +14,19 @@ private:
 
 public:
     // Variables
-    double P0{}, T0{}, Phi0{}, g{};
+    double P0{}, T0{}, Phi0{}, g{}; // Initial values for solver variables (p, T), general constants
 
     // Vectors
-    std::vector<MatPhys> vMat{};
-    std::vector<double> VF0{};
+    std::vector<MatPhys> vMat{}; // Material repository
+    std::vector<double> VF0{}; // Initial values for Velocity Field
 
     // Constructor
     Material(Json::Value materials, double g=9.81);
     
     // Functions
-    void setInitialConditions(double initPhi);
-    void setInitialConditions(double initPhi, Json::Value initVF);
-    void setInitialConditions(double initT, double initP, Json::Value initVF);
+    void setInitialConditions(double initPhi); // MainSolver
+    void setInitialConditions(double initPhi, Json::Value initVF); // NS Solver
+    void setInitialConditions(double initT, double initP, Json::Value initVF); // DHCSolver / 3DSolver
 };
 
 #endif

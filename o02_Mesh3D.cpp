@@ -1,13 +1,13 @@
-#include <algorithm>
+/* #include <algorithm> */
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <json/value.h>
 #include <string>
-#include <utility>
+/* #include <utility> */
 #include <vector>
 #include <json/json.h>
+#include <json/value.h>
 #include <cmath>
 
 // Self-Imports
@@ -38,7 +38,7 @@ Mesh::Mesh() {
 
     // UPDATE
     // Will no longer update algorithm and parameters for the entire domain
-    // Have it defined for each region and solve during iteration
+    // Have it defined for each region and only read during evaluation
 
     /* // Algorithm Selection */
     /* this->algorithm = algorithm; */
@@ -63,32 +63,37 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
     double x0 = refData["range"][0].asDouble(), x1 = refData["range"][1].asDouble(); double length = x1 - x0;
 
     // Face Positions
-    if (sAlgo == "Bidirectional"){ // Face Positions 0: Bidirectional Non-uniform (A, xC)
+    if (sAlgo == "Bidirectional"){ // Face Positions 0: Bidirectional (A, xC)
         
         // Mesh Parameters
-        double A = refData["strength"].asDouble(), xC = refData["centering"].asDouble(); 
-        if (A > 2 || A < -2){std::cerr << "Bidirectional mesh parameters out of range.\n";}
+        double A = refData["strength"].asDouble(), xC = refData["centering"].asDouble() - x0; 
+        if (A > 2.5 || A < -2.5){std::cerr << "Bidirectional mesh parameter out of range. (strength)\n"; std::exit(0);}
+        if (xC <= 0 || xC >= length){std::cerr << "Bidirectional mesh parameter out of range. (centering)\n"; std::exit(0);}
+        // A (+): Closer to center, A (-): Away from center
         
         // Generate Mesh
         for (int i = cNode; i < cNode+NSec+1; i++) {
-            nFaces[iAxis][i] = x0 + (i-cNode) * length / NSec + A * (xC - (i-cNode) * length / NSec) * (1 - (i-cNode)/NSec) * (i-cNode) / NSec;
+            nFaces[iAxis][i] = x0 + (static_cast<double>(i)-cNode) * length / NSec + A * (xC - (static_cast<double>(i)-cNode) * length / NSec) * (1 - (static_cast<double>(i)-cNode)/NSec) * (static_cast<double>(i)-cNode) / NSec;
         }
 
-    } else if (sAlgo == "Unidirectional"){ // Face Positions 1: Unidirectional Non-uniform (Kappa)
+    } else if (sAlgo == "PowerLaw"){ // Face Positions 1: Power-Law (Kappa)
         
         // Mesh Parameters
         double kappa = refData["kappa"].asDouble();
-        if (kappa > 1 || kappa < -1){std::cerr << "Unidirectional mesh parameters out of range.\n";}
+        if (kappa <= 0){std::cerr << "Power-Law mesh parameter out of range.\n"; std::exit(0);}
+        // kappa < 1: Shifts right, kappa > 1: Shifts left
 
         // Generate Mesh
         for (int i = cNode; i < cNode+NSec+1; i++) {
-            nFaces[iAxis][i] = x0 + pow(((i-cNode) * length / NSec), kappa);
+            nFaces[iAxis][i] = x0 + length * pow(((static_cast<double>(i)-cNode) / NSec), kappa);
         }
 
-    } else if(sAlgo == "HyperSingle"){ // Face Positions 2: Hyperbolic Tangent (Single Side)
+    } else if(sAlgo == "HyperSingle"){ // Face Positions 2: Hyperbolic Tangent (Single-Sided)
         
         // Mesh Parameters
         double delta = refData["delta"].asDouble(); double A{}, B{};
+        if (delta == 0){std::cerr << "Hyperbolic tangent mesh parameter out of range.\n"; std::exit(0);}
+        // delta: independent of sign (+/-), higher value pushes towards the left
 
         // Generate Mesh
         for (int i = cNode; i < cNode+NSec+1; i++){
@@ -100,6 +105,8 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
         
         // Mesh Parameters
         double delta = refData["delta"].asDouble(); double A{}, B{};
+        if (delta == 0){std::cerr << "Hyperbolic tangent mesh parameter out of range.\n"; std::exit(0);}
+        // delta: independent of sign (+/-), higher value pushes towards the edges
 
         // Generate Mesh
         for (int i = cNode; i < cNode+NSec+1; i++){
@@ -107,12 +114,22 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
             nFaces[iAxis][i] = x0 + 0.5 * length * (1 + A/B);
         }
 
-    }
+    } else if (sAlgo == "Exponential") { // Face Positions 4: Exponential
 
-        /* // Calculate */
-        /* calculateFaces(cNode[refinement[i]["axis"].asInt()], refinement[i]["N"].asInt(), refinement[i]["range"][0].asDouble(), refinement[i]["range"][1].asDouble(), Msh.Faces[refinement[i]["axis"].asInt()]); */
+        // Mesh Parameters
+        double kappa = refData["kappa"].asDouble();
+        if (kappa == 0){std::cerr << "Exponential mesh parameter out of range.\n"; std::exit(0);}
+        // kappa < 0: Shifts right, kappa > 0: Shifts left 
+        
+        // Generate Mesh
+        for (int i = cNode; i < cNode+NSec+1; i++){
+            nFaces[iAxis][i] = x0 + length * (exp(kappa * (static_cast<double>(i) - cNode) / NSec) - 1) / (exp(kappa) - 1);
+        }
+
+    } 
 
 }
+
 
 void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs){
 
@@ -121,20 +138,19 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
 	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++){
 		Msh.N[i] = qNode[i].asInt();
 	}
-    for (int val : Msh.N){Msh.totNodes *= val;}
+    for (size_t val : Msh.N){Msh.totNodes *= val;}
 
 	// Geometry Resize (nD)
 	Msh.Faces.resize(Msh.N.size()); Msh.Nodes.resize(Msh.N.size()); Msh.deltaX.resize(Msh.N.size()); Msh.dX.resize(Msh.N.size()); 
 	for (size_t i = 0; i < Msh.N.size(); i++){
 		Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1); 
 	}
-    
+
     // Faces Loop (nD)
     std::vector<size_t> cNode; cNode.resize(Msh.N.size(), 0);
     for (int i = 0; i < refinement.size(); i++){
         // Calculate
-        calculateFaces(cNode, refinement[i]);
-        /* calculateFaces(cNode[refinement[i]["axis"].asInt()], refinement[i]["N"].asInt(), refinement[i]["range"][0].asDouble(), refinement[i]["range"][1].asDouble(), Msh.Faces[refinement[i]["axis"].asInt()]); */
+        calculateFaces(cNode, refinement[i], Msh.Faces);
 
         // Control
         cNode[refinement[i]["axis"].asInt()] += refinement[i]["N"].asInt();
@@ -147,24 +163,23 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
         }
     }
 
+    // Deltas (nD)
+    for (size_t i = 0; i < Msh.N.size(); i++){
+        for (size_t j = 0; j < Msh.deltaX[i].size(); j++){
+            // Delta X
+            Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j];
 
-    std::exit(0);
-    
-    /* // Deltas (nD) */
-    /* for (size_t i = 0; i < Msh.N.size(); i++){ */
-        /* for (size_t j = 0; j < Msh.deltaX[i].size(); j++){ */
-            /* // Delta X */
-            /* Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j]; */
+            // dX
+            if (j == Msh.deltaX[i].size()-1){continue;}
+            Msh.dX[i][j+1] = Msh.Nodes[i][j+1] - Msh.Nodes[i][j];
+        }
 
-            /* // dX */
-            /* if (j == Msh.deltaX[i].size()-1){continue;} */
-            /* Msh.dX[i][j+1] = Msh.Nodes[i][j+1] - Msh.Nodes[i][j]; */
-        /* } */
+        // dX
+        Msh.dX[i].front() = Msh.Nodes[i].front() - Msh.Faces[i].front();
+        Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back();
+    }
 
-        /* // dX */
-        /* Msh.dX[i].front() = Msh.Nodes[i].front() - Msh.Faces[i].front(); */
-        /* Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back(); */
-    /* } */
+
 
     /* // Resize (Non-nD) */
     /* Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.sPhi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]); Msh.bObs.resize(Msh.N[0]); */
@@ -217,45 +232,5 @@ void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::V
 
     /* // Coefficients (nD) */
     /* Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0); */
-
-}
-
-
-
-
-
-void Mesh::calculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec) {
-
-    // General
-    double length = x1 - x0;
-
-    // Face Positions
-    if (algorithm == 0){
-        // Face Positions 0: Bidirectional Non-uniform (A, xC)
-        for (int i = cNode; i < cNode+NSec+1; i++) {
-            // fVec[i] = x0 + (i-cNode) * length / NSec + strength * (centering - (i-cNode) * length / NSec) * (1 - (i-cNode)/NSec) * (i-cNode) / NSec;
-		std::cerr << "Bidirectional Non-Uniform not currently working.\n";
-        }
-    } else if (algorithm == 1){
-        // Face Positions 1: Unidirectional Non-uniform (Kappa)
-        for (int i = cNode; i < cNode+NSec+1; i++) {
-            /* fVec[i] = x0 + pow(((i-cNode) * length / NSec), kStrength); */
-        }
-    } else if(algorithm == 2){
-        // Face Positions 2: Hyperbolic Tangent (Single Side)
-        double A, B;
-        for (int i = cNode; i < cNode+NSec+1; i++){
-            A = tanh(delta * ((static_cast<double>(i) - cNode) / NSec - 1)); B = tanh(delta);
-            fVec[i] = x0 + length * (1 + A / B);
-        }
-    } else if(algorithm == 3){
-        // Face Positions 3: Hyperbolic Tangent (Double-Sided)
-        double A, B;
-        for (int i = cNode; i < cNode+NSec+1; i++){
-            A = tanh(delta*((static_cast<double>(i) - cNode)/NSec - 0.5));
-            B = tanh(0.5 * delta);
-            fVec[i] = x0 + 0.5 * length * (1 + A/B);
-        }
-    }
 
 }

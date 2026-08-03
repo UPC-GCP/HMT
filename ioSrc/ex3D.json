@@ -5,9 +5,9 @@
     "endTime": 50, "timeStep": 1e-3,
 
     "_dataPhys": "Physical Data",
-    "P0": 0, "T0": 0, "V0": [1, 0, 0],
+    "P0": 0, "T0": 0, "V0": [1, 0, 0], "g": 9.81,
     "materials": [
-        {"rho": 1, "gamma": 1, "mu": 0.0008}
+        {"rho": 1, "gamma": 1, "cp": 1, "mu": 0.0008, "beta": 1}
     ],
 
     "_dataGeom": "Geometrical Data",
@@ -23,7 +23,7 @@
     "meshAlgorithm": 1, "N": [200, 40, 40],
     "refinement": [
         {"axis": 0, "N": 200, "range": [0, 2.5], "algorithm": "Bidirectional",  "strength": 0, "centering": 0.5},
-        {"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "Unidirectional", "kappa": 1},
+        {"axis": 1, "N": 40,  "range": [0, 1.5], "algorithm": "PowerLaw", "kappa": 1},
         {"axis": 2, "N": 40,  "range": [0, 1.5], "algorithm": "HyperSingle",     "delta": 0.1}
     ],
 

@@ -51,4 +51,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/LDCSolver.dir/DependInfo.cmake"
   "CMakeFiles/DHCSolver.dir/DependInfo.cmake"
   "CMakeFiles/SCSolver.dir/DependInfo.cmake"
+  "CMakeFiles/3DSolver.dir/DependInfo.cmake"
   )

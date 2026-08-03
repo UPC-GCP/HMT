@@ -82,7 +82,7 @@ int main(int argc, char* argv[]){
     Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n";
 
 
-    /* ///// Discretizer ///// */
+    ///// Discretizer /////
     std::cout << "Initializing discretizer ...\n";
     Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n";
     Dsc.setSchemeParameters(Mat, Msh); std::cout << "Scheme parameters set.\n";

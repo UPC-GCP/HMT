@@ -64,21 +64,21 @@ add_executable(SCSolver
     o09_MedicSC.cpp
 )
 
-# add_executable(3DSolver
-#     o00_3DSolver.cpp
-#     o01_Material.cpp
-#     o02_Mesh3D.cpp
+add_executable(3DSolver
+    o00_3DSolver.cpp
+    o01_Material.cpp
+    o02_Mesh3D.cpp
 #     o03_Discretizer3D.cpp
 #     o04_Solver3D.cpp
 #     o04_CG3D.cpp
 #     o04_BCG3D.cpp
 #     o05_Probe3D.cpp
 #     o09_Medic3D.cpp
-#     o09_ExpressionParser.cpp
-# )
+    o09_ExpressionParser.cpp
+)
 
 # 4. Linking
-foreach (target MainSolver LDCSolver DHCSolver SCSolver)
+foreach (target MainSolver LDCSolver DHCSolver SCSolver 3DSolver)
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP)
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()

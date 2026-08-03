@@ -168,6 +168,43 @@ SCSolver/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/build
 .PHONY : SCSolver/fast
 
+#=============================================================================
+# Target rules for targets named 3DSolver
+
+# Build rule for target.
+3DSolver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 3DSolver
+.PHONY : 3DSolver
+
+# fast build rule for target.
+3DSolver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/build
+.PHONY : 3DSolver/fast
+
+o00_3DSolver.o: o00_3DSolver.cpp.o
+.PHONY : o00_3DSolver.o
+
+# target to build an object file
+o00_3DSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.o
+.PHONY : o00_3DSolver.cpp.o
+
+o00_3DSolver.i: o00_3DSolver.cpp.i
+.PHONY : o00_3DSolver.i
+
+# target to preprocess a source file
+o00_3DSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.i
+.PHONY : o00_3DSolver.cpp.i
+
+o00_3DSolver.s: o00_3DSolver.cpp.s
+.PHONY : o00_3DSolver.s
+
+# target to generate assembly for a file
+o00_3DSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.s
+.PHONY : o00_3DSolver.cpp.s
+
 o00_DHCSolver.o: o00_DHCSolver.cpp.o
 .PHONY : o00_DHCSolver.o
 
@@ -273,6 +310,7 @@ o01_Material.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o01_Material.cpp.o
 .PHONY : o01_Material.cpp.o
 
 o01_Material.i: o01_Material.cpp.i
@@ -284,6 +322,7 @@ o01_Material.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o01_Material.cpp.i
 .PHONY : o01_Material.cpp.i
 
 o01_Material.s: o01_Material.cpp.s
@@ -295,6 +334,7 @@ o01_Material.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o01_Material.cpp.s
 .PHONY : o01_Material.cpp.s
 
 o02_Mesh.o: o02_Mesh.cpp.o
@@ -320,6 +360,30 @@ o02_Mesh.s: o02_Mesh.cpp.s
 o02_Mesh.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MainSolver.dir/build.make CMakeFiles/MainSolver.dir/o02_Mesh.cpp.s
 .PHONY : o02_Mesh.cpp.s
+
+o02_Mesh3D.o: o02_Mesh3D.cpp.o
+.PHONY : o02_Mesh3D.o
+
+# target to build an object file
+o02_Mesh3D.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o02_Mesh3D.cpp.o
+.PHONY : o02_Mesh3D.cpp.o
+
+o02_Mesh3D.i: o02_Mesh3D.cpp.i
+.PHONY : o02_Mesh3D.i
+
+# target to preprocess a source file
+o02_Mesh3D.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o02_Mesh3D.cpp.i
+.PHONY : o02_Mesh3D.cpp.i
+
+o02_Mesh3D.s: o02_Mesh3D.cpp.s
+.PHONY : o02_Mesh3D.s
+
+# target to generate assembly for a file
+o02_Mesh3D.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o02_Mesh3D.cpp.s
+.PHONY : o02_Mesh3D.cpp.s
 
 o02_MeshNS.o: o02_MeshNS.cpp.o
 .PHONY : o02_MeshNS.o
@@ -735,6 +799,7 @@ o09_ExpressionParser.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_ExpressionParser.cpp.o
 .PHONY : o09_ExpressionParser.cpp.o
 
 o09_ExpressionParser.i: o09_ExpressionParser.cpp.i
@@ -746,6 +811,7 @@ o09_ExpressionParser.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_ExpressionParser.cpp.i
 .PHONY : o09_ExpressionParser.cpp.i
 
 o09_ExpressionParser.s: o09_ExpressionParser.cpp.s
@@ -757,6 +823,7 @@ o09_ExpressionParser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_ExpressionParser.cpp.s
 .PHONY : o09_ExpressionParser.cpp.s
 
 o09_Medic.o: o09_Medic.cpp.o
@@ -842,10 +909,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... 3DSolver"
 	@echo "... DHCSolver"
 	@echo "... LDCSolver"
 	@echo "... MainSolver"
 	@echo "... SCSolver"
+	@echo "... o00_3DSolver.o"
+	@echo "... o00_3DSolver.i"
+	@echo "... o00_3DSolver.s"
 	@echo "... o00_DHCSolver.o"
 	@echo "... o00_DHCSolver.i"
 	@echo "... o00_DHCSolver.s"
@@ -864,6 +935,9 @@ help:
 	@echo "... o02_Mesh.o"
 	@echo "... o02_Mesh.i"
 	@echo "... o02_Mesh.s"
+	@echo "... o02_Mesh3D.o"
+	@echo "... o02_Mesh3D.i"
+	@echo "... o02_Mesh3D.s"
 	@echo "... o02_MeshNS.o"
 	@echo "... o02_MeshNS.i"
 	@echo "... o02_MeshNS.s"

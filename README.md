@@ -47,7 +47,7 @@ Summary of the current capabilities of the model and the possible configuration 
 
 ### Mesh Data
 1. **N**: Total amount of nodes for each axis.
-2. **refinement**: Definition of mesh refinement with number of nodes and ranges defined for each refinement region. Needs to include the refinement algorithm and their corresponding parameters. (Accepted Values: Bidirectional [strength, centering], Unidirectional [kappa], HyperSingle [delta], HyperDouble [delta])
+2. **refinement**: Definition of mesh refinement with number of nodes and ranges defined for each refinement region. Needs to include the refinement algorithm and their corresponding parameters. (Accepted Values: Bidirectional [strength, centering], PowerLaw [kappa], HyperSingle [delta], HyperDouble [delta])
 
 > [!NOTE]
 > "N": [200, 40, 40],\

@@ -238,5 +238,29 @@
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicSC.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o09_MedicSC.cpp",
   "output": "CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_3DSolver.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o00_3DSolver.cpp",
+  "output": "CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/3DSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
+  "output": "CMakeFiles/3DSolver.dir/o01_Material.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/3DSolver.dir/o02_Mesh3D.cpp.o -c /home/upc_gcp/TFM/HMT/o02_Mesh3D.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o02_Mesh3D.cpp",
+  "output": "CMakeFiles/3DSolver.dir/o02_Mesh3D.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/3DSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
+  "output": "CMakeFiles/3DSolver.dir/o09_ExpressionParser.cpp.o"
 }
 ]

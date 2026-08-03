@@ -13,12 +13,15 @@ struct Matrix{
 };
 
 struct MeshBase{
-    int totNodes=1; std::vector<int> N{}; // Nodes -> [nAxis]
+    int totNodes=1; std::vector<size_t> N{}; // Nodes -> [nAxis]
     std::vector<std::vector<double>> Faces{}, Nodes{}, deltaX{}, dX{}; // Coordinates, distances -> [nAxis][index]
-    std::vector<std::vector<std::vector<double>>> Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // Geometry -> [x][y][z] 
-    std::vector<std::vector<std::vector<double>>> Phi{}, oPhi{}; // Phi -> [x][y][z]
-    std::vector<Matrix> matA{}; // A -> [l] l = i + N[1] * j + N[2] * k
-    std::vector<double> matB{}, oR{}; // b -> [l] l = i + N[1] * j + N[2] * k
+    std::vector<Matrix> matA{}; std::vector<double> matB{}, oR{}; // Ax = b -> [l] -> l = i + N[1] * (j + N[2] * k)
+
+    std::vector<double> Sw{}, Se{}, Ss{}, Sn{}, Sb{}, St{}, Vp{}; // Geometry -> [l] -> l = i + N[1] * (j + N[2] * k)
+    std::vector<double> Phi{}, oPhi{}; // Phi -> [l] -> l = i + N[1] * (j + N[2] * k)
+
+    /* std::vector<std::vector<std::vector<double>>> Sw{}, Se{}, Ss{}, Sn{}, Vp{}; // Geometry -> [x][y][z] */ 
+    /* std::vector<std::vector<std::vector<double>>> Phi{}, oPhi{}; // Phi -> [x][y][z] */
 };
 
 struct MeshSolver : MeshBase{
@@ -51,7 +54,7 @@ class Mesh
 {
 private:
     // Functions
-    void calculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec);
+    /* void calculateFaces(int cNode, int NSec, double x0, double x1, std::vector<double>& fVec); */
     void calculateFaces(std::vector<size_t> cNode, Json::Value refData, std::vector<std::vector<double>>& nFaces); // Refines each region with their own algorithm
     // Still need to pass Msh.Faces so it knows which mesh to work on.
 
@@ -62,7 +65,7 @@ private:
 public:
     // Variables
     /* int algorithm{}; double A{}, xC{}, kappa{}, delta{}, epsFind=1e-5; // Config */
-    double epsFind=1e-5;
+    double epsFind=1e-5; // Config 
     MeshBase u{}, v{}, w{}; MeshSolver p{}, T{}; // Meshes
 
     // Vectors

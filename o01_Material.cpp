@@ -5,6 +5,7 @@
 // Self-Imports
 #include "o01_Material.h"
 
+
 Material::Material(Json::Value materials, double gravity){
     
     // List
@@ -24,31 +25,26 @@ Material::Material(Json::Value materials, double gravity){
 
 }
 
-void Material::setInitialConditions(double initPhi){
 
+void Material::setInitialConditions(double initPhi){ // MainSolver
     // Main Initial Conditions
     Phi0 = initPhi;
-    
 }
 
-void Material::setInitialConditions(double initPhi, Json::Value initVF){
-
+void Material::setInitialConditions(double initPhi, Json::Value initVF){ // NS Solver
     // Main Initial Conditions
     Phi0 = initPhi;
     
     // Velocity Field Initial Conditions
     VF0.resize(initVF.size());
     for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++){VF0[i] = initVF[i].asDouble();}
-
 }
 
-void Material::setInitialConditions(double initT, double initP, Json::Value initVF){
-
+void Material::setInitialConditions(double initT, double initP, Json::Value initVF){ // DHCSolver / 3DSolver
     // Main Initial Conditions
     T0 = initT; P0 = initP;
 
     // Velocity Field Initial Conditions
     VF0.resize(initVF.size());
     for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++){VF0[i] = initVF[i].asDouble();}
-
 }
