@@ -67,7 +67,36 @@ int main(int argc, char* argv[]){
     // 3DSolver: 3D Navier-Stokes solver. Includes the full Navier-Stokes set of equations with 1 MASS EQUATION, 3 MOMENTUM EQUATIONS, and 1 ENERGY EQUATION. Will also be able to include obstacles.
 
     // Mesh will be rewritten to move everything to flattened arrays and just use l = i + N[1] * j + N[2] * k
-    // Fuck that's a lot of work
+    // Geometry arrays will be stored in dimension dependent vectors that grow with N.size()
+    // Discretizer will have functions separated for each dimension and will activate the ones that are required
+    // Numerical solver will also depend on the amount of dimensions
+
+    // Need to generate Templates for all of these functions that depend on N.size()
+    // Variables for each dimension need to be defined outside the array instead of inside
+
+    // TRYING TO ORGANIZE THE IDEA
+    // Index everything in dimensional arrays and have it set so iD = {0:W, 1:E, 2:S, 3:N, 4:B, 4:T}
+    // Use that as reference and switch between each case
+    // Single functions on each side that index with iD for each dimension
+    // For each operation it should be evaluated across all active dimensions
+    // Activate dimensions at the beginning by resizing everything accordingly (?)
+    // Boundary conditions: for (i < iD.size()) {Evaluate boundary for i side}
+    // Need coefficients and neighbours to be indexable with ease (inline int getIndex(i, j=1, k=1, Ny=1, Nz=1))
+    // Generate mesh objects in Main -> Templates create efficient data structures for each without wasting space
+    // Discretizer, Solver, Probe, Medic need to use the new structure and identify each neighbour within the arrays
+
+    // Mesh
+    // Objects in Mesh need to use Templates
+
+    // Discretizer
+    // Functions in Mesh need to use Templates
+
+    // Use arrays for fixed dimensional objects
+    // CANNOT DEFINE A TEMPLATE OBJECT IN THE HEADER FILE, NEED TO MOVE ALL OF THAT TO MAIN SOLVER
+    // Can I have an array that calls different functions depending on what I want to write
+
+
+
 
 
     ////////// Model Implementation //////////
@@ -85,49 +114,30 @@ int main(int argc, char* argv[]){
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n";
+
+    // NEED TO CREATE MY VARIABLES HERE FOR THE DIFFERENT CASES
+    // Solver Variables: p, T
+    // Explicit Variables: u, v, w
+    // Boundaries could be stored within each template for the mesh
+    // Obstacles defined independently
+    
+    // Velocity components needs to be in a single vector
+    /* std::array<MeshBase<Dim>, Dim> V{}; */
+
+
+
+
     /* Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n"; */
     Mesh Msh; std::cout << "Mesh initialized.\n";
-    Msh.generateMesh(Msh.p, data["P0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes and " << Msh.obstacles.size() << " obstacles.\n";
+
+
+
+    /* Msh.generateMesh(Msh.p, data["P0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes and " << Msh.obstacles.size() << " obstacles.\n"; */
     /* Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n"; */
     /* Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryPressure.size() << " boundary conditions added.\n"; */
     /* Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n"; */
 
 
-    std::cout << "xFaces: ";
-    for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "xNodes: ";
-    for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "xDelta: ";
-    for (double val : Msh.p.deltaX[0]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "xD :";
-    for (double val : Msh.p.dX[0]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "yFaces: ";
-    for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "yNodes: ";
-    for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "yDelta: ";
-    for (double val : Msh.p.deltaX[1]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "yD :";
-    for (double val : Msh.p.dX[1]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "zFaces: ";
-    for (double val : Msh.p.Faces[2]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "zNodes: ";
-    for (double val : Msh.p.Nodes[2]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "zDelta: ";
-    for (double val : Msh.p.deltaX[2]){std::cout << val << " ";} std::cout << "\n";
-
-    std::cout << "zD :";
-    for (double val : Msh.p.dX[2]){std::cout << val << " ";} std::cout << "\n";
 
     return 0;
 
@@ -231,4 +241,39 @@ int main(int argc, char* argv[]){
 
 }
 
+    /* std::cout << "xFaces: "; */
+    /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "xNodes: "; */
+    /* for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "xDelta: "; */
+    /* for (double val : Msh.p.deltaX[0]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "xD :"; */
+    /* for (double val : Msh.p.dX[0]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "yFaces: "; */
+    /* for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "yNodes: "; */
+    /* for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "yDelta: "; */
+    /* for (double val : Msh.p.deltaX[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "yD :"; */
+    /* for (double val : Msh.p.dX[1]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "zFaces: "; */
+    /* for (double val : Msh.p.Faces[2]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "zNodes: "; */
+    /* for (double val : Msh.p.Nodes[2]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "zDelta: "; */
+    /* for (double val : Msh.p.deltaX[2]){std::cout << val << " ";} std::cout << "\n"; */
+
+    /* std::cout << "zD :"; */
+    /* for (double val : Msh.p.dX[2]){std::cout << val << " ";} std::cout << "\n"; */
 

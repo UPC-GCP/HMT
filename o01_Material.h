@@ -14,11 +14,16 @@ private:
 
 public:
     // Variables
-    double P0{}, T0{}, Phi0{}, g{}; // Initial values for solver variables (p, T), general constants
+    double P0{}, T0{}, Phi0{}, g{}; // Initial values for solver variables (p, T, phi), general constants (g)
+
+    // PENDING CHANGES:
+    // I want this to be able to read a .csv and use the last instant as the initial conditions of the simulation
+    // config.json: Include path to .csv instead of value, code needs to identify the case
+    // o01: if (Phi0 is number or path){read .csv; check dimensions for coherence with mesh (should also pass N); store initial value as vector}
 
     // Vectors
-    std::vector<MatPhys> vMat{}; // Material repository
     std::vector<double> VF0{}; // Initial values for Velocity Field
+    std::vector<MatPhys> vMat{}; // Material repository
 
     // Constructor
     Material(Json::Value materials, double g=9.81);
@@ -26,7 +31,7 @@ public:
     // Functions
     void setInitialConditions(double initPhi); // MainSolver
     void setInitialConditions(double initPhi, Json::Value initVF); // NS Solver
-    void setInitialConditions(double initT, double initP, Json::Value initVF); // DHCSolver / 3DSolver
+    void setInitialConditions(double initT, double initP, Json::Value initVF); // DHCSolver
 };
 
 #endif

@@ -1,4 +1,5 @@
-# 2D Conduction Heat and Mass Transfer Model
+# 3D Heat and Mass Transfer Model (WIP)
+CFD Model capable of solving 1D, 2D and 3D cases. Sample files for the 1D Rod, Smith-Hutton, Lid Driven Cavity, Differentially Heated Cavity, and Square Cylinder cases located in ./ioSrc.
 
 ## Config File Structure (.json)
 Summary of the current capabilities of the model and the possible configuration parameters.
