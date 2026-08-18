@@ -5,7 +5,7 @@
     "endTime": 50, "timeStep": 1e-3,
 
     "_dataPhys": "Physical Data",
-    "P0": 0, "T0": 0, "V0": [1, 0, 0], "g": 9.81,
+    "PHI0": null, "P0": 0, "T0": 0, "V0": [1, 0, 0], "g": null,
     "materials": [
         {"rho": 1, "gamma": 1, "cp": 1, "mu": 0.0008, "beta": 1}
     ],

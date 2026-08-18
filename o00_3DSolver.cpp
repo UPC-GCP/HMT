@@ -1,5 +1,7 @@
 // Imports
 /* #include <cstddef> */
+#include <cmath>
+#include <cstddef>
 #include <iostream>
 #include <json/forwards.h>
 #include <string>
@@ -11,13 +13,15 @@
 
 // Self-Imports
 #include "o01_Material.h"
-#include "o02_Mesh3D.h"
-/* #include "o03_DiscretizerSC.h" */
-/* #include "o04_SolverSC.h" */
-/* #include "o04_CGSC.h" */
-/* #include "o05_ProbeSC.h" */
-#include "o09_ExpressionParser.h"
-/* #include "o09_MedicSC.h" */
+#include "o02_Mesh.h"
+/* #include "o03_Discretizer.h" */
+/* #include "o04_Solver.h" */
+/* #include "o04_CG.h" */
+/* #include "o04_BCG.h" */
+/* #include "o05_Probe.h" */
+#include "o09_Parser.h"
+/* #include "o09_Medic.h" */
+
 
 Json::Value getParsedData(std::string fileName){
     
@@ -42,20 +46,6 @@ Json::Value getParsedData(std::string fileName){
     return data;
 
 }
-
-
-int main(int argc, char* argv[]){
-
-    // Time
-    std::cout << std::fixed << std::setprecision(3); // std::fixed, std::defaultfloat, std::scientific? (not sure about the last one)
-    auto t1 = std::chrono::high_resolution_clock::now();
-    std::cout << "Initializing model ... \n";
-    
-    // Config File
-    std::cout << "Reading data ... \n";
-    Json::Value data = getParsedData(argv[1]);
-    std::cout << "Data parsed successfully. \n";
-
 
     ///// SOME IMPORTANT DETAILS ABOUT THIS MODEL IN PARTICULAR (AND HOW TO ADDRESS THEM) (HOPEFULLY) (WE'LL SEE AT THE END HOW MUCH OF THIS INITIAL PLANNING WAS SUCCESSFUL)
     // THIS ONE WILL BE THE FULL 3D MODEL AND SHOULD BE CAPABLE OF WORKING AT ALL DIMENSION LEVELS AND FOR ALL EXEPTIONS
@@ -95,27 +85,45 @@ int main(int argc, char* argv[]){
     // CANNOT DEFINE A TEMPLATE OBJECT IN THE HEADER FILE, NEED TO MOVE ALL OF THAT TO MAIN SOLVER
     // Can I have an array that calls different functions depending on what I want to write
 
-
-
-
-
-    ////////// Model Implementation //////////
-
-    ///// Material /////
-    std::cout << "Initializing Materials ...\n";
-    Material Mat(data["materials"]); std::cout << "Material properties set.\n";
-    /* Mat.setInitialConditions(data["PHI0"].asDouble(), data["VF0"]); std::cout << "Initial conditions set.\n"; */
-
+template <size_t nDim> void runSimulation(Json::Value data){
 
     ///// Parser /////
     std::cout << "Initializing Parser ...\n";
-    ExpressionParser Prs; std::cout << "Parser configured.\n";
+    Parser Prs; std::cout << "Parser configured.\n";
 
+    ///// Material /////
+    std::cout << "Initializing Materials ...\n";
+    Material Mat(data["materials"], data["g"].isNull() ? 9.81 : data["g"].asDouble()); std::cout << "Material properties set.\n";
+
+    /* Mat.setInitialConditions(data["PHI0"].asDouble(), data["VF0"]); std::cout << "Initial conditions set.\n"; */
+
+    /* if (!data["PHI0"].isNull()) {Mat.setInitialConditions(data["PHI0"].asDouble());} */
+
+    // Initial conditions has 3 cases 
+    // 1. Phi - Scalar map, takes a double or a .csv
+    // 2. V - Fixed value, function, variable
+    // 3. p, T - active/inactive
+
+
+
+    return; 
 
     ///// Mesh /////
-    std::cout << "Initializing mesh ...\n";
+    std::cout << "Initializing mesh ...\n"; 
+    Mesh Msh; std::cout << "Mesh initialized.\n";
 
-    // NEED TO CREATE MY VARIABLES HERE FOR THE DIFFERENT CASES
+    /* if (data["boundariesPressure"].size() != 0) { */
+    /*     // Create Pressure (MeshSolver) */
+    /* } */
+    /* if (data["boundariesTemperature"].size() != 0) { */
+    /*     // Create Temperature (MeshSolver) */
+    /* } */
+    /* if (data["boundariesVelocity"].size() != 0) { */
+    /*     // Create Velocity (MeshBase) */
+    /* } */
+
+
+    // NEED TO CREATE MY VARIABLES HERE FOR THE DIFFERENT CASES DEPENDING ON THE CONFIGURATION FILE
     // Solver Variables: p, T
     // Explicit Variables: u, v, w
     // Boundaries could be stored within each template for the mesh
@@ -128,7 +136,6 @@ int main(int argc, char* argv[]){
 
 
     /* Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n"; */
-    Mesh Msh; std::cout << "Mesh initialized.\n";
 
 
 
@@ -139,12 +146,6 @@ int main(int argc, char* argv[]){
 
 
 
-    return 0;
-
-
-
-
-
     /* ///// Discretizer ///// */
     /* std::cout << "Initializing discretizer ...\n"; */
     /* Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n"; */
@@ -152,7 +153,6 @@ int main(int argc, char* argv[]){
     /* Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity boundaries set.\n"; */
     /* Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n"; Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n"; Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n"; */
     
-
     /* ///// Solver ///// */
     /* std::cout << "Initializing solver ... \n"; */
     /* Solver* Sol = nullptr; */
@@ -167,29 +167,17 @@ int main(int argc, char* argv[]){
     /*     std::cerr << "Error: Invalid linear solver selected " << data["solver"].asString() << "\n"; */
     /* } std::cout << "Solver configured.\n"; */
 
-
     /* /1* ///// Probes ///// *1/ */
     /* std::cout << "Initializing probes ...\n"; */
     /* Probe Prb(Msh, data["probes"], Dsc.tempScheme, Dsc.spatScheme, argv[1]); std::cout << "Files configured.\n"; */
-
-
-    /* return 0; */
-
-
     /* Prb.checkProbes(Msh, Sol); std::cout << "Initial conditions stored.\n"; */
-
-
-    /* return 0; */
-
 
     /* /1* ///// Medic ///// *1/ */
     /* std::cout << "Initializing medic ...\n"; */
     /* bool bMdc = data["medicOn"].asBool(); */
     /* Medic Mdc(Msh, Prb, bMdc); std::cout << "Diagnostic tools configured.\n"; */
 
-
-
-    /* ////////// Temporal Loop ////////// */
+    /* ///// Temporal Loop ///// */
     /* std::cout << "Processing ...\n"; */
     
     /* for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){ */
@@ -241,6 +229,34 @@ int main(int argc, char* argv[]){
 
 }
 
+
+int main(int argc, char* argv[]){
+    
+    ////////// Configuration //////////
+    
+    ///// Setup /////
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::cout << "Initializing model ... \n" << std::fixed << std::setprecision(3); // std::fixed, std::defaultfloat, std::scientific? (not sure about the last one)
+
+    ///// Data /////
+    std::cout << "Reading data ... \n";
+    Json::Value data = getParsedData(argv[1]); std::cout << "Data parsed successfully. \n";
+
+    ///// Simulation /////
+    size_t nDim = data["N"].size();
+    switch (nDim) {
+        case 1:
+            runSimulation<1>(data); break;
+        case 2:
+            runSimulation<2>(data); break;
+        case 3:
+            runSimulation<3>(data); break;
+        default:
+            std::cerr << "Configuration file not defined properly.\n"; return 1;
+    }
+
+}
+
     /* std::cout << "xFaces: "; */
     /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
 
@@ -276,4 +292,3 @@ int main(int argc, char* argv[]){
 
     /* std::cout << "zD :"; */
     /* for (double val : Msh.p.dX[2]){std::cout << val << " ";} std::cout << "\n"; */
-

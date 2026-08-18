@@ -7,8 +7,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.o.d"
   "CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o"
   "CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o.d"
-  "CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o"
-  "CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o.d"
   "CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o"
   "CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o.d"
   "CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.o"

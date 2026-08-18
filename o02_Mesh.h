@@ -58,7 +58,7 @@ class Mesh
 private:
     // Functions
     void calculateFaces(std::vector<size_t> cNode, Json::Value refData, std::vector<std::vector<double>>& nFaces); // Refines each region with their own algorithm
-    template <size_t Dim> void calculateMeshGeometry(MeshBase<Dim>& Msh, double valInit);
+    template <size_t Dim> void calculateMeshGeometry(MeshBase<Dim>& Msh, double valInit); // What was this for?
 
 public:
     // Variables

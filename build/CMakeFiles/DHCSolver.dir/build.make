@@ -153,24 +153,10 @@ CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o04_CGNS.cpp -o CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.s
 
-CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o: CMakeFiles/DHCSolver.dir/flags.make
-CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o: /home/upc_gcp/TFM/HMT/o04_BCG.cpp
-CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o: CMakeFiles/DHCSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o -MF CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o.d -o CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o -c /home/upc_gcp/TFM/HMT/o04_BCG.cpp
-
-CMakeFiles/DHCSolver.dir/o04_BCG.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DHCSolver.dir/o04_BCG.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o04_BCG.cpp > CMakeFiles/DHCSolver.dir/o04_BCG.cpp.i
-
-CMakeFiles/DHCSolver.dir/o04_BCG.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DHCSolver.dir/o04_BCG.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o04_BCG.cpp -o CMakeFiles/DHCSolver.dir/o04_BCG.cpp.s
-
 CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o: CMakeFiles/DHCSolver.dir/flags.make
 CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o: /home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp
 CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o: CMakeFiles/DHCSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o -MF CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o.d -o CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp
 
 CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.i: cmake_force
@@ -184,7 +170,7 @@ CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.s: cmake_force
 CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o: CMakeFiles/DHCSolver.dir/flags.make
 CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o: /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp
 CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o: CMakeFiles/DHCSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o -MF CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o.d -o CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp
 
 CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.i: cmake_force
@@ -198,7 +184,7 @@ CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.s: cmake_force
 CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o: CMakeFiles/DHCSolver.dir/flags.make
 CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o: /home/upc_gcp/TFM/HMT/o09_MedicNS.cpp
 CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o: CMakeFiles/DHCSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o -MF CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o.d -o CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicNS.cpp
 
 CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.i: cmake_force
@@ -217,7 +203,6 @@ DHCSolver_OBJECTS = \
 "CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o" \
 "CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.o" \
 "CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o" \
-"CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o" \
 "CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o" \
 "CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o" \
 "CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o"
@@ -231,14 +216,13 @@ DHCSolver: CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o
-DHCSolver: CMakeFiles/DHCSolver.dir/o04_BCG.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o
 DHCSolver: CMakeFiles/DHCSolver.dir/build.make
 DHCSolver: /usr/lib/x86_64-linux-gnu/libjsoncpp.so
 DHCSolver: CMakeFiles/DHCSolver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable DHCSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable DHCSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DHCSolver.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

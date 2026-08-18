@@ -10,9 +10,9 @@
 #include "exprtk.hpp"
 
 // Self Imports
-#include "o09_ExpressionParser.h"
+#include "o09_Parser.h"
 
-ExpressionParser::ExpressionParser(){
+Parser::Parser(){
 
     // Constants
     symbol_table.add_constant("pi", varPi);
@@ -21,10 +21,12 @@ ExpressionParser::ExpressionParser(){
     symbol_table.add_variable("t", varTime);
     symbol_table.add_variable("x", varX);
     symbol_table.add_variable("y", varY);
+    symbol_table.add_variable("z", varZ);
 
 }
 
-int ExpressionParser::registerExpression(std::string exprStr){
+
+size_t Parser::registerExpression(std::string exprStr){
 
     // Control
     size_t iPos = std::find(sExpr.begin(), sExpr.end(), exprStr) - sExpr.begin();
@@ -36,23 +38,24 @@ int ExpressionParser::registerExpression(std::string exprStr){
     parser.compile(exprStr, exprTemp);
 
     // Store
-    vExpr.push_back(exprTemp);
-    sExpr.push_back(exprStr);
+    vExpr.push_back(exprTemp); sExpr.push_back(exprStr);
 
     return vExpr.size() - 1;
 
 }
 
-double ExpressionParser::evaluateTime(int i, double nVal){
 
-    // Update
-    varTime = nVal; return vExpr[i].value();
+/* double Parser::evaluateTime(int i, double nVal){ */
 
-}
+/*     // Update */
+/*     varTime = nVal; return vExpr[i].value(); */
 
-double ExpressionParser::evaluateCoordinates(int i, double xCoord, double yCoord){
+/* } */
 
-	// Update
-	varX = xCoord; varY = yCoord; return vExpr[i].value();
 
-}
+/* double Parser::evaluateCoordinates(int i, double xCoord, double yCoord, double zCoord){ */
+	
+/*     // Update */
+/* 	varX = xCoord; varY = yCoord; varZ = zCoord; return vExpr[i].value(); */
+
+/* } */

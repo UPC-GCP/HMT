@@ -23,6 +23,13 @@ public:
     Discretizer(std::string temporalScheme, std::string spatialScheme, double endTime, double dt, double epsFind=1e-5);
     
     // Functions
+
+    // There needs to be a general function that runs the entire discretization program and changes depending on the amount of variables involved in this model
+    // Will detect p, T, u, v, w and run the proper discretization functions for each case
+    // Need to remake my functions to adapt to the templates (this is going to be hell)
+
+
+
     double calcHarmonicMean(double dPF, std::vector<double> lambda, std::vector<double> deltaX);
     void setSchemeParameters(Material& Mat, Mesh& Msh);
     void checkStability(Material Mat, Mesh& Msh);

@@ -77,7 +77,7 @@ add_executable(CFDSolver
 )
 
 # 4. Linking
-foreach (target PHISolver LDCSolver DHCSolver SCSolver CFDSolver)
+foreach (target LDCSolver DHCSolver SCSolver CFDSolver)
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP)
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()

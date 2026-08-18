@@ -11,7 +11,7 @@
 #include <cmath>
 
 // Self-Imports
-#include "o02_Mesh3D.h"
+#include "o02_Mesh.h"
 
 
 bool isFormula(std::string value){
@@ -113,7 +113,7 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
 }
 
 
-void Mesh::generateMesh(MeshSolver& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs){
+template <size_t Dim> void Mesh::generateMesh(MeshSolver<Dim>& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs){
 
 	// Control (nD)
 	Msh.N.resize(qNode.size());
