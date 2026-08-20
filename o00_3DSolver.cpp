@@ -155,6 +155,8 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     std::cout << "Initializing mesh ...\n"; 
     Mesh Msh; std::cout << "Mesh initialized.\n";
 
+    // Time to start the mesh
+
     /* if (data["boundariesPressure"].size() != 0) { */
     /*     // Create Pressure (MeshSolver) */
     /* } */

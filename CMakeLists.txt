@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # 2. Packages 
+find_package(OpenMP REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP REQUIRED IMPORTED_TARGET jsoncpp)
 
@@ -77,10 +78,9 @@ add_executable(CFDSolver
 )
 
 # 4. Linking
+target_link_libraries(CFDSolver PRIVATE OpenMP::OpenMP_CXX)
 foreach (target LDCSolver DHCSolver SCSolver CFDSolver)
-    target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP)
-    target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    target_compile_options(${target} PRIVATE -O3 -march=native) # gcc
+    target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP) # jsoncpp
+    target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}) # 
 endforeach()
-
-
-

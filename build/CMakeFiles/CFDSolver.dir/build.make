@@ -140,6 +140,8 @@ CFDSolver: CMakeFiles/CFDSolver.dir/o01_Material.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/o02_Mesh.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/build.make
+CFDSolver: /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so
+CFDSolver: /usr/lib/x86_64-linux-gnu/libpthread.a
 CFDSolver: /usr/lib/x86_64-linux-gnu/libjsoncpp.so
 CFDSolver: CMakeFiles/CFDSolver.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable CFDSolver"

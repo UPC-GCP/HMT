@@ -3,16 +3,13 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <string>
 /* #include <utility> */
-#include <vector>
 #include <json/json.h>
 #include <json/value.h>
 #include <cmath>
 
 // Self-Imports
 #include "o02_Mesh.h"
-
 
 bool isFormula(std::string value){
 

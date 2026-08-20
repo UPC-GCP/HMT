@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp
 
-CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17
+CXX_FLAGS = -std=gnu++17 -O3 -march=native -fopenmp
 
