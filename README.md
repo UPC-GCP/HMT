@@ -21,15 +21,17 @@ Summary of the current capabilities of the model and the possible configuration 
 
 
 ### Physical Data
-1. **P0**: Initial value for the Pressure map.
-2. **T0**: Initial value for the Temperature map.
-3. **V0**: Initial value for the Velocity field.
-4. **materials**: Registry of all materials with their corresponding properties. (Accepted Values: rho, gamma, mu)
+1. **PHI0**: Initial value for Single Scalar map. (null = Navier-Stokes Solver, otherwise Single Scalar Solver)
+2. **P0**: Initial value for the Pressure map. (null = Single Scalar Solver, otherwise Navier-Stokes Solver)
+3. **T0**: Initial value for the Temperature map. (null = No temperature component in Navier-Stokes Solver)
+4. **V0**: Initial value for the Velocity field. (Needs to be defined in all cases, treated as fixed for SSS, or as transport variables in NSS)
+5. **g**: Gravity
+5. **materials**: Registry of all materials with their corresponding properties. (Accepted Values: rho, gamma, cp, mu, beta)
 
 > [!NOTE]
-> "P0": 0, "T0": 0, "V0": [1, 0, 0],\
+> "PHI0": null, "P0": 0, "T0": 0, "V0": [1, 0, 0], "g": null,\
 > "materials": [\
->   &ensp;&ensp;&ensp;{"rho": 1, "gamma": 1, "mu": 0.0008}\
+>   &ensp;&ensp;&ensp;{"rho": 1, "gamma": 1, "cp": 1, "mu": 0.0008, "beta": 1}\
 > ],
 
 

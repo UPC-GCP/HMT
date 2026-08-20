@@ -1,11 +1,8 @@
 // Imports
-#include <vector> 
 #include <json/json.h>
-#include <iostream>
 
 // Self-Imports
 #include "o01_Material.h"
-
 
 Material::Material(Json::Value materials, double gravity){
     // List
@@ -24,36 +21,47 @@ Material::Material(Json::Value materials, double gravity){
     g = gravity;
 }
 
-
-void Material::setInitialConditions(double initPhi){ // MainSolver
-    // Main Initial Conditions
-    Phi0 = initPhi;
-}
-
-
-void Material::setInitialConditions(double initPhi, Json::Value initVF){ // NS Solver
+void Material::setInitialConditions(double initPhi, Json::Value initVF){ // NS Solver (Old) --- PHISolver (Value)
     // Main Initial Conditions
     Phi0 = initPhi;
     
     // Velocity Field Initial Conditions
     VF0.resize(initVF.size());
-    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++){VF0[i] = initVF[i].asDouble();}
+    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++) {VF0[i] = initVF[i].asDouble();}
+
+    // Once NEW NS Solver is done: (Will leave Scalar for the end)
+    // Change this to store the equation for the defined velocity field instead
 }
 
+void Material::setInitialConditions(std::string pathPhi, Json::Value initVF){ // PHISolver (Path)
+    // Solver Variable
+    sPhi0 = pathPhi; bPath = true;
 
-void Material::setInitialConditions(double initT, double initP, Json::Value initVF){ // DHCSolver / 3DSolver
-    // Main Initial Conditions
+    // Velocity Field
+    sVF0.resize(initVF.size());
+    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++) {sVF0[i] = initVF[i].asString();}
+}
+
+void Material::setInitialConditions(double initT, double initP, Json::Value initVF){ // NSSolver (Value)
+    // Solver Variable
     T0 = initT; P0 = initP;
 
-    // Velocity Field Initial Conditions
+    // Velocity Field
     VF0.resize(initVF.size());
-    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++){VF0[i] = initVF[i].asDouble();}
+    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++) {VF0[i] = initVF[i].asDouble();}
+}
+
+void Material::setInitialConditions(std::string pathT, std::string pathP, Json::Value pathVF){ // NSSolver (Path)
+    // Solver Variable
+    sT0 = pathT; sP0 = pathP; bPath = true;
+
+    // Velocity Field
+    sVF0.resize(pathVF.size());
+    for (Json::Value::ArrayIndex i = 0; i < pathVF.size(); i++) {sVF0[i] = pathVF[i].asString();}
 }
 
 
-template <typename nType, typename nJson> void Material::setInitialConditions(nType initT, nType initP, nJson initVF){
-    // Main Initial Conditions
-    // Is it worth it using a template? Or maybe just define both versions with doubles and strings
-    // I think this is better
-
+void Material::setInitialConditions(double initPhi){ // Old: PHISolver 
+    // Solver Variable
+    Phi0 = initPhi;
 }

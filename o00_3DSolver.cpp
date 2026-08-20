@@ -22,7 +22,6 @@
 #include "o09_Parser.h"
 /* #include "o09_Medic.h" */
 
-
 Json::Value getParsedData(std::string fileName){
     
     // Open File
@@ -82,10 +81,50 @@ Json::Value getParsedData(std::string fileName){
     // Functions in Mesh need to use Templates
 
     // Use arrays for fixed dimensional objects
-    // CANNOT DEFINE A TEMPLATE OBJECT IN THE HEADER FILE, NEED TO MOVE ALL OF THAT TO MAIN SOLVER
+    // CANNOT DEFINE A TEMPLATE OBJECT IN THE HEADER FILE, NEED TO MOVE ALL OF THAT TO MAIN SOLVER, not entirely true
     // Can I have an array that calls different functions depending on what I want to write
 
-template <size_t nDim> void runSimulation(Json::Value data){
+    // Model follows Patankar's discretization so it ALWAYS NEEDS VELOCITY
+
+bool bRun = false;
+
+template <size_t nDim> void runPHISolver(Json::Value data){
+    // Cases
+    // 1D Rod, 4Materials: Phi0 = Fixed, V = 0
+    // Smith-Hutton: Phi0 = Fixed, V = function
+
+    ///// Control /////
+    bRun = true;
+    
+    ///// Parser /////
+    std::cout << "Initializing Parser ...\n";
+    Parser Prs; std::cout << "Parser configured.\n";
+
+    ///// Material /////
+    std::cout << "Initializing Materials ...\n";
+    Material Mat(data["materials"], data["g"].isNull() ? 9.81 : data["g"].asDouble()); std::cout << "Material properties set.\n";
+    
+    // Initial Conditions
+    if (data["PHI0"].isDouble()) {
+        // Control
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
+
+        // Store data
+        /* Mat.setInitialConditions(data["PHI0"].asDouble(), data["V0"]); // Pending fix function in Material */
+
+    } else if (data["PHI0"].isString()) {
+        // Control
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
+
+        // Store data
+        Mat.setInitialConditions(data["PHI0"].asString(), data["V0"]);
+    } else {std::cerr << "Initial conditions not defined correctly.\n"; return;} std::cout << "Initial conditions logged.\n";
+    
+}
+
+template <size_t nDim> void runNSSolver(Json::Value data){
+    // Control
+    bRun = true;
 
     ///// Parser /////
     std::cout << "Initializing Parser ...\n";
@@ -94,19 +133,23 @@ template <size_t nDim> void runSimulation(Json::Value data){
     ///// Material /////
     std::cout << "Initializing Materials ...\n";
     Material Mat(data["materials"], data["g"].isNull() ? 9.81 : data["g"].asDouble()); std::cout << "Material properties set.\n";
+    
+    // Initial Conditions
+    if (data["P0"].isDouble()) {
+        // Control
+        if (!data["T0"].isDouble() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; return;}
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
 
-    /* Mat.setInitialConditions(data["PHI0"].asDouble(), data["VF0"]); std::cout << "Initial conditions set.\n"; */
+        // Store data
+        Mat.setInitialConditions(data["T0"].isNull() ? 0 : data["T0"].asDouble(), data["P0"].asDouble(), data["VF0"]);
+    } else if (data["P0"].isString()) {
+        // Control
+        if (!data["T0"].isString() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; return;}
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
 
-    /* if (!data["PHI0"].isNull()) {Mat.setInitialConditions(data["PHI0"].asDouble());} */
-
-    // Initial conditions has 3 cases 
-    // 1. Phi - Scalar map, takes a double or a .csv
-    // 2. V - Fixed value, function, variable
-    // 3. p, T - active/inactive
-
-
-
-    return; 
+        // Store data
+        Mat.setInitialConditions(data["T0"].asString(), data["P0"].asString(), data["VF0"]);
+    } else {std::cerr << "Initial conditions not defined correctly.\n"; return;} std::cout << "Initial conditions logged.\n";
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n"; 
@@ -121,6 +164,7 @@ template <size_t nDim> void runSimulation(Json::Value data){
     /* if (data["boundariesVelocity"].size() != 0) { */
     /*     // Create Velocity (MeshBase) */
     /* } */
+    // Should just compare with initial conditions null for this
 
 
     // NEED TO CREATE MY VARIABLES HERE FOR THE DIFFERENT CASES DEPENDING ON THE CONFIGURATION FILE
@@ -133,11 +177,7 @@ template <size_t nDim> void runSimulation(Json::Value data){
     /* std::array<MeshBase<Dim>, Dim> V{}; */
 
 
-
-
     /* Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n"; */
-
-
 
     /* Msh.generateMesh(Msh.p, data["P0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes and " << Msh.obstacles.size() << " obstacles.\n"; */
     /* Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n"; */
@@ -232,8 +272,6 @@ template <size_t nDim> void runSimulation(Json::Value data){
 
 int main(int argc, char* argv[]){
     
-    ////////// Configuration //////////
-    
     ///// Setup /////
     auto t1 = std::chrono::high_resolution_clock::now();
     std::cout << "Initializing model ... \n" << std::fixed << std::setprecision(3); // std::fixed, std::defaultfloat, std::scientific? (not sure about the last one)
@@ -242,18 +280,24 @@ int main(int argc, char* argv[]){
     std::cout << "Reading data ... \n";
     Json::Value data = getParsedData(argv[1]); std::cout << "Data parsed successfully. \n";
 
+    // Control
+    if (data["PHI0"].isNull() && data["P0"].isNull()) {std::cerr << "Configuration file not defined properly.\n"; return 1;}
+
     ///// Simulation /////
     size_t nDim = data["N"].size();
     switch (nDim) {
         case 1:
-            runSimulation<1>(data); break;
+            data["PHI0"].isNull() ? runNSSolver<1>(data) : runPHISolver<1>(data); break;
         case 2:
-            runSimulation<2>(data); break;
+            data["PHI0"].isNull() ? runNSSolver<2>(data) : runPHISolver<2>(data); break;
         case 3:
-            runSimulation<3>(data); break;
+            data["PHI0"].isNull() ? runNSSolver<3>(data) : runPHISolver<3>(data); break;
         default:
-            std::cerr << "Configuration file not defined properly.\n"; return 1;
+            std::cerr << "Number of dimensions not defined properly.\n"; return 1;
     }
+
+    ///// Control /////
+    if (!bRun) {std::cerr << "Configuration file not defined properly.\n"; return 1;}
 
 }
 
