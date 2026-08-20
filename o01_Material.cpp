@@ -21,16 +21,13 @@ Material::Material(Json::Value materials, double gravity){
     g = gravity;
 }
 
-void Material::setInitialConditions(double initPhi, Json::Value initVF){ // NS Solver (Old) --- PHISolver (Value)
+void Material::setInitialConditions(double initPhi, Json::Value initVF){ // PHISolver (Value)
     // Main Initial Conditions
     Phi0 = initPhi;
     
     // Velocity Field Initial Conditions
-    VF0.resize(initVF.size());
-    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++) {VF0[i] = initVF[i].asDouble();}
-
-    // Once NEW NS Solver is done: (Will leave Scalar for the end)
-    // Change this to store the equation for the defined velocity field instead
+    sVF0.resize(initVF.size());
+    for (Json::Value::ArrayIndex i = 0; i < initVF.size(); i++) {sVF0[i] = initVF[i].asString();}
 }
 
 void Material::setInitialConditions(std::string pathPhi, Json::Value initVF){ // PHISolver (Path)
@@ -59,7 +56,6 @@ void Material::setInitialConditions(std::string pathT, std::string pathP, Json::
     sVF0.resize(pathVF.size());
     for (Json::Value::ArrayIndex i = 0; i < pathVF.size(); i++) {sVF0[i] = pathVF[i].asString();}
 }
-
 
 void Material::setInitialConditions(double initPhi){ // Old: PHISolver 
     // Solver Variable

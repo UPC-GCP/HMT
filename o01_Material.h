@@ -27,10 +27,12 @@ public:
     Material(Json::Value materials, double g=9.81);
     
     // Functions
-    void setInitialConditions(double initPhi, Json::Value initVF); // NS Solver (Old) -- PHISolver (Value) 
+    void setInitialConditions(double initPhi, Json::Value initVF); // PHISolver (Value) 
     void setInitialConditions(std::string pathPhi, Json::Value initVF); // PHISolver (Path)
     void setInitialConditions(double initT, double initP, Json::Value initVF); // NSSolver (Value) (Old: DHCSolver)
     void setInitialConditions(std::string pathT, std::string pathP, Json::Value pathV); // NSSolver (Path)
+    
+    // Deprecated (Pending cleanup)
     void setInitialConditions(double initPhi); // Old: PHISolver
 };
 

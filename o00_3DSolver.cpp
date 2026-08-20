@@ -110,7 +110,7 @@ template <size_t nDim> void runPHISolver(Json::Value data){
         for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
 
         // Store data
-        /* Mat.setInitialConditions(data["PHI0"].asDouble(), data["V0"]); // Pending fix function in Material */
+        Mat.setInitialConditions(data["PHI0"].asDouble(), data["V0"]);
 
     } else if (data["PHI0"].isString()) {
         // Control
