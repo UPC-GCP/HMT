@@ -63,12 +63,9 @@ private:
 public:
     // Variables
     double epsFind=1e-5; // Config 
-    /* MeshBase u{}, v{}, w{}; MeshSolver p{}, T{}; // Meshes */
-    // Meshes should be created directly in o00 not stored here
-    // u, v, w need to be defined in a single vector that stores each MeshBase and loops over them
 
     // Vectors
-    /* std::vector<int> vExpr{}; // Velocity Expression -> [nAxis] */ 
+    /* std::vector<int> vExpr{}; // Velocity Expression -> [nAxis] */
     /* std::vector<boundMain> boundaryPressure{}, boundaryEnergy{}; // Boundaries (Pressure, Temperature) */
     /* std::vector<boundVelocity> boundaryVelocity{}; // Boundaries (Velocity Components) */
     /* std::vector<Obstacle> obstacles{}; // Obstacles */

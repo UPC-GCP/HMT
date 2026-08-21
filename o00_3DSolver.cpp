@@ -2,8 +2,10 @@
 /* #include <cstddef> */
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <iostream>
 #include <json/forwards.h>
+#include <stdexcept>
 #include <string>
 #include <fstream>
 #include <json/json.h>
@@ -107,18 +109,24 @@ template <size_t nDim> void runPHISolver(Json::Value data){
     // Initial Conditions
     if (data["PHI0"].isDouble()) {
         // Control
-        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; throw std::invalid_argument("Check .json");}}
 
         // Store data
         Mat.setInitialConditions(data["PHI0"].asDouble(), data["V0"]);
 
     } else if (data["PHI0"].isString()) {
         // Control
-        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble() || !data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; throw std::invalid_argument("Check .json");}}
 
         // Store data
         Mat.setInitialConditions(data["PHI0"].asString(), data["V0"]);
-    } else {std::cerr << "Initial conditions not defined correctly.\n"; return;} std::cout << "Initial conditions logged.\n";
+    } else {std::cerr << "Initial conditions not defined correctly.\n"; throw std::invalid_argument("Check .json");} std::cout << "Initial conditions logged.\n";
+
+    ///// Mesh /////
+    std::cout << "Initializing mesh ...\n"; 
+    Mesh Msh; std::cout << "Mesh initialized.\n";
+
+    // PENDING MESH
     
 }
 
@@ -137,54 +145,45 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     // Initial Conditions
     if (data["P0"].isDouble()) {
         // Control
-        if (!data["T0"].isDouble() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; return;}
-        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
+        if (!data["T0"].isDouble() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; throw std::invalid_argument("Check .json");}
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble()) {std::cerr << "Initial conditions (V) not defined properly.\n"; throw std::invalid_argument("Check .json");}}
 
         // Store data
         Mat.setInitialConditions(data["T0"].isNull() ? 0 : data["T0"].asDouble(), data["P0"].asDouble(), data["VF0"]);
     } else if (data["P0"].isString()) {
         // Control
-        if (!data["T0"].isString() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; return;}
-        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; return;}}
+        if (!data["T0"].isString() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; throw std::invalid_argument("Check .json");}
+        for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; throw std::invalid_argument("Check .json");}}
 
         // Store data
         Mat.setInitialConditions(data["T0"].asString(), data["P0"].asString(), data["VF0"]);
-    } else {std::cerr << "Initial conditions not defined correctly.\n"; return;} std::cout << "Initial conditions logged.\n";
+    } else {std::cerr << "Initial conditions not defined correctly.\n"; throw std::invalid_argument("Check .json");} std::cout << "Initial conditions logged.\n";
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n"; 
-    Mesh Msh; std::cout << "Mesh initialized.\n";
 
-    // Time to start the mesh
+    // Pressure
+    MeshSolver<nDim> p{}; // p.generateMesh(); std::cout << "Pressure object created with " << p.totNodes << " nodes.\n";
+    // PENDING: Add boundaries
 
-    /* if (data["boundariesPressure"].size() != 0) { */
-    /*     // Create Pressure (MeshSolver) */
-    /* } */
-    /* if (data["boundariesTemperature"].size() != 0) { */
-    /*     // Create Temperature (MeshSolver) */
-    /* } */
-    /* if (data["boundariesVelocity"].size() != 0) { */
-    /*     // Create Velocity (MeshBase) */
-    /* } */
-    // Should just compare with initial conditions null for this
+    // Velocity
+    std::array<MeshBase<nDim>, nDim> V{}; // V.generateMeshVelocity(); std::cout << "Velocity objects created with "; for(MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << " ";} std::cout << " nodes.\n";
+    // PENDING: Add boundaries
 
-
-    // NEED TO CREATE MY VARIABLES HERE FOR THE DIFFERENT CASES DEPENDING ON THE CONFIGURATION FILE
-    // Solver Variables: p, T
-    // Explicit Variables: u, v, w
-    // Boundaries could be stored within each template for the mesh
-    // Obstacles defined independently
-    
-    // Velocity components needs to be in a single vector
-    /* std::array<MeshBase<Dim>, Dim> V{}; */
+    // Temperature
+    if (!data["T0"].isNull()) {
+        MeshSolver<nDim> T{}; // T.generateMesh(); std::cout << "Temperature object created with " << T.totNodes << " nodes.\n";
+        // PENDING: Add boundaries
+    }
 
 
-    /* Mesh Msh(data["meshAlgorithm"].asInt(), data["width"].asDouble(), data["strength"].asDouble(), data["centering"].asDouble(), data["kappa"].asDouble(), data["delta"].asDouble()); std::cout << "Mesh parameters set.\n"; */
 
     /* Msh.generateMesh(Msh.p, data["P0"].asDouble(), data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Primary mesh created with " << Msh.p.totNodes << " nodes and " << Msh.obstacles.size() << " obstacles.\n"; */
     /* Msh.generateMeshVelocity(Mat, Msh.p, Msh.u, Msh.v); std::cout << "Secondary meshes created with " << Msh.u.totNodes << " and " << Msh.v.totNodes << " nodes.\n"; */
     /* Msh.addBoundariesPressure(data["boundaries"], Mat, Prs); std::cout << Msh.boundaryPressure.size() << " boundary conditions added.\n"; */
     /* Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n"; */
+
+
 
 
 
@@ -282,21 +281,23 @@ int main(int argc, char* argv[]){
     std::cout << "Reading data ... \n";
     Json::Value data = getParsedData(argv[1]); std::cout << "Data parsed successfully. \n";
 
-    // Control
+    ///// Simulation /////
     if (data["PHI0"].isNull() && data["P0"].isNull()) {std::cerr << "Configuration file not defined properly.\n"; return 1;}
 
-    ///// Simulation /////
-    size_t nDim = data["N"].size();
-    switch (nDim) {
-        case 1:
-            data["PHI0"].isNull() ? runNSSolver<1>(data) : runPHISolver<1>(data); break;
-        case 2:
-            data["PHI0"].isNull() ? runNSSolver<2>(data) : runPHISolver<2>(data); break;
-        case 3:
-            data["PHI0"].isNull() ? runNSSolver<3>(data) : runPHISolver<3>(data); break;
-        default:
-            std::cerr << "Number of dimensions not defined properly.\n"; return 1;
+    try {
+        size_t nDim = data["N"].size();
+        switch (nDim) {
+            case 1:
+                data["PHI0"].isNull() ? runNSSolver<1>(data) : runPHISolver<1>(data); break;
+            case 2:
+                data["PHI0"].isNull() ? runNSSolver<2>(data) : runPHISolver<2>(data); break;
+            case 3:
+                data["PHI0"].isNull() ? runNSSolver<3>(data) : runPHISolver<3>(data); break;
+            default:
+                std::cerr << "Number of dimensions not defined properly.\n"; return 1;
+        }
     }
+    catch (const std::exception& e) {std::cerr << "Program shutdown...\n"; return EXIT_FAILURE;}
 
     ///// Control /////
     if (!bRun) {std::cerr << "Configuration file not defined properly.\n"; return 1;}
