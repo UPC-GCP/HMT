@@ -1,15 +1,13 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
-#include <vector>
 #include <json/json.h>
 
-struct MatPhys{
+struct MatPhys {
     double rho{}, gamma{}, cp{}, mu{}, beta{};
 };
 
-class Material
-{
+class Material {
 private:
 
 public:

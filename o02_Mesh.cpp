@@ -31,7 +31,7 @@ bool isFormula(std::string value){
 }
 
 
-Mesh::Mesh() {}
+/* Mesh::Mesh() {} */
 
 
 void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::vector<std::vector<double>>& nFaces){
@@ -110,10 +110,9 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
 }
 
 
-template <size_t Dim> void Mesh::generateMesh(MeshSolver<Dim>& Msh, double Phi0, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs){
+template <size_t Dim> void Mesh::generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs){
 
 	// Control (nD)
-	Msh.N.resize(qNode.size());
 	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++){
 		Msh.N[i] = qNode[i].asInt();
 	}

@@ -124,9 +124,9 @@ template <size_t nDim> void runPHISolver(Json::Value data){
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n"; 
-    Mesh Msh; std::cout << "Mesh initialized.\n";
+    MeshSolver<nDim> PHI{};
 
-    // PENDING MESH
+
     
 }
 
@@ -161,9 +161,16 @@ template <size_t nDim> void runNSSolver(Json::Value data){
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n"; 
+    Mesh Msh; std::cout << "Creating objects...\n";
 
     // Pressure
-    MeshSolver<nDim> p{}; // p.generateMesh(); std::cout << "Pressure object created with " << p.totNodes << " nodes.\n";
+    MeshSolver<nDim> p{}; 
+
+
+    /* Msh.generateMesh(p, , Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs)// p.generateMesh(); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obstacle.size; */
+    // This needs to include the option for path/value for the initial conditions
+
+
     // PENDING: Add boundaries
 
     // Velocity
