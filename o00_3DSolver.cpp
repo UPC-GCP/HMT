@@ -161,27 +161,29 @@ template <size_t nDim> void runNSSolver(Json::Value data){
 
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n"; 
-    Mesh Msh; std::cout << "Creating objects...\n";
+    Mesh<nDim> Msh;
 
     // Pressure
-    MeshSolver<nDim> p{}; 
+    std::cout << data["obstacles"].size() << " obstacles identified.\n";
+    MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
+    Msh.addBoundariesPressure(p, Mat, Prs, data["boundariesPressure"]); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
 
 
-    /* Msh.generateMesh(p, , Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs)// p.generateMesh(); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obstacle.size; */
-    // This needs to include the option for path/value for the initial conditions
+    std::cout << "Faces:\n";
+    for (size_t i = 0; i < p.N.size(); i++) {std::cout << i << ": "; for (double val : p.Faces[i]) {std::cout << val << " ";} std::cout << "\n";}
 
 
-    // PENDING: Add boundaries
-
-    // Velocity
-    std::array<MeshBase<nDim>, nDim> V{}; // V.generateMeshVelocity(); std::cout << "Velocity objects created with "; for(MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << " ";} std::cout << " nodes.\n";
-    // PENDING: Add boundaries
-
+    return;
+    
     // Temperature
     if (!data["T0"].isNull()) {
-        MeshSolver<nDim> T{}; // T.generateMesh(); std::cout << "Temperature object created with " << T.totNodes << " nodes.\n";
-        // PENDING: Add boundaries
+        MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
+        Msh.addBoundariesTemperature(T, Mat, Prs, data["boundariesTemperature"]); std::cout << T.BC.size() << " Temperature boundary conditions added\n";
     }
+    
+    /* // Velocity */
+    /* std::array<MeshBase<nDim>, nDim> V{}; // V.generateMeshVelocity(); std::cout << "Velocity objects created with "; for(MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << " ";} std::cout << " nodes.\n"; */
+    /* // PENDING: Add boundaries */
 
 
 
@@ -192,6 +194,8 @@ template <size_t nDim> void runNSSolver(Json::Value data){
 
 
 
+
+    return;
 
 
     /* ///// Discretizer ///// */

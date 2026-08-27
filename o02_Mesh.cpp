@@ -1,4 +1,5 @@
 /* #include <algorithm> */
+#include <algorithm>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -7,12 +8,15 @@
 #include <json/json.h>
 #include <json/value.h>
 #include <cmath>
+#include <stdexcept>
+#include <omp.h>
 
 // Self-Imports
+/* #include "exprtk.hpp" */
+#include "o01_Material.h"
 #include "o02_Mesh.h"
 
 bool isFormula(std::string value){
-
     // Stringstream
     std::stringstream ss; ss << value;
 
@@ -20,25 +24,16 @@ bool isFormula(std::string value){
     float num = 0; ss >> num;
 
     // Return
-    if (ss.good()){
-        return true;
-    } else if (num == 0 && value[0] != 0){
-        return true;
-    } else {
-        return false;
-    }
-
+    if (ss.good()) {return true;}
+    else if (num == 0 && value[0] != 0) {return true;}
+    else {return false;}
 }
 
-
-/* Mesh::Mesh() {} */
-
-
-void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::vector<std::vector<double>>& nFaces){
+template <size_t Dim> void Mesh<Dim>::calculateFaces(std::array<size_t, Dim> cVec, Json::Value refData, std::array<std::vector<double>, Dim>& nFaces){
 
     // General
     std::string sAlgo = refData["algorithm"].asString();
-    size_t iAxis = refData["axis"].asInt(), NSec = refData["N"].asInt(); size_t cNode = cVec[iAxis];
+    size_t iAxis = refData["axis"].asInt(), NSec = refData["N"].asInt(), cNode = cVec[iAxis];
     double x0 = refData["range"][0].asDouble(), x1 = refData["range"][1].asDouble(); double length = x1 - x0;
 
     // Face Positions
@@ -46,8 +41,8 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
         
         // Mesh Parameters
         double A = refData["strength"].asDouble(), xC = refData["centering"].asDouble() - x0; 
-        if (A > 2.5 || A < -2.5){std::cerr << "Bidirectional mesh parameter out of range. (strength)\n"; std::exit(0);}
-        if (xC <= 0 || xC >= length){std::cerr << "Bidirectional mesh parameter out of range. (centering)\n"; std::exit(0);}
+        if (A > 2.5 || A < -2.5){std::cerr << "Bidirectional mesh parameter out of range. (strength)\n"; throw std::invalid_argument("Check .json");}
+        if (xC <= 0 || xC >= length){std::cerr << "Bidirectional mesh parameter out of range. (centering)\n"; throw std::invalid_argument("Check .json");}
         // A (+): Closer to center, A (-): Away from center
         
         // Generate Mesh
@@ -71,7 +66,7 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
         
         // Mesh Parameters
         double delta = refData["delta"].asDouble(); double A{}, B{};
-        if (delta == 0){std::cerr << "Hyperbolic tangent mesh parameter out of range.\n"; std::exit(0);}
+        if (delta == 0){std::cerr << "Hyperbolic tangent mesh parameter out of range.\n"; throw std::invalid_argument("Check .json");}
         // delta: independent of sign (+/-), higher value pushes towards the left
 
         // Generate Mesh
@@ -84,7 +79,7 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
         
         // Mesh Parameters
         double delta = refData["delta"].asDouble(); double A{}, B{};
-        if (delta == 0){std::cerr << "Hyperbolic tangent mesh parameter out of range.\n"; std::exit(0);}
+        if (delta == 0){std::cerr << "Hyperbolic tangent mesh parameter out of range.\n"; throw std::invalid_argument("Check .json");}
         // delta: independent of sign (+/-), higher value pushes towards the edges
 
         // Generate Mesh
@@ -97,7 +92,7 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
 
         // Mesh Parameters
         double kappa = refData["kappa"].asDouble();
-        if (kappa == 0){std::cerr << "Exponential mesh parameter out of range.\n"; std::exit(0);}
+        if (kappa == 0){std::cerr << "Exponential mesh parameter out of range.\n"; throw  std::invalid_argument("Check .json");}
         // kappa < 0: Shifts right, kappa > 0: Shifts left 
         
         // Generate Mesh
@@ -109,24 +104,164 @@ void Mesh::calculateFaces(std::vector<size_t> cVec, Json::Value refData, std::ve
 
 }
 
+void sections1D(MeshSolver<1>& Msh, Json::Value sections, Json::Value obstacles){
 
-template <size_t Dim> void Mesh::generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs){
+    // Sections
+    std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{};
+    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            Pos0[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos1[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
+        }
+
+        // Internal Nodes (Non-nD)
+        for (size_t j = Pos0[0]; j < Pos1[0]; j++){
+            // Control
+            idx = calcIndex(j);
+
+            // Material
+            Msh.nMat[idx] = sections[i]["material"].asInt(); Msh.sPhi[idx] = sections[i]["source"].asDouble();
+
+            // Geometry
+            Msh.S[0][idx] = Msh.deltaX[0][j];
+            Msh.Vp[idx] = Msh.deltaX[0][j]; 
+        }
+    }
+    
+    // Obstacles
+    Obstacle<1> tempObs{}; 
+    for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
+            tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
+        } 
+
+        // bObs
+        for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
+                    idx = calcIndex(j); Msh.bObs[idx] = true;
+        }
+
+        // Control
+        Msh.Obs.push_back(std::move(tempObs)); tempObs = {}; 
+    }
+
+}
+
+void sections2D(MeshSolver<2>& Msh, Json::Value sections, Json::Value obstacles){
+
+    // Sections
+    std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{};
+    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            Pos0[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos1[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
+        }
+
+        // Internal Nodes (Non-nD)
+        for (size_t j = Pos0[0]; j < Pos1[0]; j++){
+            for (size_t k = Pos0[1]; k < Pos1[1]; k++){
+                // Control
+                idx = calcIndex(j, k, Msh.N[1]);
+
+                // Material
+                Msh.nMat[idx] = sections[i]["material"].asInt(); Msh.sPhi[idx] = sections[i]["source"].asDouble();
+
+                // Geometry
+                Msh.S[0][idx] = Msh.deltaX[1][k]; Msh.S[1][idx] = Msh.deltaX[0][j];
+                Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k];
+            }
+        }
+    }
+
+    // Obstacles
+    Obstacle<2> tempObs{}; 
+    for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
+            tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
+        } 
+
+        // bObs
+        for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
+            for (size_t k = tempObs.i0[1]; k < tempObs.i1[1]; k++){
+                    idx = calcIndex(j, k, Msh.N[1]); Msh.bObs[idx] = true;
+            }
+        }
+
+        // Control
+        Msh.Obs.push_back(std::move(tempObs)); tempObs = {}; 
+    }
+
+}
+
+void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles){
+    
+    // Sections
+    std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{};
+    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            Pos0[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            Pos1[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
+        }
+
+        // Internal Nodes (Non-nD)
+        for (size_t j = Pos0[0]; j < Pos1[0]; j++){
+            for (size_t k = Pos0[1]; k < Pos1[1]; k++){
+                for (size_t l = Pos0[2]; l < Pos1[2]; l++){
+                    // Control
+                    idx = calcIndex(j, k, Msh.N[1], l, Msh.N[0]);
+
+                    // Material
+                    Msh.nMat[idx] = sections[i]["material"].asInt(); Msh.sPhi[idx] = sections[i]["source"].asDouble();
+
+                    // Geometry
+                    Msh.S[0][idx] = Msh.deltaX[1][k] * Msh.deltaX[2][l]; Msh.S[1][idx] = Msh.deltaX[0][j] * Msh.deltaX[2][l]; Msh.S[2][idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k];
+                    Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * Msh.deltaX[2][l];
+                }
+            }
+        }
+    }
+
+    // Obstacles
+    Obstacle<3> tempObs{}; 
+    for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++){
+        // Find Positions (nD)
+        for (int j = 0; j < Msh.N.size(); j++){
+            tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
+            tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
+        } 
+
+        // bObs
+        for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
+            for (size_t k = tempObs.i0[1]; k < tempObs.i1[1]; k++){
+                for (size_t l = tempObs.i0[2]; l < tempObs.i1[2]; l++){
+                    idx = calcIndex(j, k, Msh.N[1], l, Msh.N[0]); Msh.bObs[idx] = true;
+                }
+            }
+        }
+
+        // Control
+        Msh.Obs.push_back(std::move(tempObs)); tempObs = {}; 
+    }
+
+}
+
+template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles){
 
 	// Control (nD)
-	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++){
-		Msh.N[i] = qNode[i].asInt();
-	}
-    for (size_t val : Msh.N){Msh.totNodes *= val;}
+	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++) {Msh.N[i] = qNode[i].asInt(); Msh.totNodes *= Msh.N[i];}
 
 	// Geometry Resize (nD)
-	Msh.Faces.resize(Msh.N.size()); Msh.Nodes.resize(Msh.N.size()); Msh.deltaX.resize(Msh.N.size()); Msh.dX.resize(Msh.N.size()); 
-	for (size_t i = 0; i < Msh.N.size(); i++){
-		Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1); 
-	}
+	for (size_t i = 0; i < Msh.N.size(); i++) {Msh.Faces[i].resize(Msh.N[i]+1); Msh.Nodes[i].resize(Msh.N[i]); Msh.deltaX[i].resize(Msh.N[i]); Msh.dX[i].resize(Msh.N[i]+1);}
 
-    // Faces Loop (nD)
-    std::vector<size_t> cNode; cNode.resize(Msh.N.size(), 0);
-    for (int i = 0; i < refinement.size(); i++){
+    // Faces (nD)
+    std::array<size_t, Dim> cNode{}; 
+    for (Json::Value::ArrayIndex i = 0; i < refinement.size(); i++){
         // Calculate
         calculateFaces(cNode, refinement[i], Msh.Faces);
 
@@ -134,7 +269,7 @@ template <size_t Dim> void Mesh::generateMeshSolver(MeshSolver<Dim>& Msh, Materi
         cNode[refinement[i]["axis"].asInt()] += refinement[i]["N"].asInt();
     }
 
-    // CV Positions (nD)
+    // Nodes (nD)
     for (size_t i = 0; i < Msh.N.size(); i++){
         for (size_t j = 0; j < Msh.N[i]; j++){
             Msh.Nodes[i][j] = 0.5 * (Msh.Faces[i][j] + Msh.Faces[i][j+1]);
@@ -158,66 +293,336 @@ template <size_t Dim> void Mesh::generateMeshSolver(MeshSolver<Dim>& Msh, Materi
     }
 
     // Resize (nD)
-    Msh.nMat.resize(Msh.totNodes); Msh.Phi.resize(Msh.totNodes); Msh.sPhi.resize(Msh.totNodes);
-    // Pending redefine geometry to resize
+    Msh.nMat.resize(Msh.totNodes); for (std::vector<double> Sk : Msh.S) {Sk.resize(Msh.totNodes);} Msh.Vp.resize(Msh.totNodes); Msh.bObs.resize(Msh.totNodes);
+    Msh.Phi.resize(Msh.totNodes); Msh.sPhi.resize(Msh.totNodes); Msh.oPhi.resize(Msh.totNodes);
+    // PENDING, needs to account for Path/Value -- Maybe initialize it in addBoundaries? That way I already know which variable it is
 
+    // Sections
+    if constexpr (Dim == 1) {sections1D(Msh, sections, obstacles);} 
+    else if constexpr (Dim == 2) {sections2D(Msh, sections, obstacles);}
+    else if constexpr (Dim == 3) {sections3D(Msh, sections, obstacles);}
 
-
-
-
-    /* // Resize (Non-nD) */
-    /* Msh.nMat.resize(Msh.N[0]); Msh.Phi.resize(Msh.N[0]); Msh.sPhi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]); Msh.bObs.resize(Msh.N[0]); */
-    /* for (size_t i = 0; i < Msh.N[0]; i++){ */
-        /* Msh.nMat[i].resize(Msh.N[1], 0); Msh.Phi[i].resize(Msh.N[1], Phi0); Msh.sPhi[i].resize(Msh.N[1], 0); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], Phi0); Msh.bObs[i].resize(Msh.N[1]); */
-    /* } */
-
-
-
-
-    /* // Sections */
-    /* std::vector<int> Pos0(Msh.N.size()), Pos1(Msh.N.size()); */
-    /* for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){ */
-        /* // Find Positions (nD) */
-        /* for (int j = 0; j < Msh.N.size(); j++){ */
-            /* Pos0[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin(); */
-            /* Pos1[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin(); */
-        /* } */
-
-        /* // Internal Nodes (Non-nD) */
-        /* for (int j = Pos0[0]; j < Pos1[0]; j++){ */
-            /* for (int k = Pos0[1]; k < Pos1[1]; k++){ */
-                /* // Material */
-                /* Msh.nMat[j][k] = sections[i]["material"].asInt(); Msh.sPhi[j][k] = sections[i]["source"].asDouble(); */
-
-                /* /1* // Geometry *1/ */
-                /* Msh.Sw[j][k] = Msh.deltaX[1][k] * W; Msh.Se[j][k] = Msh.deltaX[1][k] * W; Msh.Ss[j][k] = Msh.deltaX[0][j] * W; Msh.Sn[j][k] = Msh.deltaX[0][j] * W; */
-                /* Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W; */
-            /* } */
-        /* } */
-    /* } */
-
-    /* // Obstacles */
-    /* Obstacle tempObs{}; tempObs.i0.resize(Msh.N.size()); tempObs.i1.resize(Msh.N.size()); */
-    /* for (Json::Value::ArrayIndex i = 0; i < obs.size(); i++){ */
-        /* // Find Positions (nD) */
-        /* for (int j = 0; j < Msh.N.size(); j++){ */
-            /* tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin(); */
-            /* tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obs[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin(); */
-        /* } */ 
-
-        /* // bObs */
-        /* for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){ */
-            /* for (size_t k = tempObs.i0[1]; k < tempObs.i1[1]; k++){ */
-                /* Msh.bObs[j][k] = true; */
-            /* } */
-        /* } */
-
-        /* // Control */
-        /* obstacles.push_back(std::move(tempObs)); tempObs = {}; */ 
-        /* tempObs.i0.resize(Msh.N.size()); tempObs.i1.resize(Msh.N.size()); */
-    /* } */
-
-    /* // Coefficients (nD) */
-    /* Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0); */
+    // Coefficients (nD)
+    Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
 
 }
+
+template <size_t Dim> void importInitialConditions(MeshSolver<Dim>& Msh, std::string sPath) {
+
+    // Import .csv
+
+    // Control (Check dimensions -- Just compare totNodes)
+
+    // Store Data
+
+}
+
+void sizeBoundary1D(Boundary<1>& BC, MeshBase<1> Msh, Parser& Prs) {
+
+    if (BC.i0[0] == BC.i1[0]) { // X Boundary
+
+        // Update
+        if (BC.bUpdate) {
+
+            // Time
+            if (BC.iEq == 0) {
+                // Value
+                BC.Phi.resize(1, BC.value); BC.oPhi.resize(1, BC.value);
+
+                // Robin
+                if (BC.type == 2) {BC.A.resize(1, BC.alpha); BC.oA.resize(1, BC.alpha);}
+            }
+
+            // Coordinates
+            else if (BC.iEq == 1) {
+                // Resize
+                BC.Phi.resize(1); BC.Phi.resize(1);
+
+                // Value
+                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {BC.Phi[i] = Prs.evaluateCoordinates(BC.iExpr, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
+
+                // Robin
+                if (BC.type == 2) {
+                    // Resize
+                    BC.A.resize(1); BC.oA.resize(1);
+
+                    // Value
+                    for (size_t i = BC.i0[0];  i < BC.i1[0]; i++) {BC.A[i] = Prs.evaluateCoordinates(BC.iExprA, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
+                }
+            }
+
+        } else { // No Update
+            // Value
+            BC.Phi.resize(1, BC.value); BC.oPhi.resize(1, BC.value);
+
+            // Robin
+            if (BC.type == 2) {BC.A.resize(1, BC.alpha); BC.oA.resize(1, BC.alpha);}
+        }
+    }
+
+}
+
+void sizeBoundary2D(Boundary<2>& BC, MeshBase<2> Msh, Parser& Prs) {
+
+    if (BC.i0[0] == BC.i1[0]) { // X Boundary
+
+        if (BC.bUpdate) { // Update
+
+            // Time
+            if (BC.iEq == 0) {
+                // Value
+                BC.Phi.resize(Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[1], BC.value);
+
+                // Robin
+                if (BC.type == 2) {BC.A.resize(Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[1], BC.alpha);}
+            }
+
+            // Coordinates // PENDING -- LAST UPDATE WAS HERE -- still need to fix the loops
+            else if (BC.iEq == 1) {
+                // Resize
+                BC.Phi.resize(Msh.N[1]); BC.Phi.resize(Msh.N[1]);
+
+                // Value
+                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {BC.Phi[i] = Prs.evaluateCoordinates(BC.iExpr, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
+
+                // Robin
+                if (BC.type == 2) {
+                    // Resize
+                    BC.A.resize(Msh.N[1]); BC.oA.resize(Msh.N[1]);
+
+                    // Value
+                    for (size_t i = BC.i0[0];  i < BC.i1[0]; i++) {BC.A[i] = Prs.evaluateCoordinates(BC.iExprA, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
+                }
+            }
+
+        } else { // No Update
+            // Value
+            BC.Phi.resize(Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[1], BC.value);
+
+            // Robin
+            if (BC.type == 2) {BC.A.resize(Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[1], BC.alpha);}
+        }
+
+    } else if (BC.i0[1] == BC.i1[1]) { // Y Boundary
+
+        if (BC.bUpdate) { // Update
+
+            // Time
+            if (BC.iEq == 0) {
+                // Value
+                BC.Phi.resize(Msh.N[0], BC.value); BC.oPhi.resize(Msh.N[0], BC.value);
+
+                // Robin
+                if (BC.type == 2) {BC.A.resize(Msh.N[0], BC.alpha); BC.oA.resize(Msh.N[0], BC.alpha);}
+            }
+
+            // Coordinates
+            else if (BC.iEq == 1) {
+                // Resize
+
+                // Value
+
+                // Robin
+                if (BC.type == 2) {
+                    // Resize
+
+                    // Value
+
+                }
+            }
+
+        } else { // No Update
+            // Value
+            BC.Phi.resize(Msh.N[0], BC.value); BC.oPhi.resize(Msh.N[0], BC.value);
+
+            // Robin
+            if (BC.type == 2) {BC.A.resize(Msh.N[0], BC.alpha); BC.oA.resize(Msh.N[0], BC.alpha);}
+        }
+
+    }
+
+}
+
+void sizeBoundary3D(Boundary<3>& BC, MeshBase<3> Msh, Parser& Prs) {
+
+    if (BC.i0[0] == BC.i1[0]) { // X Boundary
+
+        if (BC.bUpdate) { // Update
+
+            // Time
+            if (BC.iEq == 0) {
+                // Value
+                BC.Phi.resize(Msh.N[1] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[1] * Msh.N[2], BC.value);
+
+                // Robin
+                if (BC.type == 2) {BC.A.resize(Msh.N[1] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[1] * Msh.N[2], BC.alpha);}
+            }
+
+            // Coordinates
+            else if (BC.iEq == 1) {
+
+            }
+
+        } else { // No Update
+            // Value
+            BC.Phi.resize(Msh.N[1] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[1] * Msh.N[2], BC.value);
+
+            // Robin
+            if (BC.type == 2) {BC.A.resize(Msh.N[1] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[1] * Msh.N[2], BC.alpha);}
+        }
+
+    } else if (BC.i0[1] == BC.i1[1]) { // Y Boundary
+
+        if (BC.bUpdate) { // Update
+
+            // Time
+            if (BC.iEq == 0) {
+                // Value
+                BC.Phi.resize(Msh.N[0] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[2], BC.value);
+
+                // Robin
+                if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[2], BC.alpha);}
+            }
+
+            // Coordinates
+            else if (BC.iEq == 1) {
+
+            }
+
+        } else { // No Update
+            // Value
+            BC.Phi.resize(Msh.N[0] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[2], BC.value);
+
+            // Robin
+            if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[2], BC.alpha);}
+        }
+
+    } else if (BC.i0[2] == BC.i1[2]) { // Z Boundary
+
+        if (BC.bUpdate) { // Update
+
+            // Time
+            if (BC.iEq == 0) {
+                // Value
+                BC.Phi.resize(Msh.N[0] * Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[1], BC.value);
+
+                // Robin
+                if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[1], BC.alpha);}
+            }
+
+            // Coordinates
+            else if (BC.iEq == 1) {
+
+            }
+
+        } else { // No Update
+            // Value
+            BC.Phi.resize(Msh.N[0] * Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[1], BC.value);
+
+            // Robin
+            if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[1], BC.alpha);}
+        }
+
+    }
+
+}
+
+template <size_t Dim> void Mesh<Dim>::addBoundariesPressure(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries) {
+    
+    // Initial Conditions
+    if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), Mat.P0); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), Mat.P0);} else {importInitialConditions(Msh, Mat.sP0);}
+
+    // Control
+    Msh.BC.resize(boundaries.size());
+
+    // Boundaries
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++) {
+
+        // Position
+        Msh.BC[i].side = boundaries[i]["side"].asInt(); if (Msh.BC[i].side != 0 && Msh.BC[i].side != 1) {std::cerr << "Side not defined properly\n"; throw std::invalid_argument("Check .json\n");}
+        for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
+            Msh.BC[i].i0[j] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), boundaries[i]["x0"][j].asDouble() - epsFind) - Msh.Nodes[i].begin();
+            Msh.BC[i].i1[j] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), boundaries[i]["x1"][j].asDouble() - epsFind) - Msh.Nodes[i].begin();
+        }
+
+        // Value
+        if (isFormula(boundaries[i]["value"].asString())) {
+            // Control
+            Msh.BC[i].bUpdate = true; Msh.BC[i].expression = boundaries[i]["value"].asString();
+            Msh.BC[i].iExpr = Prs.registerExpression(Msh.BC[i].expression);
+
+            // Parser
+            if (Msh.BC[i].expression.find(" t ") != std::string::npos) { // Update time
+                Msh.BC[i].iEq = 0; Msh.BC[i].value = Prs.evaluateTime(Msh.BC[i].iEq, 0);
+            } else if (Msh.BC[i].expression.find(" x ") != std::string::npos || Msh.BC[i].expression.find(" y ") != std::string::npos || Msh.BC[i].expression.find(" z ") != std::string::npos) {Msh.BC[i].iEq = 1;} // Update coordinates 
+            else {std::cerr << "Equation not recognized: " << Msh.BC[i].expression << "\n"; throw std::invalid_argument("Check .json");} // Generic uses updateTime
+        } else {Msh.BC[i].value = boundaries[i]["value"].asDouble();}
+
+        // Type
+        if (boundaries[i]["type"] == "Dirichlet") {Msh.BC[i].type = 0;}
+        else if (boundaries[i]["type"] == "Neumann") {Msh.BC[i].type = 1;}
+        else if (boundaries[i]["type"] == "Robin") {Msh.BC[i].type = 2;
+
+            // Value
+            if (isFormula(boundaries[i]["alpha"].asString())) {
+                // Control
+                Msh.BC[i].bA = true; Msh.BC[i].expressionA = boundaries[i]["alpha"].asString();
+                Msh.BC[i].iExprA = Prs.registerExpression(Msh.BC[i].expressionA);
+
+                // Parser
+                if (Msh.BC[i].expressionA.find(" t ") != std::string::npos) { // Update time
+                    Msh.BC[i].iEqA = 0; Msh.BC[i].alpha = Prs.evaluateTime(Msh.BC[i].iEqA, 0);
+                } else if (Msh.BC[i].expressionA.find(" x ") != std::string::npos || Msh.BC[i].expressionA.find(" y ") != std::string::npos || Msh.BC[i].expressionA.find(" z ") != std::string::npos) {Msh.BC[i].iEqA = 1;} // Update coordinates
+                else {std::cerr << "Equation not recognized: " << Msh.BC[i].expressionA << "\n"; throw std::invalid_argument("Check .json");} 
+            }
+
+        } else {std::cerr << "Boundary type not recognized.\n"; throw std::invalid_argument("Check .json\n");}
+        
+        // Resize
+        if constexpr (Dim == 1) {sizeBoundary1D(Msh.BC[i], Msh, Prs);}
+        else if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
+        else if constexpr (Dim == 3) {sizeBoundary3D(Msh.BC[i], Msh, Prs);}
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+template <size_t Dim> void Mesh<Dim>::addBoundariesTemperature(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries) {
+
+    // Initial Conditions
+    if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), Mat.T0); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), Mat.T0);} else {importInitialConditions(Msh, Mat.sT0);}
+
+    // Control
+    std::string sType{}; Msh.BC.resize(boundaries.size());
+
+    // Boundaries
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++) {
+
+        if (boundaries[i]["type"] == "Dirichlet") {
+            
+
+        } else if (boundaries[i]["type"] == "Neumann") {
+
+
+        } else if (boundaries[i]["type"] == "Robin") {
+
+
+        } else {std::cerr << "Boundary type not recognized.\n"; throw std::invalid_argument("Check .json\n");}
+
+    }
+
+}
+
+// Compiler Instances
+template class Mesh<1>;
+template class Mesh<2>;
+template class Mesh<3>;

@@ -14,9 +14,6 @@
     "sections": [
         {"material": 0, "x0": [0, 0, 0], "x1": [1, 1, 1], "source": 0}
     ],
-    "obstacles": [
-        {"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}
-    ],
 
     "_dataMesh": "Mesh Data",
     "strength": 0, "centering": 0.5, "kappa": 1, "delta": 0.1,
@@ -26,6 +23,9 @@
         {"axis": 0, "N": 5, "range": [0.5, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.55},
         {"axis": 1, "N": 5,  "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.9},
         {"axis": 2, "N": 5,  "range": [0, 1], "algorithm": "PowerLaw", "kappa": 1}
+    ],
+    "obstacles": [
+        {"x0": [0.4, 0.65, 0.65], "x1": [0.6, 0.85, 0.85]}
     ],
 
     "_dataBnd": "Boundary Conditions",
@@ -46,6 +46,8 @@
         {"type": "Neumann",   "x0": [0, 0, 1.5], "x1": [2.5, 1.5, 1.5], "side": 1, "uValue": 0, "vValue": 0}
     ],
     "boundariesTemperature": [
+    ],
+    "boundariesPhi": [
     ],
 
     "_dataProbe": "Probe Data",

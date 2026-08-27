@@ -1,6 +1,7 @@
 #ifndef PARSER_H_ 
 #define PARSER_H_
 
+#include <cmath>
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -32,8 +33,8 @@ public:
     double evaluateTime(int i, double nVal){
         varTime = nVal; return vExpr[i].value();
     };
-    double evaluateCoordinates(int i, double xCoord, double yCoord=0.0, double zCoord=0.0){
-        varX = xCoord; varY = yCoord; varZ = zCoord; return vExpr[i].value();
+    double evaluateCoordinates(int i, double xCoord, double yCoord=NAN, double zCoord=NAN){
+        varX = xCoord; if (!std::isnan(yCoord)) {varY = yCoord;} if (!std::isnan(zCoord)) {varZ = zCoord;} return vExpr[i].value();
     };
 };
 

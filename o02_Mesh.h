@@ -6,7 +6,7 @@
 #include <json/json.h>
 
 #include "o01_Material.h"
-/* #include "o09_ExpressionParser.h" */
+#include "o09_Parser.h"
 
 namespace Compass {
     constexpr size_t W = 0, E = 1, S = 2, N = 3, B = 4, T = 5; // Direction indexes
@@ -19,10 +19,11 @@ template <size_t Dim> struct Matrix {
 };
 
 template <size_t Dim> struct Boundary {
-    size_t type{}, side{}, iExpr{}, iEq{}; double value{};
-    bool bUpdate = false; std::string expression{};
+    size_t type{}, side{}, iExpr{}, iEq{}, iExprA{}, iEqA{}; double value{}, alpha{};
+    bool bUpdate = false, bA = false; std::string expression{}, expressionA{};
     std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
     std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 2D flattened for the respective dimension
+    std::vector<double> A{}, oA{}; // Alpha, oAlpha -> [m] -> Only used for Robin BC
 };
 
 template <size_t Dim> struct Obstacle {
@@ -35,7 +36,8 @@ template <size_t Dim> struct MeshBase {
     std::vector<Matrix<Dim>> matA{}; std::vector<double> matB{}, oR{}; // Ax = b -> [l] -> l = i + Nx * (j + Ny * k)
     std::array<std::vector<double>, Dim> S{}; // Surfaces -> [nAxis][l]
     std::vector<double> Vp{}, Phi{}, oPhi{}; // Volume, Phi, oPhi -> [l]
-    std::vector<Boundary<Dim>> BC{};
+    std::vector<Boundary<Dim>> BC{}; // Boundary Conditions -> [index]
+    std::vector<Obstacle<Dim>> Obs{}; // Obstacle -> [index]
 };
 
 template <size_t Dim> struct MeshSolver : MeshBase<Dim> {
@@ -43,31 +45,33 @@ template <size_t Dim> struct MeshSolver : MeshBase<Dim> {
     std::vector<size_t> nMat{}; // Material -> [l]
     std::vector<double> sPhi{}; // Source term -> [l]
     std::vector<bool> bObs{}; // Obstacle -> [l]
-    std::vector<Obstacle<Dim>> Obs{}; // Obstacle -> [index] // Not entirely convinced about having this here -- May change in the future
 };
 
-class Mesh {
+inline size_t calcIndex(size_t iX, size_t iY=0, size_t Ny=1, size_t iZ=0, size_t Nx=1) {return static_cast<size_t>(iY + Ny * (iX + Nx * iZ));}; // General utility
+
+template <size_t Dim> class Mesh {
 private:
     // Functions
-    void calculateFaces(std::vector<size_t> cNode, Json::Value refData, std::vector<std::vector<double>>& nFaces); // Mesh refinement
-    template <size_t Dim> void calculateMeshGeometry(MeshBase<Dim>& Msh, double valInit); // What was this for?
+    void calculateFaces(std::array<size_t, Dim> cNode, Json::Value refData, std::array<std::vector<double>, Dim>& nFaces); // Mesh refinement
 
 public:
     // Variables
-    double epsFind=1e-5; // Config 
+    double epsFind=1e-8; // Config 
 
-    // Constructor
-    Mesh();
+    /* // Constructor */
+    /* Mesh(); */
 
     // Functions
-    template <size_t Dim> void generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obs); // Generate MeshSolver
-    template <size_t Dim> void generateMeshVelocity(); // Generate MeshBase
+    void generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles); // Generate MeshSolver
+    void addBoundariesPressure(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (p)
+    void addBoundariesTemperature(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (T) 
+    /* void addBoundariesPhi(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (Phi) */
 
-    // PENDING
+    /* template <size_t Dim> void generateMeshVelocity(); // Generate MeshBase */
     /* template <size_t Dim> void generateMeshVelocity(Material Mat, MeshSolver<Dim> p, MeshBase<Dim>& u, MeshBase<Dim>& v); // generate u, v, w */
-    /* void addBoundariesPressure(Json::Value boundaries, Material Mat, ExpressionParser& Prs); // Boundaries (p) */
-    /* void addBoundariesEnergy(Json::Value boundaries, Material Mat, ExpressionParser& Prs); // Boundaries (T) */ 
     /* void addBoundariesVelocity(Json::Value boundaries, Material Mat); // Boundaries (u, v, w) */
+
+    
 };
 
 ///// Deprecated (Delete later, keep for now in case it serves as reference)
