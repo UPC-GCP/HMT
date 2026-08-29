@@ -1,6 +1,7 @@
 /* #include <algorithm> */
 #include <algorithm>
 #include <cstddef>
+/* #include <cstdint> */
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -10,8 +11,10 @@
 #include <cmath>
 #include <stdexcept>
 #include <omp.h>
+#include <strings.h>
 
 // Self-Imports
+/* #include "exprtk.hpp" */
 /* #include "exprtk.hpp" */
 #include "o01_Material.h"
 #include "o02_Mesh.h"
@@ -319,43 +322,20 @@ template <size_t Dim> void importInitialConditions(MeshSolver<Dim>& Msh, std::st
 
 void sizeBoundary1D(Boundary<1>& BC, MeshBase<1> Msh, Parser& Prs) {
 
-    if (BC.i0[0] == BC.i1[0]) { // X Boundary
+    if (BC.i0[0] == BC.i1[0]) {
 
-        // Update
+        // X Boundary
         if (BC.bUpdate) {
 
             // Time
             if (BC.iEq == 0) {
-                // Value
                 BC.Phi.resize(1, BC.value); BC.oPhi.resize(1, BC.value);
-
-                // Robin
                 if (BC.type == 2) {BC.A.resize(1, BC.alpha); BC.oA.resize(1, BC.alpha);}
             }
 
-            // Coordinates
-            else if (BC.iEq == 1) {
-                // Resize
-                BC.Phi.resize(1); BC.Phi.resize(1);
-
-                // Value
-                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {BC.Phi[i] = Prs.evaluateCoordinates(BC.iExpr, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
-
-                // Robin
-                if (BC.type == 2) {
-                    // Resize
-                    BC.A.resize(1); BC.oA.resize(1);
-
-                    // Value
-                    for (size_t i = BC.i0[0];  i < BC.i1[0]; i++) {BC.A[i] = Prs.evaluateCoordinates(BC.iExprA, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
-                }
-            }
-
-        } else { // No Update
-            // Value
+        } else {
+            // Scalar
             BC.Phi.resize(1, BC.value); BC.oPhi.resize(1, BC.value);
-
-            // Robin
             if (BC.type == 2) {BC.A.resize(1, BC.alpha); BC.oA.resize(1, BC.alpha);}
         }
     }
@@ -364,78 +344,60 @@ void sizeBoundary1D(Boundary<1>& BC, MeshBase<1> Msh, Parser& Prs) {
 
 void sizeBoundary2D(Boundary<2>& BC, MeshBase<2> Msh, Parser& Prs) {
 
-    if (BC.i0[0] == BC.i1[0]) { // X Boundary
-
-        if (BC.bUpdate) { // Update
+    if (BC.i0[0] == BC.i1[0]) {
+        
+        // X Boundary 
+        if (BC.bUpdate) {
 
             // Time
             if (BC.iEq == 0) {
-                // Value
                 BC.Phi.resize(Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[1], BC.value);
-
-                // Robin
                 if (BC.type == 2) {BC.A.resize(Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[1], BC.alpha);}
             }
 
-            // Coordinates // PENDING -- LAST UPDATE WAS HERE -- still need to fix the loops
+            // Coordinates
             else if (BC.iEq == 1) {
-                // Resize
                 BC.Phi.resize(Msh.N[1]); BC.Phi.resize(Msh.N[1]);
+                for (size_t j = BC.i0[1]; j < BC.i1[1]; j++) {BC.Phi[j] = Prs.evaluateCoordinates(BC.iExpr, BC.side == 0 ? Msh.Faces[0].front() : Msh.Faces[0].back(), Msh.Nodes[1][j]);} BC.oPhi = BC.Phi;
 
-                // Value
-                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {BC.Phi[i] = Prs.evaluateCoordinates(BC.iExpr, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
-
-                // Robin
                 if (BC.type == 2) {
-                    // Resize
                     BC.A.resize(Msh.N[1]); BC.oA.resize(Msh.N[1]);
-
-                    // Value
-                    for (size_t i = BC.i0[0];  i < BC.i1[0]; i++) {BC.A[i] = Prs.evaluateCoordinates(BC.iExprA, BC.side == 0 ? Msh.Faces[0][0] : Msh.Faces[0][Msh.Faces[0].size()]);}
+                    for (size_t j = BC.i0[1];  j < BC.i1[1]; j++) {BC.A[j] = Prs.evaluateCoordinates(BC.iExprA, BC.side == 0 ? Msh.Faces[0].front() : Msh.Faces[0].back(), Msh.Nodes[1][j]); BC.oA = BC.A;
+                    }
                 }
             }
 
-        } else { // No Update
-            // Value
+        } else {
+            // Scalar 
             BC.Phi.resize(Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[1], BC.value);
-
-            // Robin
             if (BC.type == 2) {BC.A.resize(Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[1], BC.alpha);}
         }
 
-    } else if (BC.i0[1] == BC.i1[1]) { // Y Boundary
-
-        if (BC.bUpdate) { // Update
+    } else if (BC.i0[1] == BC.i1[1]) {
+        
+        // Y Boundary
+        if (BC.bUpdate) {
 
             // Time
             if (BC.iEq == 0) {
-                // Value
                 BC.Phi.resize(Msh.N[0], BC.value); BC.oPhi.resize(Msh.N[0], BC.value);
-
-                // Robin
                 if (BC.type == 2) {BC.A.resize(Msh.N[0], BC.alpha); BC.oA.resize(Msh.N[0], BC.alpha);}
             }
 
             // Coordinates
             else if (BC.iEq == 1) {
-                // Resize
+                BC.Phi.resize(Msh.N[0]); BC.oPhi.resize(Msh.N[0]);
+                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {BC.Phi[i] = Prs.evaluateCoordinates(BC.iExpr, Msh.Nodes[0][i], BC.side == 0 ? Msh.Faces[1].front() : Msh.Faces[1].back());} BC.oPhi = BC.Phi;
 
-                // Value
-
-                // Robin
                 if (BC.type == 2) {
-                    // Resize
-
-                    // Value
-
+                    BC.A.resize(Msh.N[0]); BC.oA.resize(Msh.N[0]);
+                    for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {BC.A[i] = Prs.evaluateCoordinates(BC.iExprA, Msh.Nodes[0][i], BC.side == 0 ? Msh.Faces[1].front() : Msh.Faces[1].back());} BC.oA = BC.A;
                 }
             }
 
-        } else { // No Update
-            // Value
+        } else {
+            // Scalar 
             BC.Phi.resize(Msh.N[0], BC.value); BC.oPhi.resize(Msh.N[0], BC.value);
-
-            // Robin
             if (BC.type == 2) {BC.A.resize(Msh.N[0], BC.alpha); BC.oA.resize(Msh.N[0], BC.alpha);}
         }
 
@@ -445,81 +407,111 @@ void sizeBoundary2D(Boundary<2>& BC, MeshBase<2> Msh, Parser& Prs) {
 
 void sizeBoundary3D(Boundary<3>& BC, MeshBase<3> Msh, Parser& Prs) {
 
-    if (BC.i0[0] == BC.i1[0]) { // X Boundary
-
-        if (BC.bUpdate) { // Update
+    if (BC.i0[0] == BC.i1[0]) {
+        
+        // X Boundary
+        if (BC.bUpdate) {
 
             // Time
             if (BC.iEq == 0) {
-                // Value
                 BC.Phi.resize(Msh.N[1] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[1] * Msh.N[2], BC.value);
-
-                // Robin
                 if (BC.type == 2) {BC.A.resize(Msh.N[1] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[1] * Msh.N[2], BC.alpha);}
             }
 
             // Coordinates
             else if (BC.iEq == 1) {
+                BC.Phi.resize(Msh.N[1] * Msh.N[2]); BC.oPhi.resize(Msh.N[1] * Msh.N[2]);
+                for (size_t j = BC.i0[1]; j < BC.i1[1]; j++) {
+                    for (size_t k = BC.i0[2]; k < BC.i1[2]; k++) {
+                        BC.Phi[calcIndex(j, k, Msh.N[2])] = Prs.evaluateCoordinates(BC.iExpr, BC.side == 0 ? Msh.Faces[0].front() : Msh.Faces[0].back(), Msh.Nodes[1][j], Msh.Nodes[2][k]);
+                    } BC.oPhi = BC.Phi;
+                }
 
+                if (BC.type == 2) {
+                    BC.A.resize(Msh.N[1] * Msh.N[2]); BC.oA.resize(Msh.N[1] * Msh.N[2]);
+                    for (size_t j = BC.i0[1]; j < BC.i1[1]; j++) {
+                        for (size_t k = BC.i0[2]; k < BC.i1[2]; k++) {
+                            BC.Phi[calcIndex(j, k, Msh.N[2])] = Prs.evaluateCoordinates(BC.iExpr, BC.side = 0 ? Msh.Faces[0].front() : Msh.Faces[0].back(), Msh.Nodes[1][j], Msh.Nodes[2][k]);
+                        } BC.oPhi = BC.Phi;
+                    }
+                }
             }
 
-        } else { // No Update
-            // Value
+        } else {
+            // Scalar 
             BC.Phi.resize(Msh.N[1] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[1] * Msh.N[2], BC.value);
-
-            // Robin
             if (BC.type == 2) {BC.A.resize(Msh.N[1] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[1] * Msh.N[2], BC.alpha);}
         }
 
-    } else if (BC.i0[1] == BC.i1[1]) { // Y Boundary
-
-        if (BC.bUpdate) { // Update
+    } else if (BC.i0[1] == BC.i1[1]) {
+        
+        // Y Boundary
+        if (BC.bUpdate) {
 
             // Time
             if (BC.iEq == 0) {
-                // Value
                 BC.Phi.resize(Msh.N[0] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[2], BC.value);
-
-                // Robin
                 if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[2], BC.alpha);}
             }
 
             // Coordinates
             else if (BC.iEq == 1) {
+                BC.Phi.resize(Msh.N[0] * Msh.N[2]); BC.oPhi.resize(Msh.N[0] * Msh.N[2]);
+                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {
+                    for (size_t k = BC.i0[2]; k < BC.i1[2]; k++) {
+                        BC.Phi[calcIndex(i, k, Msh.N[2])] = Prs.evaluateCoordinates(BC.iExpr, Msh.Nodes[0][i], BC.side == 0 ? Msh.Faces[1].front() : Msh.Faces[1].back(), Msh.Nodes[2][k]);
+                    } BC.oPhi = BC.Phi;
+                }
 
+                if (BC.type == 2) {
+                    BC.A.resize(Msh.N[0] * Msh.N[2]); BC.oA.resize(Msh.N[0] * Msh.N[2]);
+                    for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {
+                        for (size_t k = BC.i0[2]; k < BC.i1[2]; k++) {
+                            BC.A[calcIndex(i, k, Msh.N[2])] = Prs.evaluateCoordinates(BC.iExprA, Msh.Nodes[0][i], BC.side == 0 ? Msh.Faces[1].front() : Msh.Faces[2].back(), Msh.Nodes[2][k]);
+                        } BC.oA = BC.A;
+                    }
+                }
             }
 
-        } else { // No Update
-            // Value
+        } else {
+            // Scalar
             BC.Phi.resize(Msh.N[0] * Msh.N[2], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[2], BC.value);
-
-            // Robin
             if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[2], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[2], BC.alpha);}
         }
 
-    } else if (BC.i0[2] == BC.i1[2]) { // Z Boundary
-
-        if (BC.bUpdate) { // Update
+    } else if (BC.i0[2] == BC.i1[2]) {
+        
+        // Z Boundary
+        if (BC.bUpdate) {
 
             // Time
             if (BC.iEq == 0) {
-                // Value
                 BC.Phi.resize(Msh.N[0] * Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[1], BC.value);
-
-                // Robin
                 if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[1], BC.alpha);}
             }
 
             // Coordinates
             else if (BC.iEq == 1) {
+                BC.Phi.resize(Msh.N[0] * Msh.N[1]); BC.oPhi.resize(Msh.N[0] * Msh.N[1]);
+                for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {
+                    for (size_t j = BC.i0[1]; j < BC.i1[1]; j++) {
+                        BC.Phi[calcIndex(i, j, Msh.N[1])] = Prs.evaluateCoordinates(BC.iExpr, Msh.Nodes[0][i], Msh.Nodes[1][j], BC.side == 0 ? Msh.Faces[2].front() : Msh.Faces[2].back());
+                    }
+                }
 
+                if (BC.type == 2) {
+                    BC.A.resize(Msh.N[0] * Msh.N[1]); BC.oA.resize(Msh.N[0] * Msh.N[1]);
+                    for (size_t i = BC.i0[0]; i < BC.i1[0]; i++) {
+                        for (size_t j = BC.i0[1]; j < BC.i1[1]; j++) {
+                            BC.A[calcIndex(i, j, Msh.N[1])] = Prs.evaluateCoordinates(BC.iExpr, Msh.Nodes[0][i], Msh.Nodes[1][j], BC.side == 0 ? Msh.Faces[2].front() : Msh.Faces[2].back());
+                        }
+                    }
+                }
             }
 
-        } else { // No Update
-            // Value
+        } else {
+            // Scalar
             BC.Phi.resize(Msh.N[0] * Msh.N[1], BC.value); BC.oPhi.resize(Msh.N[0] * Msh.N[1], BC.value);
-
-            // Robin
             if (BC.type == 2) {BC.A.resize(Msh.N[0] * Msh.N[1], BC.alpha); BC.oA.resize(Msh.N[0] * Msh.N[1], BC.alpha);}
         }
 
@@ -572,15 +564,17 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesPressure(MeshSolver<Dim>& Msh
                 // Parser
                 if (Msh.BC[i].expressionA.find(" t ") != std::string::npos) { // Update time
                     Msh.BC[i].iEqA = 0; Msh.BC[i].alpha = Prs.evaluateTime(Msh.BC[i].iEqA, 0);
-                } else if (Msh.BC[i].expressionA.find(" x ") != std::string::npos || Msh.BC[i].expressionA.find(" y ") != std::string::npos || Msh.BC[i].expressionA.find(" z ") != std::string::npos) {Msh.BC[i].iEqA = 1;} // Update coordinates
+                } else if (Msh.BC[i].expressionA.find(" x ") != std::string::npos || Msh.BC[i].expressionA.find(" y ") != std::string::npos || Msh.BC[i].expressionA.find(" z ") != std::string::npos) {Msh.BC[i].iEqA = 1; if constexpr (Dim == 1) {std::cerr << "Coordinate functions not supported for 1D\n"; throw std::invalid_argument("Check .json");}} // Update coordinates
                 else {std::cerr << "Equation not recognized: " << Msh.BC[i].expressionA << "\n"; throw std::invalid_argument("Check .json");} 
             }
 
         } else {std::cerr << "Boundary type not recognized.\n"; throw std::invalid_argument("Check .json\n");}
+
+        return; // DEBUG UNTIL HERE
         
         // Resize
         if constexpr (Dim == 1) {sizeBoundary1D(Msh.BC[i], Msh, Prs);}
-        else if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
+        if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
         else if constexpr (Dim == 3) {sizeBoundary3D(Msh.BC[i], Msh, Prs);}
 
     }

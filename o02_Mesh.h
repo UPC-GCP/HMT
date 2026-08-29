@@ -22,8 +22,8 @@ template <size_t Dim> struct Boundary {
     size_t type{}, side{}, iExpr{}, iEq{}, iExprA{}, iEqA{}; double value{}, alpha{};
     bool bUpdate = false, bA = false; std::string expression{}, expressionA{};
     std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
-    std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 2D flattened for the respective dimension
-    std::vector<double> A{}, oA{}; // Alpha, oAlpha -> [m] -> Only used for Robin BC
+    std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 1D flattened for 2D/3D
+    std::vector<double> A{}, oA{}; // Alpha, oAlpha -> [m] -> Robin BC
 };
 
 template <size_t Dim> struct Obstacle {
