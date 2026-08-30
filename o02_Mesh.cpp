@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <omp.h>
 #include <strings.h>
+#include <vector>
 
 // Self-Imports
 /* #include "exprtk.hpp" */
@@ -127,8 +128,7 @@ void sections1D(MeshSolver<1>& Msh, Json::Value sections, Json::Value obstacles)
             Msh.nMat[idx] = sections[i]["material"].asInt(); Msh.sPhi[idx] = sections[i]["source"].asDouble();
 
             // Geometry
-            Msh.S[0][idx] = Msh.deltaX[0][j];
-            Msh.Vp[idx] = Msh.deltaX[0][j]; 
+            Msh.S[0][idx] = Msh.deltaX[0][j]; Msh.Vp[idx] = Msh.deltaX[0][j]; 
         }
     }
     
@@ -173,8 +173,7 @@ void sections2D(MeshSolver<2>& Msh, Json::Value sections, Json::Value obstacles)
                 Msh.nMat[idx] = sections[i]["material"].asInt(); Msh.sPhi[idx] = sections[i]["source"].asDouble();
 
                 // Geometry
-                Msh.S[0][idx] = Msh.deltaX[1][k]; Msh.S[1][idx] = Msh.deltaX[0][j];
-                Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k];
+                Msh.S[0][idx] = Msh.deltaX[1][k]; Msh.S[1][idx] = Msh.deltaX[0][j]; Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k];
             }
         }
     }
@@ -202,10 +201,13 @@ void sections2D(MeshSolver<2>& Msh, Json::Value sections, Json::Value obstacles)
 }
 
 void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles){
-    
+
     // Sections
-    std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{};
+    std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{}, valMat{}; double valSource{};
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
+        // Control
+        valMat = sections[i]["material"].asInt(); valSource = sections[i]["source"].asDouble();
+
         // Find Positions (nD)
         for (int j = 0; j < Msh.N.size(); j++){
             Pos0[j] = std::lower_bound(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
@@ -213,21 +215,21 @@ void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles)
         }
 
         // Internal Nodes (Non-nD)
-        for (size_t j = Pos0[0]; j < Pos1[0]; j++){
-            for (size_t k = Pos0[1]; k < Pos1[1]; k++){
-                for (size_t l = Pos0[2]; l < Pos1[2]; l++){
+        for (size_t l = Pos0[2]; l < Pos1[2]; l++){
+            for (size_t j = Pos0[0]; j < Pos1[0]; j++){
+                for (size_t k = Pos0[1]; k < Pos1[1]; k++){
                     // Control
                     idx = calcIndex(j, k, Msh.N[1], l, Msh.N[0]);
 
                     // Material
-                    Msh.nMat[idx] = sections[i]["material"].asInt(); Msh.sPhi[idx] = sections[i]["source"].asDouble();
+                    Msh.nMat[idx] = valMat; Msh.sPhi[idx] = valSource;
 
-                    // Geometry
-                    Msh.S[0][idx] = Msh.deltaX[1][k] * Msh.deltaX[2][l]; Msh.S[1][idx] = Msh.deltaX[0][j] * Msh.deltaX[2][l]; Msh.S[2][idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k];
-                    Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * Msh.deltaX[2][l];
+                    // Geometry -- HERE KEEP DEBUGGING
+                    Msh.S[0][idx] = Msh.deltaX[1][k] * Msh.deltaX[2][l]; Msh.S[1][idx] = Msh.deltaX[0][j] * Msh.deltaX[2][l]; Msh.S[2][idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k]; Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * Msh.deltaX[2][l]; 
                 }
             }
         }
+
     }
 
     // Obstacles
@@ -296,9 +298,10 @@ template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, M
     }
 
     // Resize (nD)
-    Msh.nMat.resize(Msh.totNodes); for (std::vector<double> Sk : Msh.S) {Sk.resize(Msh.totNodes);} Msh.Vp.resize(Msh.totNodes); Msh.bObs.resize(Msh.totNodes);
+    Msh.nMat.resize(Msh.totNodes); for (std::vector<double>& Sk : Msh.S) {Sk.resize(Msh.totNodes);} Msh.Vp.resize(Msh.totNodes); Msh.bObs.resize(Msh.totNodes);
     Msh.Phi.resize(Msh.totNodes); Msh.sPhi.resize(Msh.totNodes); Msh.oPhi.resize(Msh.totNodes);
-    // PENDING, needs to account for Path/Value -- Maybe initialize it in addBoundaries? That way I already know which variable it is
+
+    std::cout << "Surfaces sizes: "; for (std::vector<double> Sk : Msh.S) {std::cout << Sk.size() << " ";} std::cout << "\n";
 
     // Sections
     if constexpr (Dim == 1) {sections1D(Msh, sections, obstacles);} 
@@ -313,9 +316,7 @@ template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, M
 template <size_t Dim> void importInitialConditions(MeshSolver<Dim>& Msh, std::string sPath) {
 
     // Import .csv
-
     // Control (Check dimensions -- Just compare totNodes)
-
     // Store Data
 
 }
@@ -519,10 +520,10 @@ void sizeBoundary3D(Boundary<3>& BC, MeshBase<3> Msh, Parser& Prs) {
 
 }
 
-template <size_t Dim> void Mesh<Dim>::addBoundariesPressure(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries) {
+template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double dInit, std::string sInit) {
     
     // Initial Conditions
-    if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), Mat.P0); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), Mat.P0);} else {importInitialConditions(Msh, Mat.sP0);}
+    if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), dInit); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), dInit);} else {importInitialConditions(Msh, sInit);}
 
     // Control
     Msh.BC.resize(boundaries.size());
@@ -576,41 +577,6 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesPressure(MeshSolver<Dim>& Msh
         if constexpr (Dim == 1) {sizeBoundary1D(Msh.BC[i], Msh, Prs);}
         if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
         else if constexpr (Dim == 3) {sizeBoundary3D(Msh.BC[i], Msh, Prs);}
-
-    }
-
-}
-
-
-
-
-
-
-
-
-
-
-template <size_t Dim> void Mesh<Dim>::addBoundariesTemperature(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries) {
-
-    // Initial Conditions
-    if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), Mat.T0); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), Mat.T0);} else {importInitialConditions(Msh, Mat.sT0);}
-
-    // Control
-    std::string sType{}; Msh.BC.resize(boundaries.size());
-
-    // Boundaries
-    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++) {
-
-        if (boundaries[i]["type"] == "Dirichlet") {
-            
-
-        } else if (boundaries[i]["type"] == "Neumann") {
-
-
-        } else if (boundaries[i]["type"] == "Robin") {
-
-
-        } else {std::cerr << "Boundary type not recognized.\n"; throw std::invalid_argument("Check .json\n");}
 
     }
 

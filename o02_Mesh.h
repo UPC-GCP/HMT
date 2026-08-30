@@ -63,8 +63,11 @@ public:
 
     // Functions
     void generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles); // Generate MeshSolver
-    void addBoundariesPressure(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (p)
-    void addBoundariesTemperature(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (T) 
+    void addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double bInit, std::string sInit); // Boundaries MeshSolver
+    void generateMeshBase(); // Generate MeshBase
+    void addBoundariesMase(); // Boundaries MeshBase
+
+    /* void addBoundariesTemperature(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (T) */ 
     /* void addBoundariesPhi(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (Phi) */
 
     /* template <size_t Dim> void generateMeshVelocity(); // Generate MeshBase */
