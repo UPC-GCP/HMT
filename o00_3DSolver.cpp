@@ -49,42 +49,60 @@ Json::Value getParsedData(std::string fileName){
 }
 
 void print1D(MeshSolver<1> Msh) {
-    /* // Material */
-    /* std::cout << "nMat:\n"; for (double val : Msh.nMat) {std::cout << val << " ";} std::cout << "\n"; std::cout << "\n"; */
+    // Material
+    if (false) {
+        std::cout << "nMat:\n"; for (double val : Msh.nMat) {std::cout << val << " ";} std::cout << "\n"; std::cout << "\n";
+    }
 
     // Geometry
-    for (size_t nD = 0; nD < 1; nD++) {
-        for (size_t i = 0; i < Msh.N[0]; i++) {
-
-        }
+    if (true) {
+        for (size_t nD = 0; nD < 1; nD++) {
+            std::cout << "S " << nD << ":\n";
+            for (size_t i = 0; i < Msh.N[0]; i++) {
+                std::cout << Msh.S[nD][calcIndex(i)] << " ";
+            } std::cout << "\n";
+        } std::cout << "\n";
     }
 }
 
 void print2D(MeshSolver<2> Msh) {
-    /* // Material */
-    /* std::cout << "nMat:\n"; for (size_t i = 0; i < Msh.N[0]; i++) {for (size_t j = 0; j < Msh.N[1]; j++) {std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1])] << " ";} std::cout << "\n";} std::cout << "\n"; */
+    // Material
+    if (false) {
+        std::cout << "nMat:\n"; for (size_t i = 0; i < Msh.N[0]; i++) {for (size_t j = 0; j < Msh.N[1]; j++) {std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1])] << " ";} std::cout << "\n";} std::cout << "\n";
+    }
 
     // Geometry
-    for (size_t i = 0; i < 2; i++) {
-        std::cout << "S " << i << ": "; for (double val : Msh.S[i]) {std::cout << val << " ";} std::cout << "\n";
+    if (true) {
+        for (size_t nD = 0; nD < 2; nD++) {
+            std::cout << "S " << nD << ":\n";
+            for (size_t i = 0; i < Msh.N[0]; i++) {
+                for (size_t j = 0; j < Msh.N[1]; j++) {
+                    std::cout << Msh.S[nD][calcIndex(i, j, Msh.N[2])] << " ";
+                } std::cout << "\n";
+            } std::cout << "\n";
+        } std::cout << "\n";
     }
 }
 
 void print3D(MeshSolver<3> Msh) {
-    /* // Material */
-    /* std::cout << "nMat:\n"; for (size_t k = 0; k < Msh.N[2]; k++) {for (size_t i = 0; i < Msh.N[0]; i++) {for (size_t j = 0; j < Msh.N[1]; j++) {std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1], k, Msh.N[2])] << " ";} std::cout << "\n";} std::cout << "\n";} std::cout << "\n"; */
+    // Material
+    if (false) {
+        std::cout << "nMat:\n"; for (size_t k = 0; k < Msh.N[2]; k++) {for (size_t i = 0; i < Msh.N[0]; i++) {for (size_t j = 0; j < Msh.N[1]; j++) {std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1], k, Msh.N[2])] << " ";} std::cout << "\n";} std::cout << "\n";} std::cout << "\n";
+    }
 
     // Geometry
-    for (size_t D = 0; D < 3; D++) {
-        std::cout << "S " << D << ": ";
-        for (size_t k = 0; k < Msh.N[2]; k++) {
-            for (size_t i = 0; i < Msh.N[0]; i++) {
-                for (size_t j = 0; j < Msh.N[1]; j++) {
-                    std::cout << Msh.S[D][calcIndex(i, j, Msh.N[1], k, Msh.N[0])] << " ";
+    if (true) {
+        for (size_t nD = 0; nD < 3; nD++) {
+            std::cout << "S " << nD << ":\n";
+            for (size_t k = 0; k < Msh.N[2]; k++) {
+                for (size_t i = 0; i < Msh.N[0]; i++) {
+                    for (size_t j = 0; j < Msh.N[1]; j++) {
+                        std::cout << Msh.S[nD][calcIndex(i, j, Msh.N[1], k, Msh.N[0])] << " ";
+                    } std::cout << "\n";
                 } std::cout << "\n";
             } std::cout << "\n";
         } std::cout << "\n";
-    } std::cout << "\n";
+    }
 }
 
 template <size_t nDim> void printNArray(MeshSolver<nDim> Msh) {
