@@ -23,9 +23,10 @@
 /* #include "o05_Probe.h" */
 #include "o09_Parser.h"
 /* #include "o09_Medic.h" */
+#include "o09_Debugger.h"
 
+////////// JSON Parser ///////////
 Json::Value getParsedData(std::string fileName){
-    
     // Open File
     std::ifstream file(fileName, std::ifstream::binary);
 
@@ -45,69 +46,13 @@ Json::Value getParsedData(std::string fileName){
     file.close();
 
     return data;
-
 }
 
-void print1D(MeshSolver<1> Msh) {
-    // Material
-    if (false) {
-        std::cout << "nMat:\n"; for (double val : Msh.nMat) {std::cout << val << " ";} std::cout << "\n"; std::cout << "\n";
-    }
+////////// Debugging Tools //////////
 
-    // Geometry
-    if (true) {
-        for (size_t nD = 0; nD < 1; nD++) {
-            std::cout << "S " << nD << ":\n";
-            for (size_t i = 0; i < Msh.N[0]; i++) {
-                std::cout << Msh.S[nD][calcIndex(i)] << " ";
-            } std::cout << "\n";
-        } std::cout << "\n";
-    }
-}
+template <size_t nDim> void printDebug(MeshSolver<nDim> Msh, debugOptions dOps) {
 
-void print2D(MeshSolver<2> Msh) {
-    // Material
-    if (false) {
-        std::cout << "nMat:\n"; for (size_t i = 0; i < Msh.N[0]; i++) {for (size_t j = 0; j < Msh.N[1]; j++) {std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1])] << " ";} std::cout << "\n";} std::cout << "\n";
-    }
-
-    // Geometry
-    if (true) {
-        for (size_t nD = 0; nD < 2; nD++) {
-            std::cout << "S " << nD << ":\n";
-            for (size_t i = 0; i < Msh.N[0]; i++) {
-                for (size_t j = 0; j < Msh.N[1]; j++) {
-                    std::cout << Msh.S[nD][calcIndex(i, j, Msh.N[2])] << " ";
-                } std::cout << "\n";
-            } std::cout << "\n";
-        } std::cout << "\n";
-    }
-}
-
-void print3D(MeshSolver<3> Msh) {
-    // Material
-    if (false) {
-        std::cout << "nMat:\n"; for (size_t k = 0; k < Msh.N[2]; k++) {for (size_t i = 0; i < Msh.N[0]; i++) {for (size_t j = 0; j < Msh.N[1]; j++) {std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1], k, Msh.N[2])] << " ";} std::cout << "\n";} std::cout << "\n";} std::cout << "\n";
-    }
-
-    // Geometry
-    if (true) {
-        for (size_t nD = 0; nD < 3; nD++) {
-            std::cout << "S " << nD << ":\n";
-            for (size_t k = 0; k < Msh.N[2]; k++) {
-                for (size_t i = 0; i < Msh.N[0]; i++) {
-                    for (size_t j = 0; j < Msh.N[1]; j++) {
-                        std::cout << Msh.S[nD][calcIndex(i, j, Msh.N[1], k, Msh.N[0])] << " ";
-                    } std::cout << "\n";
-                } std::cout << "\n";
-            } std::cout << "\n";
-        } std::cout << "\n";
-    }
-}
-
-template <size_t nDim> void printNArray(MeshSolver<nDim> Msh) {
-
-    // General
+    // General Mesh
     for (size_t i = 0; i < nDim; i++) {
         std::cout << "\nAxis: " << i << "\n";
         std::cout << "Faces: "; for (double val : Msh.Faces[i]) {std::cout << val << " ";} std::cout << "\n";
@@ -117,12 +62,28 @@ template <size_t nDim> void printNArray(MeshSolver<nDim> Msh) {
     } std::cout << "\n";
 
     // Dimensional
-    if constexpr (nDim == 1) {print1D(Msh);}
-    else if constexpr (nDim == 2) {print2D(Msh);}
-    else if constexpr (nDim == 3) {print3D(Msh);}
+    if constexpr (nDim == 1) {print1D(Msh, dOps);}
+    else if constexpr (nDim == 2) {print2D(Msh, dOps);}
+    else if constexpr (nDim == 3) {print3D(Msh, dOps);}
+
+    // General Boundaries
+    for (size_t i = 0; i < Msh.BC.size(); i++) {
+        std::cout << "\nBC: " << i << "\n";
+        std::cout << "Type - Side: " << Msh.BC[i].type << " " << Msh.BC[i].side << "\n";
+        std::cout << "Expression: " << Msh.BC[i].bUpdate << " - " << Msh.BC[i].iExpr << " " << Msh.BC[i].iEq << " " << Msh.BC[i].expression << "\n";
+        std::cout << "ExpressionA: " << Msh.BC[i].bA << " - " << Msh.BC[i].iExprA << " " << Msh.BC[i].iEqA << " " << Msh.BC[i].expressionA << "\n";
+        std::cout << "Pos0: "; for (size_t val : Msh.BC[i].i0) { std::cout << val << " "; } std::cout << "\n";
+        std::cout << "Pos1: "; for (size_t val : Msh.BC[i].i1) { std::cout << val << " "; } std::cout << "\n";
+
+        // Dimensional
+        // TERMINAR ESTO MAÑANA
+
+        
+    }
 
 }
 
+////////// Solvers //////////
 bool bRun = false;
 
 template <size_t nDim> void runNSSolver(Json::Value data){
@@ -161,18 +122,14 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     // Pressure
     std::cout << data["obstacles"].size() << " obstacles identified.\n";
     MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
-
-
-    /// Debug Current
-    printNArray(p);
-
-    std::cout << "Test end\n";
-    return;
-
-
-
     Msh.addBoundariesSolver(p, Mat, Prs, data["boundariesPressure"], Mat.P0, Mat.sP0); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
 
+    /// Debug Current -- DEBUGGING BOUNDARY CONDITIONS
+    // Options
+    debugOptions dOps{}; dOps.bPhi = true;
+    printDebug(p, dOps);
+
+    std::cout << "Test end\n";
     return;
     
     // Temperature
@@ -306,11 +263,10 @@ template <size_t nDim> void runPHISolver(Json::Value data){
     ///// Mesh /////
     std::cout << "Initializing mesh ...\n"; 
     MeshSolver<nDim> PHI{};
-
-    // CONTINUE FROM HERE
     
 }
 
+////////// MAIN //////////
 int main(int argc, char* argv[]){
     
     ///// Setup /////
@@ -384,31 +340,3 @@ int main(int argc, char* argv[]){
     // Can I have an array that calls different functions depending on what I want to write
 
     // Model follows Patankar's discretization so it ALWAYS NEEDS VELOCITY
-
-
-    /* std::cout << "xFaces: "; */
-    /* for (double val : Msh.p.Faces[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "xNodes: "; */
-    /* for (double val : Msh.p.Nodes[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "xDelta: "; */
-    /* for (double val : Msh.p.deltaX[0]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "xD :"; */
-    /* for (double val : Msh.p.dX[0]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "yFaces: "; */
-    /* for (double val : Msh.p.Faces[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "yNodes: "; */
-    /* for (double val : Msh.p.Nodes[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "yDelta: "; */
-    /* for (double val : Msh.p.deltaX[1]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "yD :"; */
-    /* for (double val : Msh.p.dX[1]){std::cout << val << " ";} std::cout << "\n"; */
-
-    /* std::cout << "zFaces: "; */
-    /* for (double val : Msh.p.Faces[2]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "zNodes: "; */
-    /* for (double val : Msh.p.Nodes[2]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "zDelta: "; */
-    /* for (double val : Msh.p.deltaX[2]){std::cout << val << " ";} std::cout << "\n"; */
-    /* std::cout << "zD :"; */
-    /* for (double val : Msh.p.dX[2]){std::cout << val << " ";} std::cout << "\n"; */

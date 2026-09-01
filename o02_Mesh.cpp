@@ -15,27 +15,27 @@
 #include <vector>
 
 // Self-Imports
-/* #include "exprtk.hpp" */
-/* #include "exprtk.hpp" */
 #include "o01_Material.h"
 #include "o02_Mesh.h"
 
-bool isFormula(std::string value){
-    // Stringstream
-    std::stringstream ss; ss << value;
+////////// Looping //////////
+template <size_t Dim, typename Func> void loopMesh() {
 
-    // Check
-    float num = 0; ss >> num;
+    if constexpr (Dim == 1) {
+        // #pragma
+        // for loop
+    } else if constexpr (Dim == 2) {
 
-    // Return
-    if (ss.good()) {return true;}
-    else if (num == 0 && value[0] != 0) {return true;}
-    else {return false;}
+
+    } else if constexpr (Dim == 3) {
+
+    }
+
 }
 
+///// Mesh Generation /////
 template <size_t Dim> void Mesh<Dim>::calculateFaces(std::array<size_t, Dim> cVec, Json::Value refData, std::array<std::vector<double>, Dim>& nFaces){
-
-    // General
+    // Control
     std::string sAlgo = refData["algorithm"].asString();
     size_t iAxis = refData["axis"].asInt(), NSec = refData["N"].asInt(), cNode = cVec[iAxis];
     double x0 = refData["range"][0].asDouble(), x1 = refData["range"][1].asDouble(); double length = x1 - x0;
@@ -105,11 +105,9 @@ template <size_t Dim> void Mesh<Dim>::calculateFaces(std::array<size_t, Dim> cVe
         }
 
     } else {std::cerr << "Algorithm not recognized.\n";}
-
 }
 
 void sections1D(MeshSolver<1>& Msh, Json::Value sections, Json::Value obstacles){
-
     // Sections
     std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{};
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
@@ -133,27 +131,10 @@ void sections1D(MeshSolver<1>& Msh, Json::Value sections, Json::Value obstacles)
     }
     
     // Obstacles
-    Obstacle<1> tempObs{}; 
-    for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++){
-        // Find Positions (nD)
-        for (int j = 0; j < Msh.N.size(); j++){
-            tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
-            tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
-        } 
-
-        // bObs
-        for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
-                    idx = calcIndex(j); Msh.bObs[idx] = true;
-        }
-
-        // Control
-        Msh.Obs.push_back(std::move(tempObs)); tempObs = {}; 
-    }
-
+    if (obstacles.size() != 0) {std::cerr << "Obstacles not admitted for 1D.\n"; throw std::invalid_argument("Check .json\n");}
 }
 
 void sections2D(MeshSolver<2>& Msh, Json::Value sections, Json::Value obstacles){
-
     // Sections
     std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{};
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
@@ -185,7 +166,7 @@ void sections2D(MeshSolver<2>& Msh, Json::Value sections, Json::Value obstacles)
         for (int j = 0; j < Msh.N.size(); j++){
             tempObs.i0[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Nodes[j].begin();
             tempObs.i1[j] = std::lower_bound(Msh.Nodes[j].begin(), Msh.Nodes[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Nodes[j].begin();
-        } 
+        }
 
         // bObs
         for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
@@ -197,11 +178,9 @@ void sections2D(MeshSolver<2>& Msh, Json::Value sections, Json::Value obstacles)
         // Control
         Msh.Obs.push_back(std::move(tempObs)); tempObs = {}; 
     }
-
 }
 
 void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles){
-
     // Sections
     std::vector<size_t> Pos0(Msh.N.size()), Pos1(Msh.N.size()); size_t idx{}, valMat{}; double valSource{};
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++){
@@ -224,7 +203,7 @@ void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles)
                     // Material
                     Msh.nMat[idx] = valMat; Msh.sPhi[idx] = valSource;
 
-                    // Geometry -- HERE KEEP DEBUGGING
+                    // Geometry
                     Msh.S[0][idx] = Msh.deltaX[1][k] * Msh.deltaX[2][l]; Msh.S[1][idx] = Msh.deltaX[0][j] * Msh.deltaX[2][l]; Msh.S[2][idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k]; Msh.Vp[idx] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * Msh.deltaX[2][l]; 
                 }
             }
@@ -232,7 +211,6 @@ void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles)
 
     }
 
-    // Obstacles
     Obstacle<3> tempObs{}; 
     for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++){
         // Find Positions (nD)
@@ -242,9 +220,9 @@ void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles)
         } 
 
         // bObs
-        for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
-            for (size_t k = tempObs.i0[1]; k < tempObs.i1[1]; k++){
-                for (size_t l = tempObs.i0[2]; l < tempObs.i1[2]; l++){
+        for (size_t l = tempObs.i0[2]; l < tempObs.i1[2]; l++){
+            for (size_t j = tempObs.i0[0]; j < tempObs.i1[0]; j++){
+                for (size_t k = tempObs.i0[1]; k < tempObs.i1[1]; k++){
                     idx = calcIndex(j, k, Msh.N[1], l, Msh.N[0]); Msh.bObs[idx] = true;
                 }
             }
@@ -253,11 +231,9 @@ void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles)
         // Control
         Msh.Obs.push_back(std::move(tempObs)); tempObs = {}; 
     }
-
 }
 
 template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles){
-
 	// Control (nD)
 	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++) {Msh.N[i] = qNode[i].asInt(); Msh.totNodes *= Msh.N[i];}
 
@@ -301,8 +277,6 @@ template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, M
     Msh.nMat.resize(Msh.totNodes); for (std::vector<double>& Sk : Msh.S) {Sk.resize(Msh.totNodes);} Msh.Vp.resize(Msh.totNodes); Msh.bObs.resize(Msh.totNodes);
     Msh.Phi.resize(Msh.totNodes); Msh.sPhi.resize(Msh.totNodes); Msh.oPhi.resize(Msh.totNodes);
 
-    std::cout << "Surfaces sizes: "; for (std::vector<double> Sk : Msh.S) {std::cout << Sk.size() << " ";} std::cout << "\n";
-
     // Sections
     if constexpr (Dim == 1) {sections1D(Msh, sections, obstacles);} 
     else if constexpr (Dim == 2) {sections2D(Msh, sections, obstacles);}
@@ -310,19 +284,30 @@ template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, M
 
     // Coefficients (nD)
     Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
+}
 
+///// Boundary Conditions /////
+
+bool isFormula(std::string value){
+    // Stringstream
+    std::stringstream ss; ss << value;
+
+    // Check
+    float num = 0; ss >> num;
+
+    // Return
+    if (ss.good()) {return true;}
+    else if (num == 0 && value[0] != 0) {return true;}
+    else {return false;}
 }
 
 template <size_t Dim> void importInitialConditions(MeshSolver<Dim>& Msh, std::string sPath) {
-
     // Import .csv
     // Control (Check dimensions -- Just compare totNodes)
     // Store Data
-
 }
 
 void sizeBoundary1D(Boundary<1>& BC, MeshBase<1> Msh, Parser& Prs) {
-
     if (BC.i0[0] == BC.i1[0]) {
 
         // X Boundary
@@ -339,12 +324,11 @@ void sizeBoundary1D(Boundary<1>& BC, MeshBase<1> Msh, Parser& Prs) {
             BC.Phi.resize(1, BC.value); BC.oPhi.resize(1, BC.value);
             if (BC.type == 2) {BC.A.resize(1, BC.alpha); BC.oA.resize(1, BC.alpha);}
         }
-    }
 
+    }
 }
 
 void sizeBoundary2D(Boundary<2>& BC, MeshBase<2> Msh, Parser& Prs) {
-
     if (BC.i0[0] == BC.i1[0]) {
         
         // X Boundary 
@@ -403,11 +387,9 @@ void sizeBoundary2D(Boundary<2>& BC, MeshBase<2> Msh, Parser& Prs) {
         }
 
     }
-
 }
 
 void sizeBoundary3D(Boundary<3>& BC, MeshBase<3> Msh, Parser& Prs) {
-
     if (BC.i0[0] == BC.i1[0]) {
         
         // X Boundary
@@ -517,11 +499,9 @@ void sizeBoundary3D(Boundary<3>& BC, MeshBase<3> Msh, Parser& Prs) {
         }
 
     }
-
 }
 
 template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double dInit, std::string sInit) {
-    
     // Initial Conditions
     if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), dInit); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), dInit);} else {importInitialConditions(Msh, sInit);}
 
@@ -571,8 +551,6 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, 
 
         } else {std::cerr << "Boundary type not recognized.\n"; throw std::invalid_argument("Check .json\n");}
 
-        return; // DEBUG UNTIL HERE
-        
         // Resize
         if constexpr (Dim == 1) {sizeBoundary1D(Msh.BC[i], Msh, Prs);}
         if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
