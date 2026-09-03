@@ -1,5 +1,7 @@
 // Imports
+#include <cstddef>
 #include <iostream>
+/* #include <type_traits> */
 
 // Self-Imports
 #include "o09_Debugger.h"
@@ -9,14 +11,6 @@
 void print1D(MeshSolver<1> Msh, debugOptions dOps) {
     // General 
     if (dOps.bGeneral) {
-        // Material
-        if (dOps.bMat) {
-            std::cout << "nMat:\n";
-            for (double val : Msh.nMat) {
-                std::cout << val << " ";
-            } std::cout << "\n"; std::cout << "\n";
-        }
-
         // Geometry
         if (dOps.bSurf) { // Surfaces
             for (size_t nD = 0; nD < 1; nD++) {
@@ -34,13 +28,24 @@ void print1D(MeshSolver<1> Msh, debugOptions dOps) {
             } std::cout << "\n";
         }
 
-        // Obstacles
-        if (dOps.bObs) {
-            std::cout << "Obs:\n";
-            for (size_t i = 0; i < Msh.N[0]; i++) {
-                std::cout << Msh.bObs[calcIndex(i)] << " ";
-            } std::cout << "\n";
-        }
+        // MeshSolver
+        /* if constexpr (std::is_same_v<T, MeshSolver<1>>) { */
+            // Material
+            if (dOps.bMat) {
+                std::cout << "nMat:\n";
+                for (double val : Msh.nMat) {
+                    std::cout << val << " ";
+                } std::cout << "\n"; std::cout << "\n";
+            }
+
+            // Obstacles
+            if (dOps.bObs) {
+                std::cout << "Obs:\n";
+                for (size_t i = 0; i < Msh.N[0]; i++) {
+                    std::cout << Msh.bObs[calcIndex(i)] << " ";
+                } std::cout << "\n";
+            }
+        /* } */
     }
 
     // Boundaries
@@ -48,6 +53,8 @@ void print1D(MeshSolver<1> Msh, debugOptions dOps) {
         // Value
         if (dOps.bPhi) {
             std::cout << "Phi\n";
+            runLoopMesh<2>( [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i)] << "\n";});
+            
 
         }
     }
@@ -57,16 +64,6 @@ void print1D(MeshSolver<1> Msh, debugOptions dOps) {
 void print2D(MeshSolver<2> Msh, debugOptions dOps) {
     // General
     if (dOps.bGeneral) {
-        // Material
-        if (dOps.bMat) {
-            std::cout << "nMat:\n"; 
-            for (size_t i = 0; i < Msh.N[0]; i++) {
-                for (size_t j = 0; j < Msh.N[1]; j++) {
-                    std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1])] << " ";
-                } std::cout << "\n";
-            } std::cout << "\n";
-        }
-
         // Geometry
         if (dOps.bSurf) { // Surfaces
             for (size_t nD = 0; nD < 2; nD++) {
@@ -88,15 +85,28 @@ void print2D(MeshSolver<2> Msh, debugOptions dOps) {
             }
         }
 
-        // Obstacles
-        if (dOps.bObs) {
-            std::cout << "Obs:\n";
-            for (size_t i = 0; i < Msh.N[0]; i++) {
-                for (size_t j = 0; j < Msh.N[1]; j++) {
-                    std::cout << Msh.bObs[calcIndex(i, j, Msh.N[1])] << " ";
+        // MeshSolver
+        /* if constexpr (std::is_same_v<T, MeshSolver<2>>) { */
+            // Material
+            if (dOps.bMat) {
+                std::cout << "nMat:\n"; 
+                for (size_t i = 0; i < Msh.N[0]; i++) {
+                    for (size_t j = 0; j < Msh.N[1]; j++) {
+                        std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1])] << " ";
+                    } std::cout << "\n";
                 } std::cout << "\n";
-            } std::cout << "\n";
-        }
+            }
+
+            // Obstacles
+            if (dOps.bObs) {
+                std::cout << "Obs:\n";
+                for (size_t i = 0; i < Msh.N[0]; i++) {
+                    for (size_t j = 0; j < Msh.N[1]; j++) {
+                        std::cout << Msh.bObs[calcIndex(i, j, Msh.N[1])] << " ";
+                    } std::cout << "\n";
+                } std::cout << "\n";
+            }
+        /* } */
     }
 
     // Boundaries
@@ -113,18 +123,6 @@ void print2D(MeshSolver<2> Msh, debugOptions dOps) {
 void print3D(MeshSolver<3> Msh, debugOptions dOps) {
     // General 
     if (dOps.bGeneral) {
-        // Material
-        if (dOps.bMat) {
-            std::cout << "nMat:\n"; 
-            for (size_t k = 0; k < Msh.N[2]; k++) {
-                for (size_t i = 0; i < Msh.N[0]; i++) {
-                    for (size_t j = 0; j < Msh.N[1]; j++) {
-                        std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1], k, Msh.N[2])] << " ";
-                    } std::cout << "\n";
-                } std::cout << "\n";
-            } std::cout << "\n";
-        }
-
         // Geometry
         if (dOps.bSurf) { // Surfaces
             for (size_t nD = 0; nD < 3; nD++) {
@@ -149,18 +147,33 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
                 } std::cout << "\n";
             } std::cout << "\n";
         }
-
-        // Obstacles
-        if (dOps.bObs) {
-            std::cout << "Obs:\n";
-            for (size_t k = 0 ; k < Msh.N[2]; k++) {
-                for (size_t i = 0; i < Msh.N[0]; i++) {
-                    for (size_t j = 0; j < Msh.N[1]; j++) {
-                        std::cout << Msh.bObs[calcIndex(i, j, Msh.N[1], k, Msh.N[0])] << " ";
+        
+        // MeshSolver
+        /* if constexpr (std::is_same_v<T, MeshSolver<3>>) { */
+            // Material
+            if (dOps.bMat) {
+                std::cout << "nMat:\n"; 
+                for (size_t k = 0; k < Msh.N[2]; k++) {
+                    for (size_t i = 0; i < Msh.N[0]; i++) {
+                        for (size_t j = 0; j < Msh.N[1]; j++) {
+                            std::cout << Msh.nMat[calcIndex(i, j, Msh.N[1], k, Msh.N[2])] << " ";
+                        } std::cout << "\n";
                     } std::cout << "\n";
                 } std::cout << "\n";
-            } std::cout << "\n";
-        }
+            }
+
+            // Obstacles
+            if (dOps.bObs) {
+                std::cout << "Obs:\n";
+                for (size_t k = 0 ; k < Msh.N[2]; k++) {
+                    for (size_t i = 0; i < Msh.N[0]; i++) {
+                        for (size_t j = 0; j < Msh.N[1]; j++) {
+                            std::cout << Msh.bObs[calcIndex(i, j, Msh.N[1], k, Msh.N[0])] << " ";
+                        } std::cout << "\n";
+                    } std::cout << "\n";
+                } std::cout << "\n";
+            }
+        /* } */
     }
 
     // Boundaries
@@ -168,6 +181,9 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
         // Value
         if (dOps.bPhi) {
             std::cout << "Phi:\n";
+
+            // MAKE THIS USING THE LAMBDA FUNCTION DEFINITION
+
 
         }
     }

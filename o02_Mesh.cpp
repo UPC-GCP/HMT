@@ -6,34 +6,21 @@
 #include <cstdlib>
 #include <iostream>
 /* #include <utility> */
+/* #include <iterator> */
 #include <json/json.h>
 #include <json/value.h>
 #include <cmath>
 #include <stdexcept>
-#include <omp.h>
-#include <strings.h>
-#include <vector>
+/* #include <string> */
+/* #include <strings.h> */
+/* #include <vector> */
 
 // Self-Imports
 #include "o01_Material.h"
 #include "o02_Mesh.h"
 
-////////// Looping //////////
-template <size_t Dim, typename Func> void loopMesh() {
 
-    if constexpr (Dim == 1) {
-        // #pragma
-        // for loop
-    } else if constexpr (Dim == 2) {
-
-
-    } else if constexpr (Dim == 3) {
-
-    }
-
-}
-
-///// Mesh Generation /////
+////////// Mesh Generation //////////
 template <size_t Dim> void Mesh<Dim>::calculateFaces(std::array<size_t, Dim> cVec, Json::Value refData, std::array<std::vector<double>, Dim>& nFaces){
     // Control
     std::string sAlgo = refData["algorithm"].asString();
@@ -288,17 +275,22 @@ template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, M
 
 ///// Boundary Conditions /////
 
-bool isFormula(std::string value){
-    // Stringstream
-    std::stringstream ss; ss << value;
+/* bool isFormula(std::string value){ */
+/*     // Stringstream */
+/*     std::stringstream ss; ss << value; */
 
-    // Check
-    float num = 0; ss >> num;
+/*     // Check */
+/*     float num = 0; ss >> num; */
 
-    // Return
-    if (ss.good()) {return true;}
-    else if (num == 0 && value[0] != 0) {return true;}
-    else {return false;}
+/*     // Return */
+/*     if (ss.good()) {return true;} */
+/*     else if (num == 0 && value[0] != 0) {return true;} */
+/*     else {return false;} */
+/* } */
+
+bool isFormula (const std::string value) {
+    try { size_t i = 0; std::stod(value, &i); return i != value.length(); }
+    catch (...) { return true; }
 }
 
 template <size_t Dim> void importInitialConditions(MeshSolver<Dim>& Msh, std::string sPath) {
@@ -518,8 +510,13 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, 
             Msh.BC[i].i1[j] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), boundaries[i]["x1"][j].asDouble() - epsFind) - Msh.Nodes[i].begin();
         }
 
+        std::cout << "Boundary: " << i << " - "; for (size_t val : Msh.BC[i].i0) {std::cout << val << " ";} std::cout << " - "; for (size_t val : Msh.BC[i].i1) {std::cout << val << " ";} std::cout << "\n";
+
         // Value
         if (isFormula(boundaries[i]["value"].asString())) {
+
+            std::cout << "Formula: " << boundaries[i]["value"].asString().size() << " " << boundaries[i]["value"] << "\n";
+
             // Control
             Msh.BC[i].bUpdate = true; Msh.BC[i].expression = boundaries[i]["value"].asString();
             Msh.BC[i].iExpr = Prs.registerExpression(Msh.BC[i].expression);
@@ -528,13 +525,15 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, 
             if (Msh.BC[i].expression.find(" t ") != std::string::npos) { // Update time
                 Msh.BC[i].iEq = 0; Msh.BC[i].value = Prs.evaluateTime(Msh.BC[i].iEq, 0);
             } else if (Msh.BC[i].expression.find(" x ") != std::string::npos || Msh.BC[i].expression.find(" y ") != std::string::npos || Msh.BC[i].expression.find(" z ") != std::string::npos) {Msh.BC[i].iEq = 1;} // Update coordinates 
-            else {std::cerr << "Equation not recognized: " << Msh.BC[i].expression << "\n"; throw std::invalid_argument("Check .json");} // Generic uses updateTime
+            else {std::cerr << "Equation not recognized: " << Msh.BC[i].expression << "\n"; throw std::invalid_argument("Check .json");}
         } else {Msh.BC[i].value = boundaries[i]["value"].asDouble();}
 
         // Type
         if (boundaries[i]["type"] == "Dirichlet") {Msh.BC[i].type = 0;}
         else if (boundaries[i]["type"] == "Neumann") {Msh.BC[i].type = 1;}
         else if (boundaries[i]["type"] == "Robin") {Msh.BC[i].type = 2;
+
+            std::cout << "Alpha\n";
 
             // Value
             if (isFormula(boundaries[i]["alpha"].asString())) {

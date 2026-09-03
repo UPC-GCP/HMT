@@ -126,7 +126,7 @@ template <size_t nDim> void runNSSolver(Json::Value data){
 
     /// Debug Current -- DEBUGGING BOUNDARY CONDITIONS
     // Options
-    debugOptions dOps{}; dOps.bPhi = true;
+    debugOptions dOps{}; dOps.bBoundaries = true; dOps.bPhi = true;
     printDebug(p, dOps);
 
     std::cout << "Test end\n";

@@ -4,6 +4,10 @@
 #include <cstddef>
 #include <json/value.h>
 #include <json/json.h>
+/* #include <optional> */
+#include <iostream>
+#include <optional>
+#include <omp.h>
 
 #include "o01_Material.h"
 #include "o09_Parser.h"
@@ -47,8 +51,8 @@ template <size_t Dim> struct MeshSolver : MeshBase<Dim> {
     std::vector<bool> bObs{}; // Obstacle -> [l]
 };
 
-inline size_t calcIndex(size_t iX, size_t iY=0, size_t Ny=1, size_t iZ=0, size_t Nx=1) {return static_cast<size_t>(iY + Ny * (iX + Nx * iZ));}; // General utility
 
+// Class
 template <size_t Dim> class Mesh {
 private:
     // Functions
@@ -77,7 +81,58 @@ public:
     
 };
 
+
+// General Utilities
+inline size_t calcIndex(size_t iX, size_t iY=0, size_t Ny=1, size_t iZ=0, size_t Nx=1) {return static_cast<size_t>(iY + Ny * (iX + Nx * iZ));};
+
+template <size_t Dim, typename Func> void runLoopMesh(Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt) {
+     
+    std::cout << "Loop\n";
+
+    // PENDING -- DEBUG HERE
+    // PONER DEFAULT Msh.N para casos sin i0, i1
+
+    // Control
+    if (i0) { std::cout << "i0: "; for (size_t val : *i0) {std::cout << val << " ";} std::cout << "\n"; }
+    else {std::cout << "i0: null\n";} 
+
+    size_t nLoop=1; for (size_t i = 0; i < Dim; i++) { nLoop *= ((*i1)[i] - (*i0)[i]); std::cout << "Axis " << i << ": " << (*i0)[i] << " " << (*i1)[i] << "\n";}
+
+    std::cout << "Total: " << nLoop;
+
+    throw std::invalid_argument("Check .json");
+    return;
+
+    if constexpr (Dim == 1) { // 1D
+        #pragma omp parallel for if (nLoop > 10000)
+        for (size_t i = (*i0)[0]; i < (*i1)[1]; i++) {
+            lamb(i, 0, 0);
+        }
+    } else if constexpr (Dim == 2) { // 2D
+        #pragma omp parallel for collapse(2) if (nLoop > 10000)
+        for (size_t i = (*i0)[0]; i < (*i1)[1]; i++) {
+            for (size_t j = (*i0)[1]; j < (*i1)[1]; j++) {
+                lamb(i, j, 0);
+            }
+        }
+    } else if constexpr (Dim == 3) { // 3D
+        #pragma omp parallel for collapse(3) if (nLoop > 10000)
+        for (size_t k = (*i0)[2]; k < (*i1)[2]; k++) {
+            for (size_t i = (*i0)[0]; i < (*i1)[0]; i++) {
+                for (size_t j = (*i0)[1]; j < (*i1)[1]; j++) {
+                    lamb(i, j, k);
+                }
+            }
+        }
+    }
+
+}
+
+/* template <size_t Dim, typename Func> void loopMesh(Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt); */
+/* template <size_t Dim, typename Func> void loopMesh(Func lamb, std::array<size_t, Dim> i0, std::array<size_t, Dim> i1) { */
+
 ///// Deprecated (Delete later, keep for now in case it serves as reference)
+
 /* template <size_t Dim> struct boundVelocity{ */
 /*     int type{}, side{}; double uVal{}, vVal{}, wVal{}; */
 /*     bool bUpdate = false; std::string expression{}; */

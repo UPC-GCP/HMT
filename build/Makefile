@@ -576,6 +576,30 @@ o05_ProbeSC.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.s
 .PHONY : o05_ProbeSC.cpp.s
 
+o09_Debugger.o: o09_Debugger.cpp.o
+.PHONY : o09_Debugger.o
+
+# target to build an object file
+o09_Debugger.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CFDSolver.dir/build.make CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o
+.PHONY : o09_Debugger.cpp.o
+
+o09_Debugger.i: o09_Debugger.cpp.i
+.PHONY : o09_Debugger.i
+
+# target to preprocess a source file
+o09_Debugger.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CFDSolver.dir/build.make CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.i
+.PHONY : o09_Debugger.cpp.i
+
+o09_Debugger.s: o09_Debugger.cpp.s
+.PHONY : o09_Debugger.s
+
+# target to generate assembly for a file
+o09_Debugger.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CFDSolver.dir/build.make CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.s
+.PHONY : o09_Debugger.cpp.s
+
 o09_ExpressionParser.o: o09_ExpressionParser.cpp.o
 .PHONY : o09_ExpressionParser.o
 
@@ -741,6 +765,9 @@ help:
 	@echo "... o05_ProbeSC.o"
 	@echo "... o05_ProbeSC.i"
 	@echo "... o05_ProbeSC.s"
+	@echo "... o09_Debugger.o"
+	@echo "... o09_Debugger.i"
+	@echo "... o09_Debugger.s"
 	@echo "... o09_ExpressionParser.o"
 	@echo "... o09_ExpressionParser.i"
 	@echo "... o09_ExpressionParser.s"

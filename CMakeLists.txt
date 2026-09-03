@@ -75,6 +75,7 @@ add_executable(CFDSolver
 #     o05_Probe.cpp
 #     o09_Medic.cpp
     o09_Parser.cpp
+    o09_Debugger.cpp
 )
 
 # 4. Linking
