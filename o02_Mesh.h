@@ -1,17 +1,16 @@
 #ifndef MESH3D_H_
 #define MESH3D_H_
 
-#include <cstddef>
-#include <json/value.h>
+// Imports
 #include <json/json.h>
-/* #include <optional> */
 #include <iostream>
 #include <optional>
-#include <omp.h>
 
+// Self-Imports
 #include "o01_Material.h"
 #include "o09_Parser.h"
 
+// Types
 namespace Compass {
     constexpr size_t W = 0, E = 1, S = 2, N = 3, B = 4, T = 5; // Direction indexes
     constexpr size_t X = 0, Y = 1, Z = 2; // Dimension indexes
@@ -55,7 +54,7 @@ template <size_t Dim> struct MeshSolver : MeshBase<Dim> {
 // Class
 template <size_t Dim> class Mesh {
 private:
-    // Functions
+    // Headers
     void calculateFaces(std::array<size_t, Dim> cNode, Json::Value refData, std::array<std::vector<double>, Dim>& nFaces); // Mesh refinement
 
 public:
@@ -65,7 +64,7 @@ public:
     /* // Constructor */
     /* Mesh(); */
 
-    // Functions
+    // Headers
     void generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles); // Generate MeshSolver
     void addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double bInit, std::string sInit); // Boundaries MeshSolver
     void generateMeshBase(); // Generate MeshBase
@@ -77,31 +76,16 @@ public:
     /* template <size_t Dim> void generateMeshVelocity(); // Generate MeshBase */
     /* template <size_t Dim> void generateMeshVelocity(Material Mat, MeshSolver<Dim> p, MeshBase<Dim>& u, MeshBase<Dim>& v); // generate u, v, w */
     /* void addBoundariesVelocity(Json::Value boundaries, Material Mat); // Boundaries (u, v, w) */
-
-    
 };
 
-
-// General Utilities
+// Functions
 inline size_t calcIndex(size_t iX, size_t iY=0, size_t Ny=1, size_t iZ=0, size_t Nx=1) {return static_cast<size_t>(iY + Ny * (iX + Nx * iZ));};
 
-template <size_t Dim, typename Func> void runLoopMesh(Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt) {
+template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N, Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt) {
      
-    std::cout << "Loop\n";
-
-    // PENDING -- DEBUG HERE
-    // PONER DEFAULT Msh.N para casos sin i0, i1
-
     // Control
-    if (i0) { std::cout << "i0: "; for (size_t val : *i0) {std::cout << val << " ";} std::cout << "\n"; }
-    else {std::cout << "i0: null\n";} 
-
+    if (!i0) { for (size_t i = 0; i < Dim; i++) { (*i0)[i] = 0; (*i1)[i] = N[i]; } }
     size_t nLoop=1; for (size_t i = 0; i < Dim; i++) { nLoop *= ((*i1)[i] - (*i0)[i]); std::cout << "Axis " << i << ": " << (*i0)[i] << " " << (*i1)[i] << "\n";}
-
-    std::cout << "Total: " << nLoop;
-
-    throw std::invalid_argument("Check .json");
-    return;
 
     if constexpr (Dim == 1) { // 1D
         #pragma omp parallel for if (nLoop > 10000)

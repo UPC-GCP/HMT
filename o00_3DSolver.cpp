@@ -50,38 +50,6 @@ Json::Value getParsedData(std::string fileName){
 
 ////////// Debugging Tools //////////
 
-template <size_t nDim> void printDebug(MeshSolver<nDim> Msh, debugOptions dOps) {
-
-    // General Mesh
-    for (size_t i = 0; i < nDim; i++) {
-        std::cout << "\nAxis: " << i << "\n";
-        std::cout << "Faces: "; for (double val : Msh.Faces[i]) {std::cout << val << " ";} std::cout << "\n";
-        std::cout << "Nodes: "; for (double val : Msh.Nodes[i]) {std::cout << val << " ";} std::cout << "\n";
-        std::cout << "DeltaX: "; for (double val : Msh.deltaX[i]) {std::cout << val << " ";} std::cout << "\n";
-        std::cout << "dX: "; for (double val : Msh.dX[i]) {std::cout << val << " ";} std::cout << "\n";
-    } std::cout << "\n";
-
-    // Dimensional
-    if constexpr (nDim == 1) {print1D(Msh, dOps);}
-    else if constexpr (nDim == 2) {print2D(Msh, dOps);}
-    else if constexpr (nDim == 3) {print3D(Msh, dOps);}
-
-    // General Boundaries
-    for (size_t i = 0; i < Msh.BC.size(); i++) {
-        std::cout << "\nBC: " << i << "\n";
-        std::cout << "Type - Side: " << Msh.BC[i].type << " " << Msh.BC[i].side << "\n";
-        std::cout << "Expression: " << Msh.BC[i].bUpdate << " - " << Msh.BC[i].iExpr << " " << Msh.BC[i].iEq << " " << Msh.BC[i].expression << "\n";
-        std::cout << "ExpressionA: " << Msh.BC[i].bA << " - " << Msh.BC[i].iExprA << " " << Msh.BC[i].iEqA << " " << Msh.BC[i].expressionA << "\n";
-        std::cout << "Pos0: "; for (size_t val : Msh.BC[i].i0) { std::cout << val << " "; } std::cout << "\n";
-        std::cout << "Pos1: "; for (size_t val : Msh.BC[i].i1) { std::cout << val << " "; } std::cout << "\n";
-
-        // Dimensional
-        // TERMINAR ESTO MAÑANA
-
-        
-    }
-
-}
 
 ////////// Solvers //////////
 bool bRun = false;
@@ -124,10 +92,19 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
     Msh.addBoundariesSolver(p, Mat, Prs, data["boundariesPressure"], Mat.P0, Mat.sP0); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
 
+    
     /// Debug Current -- DEBUGGING BOUNDARY CONDITIONS
     // Options
-    debugOptions dOps{}; dOps.bBoundaries = true; dOps.bPhi = true;
+    debugOptions dOps{}; dOps.bGeneral = true; dOps.bPhi = true;
     printDebug(p, dOps);
+
+    // PENDING TEST ALL BOUNDARY CONDITION CONFIGURATIONS
+    // Dirichlet: Value, Formula
+    // Neumann: Value, Formula
+    // Robin: Value, Formula, alpha (value, formula)
+    // Paths: strings, leave import for end
+
+    // with that finish velocity and then Probe/Solver before Discretizer
 
     std::cout << "Test end\n";
     return;

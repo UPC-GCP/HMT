@@ -494,8 +494,9 @@ void sizeBoundary3D(Boundary<3>& BC, MeshBase<3> Msh, Parser& Prs) {
 }
 
 template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double dInit, std::string sInit) {
+
     // Initial Conditions
-    if (Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), dInit); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), dInit);} else {importInitialConditions(Msh, sInit);}
+    if (!Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), dInit); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), dInit);} else {importInitialConditions(Msh, sInit);}
 
     // Control
     Msh.BC.resize(boundaries.size());
@@ -509,8 +510,6 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, 
             Msh.BC[i].i0[j] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), boundaries[i]["x0"][j].asDouble() - epsFind) - Msh.Nodes[i].begin();
             Msh.BC[i].i1[j] = std::lower_bound(Msh.Nodes[i].begin(), Msh.Nodes[i].end(), boundaries[i]["x1"][j].asDouble() - epsFind) - Msh.Nodes[i].begin();
         }
-
-        std::cout << "Boundary: " << i << " - "; for (size_t val : Msh.BC[i].i0) {std::cout << val << " ";} std::cout << " - "; for (size_t val : Msh.BC[i].i1) {std::cout << val << " ";} std::cout << "\n";
 
         // Value
         if (isFormula(boundaries[i]["value"].asString())) {
