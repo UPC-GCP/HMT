@@ -22,8 +22,8 @@
 /* #include "o04_BCG.h" */
 /* #include "o05_Probe.h" */
 #include "o09_Parser.h"
-/* #include "o09_Medic.h" */
 #include "o09_Debugger.h"
+/* #include "o09_Medic.h" */
 
 ////////// JSON Parser ///////////
 Json::Value getParsedData(std::string fileName){
@@ -47,9 +47,6 @@ Json::Value getParsedData(std::string fileName){
 
     return data;
 }
-
-////////// Debugging Tools //////////
-
 
 ////////// Solvers //////////
 bool bRun = false;
@@ -95,7 +92,7 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     
     /// Debug Current -- DEBUGGING BOUNDARY CONDITIONS
     // Options
-    debugOptions dOps{}; dOps.bGeneral = true; dOps.bPhi = true;
+    debugOptions dOps{}; dOps.bGeneral = true; dOps.bPhiBC = true;
     printDebug(p, dOps);
 
     // PENDING TEST ALL BOUNDARY CONDITION CONFIGURATIONS
@@ -103,8 +100,6 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     // Neumann: Value, Formula
     // Robin: Value, Formula, alpha (value, formula)
     // Paths: strings, leave import for end
-
-    // with that finish velocity and then Probe/Solver before Discretizer
 
     std::cout << "Test end\n";
     return;
@@ -255,7 +250,7 @@ int main(int argc, char* argv[]){
     Json::Value data = getParsedData(argv[1]); std::cout << "Data parsed successfully. \n";
 
     ///// Simulation /////
-    if (data["PHI0"].isNull() && data["P0"].isNull()) {std::cerr << "Configuration file not defined properly.\n"; return 1;}
+    if (data["PHI0"].isNull() && data["P0"].isNull()) {std::cerr << "Configuration file not defined properly.\n"; return 1;} // if both null && burgers { call secondaryMain; return; } change to keep everything here
 
     try {
         size_t nDim = data["N"].size();

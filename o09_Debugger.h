@@ -7,7 +7,7 @@
 // Types
 struct debugOptions {
     bool bGeneral=false, bMat=false, bSurf=false, bVol=false, bObs=false; // General Mesh
-    bool bBoundaries=false, bPhi=false; // General Boundary
+    bool bBoundaries=false, bPhi=false, bPhiBC=false; // General Boundary
 };
 
 // Headers

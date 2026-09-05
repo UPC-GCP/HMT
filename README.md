@@ -100,3 +100,24 @@ Summary of the current capabilities of the model and the possible configuration 
 
 > [!NOTE]
 > "medicOn": false
+
+## Modules (.cpp / .h)
+### o00\_3DSolver
+
+
+### o01\_Material
+
+
+### o02\_Mesh
+
+
+### o03\_Discretizer
+
+
+### o04\_Solver
+
+
+### o05\_Probe
+
+
+### o09\_Utilities

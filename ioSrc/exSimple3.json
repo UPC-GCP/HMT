@@ -5,7 +5,7 @@
     "endTime": 50, "timeStep": 1e-3,
 
     "_dataPhys": "Physical Data",
-    "PHI0": null, "P0": 10, "T0": 0, "V0": [1, 0, 0], "g": null,
+    "PHI0": null, "P0": 0, "T0": 0, "V0": [1, 0, 0], "g": null,
     "materials": [
         {"rho": 1, "gamma": 1, "cp": 1, "mu": 0.0008, "beta": 1},
         {"rho": 2, "gamma": 2, "cp": 2, "mu": 0.0004, "beta": 2},
@@ -34,12 +34,12 @@
 
     "_dataBnd": "Boundary Conditions",
     "boundariesPressure": [
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": 0},
-        {"type": "Dirichlet", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": 0},
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": 0},
-        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": 0},
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": 0},
-        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": 0}
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": 10},
+        {"type": "Dirichlet", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": 20},
+        {"type": "Robin", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": 30, "alpha": 40},
+        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": " 0.005 * t "},
+        {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": " x - y "},
+        {"type": "Robin", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": " 50 + sin( 0.005 * t ) ", "alpha": " x - 0.05 * y "}
     ],
     "boundariesVelocity": [
         {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "uValue": 1, "vValue": 0},

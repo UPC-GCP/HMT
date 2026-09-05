@@ -9,6 +9,8 @@
 #define exprtk_disable_string_capabilities
 #include "exprtk.hpp"
 
+#include <iostream>
+
 class Parser
 {
 private:
@@ -34,7 +36,12 @@ public:
         varTime = nVal; return vExpr[i].value();
     };
     double evaluateCoordinates(int i, double xCoord, double yCoord=NAN, double zCoord=NAN){
-        varX = xCoord; if (!std::isnan(yCoord)) {varY = yCoord;} if (!std::isnan(zCoord)) {varZ = zCoord;} return vExpr[i].value();
+        std::cout << "Equation: " << i << "\n";
+        std::cout << "Variables: " << varX << " " << varY << " " << varZ << "\n";
+        varX = xCoord; if (!std::isnan(yCoord)) {varY = yCoord;} if (!std::isnan(zCoord)) {varZ = zCoord;} 
+        std::cout << "Variables: " << varX << " " << varY << " " << varZ << "\n";
+
+        return vExpr[i].value();
     };
 };
 

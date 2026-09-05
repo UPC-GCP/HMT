@@ -1,6 +1,7 @@
 // Imports
 #include <cstddef>
 #include <iostream>
+#include <strings.h>
 
 // Self-Imports
 #include "o09_Debugger.h"
@@ -63,7 +64,7 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
     /* } */
 
     // Value
-    if (dOps.bPhi) {
+    if (dOps.bPhi) { // General
         std::cout << "Phi:\n";
         for (size_t k = 0; k < Msh.N[2]; k++) {
             for (size_t i = 0; i < Msh.N[0]; i++) {
@@ -75,6 +76,35 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
     }
         /* runLoopMesh<3>(Msh.N, [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i, j, k)] << "\n";}); */
         // Maybe won't work for this but should work in calculations
+
+    if (dOps.bPhiBC) { // Boundary
+        std::cout << "PhiBC:\n";
+        for (Boundary<3> BC : Msh.BC){
+            std::cout << "BC: " << BC.type << " " << BC.side << "\n";
+            if (BC.i0[0] == BC.i1[0]) { // X Boundary
+                for (size_t j = 0; j < Msh.N[1]; j++) {
+                    for (size_t k = 0; k < Msh.N[2]; k++) {
+                        std::cout << BC.Phi[calcIndex(j, k, Msh.N[2])] << " ";
+                    } std::cout << "\n";
+                } std::cout << "\n";
+            } else if (BC.i0[1] == BC.i1[1]) { // Y Boundary
+                for (size_t i = 0; i < Msh.N[0]; i++) {
+                    for (size_t k = 0; k < Msh.N[2]; k++) {
+                        std::cout << BC.Phi[calcIndex(i, k, Msh.N[2])] << " ";
+                    } std::cout << "\n";
+                } std::cout << "\n";
+            } else if (BC.i0[2] == BC.i1[2]) { // Z Boundary
+                for (size_t i = 0; i < Msh.N[0]; i++) {
+                    for (size_t j = 0; j < Msh.N[1]; j++) {
+                        std::cout << BC.Phi[calcIndex(i, j, Msh.N[1])] << " ";
+                    } std::cout << "\n";
+                } std::cout << "\n";
+            }
+        }
+    }
+
+
+        
 }
 
 void print2D(MeshSolver<2> Msh, debugOptions dOps) {
@@ -167,8 +197,12 @@ void print1D(MeshSolver<1> Msh, debugOptions dOps) {
     /* } */
 
     // Value
-    if (dOps.bPhi) {
+    if (dOps.bPhi) { // General
         std::cout << "Phi\n";
         runLoopMesh<1>(Msh.N, [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i)] << "\n";});
+    }
+
+    if (dOps.bPhiBC) { // Boundary
+
     }
 }
