@@ -88,21 +88,6 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     std::cout << data["obstacles"].size() << " obstacles identified.\n";
     MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
     Msh.addBoundariesSolver(p, Mat, Prs, data["boundariesPressure"], Mat.P0, Mat.sP0); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
-
-    
-    /// Debug Current -- DEBUGGING BOUNDARY CONDITIONS
-    // Options
-    debugOptions dOps{}; dOps.bGeneral = true; dOps.bPhiBC = true;
-    printDebug(p, dOps);
-
-    // PENDING TEST ALL BOUNDARY CONDITION CONFIGURATIONS
-    // Dirichlet: Value, Formula
-    // Neumann: Value, Formula
-    // Robin: Value, Formula, alpha (value, formula)
-    // Paths: strings, leave import for end
-
-    std::cout << "Test end\n";
-    return;
     
     // Temperature
     if (!data["T0"].isNull()) {
@@ -110,15 +95,19 @@ template <size_t nDim> void runNSSolver(Json::Value data){
         Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added\n";
     }
     
-    /* // Velocity */
-    /* std::array<MeshBase<nDim>, nDim> V{}; // V.generateMeshVelocity(); std::cout << "Velocity objects created with "; for(MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << " ";} std::cout << " nodes.\n"; */
+    // Velocity
+    std::array<MeshBase<nDim>, nDim> V{}; Msh.generateMeshBase(p, V, Mat); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b nodes.\n";
+
+    
+    /* Msh.addBoundariesBase(); for (MeshBase<nDim> Vk : V) {std::cout << Vk.BC.size() << ", ";} std::cout << "\b boundary conditions added.\n"; */
 
 
-
-    /* Msh.addBoundariesVelocity(data["boundariesVelocity"], Mat); std::cout << Msh.boundaryVelocity.size() << " velocity boundary conditions added.\n"; */
-
-
-
+    /// Debug Current
+    // Options
+    debugOptions dOps{}; 
+    for (MeshBase<nDim> Vk : V) {
+        /* printDebug(Vk, dOps); // Fix it so it takes MeshBase as well */
+    }
 
     return;
 

@@ -11,7 +11,7 @@
 #include "o09_Parser.h"
 
 // Types
-namespace Compass {
+namespace COMP { // Compass
     constexpr size_t W = 0, E = 1, S = 2, N = 3, B = 4, T = 5; // Direction indexes
     constexpr size_t X = 0, Y = 1, Z = 2; // Dimension indexes
 }
@@ -22,8 +22,8 @@ template <size_t Dim> struct Matrix {
 };
 
 template <size_t Dim> struct Boundary {
-    size_t type{}, side{}, iExpr{}, iEq{}, iExprA{}, iEqA{}; double value{}, alpha{};
-    bool bUpdate = false, bA = false; std::string expression{}, expressionA{};
+    size_t type{}, side{}, iExpr{}, iEq{}, iExprA{}, iEqA{}; double value{}, alpha{}; // General
+    bool bUpdate = false, bA = false; std::string expression{}, expressionA{}; // Expression
     std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
     std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 1D flattened for 2D/3D
     std::vector<double> A{}, oA{}; // Alpha, oAlpha -> [m] -> Robin BC
@@ -61,21 +61,11 @@ public:
     // Variables
     double epsFind=1e-8; // Config 
 
-    /* // Constructor */
-    /* Mesh(); */
-
     // Headers
     void generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles); // Generate MeshSolver
     void addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double bInit, std::string sInit); // Boundaries MeshSolver
-    void generateMeshBase(); // Generate MeshBase
-    void addBoundariesMase(); // Boundaries MeshBase
-
-    /* void addBoundariesTemperature(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (T) */ 
-    /* void addBoundariesPhi(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries); // Boundaries (Phi) */
-
-    /* template <size_t Dim> void generateMeshVelocity(); // Generate MeshBase */
-    /* template <size_t Dim> void generateMeshVelocity(Material Mat, MeshSolver<Dim> p, MeshBase<Dim>& u, MeshBase<Dim>& v); // generate u, v, w */
-    /* void addBoundariesVelocity(Json::Value boundaries, Material Mat); // Boundaries (u, v, w) */
+    void generateMeshBase(MeshSolver<Dim> p, std::array<MeshBase<Dim>, Dim>& V, Material Mat); // Generate MeshBase
+    void addBoundariesBase(std::array<MeshBase<Dim>, Dim>& V, Material Mat, Parser& Prs, Json::Value boundaries, double bInit, std::string sInit); // Boundaries MeshBase
 };
 
 // Functions
@@ -111,6 +101,9 @@ template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N,
     }
 
 }
+
+
+
 
 /* template <size_t Dim, typename Func> void loopMesh(Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt); */
 /* template <size_t Dim, typename Func> void loopMesh(Func lamb, std::array<size_t, Dim> i0, std::array<size_t, Dim> i1) { */
