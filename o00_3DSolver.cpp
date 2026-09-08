@@ -96,7 +96,7 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     }
     
     // Velocity
-    std::array<MeshBase<nDim>, nDim> V{}; Msh.generateMeshBase(p, V, Mat); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b nodes.\n";
+    std::array<MeshBase<nDim>, nDim> V{}; Msh.generateMeshBase(p, V, Mat); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b\b nodes.\n";
 
     
     /* Msh.addBoundariesBase(); for (MeshBase<nDim> Vk : V) {std::cout << Vk.BC.size() << ", ";} std::cout << "\b boundary conditions added.\n"; */
