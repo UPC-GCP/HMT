@@ -86,31 +86,28 @@ template <size_t nDim> void runNSSolver(Json::Value data){
 
     // Pressure
     std::cout << data["obstacles"].size() << " obstacles identified.\n";
-    MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
+    MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
     Msh.addBoundariesSolver(p, Mat, Prs, data["boundariesPressure"], Mat.P0, Mat.sP0); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
     
     // Temperature
     if (!data["T0"].isNull()) {
-        MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, Mat, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
-        Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added\n";
-    }
+        MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
+        Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added\n"; }
     
     // Velocity
-    std::array<MeshBase<nDim>, nDim> V{}; Msh.generateMeshBase(p, V, Mat); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b\b nodes.\n";
+    std::array<MeshBase<nDim>, nDim> V{}; Msh.deriveMeshBase(p, V); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b\b nodes.\n";
+    /* Msh.addBoundariesBase(V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); for (MeshBase<nDim> Vk : V) {std::cout << Vk.BC.size() << ", ";} std::cout << "\b boundary conditions added.\n"; */
 
-    
-    /* Msh.addBoundariesBase(); for (MeshBase<nDim> Vk : V) {std::cout << Vk.BC.size() << ", ";} std::cout << "\b boundary conditions added.\n"; */
+    for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); }
 
-
-    /// Debug Current
+    /// Debug Current -- BOUNDARIES VELOCITY
     // Options
-    debugOptions dOps{}; 
-    for (MeshBase<nDim> Vk : V) {
-        /* printDebug(Vk, dOps); // Fix it so it takes MeshBase as well */
-    }
+    debugOptions dOps{}; dOps.bGeneral = true; dOps.bBoundaries = true;
+
+    // Print
+    for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); }
 
     return;
-
 
     /* ///// Discretizer ///// */
     /* std::cout << "Initializing discretizer ...\n"; */

@@ -21,12 +21,12 @@
 
     "_dataMesh": "Mesh Data",
     "strength": 0, "centering": 0.5, "kappa": 1, "delta": 0.1,
-    "meshAlgorithm": 1, "N": [10, 10, 10],
+    "meshAlgorithm": 1, "N": [5, 5, 5],
     "refinement": [
-        {"axis": 0, "N": 5, "range": [0, 0.5], "algorithm": "PowerLaw", "kappa": 1},
-        {"axis": 0, "N": 5, "range": [0.5, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.55},
-        {"axis": 1, "N": 10, "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.9},
-        {"axis": 2, "N": 10, "range": [0, 1], "algorithm": "PowerLaw", "kappa": 1}
+        {"axis": 0, "N": 3, "range": [0, 0.6], "algorithm": "PowerLaw", "kappa": 1},
+        {"axis": 0, "N": 2, "range": [0.6, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.8},
+        {"axis": 1, "N": 5, "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.9},
+        {"axis": 2, "N": 5, "range": [0, 1], "algorithm": "PowerLaw", "kappa": 1}
     ],
     "obstacles": [
         {"x0": [0.4, 0.4, 0.4], "x1": [0.6, 0.6, 0.6]}
@@ -42,12 +42,12 @@
         {"type": "Robin", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": " 50 + sin( 0.005 * t ) ", "alpha": " x - 0.05 * y "}
     ],
     "boundariesVelocity": [
-        {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "uValue": 1, "vValue": 0},
-        {"type": "Neumann", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "uValue": 0, "vValue": 0},
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "uValue": 0, "vValue": 0},
-        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "uValue": 0, "vValue": 0},
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "uValue": 0, "vValue": 0},
-        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "uValue": 0, "vValue": 0}
+        {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": [1, 0]},
+        {"type": "Neumann", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": [0, 0]}
     ],
     "boundariesTemperature": [
         {"type": "Neumann", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": 0},

@@ -10,7 +10,7 @@
 // PENDING CHANGES:
 // Detect type of variable and block out corresponding sections (MeshBase/MeshSolver)
 
-void print3D(MeshSolver<3> Msh, debugOptions dOps) {
+template <template <size_t> class MeshClass> void print3D(const MeshClass<3>& Msh, debugOptions dOps) {
     // Geometry
     if (dOps.bSurf) { // Surfaces
         for (size_t nD = 0; nD < 3; nD++) {
@@ -37,7 +37,7 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
     }
     
     // MeshSolver
-    /* if constexpr (std::is_same_v<T, MeshSolver<3>>) { */
+    if constexpr (std::is_same_v<MeshClass<3>, MeshSolver<3>>) {
         // Material
         if (dOps.bMat) {
             std::cout << "nMat:\n"; 
@@ -61,7 +61,7 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
                 } std::cout << "\n";
             } std::cout << "\n";
         }
-    /* } */
+    }
 
     // Value
     if (dOps.bPhi) { // General
@@ -74,8 +74,6 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
             } std::cout << "\n";
         } std::cout << "\n";
     }
-        /* runLoopMesh<3>(Msh.N, [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i, j, k)] << "\n";}); */
-        // Maybe won't work for this but should work in calculations
 
     if (dOps.bPhiBC) { // Boundary
         std::cout << "PhiBC:\n";
@@ -102,12 +100,9 @@ void print3D(MeshSolver<3> Msh, debugOptions dOps) {
             }
         }
     }
-
-
-        
 }
 
-void print2D(MeshSolver<2> Msh, debugOptions dOps) {
+template <template <size_t> class MeshClass> void print2D(const MeshClass<2>& Msh, debugOptions dOps) {
     // Geometry
     if (dOps.bSurf) { // Surfaces
         for (size_t nD = 0; nD < 2; nD++) {
@@ -130,7 +125,7 @@ void print2D(MeshSolver<2> Msh, debugOptions dOps) {
     }
 
     // MeshSolver
-    /* if constexpr (std::is_same_v<T, MeshSolver<2>>) { */
+    if constexpr (std::is_same_v<MeshClass<2>, MeshSolver<2>>) {
         // Material
         if (dOps.bMat) {
             std::cout << "nMat:\n"; 
@@ -150,16 +145,17 @@ void print2D(MeshSolver<2> Msh, debugOptions dOps) {
                 } std::cout << "\n";
             } std::cout << "\n";
         }
-    /* } */
+    }
 
     // Value
-    if (dOps.bPhi) {
-        std::cout << "Phi:\n";
-        runLoopMesh<2>(Msh.N,  [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i, j)] << "\n";});
-    }
+    /* if (dOps.bPhi) { */
+    /*     std::cout << "Phi:\n"; */
+    /*     runLoopMesh<2>(Msh.N,  [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i, j)] << "\n";}); */
+    /* } */
+
 }
 
-void print1D(MeshSolver<1> Msh, debugOptions dOps) {
+template <template <size_t> class MeshClass> void print1D(const MeshClass<1>& Msh, debugOptions dOps) {
     // Geometry
     if (dOps.bSurf) { // Surfaces
         for (size_t nD = 0; nD < 1; nD++) {
@@ -178,7 +174,7 @@ void print1D(MeshSolver<1> Msh, debugOptions dOps) {
     }
 
     // MeshSolver
-    /* if constexpr (std::is_same_v<T, MeshSolver<1>>) { */
+    if constexpr (std::is_same_v<MeshClass<1>, MeshSolver<1>>) {
         // Material
         if (dOps.bMat) {
             std::cout << "nMat:\n";
@@ -194,15 +190,23 @@ void print1D(MeshSolver<1> Msh, debugOptions dOps) {
                 std::cout << Msh.bObs[calcIndex(i)] << " ";
             } std::cout << "\n";
         }
-    /* } */
+    }
 
     // Value
-    if (dOps.bPhi) { // General
-        std::cout << "Phi\n";
-        runLoopMesh<1>(Msh.N, [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i)] << "\n";});
-    }
+    /* if (dOps.bPhi) { // General */
+    /*     std::cout << "Phi\n"; */
+    /*     runLoopMesh<1>(Msh.N, [&](size_t i, size_t j, size_t k) { std::cout << Msh.Phi[calcIndex(i)] << "\n";}); */
+    /* } */
 
     if (dOps.bPhiBC) { // Boundary
 
     }
 }
+
+// Compiler Instances
+template void print3D<MeshBase>(const MeshBase<3>&, debugOptions);
+template void print3D<MeshSolver>(const MeshSolver<3>&, debugOptions);
+template void print2D<MeshBase>(const MeshBase<2>&, debugOptions);
+template void print2D<MeshSolver>(const MeshSolver<2>&, debugOptions);
+template void print1D<MeshBase>(const MeshBase<1>&, debugOptions);
+template void print1D<MeshSolver>(const MeshSolver<1>&, debugOptions);

@@ -2,8 +2,8 @@
 #define MESH3D_H_
 
 // Imports
+#include <cstddef>
 #include <json/json.h>
-#include <iostream>
 #include <optional>
 
 // Self-Imports
@@ -33,8 +33,15 @@ template <size_t Dim> struct Obstacle {
     std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
 };
 
-template <size_t Dim> struct MeshBase {
+template <size_t Dim> struct MeshSimplified {
     size_t totNodes=1; std::array<size_t, Dim> N{}; // Nodes -> [nAxis]
+};
+
+template <size_t Dim> struct MeshModal : MeshSimplified<Dim> {
+
+};
+
+template <size_t Dim> struct MeshBase : MeshSimplified<Dim> {
     std::array<std::vector<double>, Dim> Faces{}, Nodes{}, deltaX{}, dX{}; // Coordinates, distances -> [nAxis][index]
     std::vector<Matrix<Dim>> matA{}; std::vector<double> matB{}, oR{}; // Ax = b -> [l] -> l = i + Nx * (j + Ny * k)
     std::array<std::vector<double>, Dim> S{}; // Surfaces -> [nAxis][l]
@@ -50,7 +57,6 @@ template <size_t Dim> struct MeshSolver : MeshBase<Dim> {
     std::vector<bool> bObs{}; // Obstacle -> [l]
 };
 
-
 // Class
 template <size_t Dim> class Mesh {
 private:
@@ -62,10 +68,12 @@ public:
     double epsFind=1e-8; // Config 
 
     // Headers
-    void generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles); // Generate MeshSolver
-    void addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double bInit, std::string sInit); // Boundaries MeshSolver
-    void generateMeshBase(MeshSolver<Dim> p, std::array<MeshBase<Dim>, Dim>& V, Material Mat); // Generate MeshBase
-    void addBoundariesBase(std::array<MeshBase<Dim>, Dim>& V, Material Mat, Parser& Prs, Json::Value boundaries, double bInit, std::string sInit); // Boundaries MeshBase
+    void generateMeshSolver(MeshSolver<Dim>& Msh, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles); // Generate MeshSolver
+    void addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double dInit, std::string sInit); // Boundaries MeshSolver
+    void deriveMeshBase(MeshSolver<Dim> p, std::array<MeshBase<Dim>, Dim>& V); // Generate MeshBase
+    // Was it worth it to pass the std::array<MeshBase<Dim>, Dim>& V ? Or should I just pass MeshBase<Dim>
+    // Test with addBoundariesBase() -- The code doesn't know what index to access if I send them independently, would need to pass that as well -- in main() -> for (size_t i = 0; i < Dim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, boundaries, bInit, sInit) }
+    void addBoundariesBase(size_t i, std::array<MeshBase<Dim>, Dim>& V, Material Mat, Parser& Prs, Json::Value boundaries, std::vector<double> dInit, std::vector<std::string> sInit); // Boundaries MeshBase
 };
 
 // Functions
@@ -75,18 +83,19 @@ template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N,
      
     // Control
     if (!i0) { for (size_t i = 0; i < Dim; i++) { (*i0)[i] = 0; (*i1)[i] = N[i]; } }
-    size_t nLoop=1; for (size_t i = 0; i < Dim; i++) { nLoop *= ((*i1)[i] - (*i0)[i]); std::cout << "Axis " << i << ": " << (*i0)[i] << " " << (*i1)[i] << "\n";}
+    size_t nLoop=1; for (size_t i = 0; i < Dim; i++) { nLoop *= ((*i1)[i] - (*i0)[i]); }
 
+    // Pragma
     if constexpr (Dim == 1) { // 1D
         #pragma omp parallel for if (nLoop > 10000)
         for (size_t i = (*i0)[0]; i < (*i1)[1]; i++) {
-            lamb(i, 0, 0);
+            lamb({i, 0, 0}, 1, 1);
         }
     } else if constexpr (Dim == 2) { // 2D
         #pragma omp parallel for collapse(2) if (nLoop > 10000)
         for (size_t i = (*i0)[0]; i < (*i1)[1]; i++) {
             for (size_t j = (*i0)[1]; j < (*i1)[1]; j++) {
-                lamb(i, j, 0);
+                lamb({i, j, 0}, N[1], 1);
             }
         }
     } else if constexpr (Dim == 3) { // 3D
@@ -94,27 +103,11 @@ template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N,
         for (size_t k = (*i0)[2]; k < (*i1)[2]; k++) {
             for (size_t i = (*i0)[0]; i < (*i1)[0]; i++) {
                 for (size_t j = (*i0)[1]; j < (*i1)[1]; j++) {
-                    lamb(i, j, k);
+                    lamb({i, j, k}, N[1], N[0]);
                 }
             }
         }
     }
 
 }
-
-
-
-
-/* template <size_t Dim, typename Func> void loopMesh(Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt); */
-/* template <size_t Dim, typename Func> void loopMesh(Func lamb, std::array<size_t, Dim> i0, std::array<size_t, Dim> i1) { */
-
-///// Deprecated (Delete later, keep for now in case it serves as reference)
-
-/* template <size_t Dim> struct boundVelocity{ */
-/*     int type{}, side{}; double uVal{}, vVal{}, wVal{}; */
-/*     bool bUpdate = false; std::string expression{}; */
-/*     std::array<int, Dim> i0{}, i1{}; // Indexes -> [nAxis] */
-/*     std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 2D flattened for the respective dimension */
-/* }; */
-
 #endif

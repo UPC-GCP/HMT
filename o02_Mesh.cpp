@@ -221,7 +221,7 @@ void sections3D(MeshSolver<3>& Msh, Json::Value sections, Json::Value obstacles)
     }
 }
 
-template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, Material Mat, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles){
+template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles){
 	// Control (nD)
 	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++) {Msh.N[i] = qNode[i].asInt(); Msh.totNodes *= Msh.N[i];}
 
@@ -275,19 +275,6 @@ template <size_t Dim> void Mesh<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, M
 }
 
 ///// Boundary Conditions /////
-
-/* bool isFormula(std::string value){ */
-/*     // Stringstream */
-/*     std::stringstream ss; ss << value; */
-
-/*     // Check */
-/*     float num = 0; ss >> num; */
-
-/*     // Return */
-/*     if (ss.good()) {return true;} */
-/*     else if (num == 0 && value[0] != 0) {return true;} */
-/*     else {return false;} */
-/* } */
 
 bool isFormula (const std::string value) {
     try { size_t i = 0; std::stod(value, &i); return i != value.length(); }
@@ -525,103 +512,68 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, 
 
 }
 
-template <size_t Dim> void Mesh<Dim>::generateMeshBase(MeshSolver<Dim> p, std::array<MeshBase<Dim>, Dim>& V, Material Mat){
+template <size_t Dim> void Mesh<Dim>::deriveMeshBase(MeshSolver<Dim> p, std::array<MeshBase<Dim>, Dim>& V){
 
-    // Control
-    for (size_t i = 0; i < V.size(); i++) {
+    // Dimension Loop
+    for (size_t i = 0; i < Dim; i++) {
         // Nodes
-        for (size_t j = 0; j < V.size(); j++) { V[i].N[j] = p.N[j]; }
-        V[i].N[i] += 1; 
-        for (size_t val : V[i].N) {V[i].totNodes *= val;}
+        for (size_t j = 0; j < Dim; j++) { V[i].N[j] = p.N[j]; }
+        V[i].N[i] += 1; for (size_t val : V[i].N) {V[i].totNodes *= val;}
 
         // Resize
-        for (size_t j = 0; j < V.size(); j++) {
+        for (size_t j = 0; j < Dim; j++) {
             V[i].Faces[j].resize(V[i].N[j]+1); V[i].Nodes[j].resize(V[i].N[j]); V[i].deltaX[j].resize(V[i].N[j]); V[i].dX[j].resize(V[i].N[j]+1);
         }
 
         // Geometry
-        // Needs to copy values from p.Faces / p.Nodes and add edges to V[i].Faces
-        // Check if z-Component is Nodes/Faces for 3D case and  complete
-        // u.Nodes = [p.Faces[0], p.Nodes[1], ]
-        // v.Nodes = [p.Nodes[0], p.Faces[1], ]
-        // w.Nodes = []
+        for (size_t j = 0; j < Dim; j++) {
+            // i = j
+            if (i == j) { 
+                V[i].Nodes[j] = p.Faces[j]; for (size_t k = 0; k < p.Nodes[j].size(); k++) { V[i].Faces[j][k+1] = p.Nodes[j][k]; }
+                V[i].Faces[j].front() = V[i].Nodes[j].front() - p.Nodes[j].front(); V[i].Faces[j].back() = 2 * V[i].Nodes[j].back() - p.Nodes[j].back(); continue;
+            }
 
+            // i != j
+            V[i].Nodes[j] = p.Nodes[j];
+            for (size_t k = 0; k < V[i].Nodes[j].size(); k++) {V[i].Nodes[j][k] = p.Nodes[j][k]; V[i].Faces[j][k] = p.Faces[j][k];} V[i].Faces[j].back() = p.Faces[j].back();
+        }
 
+        // Deltas
+        for (size_t j = 0; j < Dim; j++) {
+            for (size_t k = 0; k < V[i].deltaX[j].size(); k++) {
+                V[i].deltaX[j][k] = V[i].Faces[j][k+1] - V[i].Faces[j][k];
+                if (k == V[i].deltaX[i].size()-1) { continue; } V[i].dX[j][k+1] = V[i].Nodes[j][k+1] - V[i].Nodes[j][k];
+            }
+            V[i].dX[j].front() = V[i].Nodes[j].front() - V[i].Faces[j].front();
+            V[i].dX[j].back() = V[i].Faces[j].back() - V[i].Nodes[j].back();
+        }
+
+        // Value -- PENDING NEEDS TO HAVE INITIAL VALUE
+        V[i].Phi.resize(V[i].totNodes); V[i].oPhi.resize(V[i].totNodes);
+
+        // Geometry
+        V[i].Vp.resize(V[i].totNodes, 1); for (size_t j = 0; j < Dim; j++) { V[i].S[j].resize(V[i].totNodes, 1); }
+        runLoopMesh(V[i].N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                size_t idx = calcIndex(iX[0], iX[1], Ny, iX[2], Nx);
+                for (size_t nD = 0; nD < Dim; nD++) {
+                    V[i].Vp[idx] *= V[i].deltaX[nD][iX[nD]];
+                    for (size_t nDD = 0; nDD < Dim; nDD++) { if (nD != nDD) { V[i].S[nD][idx] *= V[i].deltaX[nDD][iX[nDD]];} }
+                } });
+
+        // Coefficients
+        V[i].matA.resize(V[i].totNodes); V[i].matB.resize(V[i].totNodes, 0); V[i].oR.resize(V[i].totNodes, 0);
     }
-
-    /* for (MeshBase<Dim> Vk : V) { */
-    /*     for (size_t nN : Vk.N) { */
-    /*         std::cout << nN << " "; */ 
-    /*     } std::cout << "\n"; */
-    /* } */
 
 }
 
-/* void Mesh::generateMeshVelocity(Material Mat, MeshSolver p, MeshBase& u, MeshBase& v){ */
-    
 
-/*     // Geometry uNodes (non-nD) */
-/*     // u nodes sit on p faces; u faces sit on p nodes (u has one more x-node than p) */
-/*     for (size_t i = 0; i < u.Nodes[0].size(); i++){u.Nodes[0][i] = p.Faces[0][i];} */
-/*     for (size_t i = 0; i < p.Nodes[0].size(); i++){u.Faces[0][i+1] = p.Nodes[0][i];} */
-/*     u.Faces[0][0] = u.Nodes[0].front() - u.Faces[0][1]; u.Faces[0].back() = u.Nodes[0].back() + u.Faces[0][1]; */
-/*     for (size_t i = 0; i < u.Nodes[1].size(); i++){u.Nodes[1][i] = p.Nodes[1][i]; u.Faces[1][i] = p.Faces[1][i];} */
-/*     u.Faces[1].back() = p.Faces[1].back(); */
+template <size_t Dim> void Mesh<Dim>::addBoundariesBase(size_t i, std::array<MeshBase<Dim>, Dim>& V, Material Mat, Parser& Prs, Json::Value boundaries, std::vector<double> dInit, std::vector<std::string> sInit) {
 
-/*     // Geometry vNodes (non-nD) */
-/*     // v nodes sit on p faces; v faces sit on p nodes (v has one more y-node than p) */
-/*     for (size_t i = 0; i < v.Nodes[0].size(); i++){v.Nodes[0][i] = p.Nodes[0][i]; v.Faces[0][i] = p.Faces[0][i];} */
-/*     v.Faces[0].back() = p.Faces[0].back(); */
-/*     for (size_t i = 0; i < v.Nodes[1].size(); i++){v.Nodes[1][i] = p.Faces[1][i];} */
-/*     for (size_t i = 0; i < p.Nodes[1].size(); i++){v.Faces[1][i+1] = p.Nodes[1][i];} */
-/*     v.Faces[1][0] = v.Nodes[1].front() - v.Faces[1][1]; v.Faces[1].back() = v.Nodes[1].back() + v.Faces[1][1]; */
+    // PENDING HERE - BURGERS BREAK
+    // i IS BEING PASSED AS ARGUMENT
+    // LAST MESH FUNCTION
 
-/*     // Calculate Geometry */
-/*     calculateMeshGeometry(u, Mat.VF0[0]); */
-/*     calculateMeshGeometry(v, Mat.VF0[1]); */
-
-/* } */
-
-
-/* void Mesh::calculateMeshGeometry(MeshBase& Msh, double valInit){ */
-
-/*     // Deltas (nD) */
-/*     for (size_t i = 0; i < Msh.N.size(); i++){ */
-/*         for (size_t j = 0; j < Msh.deltaX[i].size(); j++){ */
-/*             // Delta X */
-/*             Msh.deltaX[i][j] = Msh.Faces[i][j+1] - Msh.Faces[i][j]; */
-
-/*             // dX */
-/*             if (j == Msh.deltaX[i].size()-1){continue;} */
-/*             Msh.dX[i][j+1] = Msh.Nodes[i][j+1] - Msh.Nodes[i][j]; */
-/*         } */
-
-/*         // dX */
-/*         Msh.dX[i].front() = Msh.Nodes[i].front() - Msh.Faces[i].front(); */
-/*         Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back(); */
-/*     } */
-
-/*     /1* Msh.sPhi.resize(Msh.N[0]); *1/  // missing for MeshSolver */
-/*     /1* Msh.sPhi[i].resize(Msh.N[1], 0); *1/ // inside the loop */
-/*     // Resize (Non-nD) */
-/*     Msh.Phi.resize(Msh.N[0]); Msh.Sw.resize(Msh.N[0]); Msh.Se.resize(Msh.N[0]); Msh.Ss.resize(Msh.N[0]); Msh.Sn.resize(Msh.N[0]); Msh.Vp.resize(Msh.N[0]); Msh.oPhi.resize(Msh.N[0]); */
-/*     for (size_t i = 0; i < Msh.N[0]; i++){ */
-/*         Msh.Phi[i].resize(Msh.N[1], valInit); Msh.Sw[i].resize(Msh.N[1], 0); Msh.Se[i].resize(Msh.N[1], 0); Msh.Ss[i].resize(Msh.N[1], 0); Msh.Sn[i].resize(Msh.N[1], 0); Msh.Vp[i].resize(Msh.N[1], 0); Msh.oPhi[i].resize(Msh.N[1], valInit); */
-/*     } */
-
-/*     // Geometry */
-/*     for (size_t j = 0; j < Msh.N[0]; j++){ */
-/*         for (size_t k = 0; k < Msh.N[1]; k++){ */
-/*                 Msh.Sw[j][k] = Msh.deltaX[1][k] * W; Msh.Se[j][k] = Msh.deltaX[1][k] * W; Msh.Ss[j][k] = Msh.deltaX[0][j] * W; Msh.Sn[j][k] = Msh.deltaX[0][j] * W; */
-/*                 Msh.Vp[j][k] = Msh.deltaX[0][j] * Msh.deltaX[1][k] * W; */
-/*         } */
-/*     } */
-
-/*     // Coefficients (nD) */
-/*     Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.oR.resize(Msh.totNodes, 0); */
-/*     /1* Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0); *1/ */ 
-
-/* } */
+}
 
 // Compiler Instances
 template class Mesh<1>;
