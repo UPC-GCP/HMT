@@ -7,9 +7,6 @@
 #include "o09_Debugger.h"
 #include "o02_Mesh.h"
 
-// PENDING CHANGES:
-// Detect type of variable and block out corresponding sections (MeshBase/MeshSolver)
-
 template <template <size_t> class MeshClass> void print3D(const MeshClass<3>& Msh, debugOptions dOps) {
     // Geometry
     if (dOps.bSurf) { // Surfaces

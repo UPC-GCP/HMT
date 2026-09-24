@@ -21,6 +21,7 @@
 /* #include "o04_CG.h" */
 /* #include "o04_BCG.h" */
 /* #include "o05_Probe.h" */
+#include "o06_Burgers.h"
 #include "o09_Parser.h"
 #include "o09_Debugger.h"
 /* #include "o09_Medic.h" */
@@ -143,6 +144,8 @@ template <size_t nDim> void runNSSolver(Json::Value data){
     /* ///// Temporal Loop ///// */
     /* std::cout << "Processing ...\n"; */
     
+    // temporal loop with doubles creates floating point errors after ~ 1e3 iterations
+    // change to for (size_t i = 1; i < Dsc.endTime / Dsc.dt; i++) {t = dt * i;}
     /* for (double t = Dsc.dt; t <= Dsc.endTime; t += Dsc.dt){ */
 
     /*     // Control */
@@ -225,7 +228,7 @@ template <size_t nDim> void runPHISolver(Json::Value data){
 }
 
 ////////// MAIN //////////
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]){ // ROCK: Research Oriented Computational Kernel
     
     ///// Setup /////
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -235,8 +238,11 @@ int main(int argc, char* argv[]){
     std::cout << "Reading data ... \n";
     Json::Value data = getParsedData(argv[1]); std::cout << "Data parsed successfully. \n";
 
+    ///// BURGERS NOT YET FULLY IMPLEMENTED /////
+    if (data["bBurg"]) { runBurgers(data["dBurg"]); return(0); }
+
     ///// Simulation /////
-    if (data["PHI0"].isNull() && data["P0"].isNull()) {std::cerr << "Configuration file not defined properly.\n"; return 1;} // if both null && burgers { call secondaryMain; return; } change to keep everything here
+    if (data["PHI0"].isNull() && data["P0"].isNull()) {std::cerr << "Configuration file not defined properly.\n"; return 1;} // if both null && burgers { call secondaryMain; return; } change to keep everything here -- finish burgers and then decide how to organize the .json file - probably should include a config parameter solverType (redo .json) = Scalar / NS / Burgers and have that directly run the corresponding solver
 
     try {
         size_t nDim = data["N"].size();

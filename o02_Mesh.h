@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <json/json.h>
 #include <optional>
+#include <complex.h>
 
 // Self-Imports
 #include "o01_Material.h"
@@ -34,18 +35,21 @@ template <size_t Dim> struct Obstacle {
 };
 
 template <size_t Dim> struct MeshSimplified {
-    size_t totNodes=1; std::array<size_t, Dim> N{}; // Nodes -> [nAxis]
+    size_t totNodes=1;
 };
 
-template <size_t Dim> struct MeshModal : MeshSimplified<Dim> {
-
+template <size_t Dim> struct MeshModal : MeshSimplified<Dim> { // Not now but change to other definition afterwards
+/* struct MeshModal : MeshSimplified<1> { */
+    double Re{}; std::vector<double> E{}, oE{};
+    std::vector<std::complex<double>> uHat{}, ouHat{}, R{};
 };
 
 template <size_t Dim> struct MeshBase : MeshSimplified<Dim> {
+    std::array<size_t, Dim> N{}; // Nodes -> [nAxis]
     std::array<std::vector<double>, Dim> Faces{}, Nodes{}, deltaX{}, dX{}; // Coordinates, distances -> [nAxis][index]
     std::vector<Matrix<Dim>> matA{}; std::vector<double> matB{}, oR{}; // Ax = b -> [l] -> l = i + Nx * (j + Ny * k)
     std::array<std::vector<double>, Dim> S{}; // Surfaces -> [nAxis][l]
-    std::vector<double> Vp{}, Phi{}, oPhi{}; // Volume, Phi, oPhi -> [l]
+    std::vector<double> Vp{}, Phi{}, oPhi{}; // Volume -> [l]
     std::vector<Boundary<Dim>> BC{}; // Boundary Conditions -> [index]
     std::vector<Obstacle<Dim>> Obs{}; // Obstacle -> [index]
 };

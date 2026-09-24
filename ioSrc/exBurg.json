@@ -1,0 +1,78 @@
+{
+
+    "_dataBurg": "Burgers Data",
+    "bBurg": true, 
+    "dBurg": {
+        "Re": 40, "N": 20, "solver": "DNS", "dt": 0.001, "endTime": 10
+    },
+
+    "_dataNum": "Numerical Data",
+    "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG",
+    "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,
+    "endTime": 50, "timeStep": 1e-3,
+
+    "_dataPhys": "Physical Data",
+    "PHI0": null, "P0": 0, "T0": 0, "V0": [1, 0, 0], "g": null,
+    "materials": [
+        {"rho": 1, "gamma": 1, "cp": 1, "mu": 0.0008, "beta": 1},
+        {"rho": 2, "gamma": 2, "cp": 2, "mu": 0.0004, "beta": 2},
+        {"rho": 3, "gamma": 3, "cp": 3, "mu": 0.0002, "beta": 3}
+    ],
+
+    "_dataGeom": "Geometrical Data",
+    "sections": [
+        {"material": 0, "x0": [0, 0, 0], "x1": [0.5, 1, 0.5], "source": 0},
+        {"material": 1, "x0": [0.5, 0, 0], "x1": [1, 1, 0.5], "source": 0},
+        {"material": 2, "x0": [0, 0, 0.5], "x1": [1, 1, 1], "source": 0}
+    ],
+
+    "_dataMesh": "Mesh Data",
+    "strength": 0, "centering": 0.5, "kappa": 1, "delta": 0.1,
+    "meshAlgorithm": 1, "N": [5, 5, 5],
+    "refinement": [
+        {"axis": 0, "N": 3, "range": [0, 0.6], "algorithm": "PowerLaw", "kappa": 1},
+        {"axis": 0, "N": 2, "range": [0.6, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.8},
+        {"axis": 1, "N": 5, "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.9},
+        {"axis": 2, "N": 5, "range": [0, 1], "algorithm": "PowerLaw", "kappa": 1}
+    ],
+    "obstacles": [
+        {"x0": [0.4, 0.4, 0.4], "x1": [0.6, 0.6, 0.6]}
+    ],
+
+    "_dataBnd": "Boundary Conditions",
+    "boundariesPressure": [
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": 10},
+        {"type": "Dirichlet", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": 20},
+        {"type": "Robin", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": 30, "alpha": 40},
+        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": " 0.005 * t "},
+        {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": " x - y "},
+        {"type": "Robin", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": " 50 + sin( 0.005 * t ) ", "alpha": " x - 0.05 * y "}
+    ],
+    "boundariesVelocity": [
+        {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": [1, 0]},
+        {"type": "Neumann", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": [0, 0]},
+        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": [0, 0]}
+    ],
+    "boundariesTemperature": [
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": 0},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": 0},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": 0},
+        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": 0}
+    ],
+    "boundariesPhi": [
+    ],
+
+    "_dataProbe": "Probe Data",
+    "probes": [
+        {"type": "Map",   "t": [0, 100], "x0": [0, 0, 0], "x1": [1, 1, 1], "nWrite": 100},
+        {"type": "Field", "t": [0, 100], "x0": [0, 0, 0], "x1": [1, 1, 1], "nWrite": 100}
+    ],
+
+    "_dataMedic": "Medic Data",
+    "medicOn": false
+}

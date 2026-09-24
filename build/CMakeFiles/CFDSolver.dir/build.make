@@ -111,10 +111,24 @@ CMakeFiles/CFDSolver.dir/o02_Mesh.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/CFDSolver.dir/o02_Mesh.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o02_Mesh.cpp -o CMakeFiles/CFDSolver.dir/o02_Mesh.cpp.s
 
+CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o: CMakeFiles/CFDSolver.dir/flags.make
+CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o: /home/upc_gcp/TFM/HMT/o06_Burgers.cpp
+CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o: CMakeFiles/CFDSolver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o -MF CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o.d -o CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o -c /home/upc_gcp/TFM/HMT/o06_Burgers.cpp
+
+CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o06_Burgers.cpp > CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.i
+
+CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o06_Burgers.cpp -o CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.s
+
 CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o: CMakeFiles/CFDSolver.dir/flags.make
 CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp
 CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o: CMakeFiles/CFDSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o -MF CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o.d -o CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Parser.cpp
 
 CMakeFiles/CFDSolver.dir/o09_Parser.cpp.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/CFDSolver.dir/o09_Parser.cpp.s: cmake_force
 CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o: CMakeFiles/CFDSolver.dir/flags.make
 CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp
 CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o: CMakeFiles/CFDSolver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o -MF CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o.d -o CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Debugger.cpp
 
 CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.i: cmake_force
@@ -144,6 +158,7 @@ CFDSolver_OBJECTS = \
 "CMakeFiles/CFDSolver.dir/o00_3DSolver.cpp.o" \
 "CMakeFiles/CFDSolver.dir/o01_Material.cpp.o" \
 "CMakeFiles/CFDSolver.dir/o02_Mesh.cpp.o" \
+"CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o" \
 "CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o" \
 "CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o"
 
@@ -153,6 +168,7 @@ CFDSolver_EXTERNAL_OBJECTS =
 CFDSolver: CMakeFiles/CFDSolver.dir/o00_3DSolver.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/o01_Material.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/o02_Mesh.cpp.o
+CFDSolver: CMakeFiles/CFDSolver.dir/o06_Burgers.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/o09_Parser.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/o09_Debugger.cpp.o
 CFDSolver: CMakeFiles/CFDSolver.dir/build.make
@@ -160,7 +176,7 @@ CFDSolver: /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so
 CFDSolver: /usr/lib/x86_64-linux-gnu/libpthread.a
 CFDSolver: /usr/lib/x86_64-linux-gnu/libjsoncpp.so
 CFDSolver: CMakeFiles/CFDSolver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable CFDSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable CFDSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CFDSolver.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
