@@ -64,7 +64,7 @@ add_executable(SCSolver
     o09_MedicSC.cpp
 )
 
-add_executable(ROCK
+add_executable(3DSolver
     o00_3DSolver.cpp
     o01_Material.cpp
     o02_Mesh.cpp
@@ -79,9 +79,21 @@ add_executable(ROCK
     o09_Debugger.cpp
 )
 
+add_executable(ROCK
+    ROCK.cpp
+    o00_FVMScalar.cpp
+    o00_FVMNS.cpp
+    o00_Spectral.cpp
+    o01_Material.cpp
+    o02_Mesh.cpp
+    o09_Parser.cpp
+    o09_Debugger.cpp
+)
+
 # 4. Linking
+target_link_libraries(3DSolver PRIVATE OpenMP::OpenMP_CXX)
 target_link_libraries(ROCK PRIVATE OpenMP::OpenMP_CXX)
-foreach (target LDCSolver DHCSolver SCSolver ROCK)
+foreach (target LDCSolver DHCSolver SCSolver 3DSolver ROCK)
     target_compile_options(${target} PRIVATE -O3 -march=native) # gcc
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP) # jsoncpp
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}) # 

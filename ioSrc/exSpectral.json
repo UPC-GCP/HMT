@@ -1,0 +1,17 @@
+{
+    "_dataConfig": "Configuration",
+    "configSolver": "Spectral",
+
+    "_dataNum": "Numerical Data",
+    "N": 20, "solver": "DNS", "endTime": 10, "timeStep": 0.001,
+
+    "_dataPhys": "Physical Data",
+    "Re": 40,
+
+    "_dataProbe": "Probe Data",
+    "probes": [
+    ],
+
+    "_dataMedic": "Medic Data",
+    "medicOn": false
+}

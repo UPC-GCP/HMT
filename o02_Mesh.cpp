@@ -505,7 +505,7 @@ template <size_t Dim> void Mesh<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, 
 
         // Resize
         if constexpr (Dim == 1) {sizeBoundary1D(Msh.BC[i], Msh, Prs);}
-        if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
+        else if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);}
         else if constexpr (Dim == 3) {sizeBoundary3D(Msh.BC[i], Msh, Prs);}
 
     }
@@ -565,7 +565,6 @@ template <size_t Dim> void Mesh<Dim>::deriveMeshBase(MeshSolver<Dim> p, std::arr
     }
 
 }
-
 
 template <size_t Dim> void Mesh<Dim>::addBoundariesBase(size_t i, std::array<MeshBase<Dim>, Dim>& V, Material Mat, Parser& Prs, Json::Value boundaries, std::vector<double> dInit, std::vector<std::string> sInit) {
 

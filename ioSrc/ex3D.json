@@ -1,4 +1,7 @@
 {
+    "_dataConfig": "Configuration Data",
+    "configSolver": "FVMNS",
+
     "_dataNum": "Numerical Data",
     "tempScheme": "implicit", "spatScheme": "Hybrid", "solver": "CG",
     "tolTemporal": 1e-20, "tolNumeric": 1e-10, "maxIterations": 3000,
