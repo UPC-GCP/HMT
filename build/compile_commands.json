@@ -55,6 +55,12 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeSpectral.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o05_ProbeSpectral.cpp",
+  "output": "CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o09_Parser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Parser.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o09_Parser.cpp",
   "output": "CMakeFiles/ROCK.dir/o09_Parser.cpp.o"

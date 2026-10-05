@@ -345,6 +345,30 @@ o04_SolverSpectral.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.s
 .PHONY : o04_SolverSpectral.cpp.s
 
+o05_ProbeSpectral.o: o05_ProbeSpectral.cpp.o
+.PHONY : o05_ProbeSpectral.o
+
+# target to build an object file
+o05_ProbeSpectral.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.o
+.PHONY : o05_ProbeSpectral.cpp.o
+
+o05_ProbeSpectral.i: o05_ProbeSpectral.cpp.i
+.PHONY : o05_ProbeSpectral.i
+
+# target to preprocess a source file
+o05_ProbeSpectral.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.i
+.PHONY : o05_ProbeSpectral.cpp.i
+
+o05_ProbeSpectral.s: o05_ProbeSpectral.cpp.s
+.PHONY : o05_ProbeSpectral.s
+
+# target to generate assembly for a file
+o05_ProbeSpectral.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.s
+.PHONY : o05_ProbeSpectral.cpp.s
+
 o09_Debugger.o: o09_Debugger.cpp.o
 .PHONY : o09_Debugger.o
 
@@ -429,6 +453,9 @@ help:
 	@echo "... o04_SolverSpectral.o"
 	@echo "... o04_SolverSpectral.i"
 	@echo "... o04_SolverSpectral.s"
+	@echo "... o05_ProbeSpectral.o"
+	@echo "... o05_ProbeSpectral.i"
+	@echo "... o05_ProbeSpectral.s"
 	@echo "... o09_Debugger.o"
 	@echo "... o09_Debugger.i"
 	@echo "... o09_Debugger.s"
