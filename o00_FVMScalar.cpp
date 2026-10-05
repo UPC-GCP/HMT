@@ -8,7 +8,7 @@
 
 // Self-Imports
 #include "o01_Material.h"
-#include "o02_Mesh.h"
+#include "o02_MeshFVM.h"
 
 namespace {
     template <size_t nDim> void runSolverLoop(const Json::Value& data){

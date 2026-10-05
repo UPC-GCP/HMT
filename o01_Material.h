@@ -13,7 +13,7 @@ private:
 public:
     // Variables
     bool bPath=false; // Bool for Path/Value
-    double P0{}, T0{}, Phi0{}, g{}; // Initial values for solver variables (p, T, phi), general constants (g)
+    double P0{}, T0{}, Phi0{}, g{}, Re{}; // Initial values for solver variables (p, T, phi), general constants (g, Re)
     std::string sP0{}, sT0{}, sPhi0{}; // Path for solver variables
 
     // Vectors
@@ -23,6 +23,7 @@ public:
 
     // Constructor
     Material(Json::Value materials, double g=9.81);
+    Material(double Reynolds);
     
     // Functions
     void setInitialConditions(double initPhi, Json::Value initVF); // PHISolver (Value) 

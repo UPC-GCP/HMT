@@ -30,7 +30,7 @@
     // RK4: Calculate uk n+1
     // Energy Eq -- Check conservation
 
-void meshBurgers(MeshModal<1>& Msh, size_t N) {
+void meshBurgers(MeshModal<1>& Msh, size_t N) { // Done
 
     // Control
     Msh.totNodes = N+1; 
@@ -41,7 +41,7 @@ void meshBurgers(MeshModal<1>& Msh, size_t N) {
 
 }
 
-void discretizerBurgers(MeshModal<1>& Msh, double Re) {
+void discretizerBurgers(MeshModal<1>& Msh, double Re) { // Done
 
     // Initial Values
     Msh.Re = Re;
@@ -50,7 +50,7 @@ void discretizerBurgers(MeshModal<1>& Msh, double Re) {
 
 }
 
-void discretizerCalculateConvection(std::vector<std::complex<double>>& C, std::vector<std::complex<double>> const& u) {
+void discretizerCalculateConvection(std::vector<std::complex<double>>& C, std::vector<std::complex<double>> const& u) { // Done
 
     int p{}, N = static_cast<int>(u.size()) - 1; std::complex<double> i(0, 1), up{}, uq{};
     for (int k = 0; k <= N; k++) {
@@ -66,7 +66,7 @@ void discretizerCalculateConvection(std::vector<std::complex<double>>& C, std::v
 
 }
 
-std::vector<std::complex<double>> discretizerCalculateRHS(std::vector<std::complex<double>> const& u, double Re, double t) {
+std::vector<std::complex<double>> discretizerCalculateRHS(std::vector<std::complex<double>> const& u, double Re, double t) { // Done
 
     // Control
     std::vector<std::complex<double>> D(u.size()), C(u.size()), F(u.size()), R(u.size());
@@ -120,7 +120,7 @@ void solverRK4(std::vector<std::complex<double>>& u, double Re, double t, double
 
 }
 
-double calcErr(std::vector<std::complex<double>> matA, std::vector<std::complex<double>> matB) {
+double calcErr(std::vector<std::complex<double>> matA, std::vector<std::complex<double>> matB) { // Done
 
     // Control
     double rsNew{};

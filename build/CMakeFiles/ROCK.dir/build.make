@@ -83,24 +83,10 @@ CMakeFiles/ROCK.dir/ROCK.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/ROCK.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/ROCK.cpp -o CMakeFiles/ROCK.dir/ROCK.cpp.s
 
-CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o: CMakeFiles/ROCK.dir/flags.make
-CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o: /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp
-CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o -MF CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o.d -o CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o -c /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp
-
-CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp > CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.i
-
-CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp -o CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s
-
 CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o: CMakeFiles/ROCK.dir/flags.make
 CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o: /home/upc_gcp/TFM/HMT/o00_FVMNS.cpp
 CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o -MF CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o.d -o CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o -c /home/upc_gcp/TFM/HMT/o00_FVMNS.cpp
 
 CMakeFiles/ROCK.dir/o00_FVMNS.cpp.i: cmake_force
@@ -110,6 +96,20 @@ CMakeFiles/ROCK.dir/o00_FVMNS.cpp.i: cmake_force
 CMakeFiles/ROCK.dir/o00_FVMNS.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o00_FVMNS.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o00_FVMNS.cpp -o CMakeFiles/ROCK.dir/o00_FVMNS.cpp.s
+
+CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o: CMakeFiles/ROCK.dir/flags.make
+CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o: /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp
+CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o -MF CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o.d -o CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o -c /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp
+
+CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp > CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.i
+
+CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp -o CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s
 
 CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: CMakeFiles/ROCK.dir/flags.make
 CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp
@@ -139,24 +139,66 @@ CMakeFiles/ROCK.dir/o01_Material.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o01_Material.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o01_Material.cpp -o CMakeFiles/ROCK.dir/o01_Material.cpp.s
 
-CMakeFiles/ROCK.dir/o02_Mesh.cpp.o: CMakeFiles/ROCK.dir/flags.make
-CMakeFiles/ROCK.dir/o02_Mesh.cpp.o: /home/upc_gcp/TFM/HMT/o02_Mesh.cpp
-CMakeFiles/ROCK.dir/o02_Mesh.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ROCK.dir/o02_Mesh.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o02_Mesh.cpp.o -MF CMakeFiles/ROCK.dir/o02_Mesh.cpp.o.d -o CMakeFiles/ROCK.dir/o02_Mesh.cpp.o -c /home/upc_gcp/TFM/HMT/o02_Mesh.cpp
+CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o: CMakeFiles/ROCK.dir/flags.make
+CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o: /home/upc_gcp/TFM/HMT/o02_MeshFVM.cpp
+CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o -MF CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o.d -o CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshFVM.cpp
 
-CMakeFiles/ROCK.dir/o02_Mesh.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o02_Mesh.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o02_Mesh.cpp > CMakeFiles/ROCK.dir/o02_Mesh.cpp.i
+CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o02_MeshFVM.cpp > CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.i
 
-CMakeFiles/ROCK.dir/o02_Mesh.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o02_Mesh.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o02_Mesh.cpp -o CMakeFiles/ROCK.dir/o02_Mesh.cpp.s
+CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o02_MeshFVM.cpp -o CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.s
+
+CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o: CMakeFiles/ROCK.dir/flags.make
+CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o02_MeshSpectral.cpp
+CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o -MF CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o.d -o CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshSpectral.cpp
+
+CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o02_MeshSpectral.cpp > CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.i
+
+CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o02_MeshSpectral.cpp -o CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.s
+
+CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: CMakeFiles/ROCK.dir/flags.make
+CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp
+CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o -MF CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o.d -o CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp
+
+CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp > CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.i
+
+CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp -o CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.s
+
+CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o: CMakeFiles/ROCK.dir/flags.make
+CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp
+CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o -MF CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o.d -o CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp
+
+CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp > CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.i
+
+CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp -o CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.s
 
 CMakeFiles/ROCK.dir/o09_Parser.cpp.o: CMakeFiles/ROCK.dir/flags.make
 CMakeFiles/ROCK.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp
 CMakeFiles/ROCK.dir/o09_Parser.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ROCK.dir/o09_Parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ROCK.dir/o09_Parser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o09_Parser.cpp.o -MF CMakeFiles/ROCK.dir/o09_Parser.cpp.o.d -o CMakeFiles/ROCK.dir/o09_Parser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Parser.cpp
 
 CMakeFiles/ROCK.dir/o09_Parser.cpp.i: cmake_force
@@ -170,7 +212,7 @@ CMakeFiles/ROCK.dir/o09_Parser.cpp.s: cmake_force
 CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: CMakeFiles/ROCK.dir/flags.make
 CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp
 CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: CMakeFiles/ROCK.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ROCK.dir/o09_Debugger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ROCK.dir/o09_Debugger.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ROCK.dir/o09_Debugger.cpp.o -MF CMakeFiles/ROCK.dir/o09_Debugger.cpp.o.d -o CMakeFiles/ROCK.dir/o09_Debugger.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Debugger.cpp
 
 CMakeFiles/ROCK.dir/o09_Debugger.cpp.i: cmake_force
@@ -184,11 +226,14 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.s: cmake_force
 # Object files for target ROCK
 ROCK_OBJECTS = \
 "CMakeFiles/ROCK.dir/ROCK.cpp.o" \
-"CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o" \
 "CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o" \
+"CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o" \
 "CMakeFiles/ROCK.dir/o00_Spectral.cpp.o" \
 "CMakeFiles/ROCK.dir/o01_Material.cpp.o" \
-"CMakeFiles/ROCK.dir/o02_Mesh.cpp.o" \
+"CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o" \
+"CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o" \
+"CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o" \
+"CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o" \
 "CMakeFiles/ROCK.dir/o09_Parser.cpp.o" \
 "CMakeFiles/ROCK.dir/o09_Debugger.cpp.o"
 
@@ -196,19 +241,22 @@ ROCK_OBJECTS = \
 ROCK_EXTERNAL_OBJECTS =
 
 ROCK: CMakeFiles/ROCK.dir/ROCK.cpp.o
-ROCK: CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o
 ROCK: CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o
+ROCK: CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o
 ROCK: CMakeFiles/ROCK.dir/o00_Spectral.cpp.o
 ROCK: CMakeFiles/ROCK.dir/o01_Material.cpp.o
-ROCK: CMakeFiles/ROCK.dir/o02_Mesh.cpp.o
+ROCK: CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o
+ROCK: CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o
+ROCK: CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o
+ROCK: CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o
 ROCK: CMakeFiles/ROCK.dir/o09_Parser.cpp.o
 ROCK: CMakeFiles/ROCK.dir/o09_Debugger.cpp.o
 ROCK: CMakeFiles/ROCK.dir/build.make
+ROCK: /usr/lib/x86_64-linux-gnu/libjsoncpp.so
 ROCK: /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so
 ROCK: /usr/lib/x86_64-linux-gnu/libpthread.a
-ROCK: /usr/lib/x86_64-linux-gnu/libjsoncpp.so
 ROCK: CMakeFiles/ROCK.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable ROCK"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/upc_gcp/TFM/HMT/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable ROCK"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ROCK.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

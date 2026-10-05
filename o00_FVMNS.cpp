@@ -7,7 +7,7 @@
 
 // Self-Imports
 #include "o01_Material.h"
-#include "o02_Mesh.h"
+#include "o02_MeshFVM.h"
 /* #include "o03_Discretizer.h" */
 /* #include "o04_Solver.h" */
 /* #include "o04_CG.h" */
@@ -47,7 +47,7 @@ namespace {
 
         ///// Mesh /////
         std::cout << "Initializing mesh ...\n"; 
-        Mesh<nDim> Msh;
+        MeshFVM<nDim> Msh;
 
         // Pressure
         std::cout << data["obstacles"].size() << " obstacles identified.\n";
@@ -57,7 +57,8 @@ namespace {
         // Temperature
         if (!data["T0"].isNull()) {
             MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
-            Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added\n"; }
+            Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added\n";
+        }
         
         // Velocity
         std::array<MeshBase<nDim>, nDim> V{}; Msh.deriveMeshBase(p, V); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b\b nodes.\n";
@@ -74,7 +75,12 @@ namespace {
 
         return;
 
+
         // PENDING -- FINISH NAVIER-STOKES SOLVER BY COMPLETING ALL OTHER OBJECTS
+
+
+
+
 
         /* ///// Discretizer ///// */
         /* std::cout << "Initializing discretizer ...\n"; */
@@ -84,6 +90,8 @@ namespace {
         /* Dsc.setMomentumCoefficients(Mat, Msh); Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity predictor set.\n"; Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure boundaries set.\n"; Dsc.setPressureCoefficients(Mat, Msh); Dsc.setPressureBoundaries(Mat, Msh); std::cout << "Pressure coefficients set.\n"; */
         
         /* ///// Solver ///// */
+
+        // Only keep tolNumeric here, tolTemporal should be stored in this scope
         /* std::cout << "Initializing solver ... \n"; */
         /* Solver* Sol = nullptr; */
         /* if (data["solver"] == "CG"){ */
@@ -108,6 +116,7 @@ namespace {
         /* Medic Mdc(Msh, Prb, bMdc); std::cout << "Diagnostic tools configured.\n"; */
 
         /* ///// Temporal Loop ///// */
+        /* double dt = data["dt"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(); */
         /* std::cout << "Processing ...\n"; */
         
         // temporal loop with doubles creates floating point errors after ~ 1e3 iterations

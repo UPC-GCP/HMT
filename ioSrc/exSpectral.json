@@ -3,7 +3,8 @@
     "configSolver": "Spectral",
 
     "_dataNum": "Numerical Data",
-    "N": 20, "solver": "DNS", "endTime": 10, "timeStep": 0.001,
+    "N": 20, "endTime": 10, "timeStep": 0.001,
+    "solver": "DNS", "tolTemporal": 1e-3, "tolNumeric": 1e-6,
 
     "_dataPhys": "Physical Data",
     "Re": 40,

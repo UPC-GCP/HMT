@@ -12,89 +12,34 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP REQUIRED IMPORTED_TARGET jsoncpp)
 
 # 3. Executable
-# add_executable(PHISolver
-#     o00_PHISolver.cpp
-#     o01_Material.cpp
-#     o02_MeshPHI.cpp
-#     o03_DiscretizerPHI.cpp
-#     o04_SolverPHI.cpp
-#     o04_CGPHI.cpp
-#     o04_BCGPHI.cpp
-#     o04_GSPHI.cpp
-#     o05_ProbePHI.cpp
-#     o09_ExpressionParser.cpp
-#     o09_MedicPHI.cpp
-# )
-
-add_executable(LDCSolver
-    o00_NSSolver.cpp
-    o01_Material.cpp
-    o02_MeshNS.cpp
-    o03_DiscretizerNS.cpp
-    o04_SolverNS.cpp
-    o04_CGNS.cpp
-    # o04_BCG.cpp
-    o05_ProbeNS.cpp
-    o09_ExpressionParser.cpp
-    o09_MedicNS.cpp
-)
-
-add_executable(DHCSolver
-    o00_DHCSolver.cpp
-    o01_Material.cpp
-    o02_MeshNS.cpp
-    o03_DiscretizerNS.cpp
-    o04_SolverNS.cpp
-    o04_CGNS.cpp
-    # o04_BCG.cpp
-    o05_ProbeNS.cpp
-    o09_ExpressionParser.cpp
-    o09_MedicNS.cpp
-)
-
-add_executable(SCSolver
-    o00_SCSolver.cpp
-    o01_Material.cpp
-    o02_MeshSC.cpp
-    o03_DiscretizerSC.cpp
-    o04_SolverSC.cpp
-    o04_CGSC.cpp
-    o05_ProbeSC.cpp
-    o09_ExpressionParser.cpp
-    o09_MedicSC.cpp
-)
-
-add_executable(3DSolver
-    o00_3DSolver.cpp
-    o01_Material.cpp
-    o02_Mesh.cpp
-#     o03_Discretizer.cpp
-#     o04_Solver.cpp
-#     o04_CG.cpp
-#     o04_BCG.cpp
-#     o05_Probe.cpp
-    o06_Burgers.cpp
-#     o09_Medic.cpp
-    o09_Parser.cpp
-    o09_Debugger.cpp
-)
-
 add_executable(ROCK
     ROCK.cpp
-    o00_FVMScalar.cpp
     o00_FVMNS.cpp
+    o00_FVMScalar.cpp
     o00_Spectral.cpp
     o01_Material.cpp
-    o02_Mesh.cpp
+    # o01_MaterialFVM.cpp
+    # o01_MaterialSpectral.cpp - Can split this later but honestly doesn't cost too much
+    o02_MeshFVM.cpp
+    o02_MeshSpectral.cpp
+    # o03_DiscretizerFVM.cpp
+    o03_DiscretizerSpectral.cpp
+    # o04_SolverFVM.cpp
+    o04_SolverSpectral.cpp
+    # o05_ProbeFVM.cpp
+    o05_ProbeSpectral.cpp
+    # o06_MedicFVM.cpp
+    # o06_MedicSpectral.cpp
     o09_Parser.cpp
     o09_Debugger.cpp
+    # o09_DebuggerFVM.cpp
+    # o09_DebuggerSpectral.cpp
 )
 
 # 4. Linking
-target_link_libraries(3DSolver PRIVATE OpenMP::OpenMP_CXX)
-target_link_libraries(ROCK PRIVATE OpenMP::OpenMP_CXX)
-foreach (target LDCSolver DHCSolver SCSolver 3DSolver ROCK)
+foreach (target ROCK)
     target_compile_options(${target} PRIVATE -O3 -march=native) # gcc
     target_link_libraries(${target} PRIVATE PkgConfig::JSONCPP) # jsoncpp
-    target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}) # 
+    target_link_libraries(${target} PRIVATE OpenMP::OpenMP_CXX) # OpenMP
+    target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()

@@ -75,9 +75,11 @@ Spectral Methods numerical solver.
 
 ### Numerical Data
 1. **N**: Truncated mode limit.
-1. **solver**: Numerical solver selection. (DNS, LES)
 2. **endTime**: Total duration of simulation.
 3. **timeStep**: Time interval between instants.
+4. **solver**: Numerical solver selection. (DNS, LES)
+5. **tolTemporal**: Tolerance for the steady-state convergence check.
+6. **tolNumeric**: Tolerance for the numerical solver. 
 
 ### Physical Data
 1. **Re**: Reynolds number.

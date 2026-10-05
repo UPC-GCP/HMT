@@ -1,219 +1,21 @@
 [
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o00_NSSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_NSSolver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o00_NSSolver.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o00_NSSolver.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o01_Material.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o02_MeshNS.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o02_MeshNS.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o02_MeshNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o03_DiscretizerNS.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o03_DiscretizerNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o04_SolverNS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_SolverNS.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o04_SolverNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o04_CGNS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CGNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_CGNS.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o04_CGNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o05_ProbeNS.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o05_ProbeNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/LDCSolver.dir/o09_MedicNS.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
-  "output": "CMakeFiles/LDCSolver.dir/o09_MedicNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o00_DHCSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_DHCSolver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o00_DHCSolver.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o00_DHCSolver.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o01_Material.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o02_MeshNS.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o03_DiscretizerNS.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_SolverNS.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CGNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_CGNS.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o05_ProbeNS.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_MedicNS.cpp",
-  "output": "CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_SCSolver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o00_SCSolver.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o01_Material.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshSC.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o02_MeshSC.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerSC.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o03_DiscretizerSC.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverSC.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_SolverSC.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o04_CGSC.cpp.o -c /home/upc_gcp/TFM/HMT/o04_CGSC.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o04_CGSC.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o04_CGSC.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.o -c /home/upc_gcp/TFM/HMT/o05_ProbeSC.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o05_ProbeSC.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_ExpressionParser.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -o CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o -c /home/upc_gcp/TFM/HMT/o09_MedicSC.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_MedicSC.cpp",
-  "output": "CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.o -c /home/upc_gcp/TFM/HMT/o00_3DSolver.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o00_3DSolver.cpp",
-  "output": "CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/3DSolver.dir/o01_Material.cpp.o -c /home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o01_Material.cpp",
-  "output": "CMakeFiles/3DSolver.dir/o01_Material.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/3DSolver.dir/o02_Mesh.cpp.o -c /home/upc_gcp/TFM/HMT/o02_Mesh.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o02_Mesh.cpp",
-  "output": "CMakeFiles/3DSolver.dir/o02_Mesh.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/3DSolver.dir/o06_Burgers.cpp.o -c /home/upc_gcp/TFM/HMT/o06_Burgers.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o06_Burgers.cpp",
-  "output": "CMakeFiles/3DSolver.dir/o06_Burgers.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/3DSolver.dir/o09_Parser.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Parser.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_Parser.cpp",
-  "output": "CMakeFiles/3DSolver.dir/o09_Parser.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/3DSolver.dir/o09_Debugger.cpp.o -c /home/upc_gcp/TFM/HMT/o09_Debugger.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o09_Debugger.cpp",
-  "output": "CMakeFiles/3DSolver.dir/o09_Debugger.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/ROCK.cpp.o -c /home/upc_gcp/TFM/HMT/ROCK.cpp",
   "file": "/home/upc_gcp/TFM/HMT/ROCK.cpp",
   "output": "CMakeFiles/ROCK.dir/ROCK.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o -c /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp",
-  "output": "CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o"
-},
-{
-  "directory": "/home/upc_gcp/TFM/HMT/build",
   "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o -c /home/upc_gcp/TFM/HMT/o00_FVMNS.cpp",
   "file": "/home/upc_gcp/TFM/HMT/o00_FVMNS.cpp",
   "output": "CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o -c /home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o00_FVMScalar.cpp",
+  "output": "CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
@@ -229,9 +31,27 @@
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",
-  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o02_Mesh.cpp.o -c /home/upc_gcp/TFM/HMT/o02_Mesh.cpp",
-  "file": "/home/upc_gcp/TFM/HMT/o02_Mesh.cpp",
-  "output": "CMakeFiles/ROCK.dir/o02_Mesh.cpp.o"
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshFVM.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o02_MeshFVM.cpp",
+  "output": "CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o02_MeshSpectral.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o02_MeshSpectral.cpp",
+  "output": "CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp",
+  "output": "CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o"
+},
+{
+  "directory": "/home/upc_gcp/TFM/HMT/build",
+  "command": "/usr/bin/c++  -I/home/upc_gcp/TFM/HMT -isystem /usr/include/jsoncpp -std=gnu++17 -O3 -march=native -fopenmp -o CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o -c /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp",
+  "file": "/home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp",
+  "output": "CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o"
 },
 {
   "directory": "/home/upc_gcp/TFM/HMT/build",

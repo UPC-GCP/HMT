@@ -4,7 +4,7 @@
 // Self-Imports
 #include "o01_Material.h"
 
-Material::Material(Json::Value materials, double gravity) {
+Material::Material(Json::Value materials, double gravity) { // FVM
     // List
     vMat.resize(materials.size());
 
@@ -19,6 +19,11 @@ Material::Material(Json::Value materials, double gravity) {
 
     // External Properties
     g = gravity;
+}
+
+Material::Material(double Reynolds) { // Spectral
+    // Properties
+    Re = Reynolds;
 }
 
 void Material::setInitialConditions(double initPhi, Json::Value initVF) { // PHISolver (Value)

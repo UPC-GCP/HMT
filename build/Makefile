@@ -117,58 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named LDCSolver
-
-# Build rule for target.
-LDCSolver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 LDCSolver
-.PHONY : LDCSolver
-
-# fast build rule for target.
-LDCSolver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/build
-.PHONY : LDCSolver/fast
-
-#=============================================================================
-# Target rules for targets named DHCSolver
-
-# Build rule for target.
-DHCSolver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 DHCSolver
-.PHONY : DHCSolver
-
-# fast build rule for target.
-DHCSolver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/build
-.PHONY : DHCSolver/fast
-
-#=============================================================================
-# Target rules for targets named SCSolver
-
-# Build rule for target.
-SCSolver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SCSolver
-.PHONY : SCSolver
-
-# fast build rule for target.
-SCSolver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/build
-.PHONY : SCSolver/fast
-
-#=============================================================================
-# Target rules for targets named 3DSolver
-
-# Build rule for target.
-3DSolver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 3DSolver
-.PHONY : 3DSolver
-
-# fast build rule for target.
-3DSolver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/build
-.PHONY : 3DSolver/fast
-
-#=============================================================================
 # Target rules for targets named ROCK
 
 # Build rule for target.
@@ -204,54 +152,6 @@ ROCK.s: ROCK.cpp.s
 ROCK.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/ROCK.cpp.s
 .PHONY : ROCK.cpp.s
-
-o00_3DSolver.o: o00_3DSolver.cpp.o
-.PHONY : o00_3DSolver.o
-
-# target to build an object file
-o00_3DSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.o
-.PHONY : o00_3DSolver.cpp.o
-
-o00_3DSolver.i: o00_3DSolver.cpp.i
-.PHONY : o00_3DSolver.i
-
-# target to preprocess a source file
-o00_3DSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.i
-.PHONY : o00_3DSolver.cpp.i
-
-o00_3DSolver.s: o00_3DSolver.cpp.s
-.PHONY : o00_3DSolver.s
-
-# target to generate assembly for a file
-o00_3DSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o00_3DSolver.cpp.s
-.PHONY : o00_3DSolver.cpp.s
-
-o00_DHCSolver.o: o00_DHCSolver.cpp.o
-.PHONY : o00_DHCSolver.o
-
-# target to build an object file
-o00_DHCSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o00_DHCSolver.cpp.o
-.PHONY : o00_DHCSolver.cpp.o
-
-o00_DHCSolver.i: o00_DHCSolver.cpp.i
-.PHONY : o00_DHCSolver.i
-
-# target to preprocess a source file
-o00_DHCSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o00_DHCSolver.cpp.i
-.PHONY : o00_DHCSolver.cpp.i
-
-o00_DHCSolver.s: o00_DHCSolver.cpp.s
-.PHONY : o00_DHCSolver.s
-
-# target to generate assembly for a file
-o00_DHCSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o00_DHCSolver.cpp.s
-.PHONY : o00_DHCSolver.cpp.s
 
 o00_FVMNS.o: o00_FVMNS.cpp.o
 .PHONY : o00_FVMNS.o
@@ -301,54 +201,6 @@ o00_FVMScalar.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o00_FVMScalar.cpp.s
 .PHONY : o00_FVMScalar.cpp.s
 
-o00_NSSolver.o: o00_NSSolver.cpp.o
-.PHONY : o00_NSSolver.o
-
-# target to build an object file
-o00_NSSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o00_NSSolver.cpp.o
-.PHONY : o00_NSSolver.cpp.o
-
-o00_NSSolver.i: o00_NSSolver.cpp.i
-.PHONY : o00_NSSolver.i
-
-# target to preprocess a source file
-o00_NSSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o00_NSSolver.cpp.i
-.PHONY : o00_NSSolver.cpp.i
-
-o00_NSSolver.s: o00_NSSolver.cpp.s
-.PHONY : o00_NSSolver.s
-
-# target to generate assembly for a file
-o00_NSSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o00_NSSolver.cpp.s
-.PHONY : o00_NSSolver.cpp.s
-
-o00_SCSolver.o: o00_SCSolver.cpp.o
-.PHONY : o00_SCSolver.o
-
-# target to build an object file
-o00_SCSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.o
-.PHONY : o00_SCSolver.cpp.o
-
-o00_SCSolver.i: o00_SCSolver.cpp.i
-.PHONY : o00_SCSolver.i
-
-# target to preprocess a source file
-o00_SCSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.i
-.PHONY : o00_SCSolver.cpp.i
-
-o00_SCSolver.s: o00_SCSolver.cpp.s
-.PHONY : o00_SCSolver.s
-
-# target to generate assembly for a file
-o00_SCSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o00_SCSolver.cpp.s
-.PHONY : o00_SCSolver.cpp.s
-
 o00_Spectral.o: o00_Spectral.cpp.o
 .PHONY : o00_Spectral.o
 
@@ -378,10 +230,6 @@ o01_Material.o: o01_Material.cpp.o
 
 # target to build an object file
 o01_Material.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o01_Material.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o01_Material.cpp.o
 .PHONY : o01_Material.cpp.o
 
@@ -390,10 +238,6 @@ o01_Material.i: o01_Material.cpp.i
 
 # target to preprocess a source file
 o01_Material.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o01_Material.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o01_Material.cpp.i
 .PHONY : o01_Material.cpp.i
 
@@ -402,325 +246,110 @@ o01_Material.s: o01_Material.cpp.s
 
 # target to generate assembly for a file
 o01_Material.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o01_Material.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o01_Material.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o01_Material.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o01_Material.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o01_Material.cpp.s
 .PHONY : o01_Material.cpp.s
 
-o02_Mesh.o: o02_Mesh.cpp.o
-.PHONY : o02_Mesh.o
+o02_MeshFVM.o: o02_MeshFVM.cpp.o
+.PHONY : o02_MeshFVM.o
 
 # target to build an object file
-o02_Mesh.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o02_Mesh.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_Mesh.cpp.o
-.PHONY : o02_Mesh.cpp.o
+o02_MeshFVM.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.o
+.PHONY : o02_MeshFVM.cpp.o
 
-o02_Mesh.i: o02_Mesh.cpp.i
-.PHONY : o02_Mesh.i
+o02_MeshFVM.i: o02_MeshFVM.cpp.i
+.PHONY : o02_MeshFVM.i
 
 # target to preprocess a source file
-o02_Mesh.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o02_Mesh.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_Mesh.cpp.i
-.PHONY : o02_Mesh.cpp.i
+o02_MeshFVM.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.i
+.PHONY : o02_MeshFVM.cpp.i
 
-o02_Mesh.s: o02_Mesh.cpp.s
-.PHONY : o02_Mesh.s
+o02_MeshFVM.s: o02_MeshFVM.cpp.s
+.PHONY : o02_MeshFVM.s
 
 # target to generate assembly for a file
-o02_Mesh.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o02_Mesh.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_Mesh.cpp.s
-.PHONY : o02_Mesh.cpp.s
+o02_MeshFVM.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_MeshFVM.cpp.s
+.PHONY : o02_MeshFVM.cpp.s
 
-o02_MeshNS.o: o02_MeshNS.cpp.o
-.PHONY : o02_MeshNS.o
+o02_MeshSpectral.o: o02_MeshSpectral.cpp.o
+.PHONY : o02_MeshSpectral.o
 
 # target to build an object file
-o02_MeshNS.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o02_MeshNS.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.o
-.PHONY : o02_MeshNS.cpp.o
+o02_MeshSpectral.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o
+.PHONY : o02_MeshSpectral.cpp.o
 
-o02_MeshNS.i: o02_MeshNS.cpp.i
-.PHONY : o02_MeshNS.i
+o02_MeshSpectral.i: o02_MeshSpectral.cpp.i
+.PHONY : o02_MeshSpectral.i
 
 # target to preprocess a source file
-o02_MeshNS.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o02_MeshNS.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.i
-.PHONY : o02_MeshNS.cpp.i
+o02_MeshSpectral.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.i
+.PHONY : o02_MeshSpectral.cpp.i
 
-o02_MeshNS.s: o02_MeshNS.cpp.s
-.PHONY : o02_MeshNS.s
+o02_MeshSpectral.s: o02_MeshSpectral.cpp.s
+.PHONY : o02_MeshSpectral.s
 
 # target to generate assembly for a file
-o02_MeshNS.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o02_MeshNS.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o02_MeshNS.cpp.s
-.PHONY : o02_MeshNS.cpp.s
+o02_MeshSpectral.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.s
+.PHONY : o02_MeshSpectral.cpp.s
 
-o02_MeshSC.o: o02_MeshSC.cpp.o
-.PHONY : o02_MeshSC.o
+o03_DiscretizerSpectral.o: o03_DiscretizerSpectral.cpp.o
+.PHONY : o03_DiscretizerSpectral.o
 
 # target to build an object file
-o02_MeshSC.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.o
-.PHONY : o02_MeshSC.cpp.o
+o03_DiscretizerSpectral.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o
+.PHONY : o03_DiscretizerSpectral.cpp.o
 
-o02_MeshSC.i: o02_MeshSC.cpp.i
-.PHONY : o02_MeshSC.i
+o03_DiscretizerSpectral.i: o03_DiscretizerSpectral.cpp.i
+.PHONY : o03_DiscretizerSpectral.i
 
 # target to preprocess a source file
-o02_MeshSC.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.i
-.PHONY : o02_MeshSC.cpp.i
+o03_DiscretizerSpectral.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.i
+.PHONY : o03_DiscretizerSpectral.cpp.i
 
-o02_MeshSC.s: o02_MeshSC.cpp.s
-.PHONY : o02_MeshSC.s
+o03_DiscretizerSpectral.s: o03_DiscretizerSpectral.cpp.s
+.PHONY : o03_DiscretizerSpectral.s
 
 # target to generate assembly for a file
-o02_MeshSC.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o02_MeshSC.cpp.s
-.PHONY : o02_MeshSC.cpp.s
+o03_DiscretizerSpectral.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.s
+.PHONY : o03_DiscretizerSpectral.cpp.s
 
-o03_DiscretizerNS.o: o03_DiscretizerNS.cpp.o
-.PHONY : o03_DiscretizerNS.o
+o04_SolverSpectral.o: o04_SolverSpectral.cpp.o
+.PHONY : o04_SolverSpectral.o
 
 # target to build an object file
-o03_DiscretizerNS.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o03_DiscretizerNS.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.o
-.PHONY : o03_DiscretizerNS.cpp.o
+o04_SolverSpectral.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o
+.PHONY : o04_SolverSpectral.cpp.o
 
-o03_DiscretizerNS.i: o03_DiscretizerNS.cpp.i
-.PHONY : o03_DiscretizerNS.i
-
-# target to preprocess a source file
-o03_DiscretizerNS.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o03_DiscretizerNS.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.i
-.PHONY : o03_DiscretizerNS.cpp.i
-
-o03_DiscretizerNS.s: o03_DiscretizerNS.cpp.s
-.PHONY : o03_DiscretizerNS.s
-
-# target to generate assembly for a file
-o03_DiscretizerNS.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o03_DiscretizerNS.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o03_DiscretizerNS.cpp.s
-.PHONY : o03_DiscretizerNS.cpp.s
-
-o03_DiscretizerSC.o: o03_DiscretizerSC.cpp.o
-.PHONY : o03_DiscretizerSC.o
-
-# target to build an object file
-o03_DiscretizerSC.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.o
-.PHONY : o03_DiscretizerSC.cpp.o
-
-o03_DiscretizerSC.i: o03_DiscretizerSC.cpp.i
-.PHONY : o03_DiscretizerSC.i
+o04_SolverSpectral.i: o04_SolverSpectral.cpp.i
+.PHONY : o04_SolverSpectral.i
 
 # target to preprocess a source file
-o03_DiscretizerSC.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.i
-.PHONY : o03_DiscretizerSC.cpp.i
+o04_SolverSpectral.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.i
+.PHONY : o04_SolverSpectral.cpp.i
 
-o03_DiscretizerSC.s: o03_DiscretizerSC.cpp.s
-.PHONY : o03_DiscretizerSC.s
-
-# target to generate assembly for a file
-o03_DiscretizerSC.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o03_DiscretizerSC.cpp.s
-.PHONY : o03_DiscretizerSC.cpp.s
-
-o04_CGNS.o: o04_CGNS.cpp.o
-.PHONY : o04_CGNS.o
-
-# target to build an object file
-o04_CGNS.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o04_CGNS.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.o
-.PHONY : o04_CGNS.cpp.o
-
-o04_CGNS.i: o04_CGNS.cpp.i
-.PHONY : o04_CGNS.i
-
-# target to preprocess a source file
-o04_CGNS.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o04_CGNS.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.i
-.PHONY : o04_CGNS.cpp.i
-
-o04_CGNS.s: o04_CGNS.cpp.s
-.PHONY : o04_CGNS.s
+o04_SolverSpectral.s: o04_SolverSpectral.cpp.s
+.PHONY : o04_SolverSpectral.s
 
 # target to generate assembly for a file
-o04_CGNS.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o04_CGNS.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_CGNS.cpp.s
-.PHONY : o04_CGNS.cpp.s
-
-o04_CGSC.o: o04_CGSC.cpp.o
-.PHONY : o04_CGSC.o
-
-# target to build an object file
-o04_CGSC.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_CGSC.cpp.o
-.PHONY : o04_CGSC.cpp.o
-
-o04_CGSC.i: o04_CGSC.cpp.i
-.PHONY : o04_CGSC.i
-
-# target to preprocess a source file
-o04_CGSC.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_CGSC.cpp.i
-.PHONY : o04_CGSC.cpp.i
-
-o04_CGSC.s: o04_CGSC.cpp.s
-.PHONY : o04_CGSC.s
-
-# target to generate assembly for a file
-o04_CGSC.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_CGSC.cpp.s
-.PHONY : o04_CGSC.cpp.s
-
-o04_SolverNS.o: o04_SolverNS.cpp.o
-.PHONY : o04_SolverNS.o
-
-# target to build an object file
-o04_SolverNS.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o04_SolverNS.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.o
-.PHONY : o04_SolverNS.cpp.o
-
-o04_SolverNS.i: o04_SolverNS.cpp.i
-.PHONY : o04_SolverNS.i
-
-# target to preprocess a source file
-o04_SolverNS.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o04_SolverNS.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.i
-.PHONY : o04_SolverNS.cpp.i
-
-o04_SolverNS.s: o04_SolverNS.cpp.s
-.PHONY : o04_SolverNS.s
-
-# target to generate assembly for a file
-o04_SolverNS.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o04_SolverNS.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o04_SolverNS.cpp.s
-.PHONY : o04_SolverNS.cpp.s
-
-o04_SolverSC.o: o04_SolverSC.cpp.o
-.PHONY : o04_SolverSC.o
-
-# target to build an object file
-o04_SolverSC.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.o
-.PHONY : o04_SolverSC.cpp.o
-
-o04_SolverSC.i: o04_SolverSC.cpp.i
-.PHONY : o04_SolverSC.i
-
-# target to preprocess a source file
-o04_SolverSC.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.i
-.PHONY : o04_SolverSC.cpp.i
-
-o04_SolverSC.s: o04_SolverSC.cpp.s
-.PHONY : o04_SolverSC.s
-
-# target to generate assembly for a file
-o04_SolverSC.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o04_SolverSC.cpp.s
-.PHONY : o04_SolverSC.cpp.s
-
-o05_ProbeNS.o: o05_ProbeNS.cpp.o
-.PHONY : o05_ProbeNS.o
-
-# target to build an object file
-o05_ProbeNS.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o05_ProbeNS.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.o
-.PHONY : o05_ProbeNS.cpp.o
-
-o05_ProbeNS.i: o05_ProbeNS.cpp.i
-.PHONY : o05_ProbeNS.i
-
-# target to preprocess a source file
-o05_ProbeNS.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o05_ProbeNS.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.i
-.PHONY : o05_ProbeNS.cpp.i
-
-o05_ProbeNS.s: o05_ProbeNS.cpp.s
-.PHONY : o05_ProbeNS.s
-
-# target to generate assembly for a file
-o05_ProbeNS.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o05_ProbeNS.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o05_ProbeNS.cpp.s
-.PHONY : o05_ProbeNS.cpp.s
-
-o05_ProbeSC.o: o05_ProbeSC.cpp.o
-.PHONY : o05_ProbeSC.o
-
-# target to build an object file
-o05_ProbeSC.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.o
-.PHONY : o05_ProbeSC.cpp.o
-
-o05_ProbeSC.i: o05_ProbeSC.cpp.i
-.PHONY : o05_ProbeSC.i
-
-# target to preprocess a source file
-o05_ProbeSC.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.i
-.PHONY : o05_ProbeSC.cpp.i
-
-o05_ProbeSC.s: o05_ProbeSC.cpp.s
-.PHONY : o05_ProbeSC.s
-
-# target to generate assembly for a file
-o05_ProbeSC.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o05_ProbeSC.cpp.s
-.PHONY : o05_ProbeSC.cpp.s
-
-o06_Burgers.o: o06_Burgers.cpp.o
-.PHONY : o06_Burgers.o
-
-# target to build an object file
-o06_Burgers.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o06_Burgers.cpp.o
-.PHONY : o06_Burgers.cpp.o
-
-o06_Burgers.i: o06_Burgers.cpp.i
-.PHONY : o06_Burgers.i
-
-# target to preprocess a source file
-o06_Burgers.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o06_Burgers.cpp.i
-.PHONY : o06_Burgers.cpp.i
-
-o06_Burgers.s: o06_Burgers.cpp.s
-.PHONY : o06_Burgers.s
-
-# target to generate assembly for a file
-o06_Burgers.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o06_Burgers.cpp.s
-.PHONY : o06_Burgers.cpp.s
+o04_SolverSpectral.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.s
+.PHONY : o04_SolverSpectral.cpp.s
 
 o09_Debugger.o: o09_Debugger.cpp.o
 .PHONY : o09_Debugger.o
 
 # target to build an object file
 o09_Debugger.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_Debugger.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o09_Debugger.cpp.o
 .PHONY : o09_Debugger.cpp.o
 
@@ -729,7 +358,6 @@ o09_Debugger.i: o09_Debugger.cpp.i
 
 # target to preprocess a source file
 o09_Debugger.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_Debugger.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o09_Debugger.cpp.i
 .PHONY : o09_Debugger.cpp.i
 
@@ -738,97 +366,14 @@ o09_Debugger.s: o09_Debugger.cpp.s
 
 # target to generate assembly for a file
 o09_Debugger.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_Debugger.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o09_Debugger.cpp.s
 .PHONY : o09_Debugger.cpp.s
-
-o09_ExpressionParser.o: o09_ExpressionParser.cpp.o
-.PHONY : o09_ExpressionParser.o
-
-# target to build an object file
-o09_ExpressionParser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.o
-.PHONY : o09_ExpressionParser.cpp.o
-
-o09_ExpressionParser.i: o09_ExpressionParser.cpp.i
-.PHONY : o09_ExpressionParser.i
-
-# target to preprocess a source file
-o09_ExpressionParser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.i
-.PHONY : o09_ExpressionParser.cpp.i
-
-o09_ExpressionParser.s: o09_ExpressionParser.cpp.s
-.PHONY : o09_ExpressionParser.s
-
-# target to generate assembly for a file
-o09_ExpressionParser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_ExpressionParser.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_ExpressionParser.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_ExpressionParser.cpp.s
-.PHONY : o09_ExpressionParser.cpp.s
-
-o09_MedicNS.o: o09_MedicNS.cpp.o
-.PHONY : o09_MedicNS.o
-
-# target to build an object file
-o09_MedicNS.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_MedicNS.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.o
-.PHONY : o09_MedicNS.cpp.o
-
-o09_MedicNS.i: o09_MedicNS.cpp.i
-.PHONY : o09_MedicNS.i
-
-# target to preprocess a source file
-o09_MedicNS.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_MedicNS.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.i
-.PHONY : o09_MedicNS.cpp.i
-
-o09_MedicNS.s: o09_MedicNS.cpp.s
-.PHONY : o09_MedicNS.s
-
-# target to generate assembly for a file
-o09_MedicNS.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/LDCSolver.dir/build.make CMakeFiles/LDCSolver.dir/o09_MedicNS.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/DHCSolver.dir/build.make CMakeFiles/DHCSolver.dir/o09_MedicNS.cpp.s
-.PHONY : o09_MedicNS.cpp.s
-
-o09_MedicSC.o: o09_MedicSC.cpp.o
-.PHONY : o09_MedicSC.o
-
-# target to build an object file
-o09_MedicSC.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.o
-.PHONY : o09_MedicSC.cpp.o
-
-o09_MedicSC.i: o09_MedicSC.cpp.i
-.PHONY : o09_MedicSC.i
-
-# target to preprocess a source file
-o09_MedicSC.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.i
-.PHONY : o09_MedicSC.cpp.i
-
-o09_MedicSC.s: o09_MedicSC.cpp.s
-.PHONY : o09_MedicSC.s
-
-# target to generate assembly for a file
-o09_MedicSC.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SCSolver.dir/build.make CMakeFiles/SCSolver.dir/o09_MedicSC.cpp.s
-.PHONY : o09_MedicSC.cpp.s
 
 o09_Parser.o: o09_Parser.cpp.o
 .PHONY : o09_Parser.o
 
 # target to build an object file
 o09_Parser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_Parser.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o09_Parser.cpp.o
 .PHONY : o09_Parser.cpp.o
 
@@ -837,7 +382,6 @@ o09_Parser.i: o09_Parser.cpp.i
 
 # target to preprocess a source file
 o09_Parser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_Parser.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o09_Parser.cpp.i
 .PHONY : o09_Parser.cpp.i
 
@@ -846,7 +390,6 @@ o09_Parser.s: o09_Parser.cpp.s
 
 # target to generate assembly for a file
 o09_Parser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/3DSolver.dir/build.make CMakeFiles/3DSolver.dir/o09_Parser.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o09_Parser.cpp.s
 .PHONY : o09_Parser.cpp.s
 
@@ -858,86 +401,37 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... 3DSolver"
-	@echo "... DHCSolver"
-	@echo "... LDCSolver"
 	@echo "... ROCK"
-	@echo "... SCSolver"
 	@echo "... ROCK.o"
 	@echo "... ROCK.i"
 	@echo "... ROCK.s"
-	@echo "... o00_3DSolver.o"
-	@echo "... o00_3DSolver.i"
-	@echo "... o00_3DSolver.s"
-	@echo "... o00_DHCSolver.o"
-	@echo "... o00_DHCSolver.i"
-	@echo "... o00_DHCSolver.s"
 	@echo "... o00_FVMNS.o"
 	@echo "... o00_FVMNS.i"
 	@echo "... o00_FVMNS.s"
 	@echo "... o00_FVMScalar.o"
 	@echo "... o00_FVMScalar.i"
 	@echo "... o00_FVMScalar.s"
-	@echo "... o00_NSSolver.o"
-	@echo "... o00_NSSolver.i"
-	@echo "... o00_NSSolver.s"
-	@echo "... o00_SCSolver.o"
-	@echo "... o00_SCSolver.i"
-	@echo "... o00_SCSolver.s"
 	@echo "... o00_Spectral.o"
 	@echo "... o00_Spectral.i"
 	@echo "... o00_Spectral.s"
 	@echo "... o01_Material.o"
 	@echo "... o01_Material.i"
 	@echo "... o01_Material.s"
-	@echo "... o02_Mesh.o"
-	@echo "... o02_Mesh.i"
-	@echo "... o02_Mesh.s"
-	@echo "... o02_MeshNS.o"
-	@echo "... o02_MeshNS.i"
-	@echo "... o02_MeshNS.s"
-	@echo "... o02_MeshSC.o"
-	@echo "... o02_MeshSC.i"
-	@echo "... o02_MeshSC.s"
-	@echo "... o03_DiscretizerNS.o"
-	@echo "... o03_DiscretizerNS.i"
-	@echo "... o03_DiscretizerNS.s"
-	@echo "... o03_DiscretizerSC.o"
-	@echo "... o03_DiscretizerSC.i"
-	@echo "... o03_DiscretizerSC.s"
-	@echo "... o04_CGNS.o"
-	@echo "... o04_CGNS.i"
-	@echo "... o04_CGNS.s"
-	@echo "... o04_CGSC.o"
-	@echo "... o04_CGSC.i"
-	@echo "... o04_CGSC.s"
-	@echo "... o04_SolverNS.o"
-	@echo "... o04_SolverNS.i"
-	@echo "... o04_SolverNS.s"
-	@echo "... o04_SolverSC.o"
-	@echo "... o04_SolverSC.i"
-	@echo "... o04_SolverSC.s"
-	@echo "... o05_ProbeNS.o"
-	@echo "... o05_ProbeNS.i"
-	@echo "... o05_ProbeNS.s"
-	@echo "... o05_ProbeSC.o"
-	@echo "... o05_ProbeSC.i"
-	@echo "... o05_ProbeSC.s"
-	@echo "... o06_Burgers.o"
-	@echo "... o06_Burgers.i"
-	@echo "... o06_Burgers.s"
+	@echo "... o02_MeshFVM.o"
+	@echo "... o02_MeshFVM.i"
+	@echo "... o02_MeshFVM.s"
+	@echo "... o02_MeshSpectral.o"
+	@echo "... o02_MeshSpectral.i"
+	@echo "... o02_MeshSpectral.s"
+	@echo "... o03_DiscretizerSpectral.o"
+	@echo "... o03_DiscretizerSpectral.i"
+	@echo "... o03_DiscretizerSpectral.s"
+	@echo "... o04_SolverSpectral.o"
+	@echo "... o04_SolverSpectral.i"
+	@echo "... o04_SolverSpectral.s"
 	@echo "... o09_Debugger.o"
 	@echo "... o09_Debugger.i"
 	@echo "... o09_Debugger.s"
-	@echo "... o09_ExpressionParser.o"
-	@echo "... o09_ExpressionParser.i"
-	@echo "... o09_ExpressionParser.s"
-	@echo "... o09_MedicNS.o"
-	@echo "... o09_MedicNS.i"
-	@echo "... o09_MedicNS.s"
-	@echo "... o09_MedicSC.o"
-	@echo "... o09_MedicSC.i"
-	@echo "... o09_MedicSC.s"
 	@echo "... o09_Parser.o"
 	@echo "... o09_Parser.i"
 	@echo "... o09_Parser.s"
