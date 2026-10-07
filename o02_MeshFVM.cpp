@@ -1,7 +1,8 @@
-// Self-Imports
-#include "o02_MeshFVM.h"
+// Imports
 #include <cstddef>
 
+// Self-Imports
+#include "o02_MeshFVM.h"
 
 template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles) {
 

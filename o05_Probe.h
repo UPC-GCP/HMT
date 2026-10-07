@@ -34,6 +34,7 @@ public:
     // Variables
     size_t iProbes{};
     std::string pathBase{}, dirName{}, uName{};
+    std::filesystem::path fPath;
 
     // Constructor
     Probe(const Json::Value& probes, std::string fName);
@@ -64,9 +65,18 @@ inline std::ofstream createFile(std::filesystem::path fName){
 
 // Constuctor
 template <size_t Dim> Probe<Dim>::Probe(const Json::Value& probes, std::string fName) {
+
+    // PENDING -- TEST IF fPath WORKS AS INTENDED
+    // A LOT OF DEBUGGING NEEDED BEFORE I CAN COMPILE AGAIN
+    
     // Create Folder
-    std::filesystem::path newPath(fName);
-    pathBase = createFolder(newPath.filename().string(), dirName);
+    std::filesystem::path newPath(fName); // Old
+
+    fPath = fName; std::cout << fPath.filename().string() << "\n";
+
+    pathBase = createFolder(newPath.filename().string(), dirName); // Old
+
+    fPath = pathBase; std::cout << fPath.filename().string() << "\n";
 }
 
 // Destructor -- PENDING

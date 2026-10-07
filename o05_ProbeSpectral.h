@@ -12,7 +12,7 @@ private:
 
 public:
     // Variables
-    probeRange<1> pModal{};
+    std::vector<probeRange<1>> pModal{};
 
     // Constructor
     ProbeSpectral(const Json::Value& probes, std::string fName);

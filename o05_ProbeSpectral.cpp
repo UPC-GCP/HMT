@@ -1,11 +1,13 @@
+// Imports
+#include <string>
+
 // Self-Imports
 #include "o05_ProbeSpectral.h"
 #include "o05_Probe.h"
-#include <string>
 
 ProbeSpectral::~ProbeSpectral() {
     // pModal
-
+    if (!pModal.empty()) { for (size_t k = 0; k < pModal.size(); k++) { pModal.file.close(); } }
 }
 
 ProbeSpectral::ProbeSpectral(const Json::Value& probes, std::string fName) : Probe(probes, fName) {
@@ -26,7 +28,19 @@ ProbeSpectral::ProbeSpectral(const Json::Value& probes, std::string fName) : Pro
             // newPath not recognized, need to keep it as a class variable and check how to initialize it
 
             // Time
-            pTemp.t = {probes[k]["t"][0].asDouble(), probes[k]["t"][1].asDouble()};
+            pTemp.t = { probes[k]["t"][0].asDouble(), probes[k]["t"][1].asDouble() };
+	    if (!probes[i]["nWrite"].isNull()) { pTemp.nWrite = probes[i]["nWrite"].asInt;
+
+            // Position
+            pTemp.i0 = { probes[i]["x0"][0].asInt() };
+            pTemp.i1 = { probes[i]["x1"][0].asInt() };
+
+            // Header
+            for (size_t i = pTemp.i0[0]; i = pTemp.i1[1]; i++) {
+                // This will use the lambda and runLoopMesh to define the haeders of the file
+                //
+                runLoopMesh(
+            }
 
 
             /* ///// Energy  ///// */

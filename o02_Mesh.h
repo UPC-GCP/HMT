@@ -1,8 +1,6 @@
 #ifndef MESHDEV_H_
 #define MESHDEV_H_
 
-// When the Great Cleanup™ arrives this will change to MESH_H_
-
 // Imports
 #include <cstddef>
 #include <optional>
@@ -24,15 +22,13 @@ template <size_t Dim> class Mesh {
 private:
 
 public:
-    // Variables
-    double epsFind=1e-8; // Config -- Maybe this should just go as a global variable outside the code
+
 };
 
 // Functions
 inline size_t calcIndex(size_t iX, size_t iY=0, size_t Ny=1, size_t iZ=0, size_t Nx=1) { return static_cast<size_t>(iY + Ny * (iX + Nx * iZ)); };
 
 template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N, Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt) {
-     
     // Control
     if (!i0) { for (size_t i = 0; i < Dim; i++) { (*i0)[i] = 0; (*i1)[i] = N[i]; } }
     size_t nLoop=1; for (size_t i = 0; i < Dim; i++) { nLoop *= ((*i1)[i] - (*i0)[i]); }
@@ -60,6 +56,6 @@ template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N,
             }
         }
     }
-
 }
+
 #endif
