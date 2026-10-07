@@ -1,6 +1,6 @@
 // Imports
 #include <complex.h>
-#include <iostream> // Just to debug constructor rn
+/* #include <iostream> // Just to debug constructor rn */
 
 // Self-Imports
 #include "o04_SolverSpectral.h"
@@ -8,12 +8,11 @@
 
 SolverSpectral::SolverSpectral(std::string solverSelection, double tolNumeric, double maxIterations) {
     // Data
-    tolNum = tolNumeric; maxIter = maxIterations; std::cout << "Test empty: " << maxIterations << " " << maxIter << "\n";
+    tolNum = tolNumeric; maxIter = maxIterations;
 
     // Solver Selection
     if (solverSelection == "RK4") { algorithm = solSpectral::RK4; }   
     else if (solverSelection == "LES") { algorithm = solSpectral::LES; }
-    else throw std::logic_error("Unknown numerical solver: " + solverSelection);
 }
 
 bool SolverSpectral::solveRK4(std::vector<std::complex<double>>& u, double Re, double t, double dt) {

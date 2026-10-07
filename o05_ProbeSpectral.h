@@ -22,5 +22,4 @@ public:
     ~ProbeSpectral();
 };
 
-
 #endif

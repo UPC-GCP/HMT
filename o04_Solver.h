@@ -18,15 +18,12 @@ public:
 };
 
 // Functions
-
 inline double calcErr(std::vector<double> matA, std::vector<double> matB) {
     // Control
     double rsNew{}, errVal{};
 
     // Error
-    for (size_t k = 0; k < matA.size(); k++) {
-        errVal = abs(matA[k] - matB[k]); rsNew += errVal * errVal;
-    }
+    for (size_t k = 0; k < matA.size(); k++) { errVal = abs(matA[k] - matB[k]); rsNew += errVal * errVal; }
 
     return std::sqrt(rsNew);
 }
