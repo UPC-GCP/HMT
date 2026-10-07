@@ -19,8 +19,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o.d"
   "CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.o"
   "CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.o.d"
-  "CMakeFiles/ROCK.dir/o09_Debugger.cpp.o"
-  "CMakeFiles/ROCK.dir/o09_Debugger.cpp.o.d"
   "CMakeFiles/ROCK.dir/o09_Parser.cpp.o"
   "CMakeFiles/ROCK.dir/o09_Parser.cpp.o.d"
   "ROCK"

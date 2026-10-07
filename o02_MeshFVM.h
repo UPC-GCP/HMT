@@ -24,7 +24,6 @@ template <size_t Dim> struct Obstacle {
 };
 
 template <size_t Dim> struct MeshBase : MeshSimplified<Dim> {
-    std::array<size_t, Dim> N{}; // Nodes -> [nAxis]
     std::array<std::vector<double>, Dim> Faces{}, Nodes{}, deltaX{}, dX{}; // Coordinates, distances -> [nAxis][index]
     std::vector<Matrix<Dim>> matA{}; std::vector<double> matB{}, oR{}; // Ax = b -> [l] -> l = i + Nx * (j + Ny * k)
     std::array<std::vector<double>, Dim> S{}; // Surfaces -> [nAxis][l]

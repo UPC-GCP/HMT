@@ -5,6 +5,7 @@
 
 // Self-Imports
 #include "o05_Probe.h"
+#include "o02_MeshSpectral.h"
 
 // Class
 class ProbeSpectral : Probe<1> {
@@ -15,7 +16,7 @@ public:
     std::vector<probeRange<1>> pModal{};
 
     // Constructor
-    ProbeSpectral(const Json::Value& probes, std::string fName);
+    ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes, std::string fName);
 
     // Destructor
     ~ProbeSpectral();

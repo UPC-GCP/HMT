@@ -14,7 +14,7 @@ namespace COMP { // Compass
 
 // Types
 template <size_t Dim> struct MeshSimplified {
-    size_t totNodes=1;
+    size_t totNodes=1; std::array<size_t, Dim> N{}; // Nodes -> [nAxis]
 };
 
 // Class

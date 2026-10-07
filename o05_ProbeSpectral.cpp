@@ -1,26 +1,23 @@
 // Imports
 #include <string>
+#include <cstddef>
 
 // Self-Imports
+#include "o02_Mesh.h"
 #include "o05_ProbeSpectral.h"
-#include "o05_Probe.h"
 
 ProbeSpectral::~ProbeSpectral() {
     // pModal
-    if (!pModal.empty()) { for (size_t k = 0; k < pModal.size(); k++) { pModal.file.close(); } }
+    if (!pModal.empty()) { for (size_t k = 0; k < pModal.size(); k++) { pModal[k].file.close(); } }
 }
 
-ProbeSpectral::ProbeSpectral(const Json::Value& probes, std::string fName) : Probe(probes, fName) {
+ProbeSpectral::ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes, std::string fName) : Probe(probes, fName) {
     // Control
     std::string tempString{}; probeRange<1> pTemp{};
     
     // Add Probes
     for (Json::Value::ArrayIndex k = 0; k < probes.size(); k++) {
-        
-        // Also test what happens when nWrite is empty/null
-
-        if (probes[k]["type"].asString() == "Modal") {
-
+        if (probes[k]["type"].asString() == "Modal") { // Modal
             // Create File
             tempString = "Probe_" + std::to_string(iProbes + 1) + "_Modal.csv";
             /* pTemp.file = createFile(newPath / tempString); */
@@ -29,73 +26,21 @@ ProbeSpectral::ProbeSpectral(const Json::Value& probes, std::string fName) : Pro
 
             // Time
             pTemp.t = { probes[k]["t"][0].asDouble(), probes[k]["t"][1].asDouble() };
-	    if (!probes[i]["nWrite"].isNull()) { pTemp.nWrite = probes[i]["nWrite"].asInt;
+	        if (!probes[k]["nWrite"].isNull()) { pTemp.nWrite = probes[k]["nWrite"].asInt(); }
 
             // Position
-            pTemp.i0 = { probes[i]["x0"][0].asInt() };
-            pTemp.i1 = { probes[i]["x1"][0].asInt() };
+            pTemp.i0 = { static_cast<size_t>(probes[k]["x0"][0].asInt()) };
+            pTemp.i1 = { static_cast<size_t>(probes[k]["x1"][0].asInt()) };
 
             // Header
-            for (size_t i = pTemp.i0[0]; i = pTemp.i1[1]; i++) {
-                // This will use the lambda and runLoopMesh to define the haeders of the file
-                //
-                runLoopMesh(
-            }
+            runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                    pTemp.file << "," << iX[0];
+                    }, pTemp.i0, pTemp.i1); pTemp.file << "\n";
 
-
-            /* ///// Energy  ///// */
-            /* if (!Msh.T.Phi.empty()){ */
-            /*     // Create File */
-            /*     tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv"; */
-            /*     tempMap.file = createFile(newPath / tempString); */
-
-            /*     // Time */
-            /*     tempMap.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()}; */
-            /*     tempMap.nWrite = probes[i]["nWrite"].isNull() ? 1 : probes[i]["nWrite"].asInt(); */
-
-            /*     // Position */
-            /*     tempMap.xPos = {static_cast<size_t>(std::lower_bound(Msh.T.Nodes[0].begin(), Msh.T.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.T.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.T.Nodes[0].begin(), Msh.T.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.T.Nodes[0].begin())}; */
-            /*     tempMap.yPos = {static_cast<size_t>(std::lower_bound(Msh.T.Nodes[1].begin(), Msh.T.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.T.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.T.Nodes[1].begin(), Msh.T.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.T.Nodes[1].begin())}; */
-
-            /*     // Header */
-            /*     for (int j = tempMap.xPos[0]; j < tempMap.xPos[1]; j++){ */
-            /*         for (int k = tempMap.yPos[0]; k < tempMap.yPos[1]; k++){ */
-            /*             tempMap.file << "," << Msh.T.Nodes[0][j] << " " << Msh.T.Nodes[1][k]; */
-            /*         } */
-            /*     } tempMap.file << "\n"; */
-
-            /*     // Control */
-            /*     probeMap.push_back(std::move(tempMap)); */
-            /*     tempMap = {}; */
-            /* } */
-
-            /* ///// Pressure ///// */
-            /* // Create File */
-            /* tempString = "Probe_" + std::to_string(probeMap.size() + 1) + "_Map.csv"; */
-            /* tempMap.file = createFile(newPath / tempString); */
-
-            /* // Time */
-            /* tempMap.t = {probes[i]["t"][0].asDouble(), probes[i]["t"][1].asDouble()}; */
-            /* tempMap.nWrite = probes[i]["nWrite"].isNull() ? 1 : probes[i]["nWrite"].asInt(); */
-
-            /* // Position */
-            /* tempMap.xPos = {static_cast<size_t>(std::lower_bound(Msh.p.Nodes[0].begin(), Msh.p.Nodes[0].end(), probes[i]["x0"][0].asDouble()) - Msh.p.Nodes[0].begin()), static_cast<size_t>(std::lower_bound(Msh.p.Nodes[0].begin(), Msh.p.Nodes[0].end(), probes[i]["x1"][0].asDouble()) - Msh.p.Nodes[0].begin())}; */
-            /* tempMap.yPos = {static_cast<size_t>(std::lower_bound(Msh.p.Nodes[1].begin(), Msh.p.Nodes[1].end(), probes[i]["x0"][1].asDouble()) - Msh.p.Nodes[1].begin()), static_cast<size_t>(std::lower_bound(Msh.p.Nodes[1].begin(), Msh.p.Nodes[1].end(), probes[i]["x1"][1].asDouble()) - Msh.p.Nodes[1].begin())}; */
-            
-            /* // Header */
-            /* for (int j = tempMap.xPos[0]; j < tempMap.xPos[1]; j++){ */
-            /*     for (int k = tempMap.yPos[0]; k < tempMap.yPos[1]; k++){ */
-            /*         tempMap.file << "," << Msh.p.Nodes[0][j] << " " << Msh.p.Nodes[1][k]; */
-            /*     } */
-            /* } tempMap.file << "\n"; */
-
-            /* // Control */
-            /* probeMap.push_back(std::move(tempMap)); */
-            /* tempMap = {}; */
-
+            // Control
+            pModal.push_back(std::move(pTemp));
+            pTemp = {};
         }
-
     }
-
-
+        // Also test what happens when nWrite is empty/null
 }

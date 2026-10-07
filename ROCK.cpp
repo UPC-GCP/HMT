@@ -35,9 +35,9 @@ enumSolver getSolverType(const std::string& configSolver) {
 }
 
 ///// Forward Declaration /////
-void runFVMScalar(const Json::Value& data);
-void runFVMNS(const Json::Value& data);
-void runSpectral(const Json::Value& data);
+void runFVMScalar(const Json::Value& data, std::string configName);
+void runFVMNS(const Json::Value& data, std::string configName);
+void runSpectral(const Json::Value& data, std::string configName);
 
 ////////// MAIN //////////
 int main(int argc, char* argv[]){ // ROCK: Research Oriented Computational Kernel
@@ -53,9 +53,9 @@ int main(int argc, char* argv[]){ // ROCK: Research Oriented Computational Kerne
         ///// SOLVER SELECTION /////
         enumSolver configSolver = getSolverType(data["configSolver"].asString());
         switch (configSolver) {
-            case enumSolver::FVMScalar: runFVMScalar(data); break;
-            case enumSolver::FVMNS: runFVMNS(data); break;
-            case enumSolver::Spectral: runSpectral(data); break;
+            case enumSolver::FVMScalar: runFVMScalar(data, argv[1]); break;
+            case enumSolver::FVMNS: runFVMNS(data, argv[1]); break;
+            case enumSolver::Spectral: runSpectral(data, argv[1]); break;
         }
     } catch (const std::exception& e) {std::cerr << "Program shutdown...\n"; return EXIT_FAILURE;}
 

@@ -11,12 +11,12 @@
 #include "o02_MeshSpectral.h"
 #include "o03_DiscretizerSpectral.h"
 #include "o04_SolverSpectral.h"
-/* #include "o05_ProbeSpectral.h" */
+#include "o05_ProbeSpectral.h"
 /* #include "o06_MedicSpectral.h" */
 /* #include "o09_Debugger.h" */
 
 namespace {
-    void runSolverLoop(const Json::Value& data) {
+    void runSolverLoop(const Json::Value& data, std::string configName) {
 
         ///// Material /////
         Material Mat(data["Re"].asDouble());
@@ -30,7 +30,7 @@ namespace {
 
         ///// Discretizer /////
         std::cout << "Initializing discretizer ...\n";
-        DiscretizerSpectral Dsc; Dsc.initializeBurgers(Burg);
+        DiscretizerSpectral Dsc; Dsc.initializeBurgers(Burg); std::cout << "Model initialized.\n";
 
         ///// Solver /////
         std::cout << "Initializing solver ...\n";
@@ -38,7 +38,11 @@ namespace {
 
         ///// Probe /////
         std::cout << "Initializing probe ...\n";
-        // Create Probe and then store data for t = 0
+        ProbeSpectral Prb(Burg, data["probes"], configName); std::cout << "Files configured.\n";
+
+        return;
+
+        // Add checkProbe() and store t = 0
         /* probeStoreData(Msh.uHat, Msh.E); */
 
         ///// Temporal Loop /////
@@ -77,9 +81,7 @@ namespace {
 
 }
 
-void runSpectral(const Json::Value& data) {
-
+void runSpectral(const Json::Value& data, std::string configName) {
     ///// Simulation /////
-    runSolverLoop(data);
-
+    runSolverLoop(data, configName);
 }

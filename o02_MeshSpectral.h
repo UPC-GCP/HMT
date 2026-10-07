@@ -19,7 +19,7 @@ private:
     
 public:
     // Headers
-    void generateMeshBurgers(MeshBurgers Msh, size_t N);
+    void generateMeshBurgers(MeshBurgers& Msh, size_t N);
 };
 
 #endif

@@ -277,7 +277,6 @@ CMakeFiles/ROCK.dir/o00_FVMNS.cpp.o: /home/upc_gcp/TFM/HMT/o00_FVMNS.cpp \
   /home/upc_gcp/TFM/HMT/o01_Material.h \
   /home/upc_gcp/TFM/HMT/o02_Mesh.h \
   /home/upc_gcp/TFM/HMT/o02_MeshFVM.h \
-  /home/upc_gcp/TFM/HMT/o09_Debugger.h \
   /home/upc_gcp/TFM/HMT/o09_Parser.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
@@ -924,6 +923,8 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.h \
   /home/upc_gcp/TFM/HMT/o04_Solver.h \
   /home/upc_gcp/TFM/HMT/o04_SolverSpectral.h \
+  /home/upc_gcp/TFM/HMT/o05_Probe.h \
+  /home/upc_gcp/TFM/HMT/o05_ProbeSpectral.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -943,6 +944,8 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/bits/basic_string.tcc \
   /usr/include/c++/13/bits/char_traits.h \
   /usr/include/c++/13/bits/charconv.h \
+  /usr/include/c++/13/bits/chrono.h \
+  /usr/include/c++/13/bits/codecvt.h \
   /usr/include/c++/13/bits/concept_check.h \
   /usr/include/c++/13/bits/cpp_type_traits.h \
   /usr/include/c++/13/bits/cxxabi_forced.h \
@@ -953,6 +956,11 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/bits/exception.h \
   /usr/include/c++/13/bits/exception_defines.h \
   /usr/include/c++/13/bits/exception_ptr.h \
+  /usr/include/c++/13/bits/fs_dir.h \
+  /usr/include/c++/13/bits/fs_fwd.h \
+  /usr/include/c++/13/bits/fs_ops.h \
+  /usr/include/c++/13/bits/fs_path.h \
+  /usr/include/c++/13/bits/fstream.tcc \
   /usr/include/c++/13/bits/functexcept.h \
   /usr/include/c++/13/bits/functional_hash.h \
   /usr/include/c++/13/bits/hash_bytes.h \
@@ -961,8 +969,11 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/bits/istream.tcc \
   /usr/include/c++/13/bits/locale_classes.h \
   /usr/include/c++/13/bits/locale_classes.tcc \
+  /usr/include/c++/13/bits/locale_conv.h \
   /usr/include/c++/13/bits/locale_facets.h \
   /usr/include/c++/13/bits/locale_facets.tcc \
+  /usr/include/c++/13/bits/locale_facets_nonio.h \
+  /usr/include/c++/13/bits/locale_facets_nonio.tcc \
   /usr/include/c++/13/bits/localefwd.h \
   /usr/include/c++/13/bits/memory_resource.h \
   /usr/include/c++/13/bits/memoryfwd.h \
@@ -972,9 +983,11 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/bits/node_handle.h \
   /usr/include/c++/13/bits/ostream.tcc \
   /usr/include/c++/13/bits/ostream_insert.h \
+  /usr/include/c++/13/bits/parse_numbers.h \
   /usr/include/c++/13/bits/postypes.h \
   /usr/include/c++/13/bits/predefined_ops.h \
   /usr/include/c++/13/bits/ptr_traits.h \
+  /usr/include/c++/13/bits/quoted_string.h \
   /usr/include/c++/13/bits/range_access.h \
   /usr/include/c++/13/bits/refwrap.h \
   /usr/include/c++/13/bits/requires_hosted.h \
@@ -1015,6 +1028,7 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/cerrno \
   /usr/include/c++/13/clocale \
   /usr/include/c++/13/cmath \
+  /usr/include/c++/13/codecvt \
   /usr/include/c++/13/compare \
   /usr/include/c++/13/complex \
   /usr/include/c++/13/complex.h \
@@ -1023,6 +1037,7 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
   /usr/include/c++/13/cstring \
+  /usr/include/c++/13/ctime \
   /usr/include/c++/13/cwchar \
   /usr/include/c++/13/cwctype \
   /usr/include/c++/13/debug/assertions.h \
@@ -1036,12 +1051,16 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/ext/numeric_traits.h \
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
+  /usr/include/c++/13/filesystem \
+  /usr/include/c++/13/fstream \
   /usr/include/c++/13/initializer_list \
+  /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
   /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/limits \
+  /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
   /usr/include/c++/13/math.h \
   /usr/include/c++/13/memory \
@@ -1051,6 +1070,7 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/pstl/execution_defs.h \
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/pstl_config.h \
+  /usr/include/c++/13/ratio \
   /usr/include/c++/13/sstream \
   /usr/include/c++/13/stack \
   /usr/include/c++/13/stdexcept \
@@ -1089,6 +1109,7 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/jsoncpp/json/value.h \
   /usr/include/jsoncpp/json/version.h \
   /usr/include/jsoncpp/json/writer.h \
+  /usr/include/libintl.h \
   /usr/include/linux/errno.h \
   /usr/include/locale.h \
   /usr/include/math.h \
@@ -1188,8 +1209,10 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h \
@@ -1197,7 +1220,9 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/x86_64-linux-gnu/c++/13/bits/error_constants.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/messages_members.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/time_members.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -2644,22 +2669,18 @@ CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o04_SolverSp
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h
 
-CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
-  /home/upc_gcp/TFM/HMT/exprtk.hpp \
-  /home/upc_gcp/TFM/HMT/o01_Material.h \
+CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o05_ProbeSpectral.cpp \
   /home/upc_gcp/TFM/HMT/o02_Mesh.h \
-  /home/upc_gcp/TFM/HMT/o09_Debugger.h \
-  /home/upc_gcp/TFM/HMT/o09_Parser.h \
+  /home/upc_gcp/TFM/HMT/o02_MeshSpectral.h \
+  /home/upc_gcp/TFM/HMT/o05_Probe.h \
+  /home/upc_gcp/TFM/HMT/o05_ProbeSpectral.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
-  /usr/include/assert.h \
-  /usr/include/c++/13/algorithm \
   /usr/include/c++/13/array \
   /usr/include/c++/13/backward/auto_ptr.h \
   /usr/include/c++/13/backward/binders.h \
   /usr/include/c++/13/bit \
-  /usr/include/c++/13/bits/algorithmfwd.h \
   /usr/include/c++/13/bits/align.h \
   /usr/include/c++/13/bits/alloc_traits.h \
   /usr/include/c++/13/bits/allocated_ptr.h \
@@ -2672,6 +2693,7 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/c++/13/bits/basic_string.tcc \
   /usr/include/c++/13/bits/char_traits.h \
   /usr/include/c++/13/bits/charconv.h \
+  /usr/include/c++/13/bits/chrono.h \
   /usr/include/c++/13/bits/codecvt.h \
   /usr/include/c++/13/bits/concept_check.h \
   /usr/include/c++/13/bits/cpp_type_traits.h \
@@ -2683,20 +2705,24 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/c++/13/bits/exception.h \
   /usr/include/c++/13/bits/exception_defines.h \
   /usr/include/c++/13/bits/exception_ptr.h \
+  /usr/include/c++/13/bits/fs_dir.h \
+  /usr/include/c++/13/bits/fs_fwd.h \
+  /usr/include/c++/13/bits/fs_ops.h \
+  /usr/include/c++/13/bits/fs_path.h \
   /usr/include/c++/13/bits/fstream.tcc \
   /usr/include/c++/13/bits/functexcept.h \
   /usr/include/c++/13/bits/functional_hash.h \
   /usr/include/c++/13/bits/hash_bytes.h \
-  /usr/include/c++/13/bits/hashtable.h \
-  /usr/include/c++/13/bits/hashtable_policy.h \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
   /usr/include/c++/13/bits/istream.tcc \
-  /usr/include/c++/13/bits/list.tcc \
   /usr/include/c++/13/bits/locale_classes.h \
   /usr/include/c++/13/bits/locale_classes.tcc \
+  /usr/include/c++/13/bits/locale_conv.h \
   /usr/include/c++/13/bits/locale_facets.h \
   /usr/include/c++/13/bits/locale_facets.tcc \
+  /usr/include/c++/13/bits/locale_facets_nonio.h \
+  /usr/include/c++/13/bits/locale_facets_nonio.tcc \
   /usr/include/c++/13/bits/localefwd.h \
   /usr/include/c++/13/bits/memory_resource.h \
   /usr/include/c++/13/bits/memoryfwd.h \
@@ -2706,9 +2732,11 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/c++/13/bits/node_handle.h \
   /usr/include/c++/13/bits/ostream.tcc \
   /usr/include/c++/13/bits/ostream_insert.h \
+  /usr/include/c++/13/bits/parse_numbers.h \
   /usr/include/c++/13/bits/postypes.h \
   /usr/include/c++/13/bits/predefined_ops.h \
   /usr/include/c++/13/bits/ptr_traits.h \
+  /usr/include/c++/13/bits/quoted_string.h \
   /usr/include/c++/13/bits/range_access.h \
   /usr/include/c++/13/bits/refwrap.h \
   /usr/include/c++/13/bits/requires_hosted.h \
@@ -2718,48 +2746,38 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/c++/13/bits/specfun.h \
   /usr/include/c++/13/bits/sstream.tcc \
   /usr/include/c++/13/bits/std_abs.h \
-  /usr/include/c++/13/bits/std_function.h \
-  /usr/include/c++/13/bits/stl_algo.h \
   /usr/include/c++/13/bits/stl_algobase.h \
   /usr/include/c++/13/bits/stl_bvector.h \
   /usr/include/c++/13/bits/stl_construct.h \
   /usr/include/c++/13/bits/stl_deque.h \
   /usr/include/c++/13/bits/stl_function.h \
-  /usr/include/c++/13/bits/stl_heap.h \
   /usr/include/c++/13/bits/stl_iterator.h \
   /usr/include/c++/13/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/13/bits/stl_iterator_base_types.h \
-  /usr/include/c++/13/bits/stl_list.h \
   /usr/include/c++/13/bits/stl_map.h \
   /usr/include/c++/13/bits/stl_multimap.h \
-  /usr/include/c++/13/bits/stl_multiset.h \
   /usr/include/c++/13/bits/stl_pair.h \
   /usr/include/c++/13/bits/stl_raw_storage_iter.h \
-  /usr/include/c++/13/bits/stl_relops.h \
-  /usr/include/c++/13/bits/stl_set.h \
   /usr/include/c++/13/bits/stl_stack.h \
   /usr/include/c++/13/bits/stl_tempbuf.h \
   /usr/include/c++/13/bits/stl_tree.h \
   /usr/include/c++/13/bits/stl_uninitialized.h \
   /usr/include/c++/13/bits/stl_vector.h \
-  /usr/include/c++/13/bits/stream_iterator.h \
   /usr/include/c++/13/bits/streambuf.tcc \
   /usr/include/c++/13/bits/streambuf_iterator.h \
   /usr/include/c++/13/bits/string_view.tcc \
   /usr/include/c++/13/bits/stringfwd.h \
-  /usr/include/c++/13/bits/uniform_int_dist.h \
   /usr/include/c++/13/bits/unique_ptr.h \
-  /usr/include/c++/13/bits/unordered_map.h \
   /usr/include/c++/13/bits/uses_allocator.h \
   /usr/include/c++/13/bits/uses_allocator_args.h \
   /usr/include/c++/13/bits/utility.h \
   /usr/include/c++/13/bits/vector.tcc \
-  /usr/include/c++/13/cassert \
   /usr/include/c++/13/ccomplex \
   /usr/include/c++/13/cctype \
   /usr/include/c++/13/cerrno \
   /usr/include/c++/13/clocale \
   /usr/include/c++/13/cmath \
+  /usr/include/c++/13/codecvt \
   /usr/include/c++/13/compare \
   /usr/include/c++/13/complex \
   /usr/include/c++/13/complex.h \
@@ -2782,27 +2800,25 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/c++/13/ext/numeric_traits.h \
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
+  /usr/include/c++/13/filesystem \
   /usr/include/c++/13/fstream \
-  /usr/include/c++/13/functional \
   /usr/include/c++/13/initializer_list \
+  /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
   /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
-  /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \
-  /usr/include/c++/13/list \
+  /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
-  /usr/include/c++/13/math.h \
   /usr/include/c++/13/memory \
   /usr/include/c++/13/new \
   /usr/include/c++/13/optional \
   /usr/include/c++/13/ostream \
   /usr/include/c++/13/pstl/execution_defs.h \
-  /usr/include/c++/13/pstl/glue_algorithm_defs.h \
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/pstl_config.h \
-  /usr/include/c++/13/set \
+  /usr/include/c++/13/ratio \
   /usr/include/c++/13/sstream \
   /usr/include/c++/13/stack \
   /usr/include/c++/13/stdexcept \
@@ -2825,8 +2841,6 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/c++/13/tuple \
   /usr/include/c++/13/type_traits \
   /usr/include/c++/13/typeinfo \
-  /usr/include/c++/13/unordered_map \
-  /usr/include/c++/13/utility \
   /usr/include/c++/13/vector \
   /usr/include/complex.h \
   /usr/include/ctype.h \
@@ -2843,6 +2857,7 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/jsoncpp/json/value.h \
   /usr/include/jsoncpp/json/version.h \
   /usr/include/jsoncpp/json/writer.h \
+  /usr/include/libintl.h \
   /usr/include/linux/errno.h \
   /usr/include/locale.h \
   /usr/include/math.h \
@@ -2953,13 +2968,14 @@ CMakeFiles/ROCK.dir/o09_Debugger.cpp.o: /home/upc_gcp/TFM/HMT/o09_Debugger.cpp \
   /usr/include/x86_64-linux-gnu/c++/13/bits/error_constants.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/messages_members.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/time_members.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/sys/single_threaded.h \
-  /usr/include/x86_64-linux-gnu/sys/time.h \
   /usr/include/x86_64-linux-gnu/sys/types.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
@@ -3248,13 +3264,25 @@ CMakeFiles/ROCK.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
 
 
-/home/upc_gcp/TFM/HMT/o09_Debugger.cpp:
-
 /home/upc_gcp/TFM/HMT/o09_Parser.cpp:
 
 /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp:
 
 /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp:
+
+/usr/include/c++/13/filesystem:
+
+/usr/include/c++/13/codecvt:
+
+/usr/include/c++/13/bits/fs_path.h:
+
+/usr/include/c++/13/bits/fs_ops.h:
+
+/usr/include/c++/13/bits/fs_fwd.h:
+
+/usr/include/c++/13/bits/fs_dir.h:
+
+/home/upc_gcp/TFM/HMT/o05_ProbeSpectral.h:
 
 /home/upc_gcp/TFM/HMT/o03_Discretizer.h:
 
@@ -3321,8 +3349,6 @@ CMakeFiles/ROCK.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp \
 /usr/include/c++/13/algorithm:
 
 /usr/include/assert.h:
-
-/home/upc_gcp/TFM/HMT/o09_Debugger.h:
 
 /home/upc_gcp/TFM/HMT/o02_MeshFVM.h:
 
@@ -3556,6 +3582,8 @@ CMakeFiles/ROCK.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
+/home/upc_gcp/TFM/HMT/o05_Probe.h:
+
 /usr/include/c++/13/bits/basic_string.h:
 
 /usr/include/libintl.h:
@@ -3611,6 +3639,8 @@ CMakeFiles/ROCK.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp \
 /usr/include/c++/13/backward/binders.h:
 
 /usr/include/c++/13/bits/basic_string.tcc:
+
+/home/upc_gcp/TFM/HMT/o05_ProbeSpectral.cpp:
 
 /usr/include/c++/13/bits/allocated_ptr.h:
 

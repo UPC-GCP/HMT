@@ -14,11 +14,11 @@
 /* #include "o04_BCG.h" */
 /* #include "o05_Probe.h" */
 #include "o09_Parser.h"
-#include "o09_Debugger.h"
+/* #include "o09_Debugger.h" */
 /* #include "o09_Medic.h" */
 
 namespace {
-    template <size_t nDim> void runSolverLoop(const Json::Value& data){
+    template <size_t nDim> void runSolverLoop(const Json::Value& data, std::string configName){
 
         ///// Parser /////
         std::cout << "Initializing Parser ...\n";
@@ -66,12 +66,12 @@ namespace {
 
         for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); }
 
-        /// Debug Current -- BOUNDARIES VELOCITY
-        // Options
-        debugOptions dOps{}; dOps.bGeneral = true; dOps.bBoundaries = true;
+        /* /// Debug Current -- BOUNDARIES VELOCITY */
+        /* // Options */
+        /* debugOptions dOps{}; dOps.bGeneral = true; dOps.bBoundaries = true; */
 
-        // Print
-        for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); }
+        /* // Print */
+        /* for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); } */
 
         return;
 
@@ -165,14 +165,14 @@ namespace {
     }
 }
 
-void runFVMNS(const Json::Value& data) {
+void runFVMNS(const Json::Value& data, std::string configName) {
 
     ///// Simulation /////
     size_t nDim = data["N"].size();
     switch (nDim) {
-        case 1: runSolverLoop<1>(data); break;
-        case 2: runSolverLoop<2>(data); break;
-        case 3: runSolverLoop<3>(data); break;
+        case 1: runSolverLoop<1>(data, configName); break;
+        case 2: runSolverLoop<2>(data, configName); break;
+        case 3: runSolverLoop<3>(data, configName); break;
         default: throw std::runtime_error("Unrecognized number of dimensions: " + std::to_string(nDim));
     }
 

@@ -2,6 +2,7 @@
 #define PROBE_H_
 
 // Imports
+#include <iostream>
 #include <ctime>
 #include <array>
 #include <vector>
@@ -38,9 +39,6 @@ public:
 
     // Constructor
     Probe(const Json::Value& probes, std::string fName);
-    
-    // Destructor
-    ~Probe();
 };
 
 // Functions
@@ -56,7 +54,7 @@ inline std::string createFolder(std::string fName, std::string& dirName) {
     return pBase.string();
 }
 
-inline std::ofstream createFile(std::filesystem::path fName){
+inline std::ofstream createFile(const std::filesystem::path& fName){
     // Create File
     std::ofstream file(fName); if (!file.is_open()){ throw std::runtime_error("File could not be created: " + fName.string()); } file << "Time";
     
@@ -77,35 +75,7 @@ template <size_t Dim> Probe<Dim>::Probe(const Json::Value& probes, std::string f
     pathBase = createFolder(newPath.filename().string(), dirName); // Old
 
     fPath = pathBase; std::cout << fPath.filename().string() << "\n";
-}
-
-// Destructor -- PENDING
-template <size_t Dim> Probe<Dim>::~Probe() { // Define bien cuales quedan y ponlo aca
-    /* // Point Probe */ 
-    /* if (!probePoint.bFile){ */
-    /*     probePoint.file.close(); */
-    /* } */
     
-    /* // Map Probes */
-    /* if (!probeMap.empty()){ */
-    /*     for (int i = 0; i < probeMap.size(); i++){ */
-    /*         probeMap[i].file.close(); */
-    /*     } */
-    /* } */
-
-    /* // Field Probes */
-    /* if (!probeFld.empty()){ */
-    /*     for (int i = 0; i < probeFld.size(); i++){ */
-    /*         probeFld[i].file.close(); */
-    /*     } */
-    /* } */
-
-    /* // Bug Probes */
-    /* if (!probeBug.empty()){ */
-	    /* for (int i = 0; i < probeBug.size(); i++){ */
-		    /* probeBug[i].file.close(); */
-	    /* } */
-    /* } */
 }
 
 #endif

@@ -11,7 +11,7 @@
 #include "o02_MeshFVM.h"
 
 namespace {
-    template <size_t nDim> void runSolverLoop(const Json::Value& data){
+    template <size_t nDim> void runSolverLoop(const Json::Value& data, std::string configName){
         
         ///// Parser /////
         std::cout << "Initializing Parser ...\n";
@@ -46,14 +46,14 @@ namespace {
     }
 }
 
-void runFVMScalar(const Json::Value& data) {
+void runFVMScalar(const Json::Value& data, std::string configName) {
 
     ///// Simulation /////
     size_t nDim = data["N"].size();
     switch (nDim) {
-        case 1: runSolverLoop<1>(data); break;
-        case 2: runSolverLoop<2>(data); break;
-        case 3: runSolverLoop<3>(data); break;
+        case 1: runSolverLoop<1>(data, configName); break;
+        case 2: runSolverLoop<2>(data, configName); break;
+        case 3: runSolverLoop<3>(data, configName); break;
         default: throw std::runtime_error("Unrecognized number of dimensions: " + std::to_string(nDim));
     }
 
