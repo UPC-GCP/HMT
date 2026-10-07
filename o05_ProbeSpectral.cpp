@@ -20,9 +20,7 @@ ProbeSpectral::ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes,
         if (probes[k]["type"].asString() == "Modal") { // Modal
             // Create File
             tempString = "Probe_" + std::to_string(iProbes + 1) + "_Modal.csv";
-            /* pTemp.file = createFile(newPath / tempString); */
-
-            // newPath not recognized, need to keep it as a class variable and check how to initialize it
+            pTemp.file = createFile(fPath / tempString);
 
             // Time
             pTemp.t = { probes[k]["t"][0].asDouble(), probes[k]["t"][1].asDouble() };

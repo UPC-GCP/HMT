@@ -2,7 +2,7 @@
 #define PROBE_H_
 
 // Imports
-#include <iostream>
+/* #include <iostream> */
 #include <ctime>
 #include <array>
 #include <vector>
@@ -34,7 +34,7 @@ private:
 public:
     // Variables
     size_t iProbes{};
-    std::string pathBase{}, dirName{}, uName{};
+    std::string pathBase{};
     std::filesystem::path fPath;
 
     // Constructor
@@ -42,14 +42,23 @@ public:
 };
 
 // Functions
-inline std::string createFolder(std::string fName, std::string& dirName) {
+inline std::string createFolder(std::string fName) {
     // Timestamp
     time_t timeStamp = std::time(nullptr); struct tm datetime = *localtime(&timeStamp);
     char oName[35]; strftime(oName, sizeof(oName), "%Y%m%d%H%M%S_", &datetime);
     
+    // User
+    const char* user = std::getenv("USER");
+    (user == nullptr) ? user = std::getenv("LOGNAME") : nullptr;
+    std::string uName = std::string(user);
+
+    // Directory
+    std::filesystem::path pBase = std::filesystem::current_path(); 
+    if (uName == "upc_gcp") { pBase /= "ioRes"; } else if (uName == "gonzalo") { pBase /= "../../../home_nobck/ioRes"; pBase = std::filesystem::weakly_canonical(pBase); }
+
     // Create Folder
-    size_t iPos = fName.find(".json"); dirName = oName + fName.substr(0, iPos);
-    std::filesystem::path pBase = std::filesystem::current_path(); pBase /= dirName; std::filesystem::create_directories(pBase);
+    size_t iPos = fName.find(".json"); std::string dirName = oName + fName.substr(0, iPos); pBase /= dirName;
+    std::filesystem::create_directories(pBase);
 
     return pBase.string();
 }
@@ -63,19 +72,8 @@ inline std::ofstream createFile(const std::filesystem::path& fName){
 
 // Constuctor
 template <size_t Dim> Probe<Dim>::Probe(const Json::Value& probes, std::string fName) {
-
-    // PENDING -- TEST IF fPath WORKS AS INTENDED
-    // A LOT OF DEBUGGING NEEDED BEFORE I CAN COMPILE AGAIN
-    
     // Create Folder
-    std::filesystem::path newPath(fName); // Old
-
-    fPath = fName; std::cout << fPath.filename().string() << "\n";
-
-    pathBase = createFolder(newPath.filename().string(), dirName); // Old
-
-    fPath = pathBase; std::cout << fPath.filename().string() << "\n";
-    
+    fPath = fName; pathBase = createFolder(fPath.filename().string()); fPath = pathBase;
 }
 
 #endif

@@ -8,7 +8,7 @@
 #include "o02_MeshSpectral.h"
 
 // Class
-class ProbeSpectral : Probe<1> {
+class ProbeSpectral : public Probe<1> {
 private:
 
 public:

@@ -38,7 +38,9 @@ namespace {
 
         ///// Probe /////
         std::cout << "Initializing probe ...\n";
-        ProbeSpectral Prb(Burg, data["probes"], configName); std::cout << "Files configured.\n";
+        ProbeSpectral Prb(Burg, data["probes"], configName); std::cout << "Files stored at: " << Prb.fPath << "\n";
+
+        // DEBUGGING HERE -- Finish adding probes
 
         return;
 
