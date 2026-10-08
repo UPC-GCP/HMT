@@ -38,23 +38,23 @@ namespace {
 
         ///// Probe /////
         std::cout << "Initializing probe ...\n";
-        ProbeSpectral Prb(Burg, data["probes"], configName); std::cout << "Files stored at: " << Prb.fPath << "\n";
+        ProbeSpectral Prb(Burg, data["probes"], configName); Prb.checkProbes(Burg, 0); std::cout << "Directory and files created.\n";
 
-        // DEBUGGING HERE -- Finish adding probes
-
-        return;
-
-        // Add checkProbe() and store t = 0
-        /* probeStoreData(Msh.uHat, Msh.E); */
+        ///// Medic /////
+        std::cout << "Initializing medic ...\n";
+        /* MedicSpectral Mdc(); */
 
         ///// Temporal Loop /////
-        double dt = data["dt"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
+        double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
 
         std::cout << "Processing ...\n";
-        for (size_t i = 0; i < iMax; i++) {
-
+        for (size_t i = 1; i < iMax; i++) {
             // Control
             t = i * dt; Burg.ouHat = Burg.uHat; Burg.oE = Burg.E;
+
+            std::cout << "t: " << t << "\n";
+
+            // DEBUG SOLVER AND ENERGY AND THEN IT'S DONE
             
             // Solver
             Sol.solveRK4(Burg.uHat, Mat.Re, t, dt);
@@ -62,23 +62,20 @@ namespace {
             // Energy Balance
             Dsc.calculateEnergy(Burg.E, Burg.uHat, Mat.Re);
 
-            // PENDING -- SETUP PROBE, SETUP MEDIC, END BURGERS DNS
-
-            /* // Write Data */
-            /* /1* probeStoreData(Msh.uHat, Msh.E); *1/ */
-            /* std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %"; */
+            // Probe 
+            Prb.checkProbes(Burg, t);
 
             /* // Diagnostic */
             // This one will also check Energy Transport Equation 
             /* medicRunDiagnostics(Msh.uHat); */
+            std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %";
 
             // Convergence
             if (calcErr(Burg.uHat, Burg.ouHat) / dt < tolTemporal) { std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break; }
-
         } std::cout << "\n";
 
         // End
-        /* std::cout << "Files saved to: \n"; */
+        std::cout << "Files saved to: " << Prb.fPath << "\n";
     }
 
 }

@@ -1,9 +1,11 @@
 // Imports
 #include <string>
 #include <cstddef>
+#include <iostream>
 
 // Self-Imports
 #include "o02_Mesh.h"
+#include "o02_MeshSpectral.h"
 #include "o05_ProbeSpectral.h"
 
 ProbeSpectral::~ProbeSpectral() {
@@ -28,17 +30,28 @@ ProbeSpectral::ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes,
 
             // Position
             pTemp.i0 = { static_cast<size_t>(probes[k]["x0"][0].asInt()) };
-            pTemp.i1 = { static_cast<size_t>(probes[k]["x1"][0].asInt()) };
+            pTemp.i1 = { static_cast<size_t>(probes[k]["x1"][0].asInt()) }; for (size_t& val : pTemp.i1) { val += 1; }
 
             // Header
-            runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
-                    pTemp.file << "," << iX[0];
-                    }, pTemp.i0, pTemp.i1); pTemp.file << "\n";
+            runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { pTemp.file << "," << iX[0]; }, pTemp.i0, pTemp.i1); pTemp.file << "\n";
 
             // Control
             pModal.push_back(std::move(pTemp));
             pTemp = {};
         }
     }
-        // Also test what happens when nWrite is empty/null
+}
+
+void ProbeSpectral::checkProbes(const MeshBurgers& Burg, double t) {
+    // Modal
+    for (size_t k = 0; k < pModal.size(); k++) {
+        // Control
+        if (t < pModal[k].t[0] || t > pModal[k].t[1]) { continue; }
+        if (pModal[k].nCount++ % pModal[k].nWrite != 0) { continue; }
+
+        // Write Data
+        pModal[k].file << t; 
+        runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { pModal[k].file << "," << Burg.E[iX[0]]; }, pModal[k].i0, pModal[k].i1); pModal[k].file << "\n";
+    }
+
 }

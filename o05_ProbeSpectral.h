@@ -14,12 +14,15 @@ private:
 public:
     // Variables
     std::vector<probeRange<1>> pModal{};
-
+    
     // Constructor
     ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes, std::string fName);
 
     // Destructor
     ~ProbeSpectral();
+
+    // Headers
+    void checkProbes(const MeshBurgers& Burg, double t);
 };
 
 #endif

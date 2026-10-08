@@ -36,12 +36,12 @@ template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N,
     // Pragma
     if constexpr (Dim == 1) { // 1D
         #pragma omp parallel for if (nLoop > 10000)
-        for (size_t i = (*i0)[0]; i < (*i1)[1]; i++) {
+        for (size_t i = (*i0)[0]; i < (*i1)[0]; i++) {
             lamb({i, 0, 0}, 1, 1);
         }
     } else if constexpr (Dim == 2) { // 2D
         #pragma omp parallel for collapse(2) if (nLoop > 10000)
-        for (size_t i = (*i0)[0]; i < (*i1)[1]; i++) {
+        for (size_t i = (*i0)[0]; i < (*i1)[0]; i++) {
             for (size_t j = (*i0)[1]; j < (*i1)[1]; j++) {
                 lamb({i, j, 0}, N[1], 1);
             }

@@ -11,7 +11,7 @@
 
     "_dataProbe": "Probe Data",
     "probes": [
-        {"type": "Modal", "t": [0, 100], "x0": [0], "x1": [20], "nWrite": 1}
+        {"type": "Modal", "t": [0, 100], "x0": [0], "x1": [20], "nWrite": null}
     ],
 
     "_dataMedic": "Medic Data",
