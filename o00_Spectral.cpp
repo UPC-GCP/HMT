@@ -1,9 +1,7 @@
 // Imports
 #include <cmath>
 #include <cstddef>
-#include <math.h>
 #include <iostream>
-/* #include <stdexcept> */
 #include <json/json.h>
 
 // Self-Imports
@@ -12,7 +10,7 @@
 #include "o03_DiscretizerSpectral.h"
 #include "o04_SolverSpectral.h"
 #include "o05_ProbeSpectral.h"
-/* #include "o06_MedicSpectral.h" */
+#include "o06_MedicSpectral.h"
 /* #include "o09_Debugger.h" */
 
 namespace {
@@ -42,7 +40,7 @@ namespace {
 
         ///// Medic /////
         std::cout << "Initializing medic ...\n";
-        /* MedicSpectral Mdc(); */
+        bool bMdc = data["medicOn"].asBool(); if (bMdc) { MedicSpectral Mdc(Burg, Prb); }
 
         ///// Temporal Loop /////
         double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
@@ -52,10 +50,6 @@ namespace {
             // Control
             t = i * dt; Burg.ouHat = Burg.uHat; Burg.oE = Burg.E;
 
-            std::cout << "t: " << t << "\n";
-
-            // DEBUG SOLVER AND ENERGY AND THEN IT'S DONE
-            
             // Solver
             Sol.solveRK4(Burg.uHat, Mat.Re, t, dt);
 
@@ -65,7 +59,10 @@ namespace {
             // Probe 
             Prb.checkProbes(Burg, t);
 
-            /* // Diagnostic */
+            // Medic
+            if (bMdc) {
+                // Run diagnostics here
+            }
             // This one will also check Energy Transport Equation 
             /* medicRunDiagnostics(Msh.uHat); */
             std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %";

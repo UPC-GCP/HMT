@@ -10,7 +10,7 @@ private:
 
 public:
     // Headers
-    void initializeBurgers(MeshBurgers Msh);
+    void initializeBurgers(MeshBurgers& Msh);
     void calculateEnergy(std::vector<double>& E, const std::vector<std::complex<double>>& uHat, double Re);
     static std::vector<std::complex<double>> calculateRHS(std::vector<std::complex<double>> const& u, double Re, double t);
 };

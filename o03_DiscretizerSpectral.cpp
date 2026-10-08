@@ -1,7 +1,7 @@
 // Self-Imports
 #include "o03_DiscretizerSpectral.h"
 
-void DiscretizerSpectral::initializeBurgers(MeshBurgers Msh) {
+void DiscretizerSpectral::initializeBurgers(MeshBurgers& Msh) {
     // Initialize Values
     for (size_t k = 1; k < Msh.totNodes; k++) { Msh.uHat[k] = 1 / static_cast<double>(k); }
     for (size_t k = 0; k < Msh.totNodes; k++) { Msh.E[k] = std::real(Msh.uHat[k] * std::conj(Msh.uHat[k])); }

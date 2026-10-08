@@ -29,7 +29,7 @@ add_executable(ROCK
     # o05_ProbeFVM.cpp
     o05_ProbeSpectral.cpp
     # o06_MedicFVM.cpp
-    # o06_MedicSpectral.cpp
+    o06_MedicSpectral.cpp
     o09_Parser.cpp
     # o09_Debugger.cpp
     # o09_DebuggerFVM.cpp

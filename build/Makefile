@@ -369,6 +369,30 @@ o05_ProbeSpectral.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o05_ProbeSpectral.cpp.s
 .PHONY : o05_ProbeSpectral.cpp.s
 
+o06_MedicSpectral.o: o06_MedicSpectral.cpp.o
+.PHONY : o06_MedicSpectral.o
+
+# target to build an object file
+o06_MedicSpectral.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o06_MedicSpectral.cpp.o
+.PHONY : o06_MedicSpectral.cpp.o
+
+o06_MedicSpectral.i: o06_MedicSpectral.cpp.i
+.PHONY : o06_MedicSpectral.i
+
+# target to preprocess a source file
+o06_MedicSpectral.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o06_MedicSpectral.cpp.i
+.PHONY : o06_MedicSpectral.cpp.i
+
+o06_MedicSpectral.s: o06_MedicSpectral.cpp.s
+.PHONY : o06_MedicSpectral.s
+
+# target to generate assembly for a file
+o06_MedicSpectral.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ROCK.dir/build.make CMakeFiles/ROCK.dir/o06_MedicSpectral.cpp.s
+.PHONY : o06_MedicSpectral.cpp.s
+
 o09_Parser.o: o09_Parser.cpp.o
 .PHONY : o09_Parser.o
 
@@ -432,6 +456,9 @@ help:
 	@echo "... o05_ProbeSpectral.o"
 	@echo "... o05_ProbeSpectral.i"
 	@echo "... o05_ProbeSpectral.s"
+	@echo "... o06_MedicSpectral.o"
+	@echo "... o06_MedicSpectral.i"
+	@echo "... o06_MedicSpectral.s"
 	@echo "... o09_Parser.o"
 	@echo "... o09_Parser.i"
 	@echo "... o09_Parser.s"
