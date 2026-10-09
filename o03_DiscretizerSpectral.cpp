@@ -7,7 +7,7 @@ void DiscretizerSpectral::initializeBurgers(MeshBurgers& Msh) {
     for (size_t k = 0; k < Msh.totNodes; k++) { Msh.E[k] = std::real(Msh.uHat[k] * std::conj(Msh.uHat[k])); }
 }
 
-void calculateConvectiveTerm(std::vector<std::complex<double>>& C, std::vector<std::complex<double>> const& u) {
+void DiscretizerSpectral::calculateConvectiveTerm(std::vector<std::complex<double>>& C, const std::vector<std::complex<double>>& u) {
     // Control
     int p{}, N = static_cast<int>(u.size()) - 1; std::complex<double> i(0, 1), up{}, uq{};
     
@@ -25,14 +25,12 @@ void calculateConvectiveTerm(std::vector<std::complex<double>>& C, std::vector<s
     }
 }
 
-std::vector<std::complex<double>> DiscretizerSpectral::calculateRHS(std::vector<std::complex<double>> const& u, double Re, double t) {
+std::vector<std::complex<double>> DiscretizerSpectral::calculateRHS(const std::vector<std::complex<double>>& u, double Re, double t) {
     // Control
     std::vector<std::complex<double>> D(u.size()), C(u.size()), F(u.size()), R(u.size());
 
     // Diffusion
-    for (size_t k = 0; k < u.size(); k++) {
-        D[k] = 2 * static_cast<double>(k) * static_cast<double>(k) * u[k] / Re;
-    }
+    for (size_t k = 0; k < u.size(); k++) { D[k] = 2 * static_cast<double>(k) * static_cast<double>(k) * u[k] / Re; }
     
     // Convection
     calculateConvectiveTerm(C, u);

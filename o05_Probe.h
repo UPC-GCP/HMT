@@ -72,8 +72,11 @@ inline std::ofstream createFile(const std::filesystem::path& fName){
 
 // Constuctor
 template <size_t Dim> Probe<Dim>::Probe(const Json::Value& probes, std::string fName) {
+    // Control
+    fPath = fName; if (probes.size() == 0) { return; }
+
     // Create Folder
-    fPath = fName; pathBase = createFolder(fPath.filename().string()); fPath = pathBase;
+    pathBase = createFolder(fPath.filename().string()); fPath = pathBase;
 }
 
 #endif

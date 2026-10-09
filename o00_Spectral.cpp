@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <iostream>
 #include <json/json.h>
+#include <optional>
 
 // Self-Imports
 #include "o01_Material.h"
@@ -36,15 +37,16 @@ namespace {
 
         ///// Probe /////
         std::cout << "Initializing probe ...\n";
-        ProbeSpectral Prb(Burg, data["probes"], configName); Prb.checkProbes(Burg, 0); std::cout << "Directory and files created.\n";
+        ProbeSpectral Prb(Burg, data["probes"], configName); Prb.checkProbes(Burg, 0); std::cout << "Directory and files created.\n"; // Probe only stores E, add uHat later
+
+        ///// Temporal Parameters /////
+        double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
 
         ///// Medic /////
         std::cout << "Initializing medic ...\n";
-        bool bMdc = data["medicOn"].asBool(); if (bMdc) { MedicSpectral Mdc(Burg, Prb); }
+        bool bMdc = data["medicOn"].asBool(); std::optional<MedicSpectral> Mdc; if (bMdc) { Mdc.emplace(Burg, Prb, dt); }
 
         ///// Temporal Loop /////
-        double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
-
         std::cout << "Processing ...\n";
         for (size_t i = 1; i < iMax; i++) {
             // Control
@@ -56,19 +58,14 @@ namespace {
             // Energy Balance
             Dsc.calculateEnergy(Burg.E, Burg.uHat, Mat.Re);
 
-            // Probe 
+            // Probe & Medic
             Prb.checkProbes(Burg, t);
-
-            // Medic
-            if (bMdc) {
-                // Run diagnostics here
-            }
-            // This one will also check Energy Transport Equation 
-            /* medicRunDiagnostics(Msh.uHat); */
-            std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %";
+            if (Mdc.has_value()) { Mdc->checkDiagnostics(Mat, Burg); }
 
             // Convergence
             if (calcErr(Burg.uHat, Burg.ouHat) / dt < tolTemporal) { std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break; }
+
+            std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %";
         } std::cout << "\n";
 
         // End
