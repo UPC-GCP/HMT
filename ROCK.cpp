@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){ // ROCK: Research Oriented Computational Kerne
             case enumSolver::FVMNS: runFVMNS(data, argv[1]); break;
             case enumSolver::Spectral: runSpectral(data, argv[1]); break;
         }
-    } catch (const std::exception& e) {std::cerr << "Program shutdown...\n"; return EXIT_FAILURE;}
+    } catch (const std::exception& e) {std::cerr << "Program shutdown...\n"; std::cerr << e.what() << "\n"; return EXIT_FAILURE;}
 
     ///// Control /////
     auto t2 = std::chrono::high_resolution_clock::now(); std::chrono::duration<double, std::milli> msDoub = t2 - t1; double tTime = msDoub.count()/1000/60; std::cout << "Time elapsed: " << int(tTime) << " minutes and " << (tTime - int(tTime))*60 << " seconds.\n";

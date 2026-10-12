@@ -11,16 +11,16 @@ template <size_t Dim> struct Matrix {
     std::array<double, 2 * Dim> ak{}; // Neighbour coefficients
 };
 
+template <size_t Dim> struct Obstacle {
+    std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
+};
+
 template <size_t Dim> struct Boundary {
     size_t type{}, side{}, iExpr{}, iEq{}, iExprA{}, iEqA{}; double value{}, alpha{}; // General
     bool bUpdate = false, bA = false; std::string expression{}, expressionA{}; // Expression
     std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
     std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 1D flattened for 2D/3D
     std::vector<double> A{}, oA{}; // Alpha, oAlpha -> [m] -> Robin BC
-};
-
-template <size_t Dim> struct Obstacle {
-    std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
 };
 
 template <size_t Dim> struct MeshBase : MeshSimplified<Dim> {

@@ -42,14 +42,19 @@
 
 # Directories
 ioRes/
+ioPlots/
 *.png
+__pycache__
+.cache/clangd/index/
 
 # Reports
 *.tex
 *.cls
 
-# Bash
+# Bash / Linux
 *.sh
 .*.swp
+
+# Markdown
 *.md
 !README.md

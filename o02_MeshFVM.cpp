@@ -1,10 +1,15 @@
 // Imports
+#include <iostream>
+#include <algorithm>
+#include <array>
 #include <cstddef>
+#include <json/value.h>
 #include <stdexcept>
 #include <string>
 
 // Self-Imports
 #include "o00_Globals.h"
+#include "o02_Mesh.h"
 #include "o02_MeshFVM.h"
 
 ///// Mesh Generation /////
@@ -121,14 +126,55 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
         Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back();
     }
 
+
+    std::cout << "S Size: "; for (std::vector<double>& Sk : Msh.S) {std::cout << Sk.size() << " ";} std::cout << "\n";
+
+
     // Resize (nD)
-    Msh.nMat.resize(Msh.totNodes); for (std::vector<double>& Sk : Msh.S) {Sk.resize(Msh.totNodes);} Msh.Vp.resize(Msh.totNodes); Msh.bObs.resize(Msh.totNodes);
+    Msh.nMat.resize(Msh.totNodes); for (std::vector<double>& Sk : Msh.S) {Sk.resize(Msh.totNodes, 1);} Msh.Vp.resize(Msh.totNodes, 1); Msh.bObs.resize(Msh.totNodes, false);
     Msh.Phi.resize(Msh.totNodes); Msh.sPhi.resize(Msh.totNodes); Msh.oPhi.resize(Msh.totNodes);
+    
+
+    std::cout << "S Size: "; for (std::vector<double>& Sk : Msh.S) {std::cout << Sk.size() << " ";} std::cout << "\n";
+    throw std::invalid_argument("Test exit");
+
 
     // Sections
-    // PENDING -- DEFINE USING LAMBDAS (Training before Discretizer)
+    std::array<size_t, Dim> i0{}, i1{}; size_t valMat{}; double valSource{};
+    for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++) {
+        // Positions
+        for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
+            i0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin() - 1;
+        }
 
+        // Properties
+        valMat = sections[i]["material"].asInt(); valSource = sections[i]["source"].asDouble();
+        runLoopMesh<Dim>(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                size_t idx = calcIndex(iX[0], iX[1], Ny, iX[2], Nx); Msh.nMat[idx] = valMat; Msh.sPhi[idx] = valSource;
+                for (size_t nD = 0; nD < Dim; nD++) {
+                    Msh.Vp[idx] *= Msh.deltaX[nD][iX[nD]];
+                    for (size_t nDD = 0; nDD < Dim; nDD++) { if (nD != nDD) { Msh.S[nD][idx] *= Msh.deltaX[nDD][iX[nDD]]; } }
+                } }, i0, i1);
+    }
 
+    // Obstacles
+    Obstacle<Dim> tempObs{};
+    for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++) {
+        // Positions
+        for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
+            tempObs.i0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
+            tempObs.i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Faces[j].end() - 1;
+        }
+
+        // bObs
+        runLoopMesh<Dim>(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                    size_t idx = calcIndex(iX[0], iX[1], Ny, iX[2], Nx); Msh.bObs[idx] = true;
+                }, tempObs.i0, tempObs.i1);
+
+        // Control
+        Msh.Obs.push_back(std::move(tempObs)); tempObs = {};
+    }
 
     /* if constexpr (Dim == 1) {sections1D(Msh, sections, obstacles);} */ 
     /* else if constexpr (Dim == 2) {sections2D(Msh, sections, obstacles);} */
