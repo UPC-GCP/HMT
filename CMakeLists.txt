@@ -19,7 +19,7 @@ add_executable(ROCK
     o00_Spectral.cpp
     o01_Material.cpp
     # o01_MaterialFVM.cpp
-    # o01_MaterialSpectral.cpp - Can split this later but honestly doesn't cost too much
+    # o01_MaterialSpectral.cpp -- Can split this later but honestly doesn't really cost too much
     o02_MeshFVM.cpp
     o02_MeshSpectral.cpp
     # o03_DiscretizerFVM.cpp
@@ -31,8 +31,8 @@ add_executable(ROCK
     # o06_MedicFVM.cpp
     o06_MedicSpectral.cpp
     o09_Parser.cpp
-    # o09_Debugger.cpp
-    # o09_DebuggerFVM.cpp
+    o09_Debugger.cpp
+    # o09_DebuggerFVM.cpp -- Not sure if I'll make this change, seems like a lot
     # o09_DebuggerSpectral.cpp
 )
 

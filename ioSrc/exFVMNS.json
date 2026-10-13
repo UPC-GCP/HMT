@@ -24,12 +24,11 @@
     ],
 
     "_dataMesh": "Mesh Data",
-    "N": [5, 5, 5],
+    "N": [10, 10, 10],
     "refinement": [
-        {"axis": 0, "N": 3, "range": [0, 0.6], "algorithm": "PowerLaw", "kappa": 1},
-        {"axis": 0, "N": 2, "range": [0.6, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.8},
-        {"axis": 1, "N": 5, "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.9},
-        {"axis": 2, "N": 5, "range": [0, 1], "algorithm": "PowerLaw", "kappa": 1}
+        {"axis": 0, "N": 10, "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.5},
+        {"axis": 1, "N": 10, "range": [0, 1], "algorithm": "Bidirectional", "strength": 0, "centering": 0.9},
+        {"axis": 2, "N": 10, "range": [0, 1], "algorithm": "PowerLaw", "kappa": 1}
     ],
 
     "_dataBnd": "Boundary Conditions",

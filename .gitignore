@@ -45,7 +45,8 @@ ioRes/
 ioPlots/
 *.png
 __pycache__
-.cache/clangd/index/
+.cache/
+.venv/
 
 # Reports
 *.tex

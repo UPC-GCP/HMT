@@ -14,7 +14,7 @@
 /* #include "o04_BCG.h" */
 /* #include "o05_Probe.h" */
 #include "o09_Parser.h"
-/* #include "o09_Debugger.h" */
+#include "o09_Debugger.h"
 /* #include "o09_Medic.h" */
 
 namespace {
@@ -54,6 +54,18 @@ namespace {
         MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
         Msh.addBoundariesSolver(p, Mat, Prs, data["boundariesPressure"], Mat.P0, Mat.sP0); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
         
+        /// Debug Current
+        // Options
+        debugOptions dOps{}; dOps.bObs = true; dOps.bGeneral = true;
+
+        // Print
+        debugFVM(p, dOps);
+        /* printDebug(p, dOps); */
+        /* for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); } */
+
+        return;
+
+
         // Temperature
         if (!data["T0"].isNull()) {
             MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
@@ -66,17 +78,8 @@ namespace {
 
         for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); }
 
-        /* /// Debug Current -- BOUNDARIES VELOCITY */
-        /* // Options */
-        /* debugOptions dOps{}; dOps.bGeneral = true; dOps.bBoundaries = true; */
-
-        /* // Print */
-        /* for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); } */
-
-        return;
 
 
-        // PENDING -- FINISH NAVIER-STOKES SOLVER BY COMPLETING ALL OTHER OBJECTS
 
 
 

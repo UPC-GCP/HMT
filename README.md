@@ -23,7 +23,7 @@ Finite Volume Method single scalar numerical solver.
 2. **V0**: Initial value for the Velocity field.
 3. **g**: Gravity
 4. **materials**: Registry of all materials with their corresponding properties. (rho, gamma, cp, mu, beta, alpha)
-5. **sections**: Registry of geometric regions defining material index and source term.
+5. **sections**: Registry of geometric regions defining material index and source term. Must always define regions to match any separation in geometry.
 6. **obstacles**: Registry of geometric regions blocked by an obstacle.
 
 ### Mesh Data

@@ -200,6 +200,56 @@ template <template <size_t> class MeshClass> void print1D(const MeshClass<1>& Ms
     }
 }
 
+template <size_t Dim, template <size_t> class MeshClass> void debugFVM(const MeshClass<Dim>& Msh, debugOptions dOps) {
+    // General Mesh
+    if (dOps.bGeneral) {
+        for (size_t i = 0; i < Dim; i++) {
+            std::cout << "\nAxis: " << i << "\n";
+            std::cout << "Faces: "; for (double val : Msh.Faces[i]) {std::cout << val << " ";} std::cout << "\n";
+            std::cout << "Nodes: "; for (double val : Msh.Nodes[i]) {std::cout << val << " ";} std::cout << "\n";
+            std::cout << "DeltaX: "; for (double val : Msh.deltaX[i]) {std::cout << val << " ";} std::cout << "\n";
+            std::cout << "dX: "; for (double val : Msh.dX[i]) {std::cout << val << " ";} std::cout << "\n";
+        } std::cout << "\n";
+    }
+
+    // Geometry
+    if (dOps.bSurf) { // Surfaces
+
+    }
+    
+    if (dOps.bVol) { // Volume
+
+    }
+
+    // Value
+    if (dOps.bPhi) { // Value
+
+    }
+
+    if (dOps.bPhiBC) { // Boundaries
+
+    }
+
+    // MeshSolver
+    if constexpr (std::is_same_v<MeshClass<3>, MeshSolver<3>>) {
+        if (dOps.bMat) { // Material
+            std::cout << "nMat:\n";
+            runLoopMesh(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                    std::cout << Msh.nMat[calcIndex(iX[0], iX[1], Ny, iX[2], Nx)] << " ";
+                    if (iX[1] == Ny - 1) { std::cout << "\n"; } if (iX[1] == Ny - 1 && iX[0] == Nx - 1) { std::cout << "\n"; }
+                    });
+        }
+
+        if (dOps.bObs) { // Obstacles
+            std::cout << "bObs:\n";
+            runLoopMesh(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                    std::cout << Msh.bObs[calcIndex(iX[0], iX[1], Ny, iX[2], Nx)] << " ";
+                    if (iX[1] == Ny - 1) { std::cout << "\n"; } if (iX[1] == Ny - 1 && iX[0] == Nx - 1) { std::cout << "\n"; }
+                    });
+        }
+    }       
+}
+
 // Compiler Instances
 template void print3D<MeshBase>(const MeshBase<3>&, debugOptions);
 template void print3D<MeshSolver>(const MeshSolver<3>&, debugOptions);
@@ -207,3 +257,10 @@ template void print2D<MeshBase>(const MeshBase<2>&, debugOptions);
 template void print2D<MeshSolver>(const MeshSolver<2>&, debugOptions);
 template void print1D<MeshBase>(const MeshBase<1>&, debugOptions);
 template void print1D<MeshSolver>(const MeshSolver<1>&, debugOptions);
+
+template void debugFVM<1, MeshBase>(const MeshBase<1>&, debugOptions);
+template void debugFVM<1, MeshSolver>(const MeshSolver<1>&, debugOptions);
+template void debugFVM<2, MeshBase>(const MeshBase<2>&, debugOptions);
+template void debugFVM<2, MeshSolver>(const MeshSolver<2>&, debugOptions);
+template void debugFVM<3, MeshBase>(const MeshBase<3>&, debugOptions);
+template void debugFVM<3, MeshSolver>(const MeshSolver<3>&, debugOptions);

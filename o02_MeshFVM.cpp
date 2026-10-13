@@ -21,7 +21,6 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
 
     // Face Positions
     if (sAlgo == "Bidirectional"){ // Bidirectional (A, xC)
-        
         // Mesh Parameters
         double A = refData["strength"].asDouble(), xC = refData["centering"].asDouble() - x0; 
         if (A > 2.5 || A < -2.5){ throw std::invalid_argument("Check .json"); }
@@ -32,9 +31,7 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
         for (int i = cNode; i < cNode+NSec+1; i++) {
             nFaces[iAxis][i] = x0 + (static_cast<double>(i)-cNode) * length / NSec + A * (xC - (static_cast<double>(i)-cNode) * length / NSec) * (1 - (static_cast<double>(i)-cNode)/NSec) * (static_cast<double>(i)-cNode) / NSec;
         }
-
     } else if (sAlgo == "PowerLaw"){ // Power-Law (Kappa)
-        
         // Mesh Parameters
         double kappa = refData["kappa"].asDouble();
         if (kappa <= 0){ std::exit(0); }
@@ -44,9 +41,7 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
         for (int i = cNode; i < cNode+NSec+1; i++) {
             nFaces[iAxis][i] = x0 + length * pow(((static_cast<double>(i)-cNode) / NSec), kappa);
         }
-
     } else if(sAlgo == "HyperSingle"){ // Hyperbolic Tangent (Single-Sided)
-        
         // Mesh Parameters
         double delta = refData["delta"].asDouble(); double A{}, B{};
         if (delta == 0){ throw std::invalid_argument("Check .json"); }
@@ -57,9 +52,7 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
             A = tanh(delta * ((static_cast<double>(i) - cNode) / NSec - 1)); B = tanh(delta);
             nFaces[iAxis][i] = x0 + length * (1 + A / B);
         }
-
     } else if(sAlgo == "HyperDouble"){ // Hyperbolic Tangent (Double-Sided)
-        
         // Mesh Parameters
         double delta = refData["delta"].asDouble(); double A{}, B{};
         if (delta == 0){ throw std::invalid_argument("Check .json"); }
@@ -70,9 +63,7 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
             A = tanh(delta*((static_cast<double>(i) - cNode)/NSec - 0.5)); B = tanh(0.5 * delta);
             nFaces[iAxis][i] = x0 + 0.5 * length * (1 + A/B);
         }
-
     } else if (sAlgo == "Exponential") { // Exponential
-
         // Mesh Parameters
         double kappa = refData["kappa"].asDouble();
         if (kappa == 0){ throw  std::invalid_argument("Check .json"); }
@@ -82,7 +73,6 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
         for (int i = cNode; i < cNode+NSec+1; i++){
             nFaces[iAxis][i] = x0 + length * (exp(kappa * (static_cast<double>(i) - cNode) / NSec) - 1) / (exp(kappa) - 1);
         }
-
     } else { throw std::logic_error("Mesh algorithm not recognized.\n"); } 
 }
 
@@ -126,26 +116,17 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
         Msh.dX[i].back() = Msh.Faces[i].back() - Msh.Nodes[i].back();
     }
 
-
-    std::cout << "S Size: "; for (std::vector<double>& Sk : Msh.S) {std::cout << Sk.size() << " ";} std::cout << "\n";
-
-
     // Resize (nD)
     Msh.nMat.resize(Msh.totNodes); for (std::vector<double>& Sk : Msh.S) {Sk.resize(Msh.totNodes, 1);} Msh.Vp.resize(Msh.totNodes, 1); Msh.bObs.resize(Msh.totNodes, false);
     Msh.Phi.resize(Msh.totNodes); Msh.sPhi.resize(Msh.totNodes); Msh.oPhi.resize(Msh.totNodes);
     
-
-    std::cout << "S Size: "; for (std::vector<double>& Sk : Msh.S) {std::cout << Sk.size() << " ";} std::cout << "\n";
-    throw std::invalid_argument("Test exit");
-
-
     // Sections
     std::array<size_t, Dim> i0{}, i1{}; size_t valMat{}; double valSource{};
     for (Json::Value::ArrayIndex i = 0; i < sections.size(); i++) {
         // Positions
         for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
             i0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
-            i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin() - 1;
+            i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), sections[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
         }
 
         // Properties
@@ -158,14 +139,19 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
                 } }, i0, i1);
     }
 
+    std::cout << "Obstacles start\n";
+
     // Obstacles
     Obstacle<Dim> tempObs{};
     for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++) {
         // Positions
         for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
             tempObs.i0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
-            tempObs.i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Faces[j].end() - 1;
+            tempObs.i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
         }
+
+        std::cout << "bObs i0: "; for (size_t val : tempObs.i0) { std::cout << val << " "; } std::cout << "\n";
+        std::cout << "bObs i1: "; for (size_t val : tempObs.i1) { std::cout << val << " "; } std::cout << "\n";
 
         // bObs
         runLoopMesh<Dim>(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
@@ -175,6 +161,8 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
         // Control
         Msh.Obs.push_back(std::move(tempObs)); tempObs = {};
     }
+
+    std::cout << "Obstacles done\n";
 
     /* if constexpr (Dim == 1) {sections1D(Msh, sections, obstacles);} */ 
     /* else if constexpr (Dim == 2) {sections2D(Msh, sections, obstacles);} */

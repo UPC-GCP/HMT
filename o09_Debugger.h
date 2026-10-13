@@ -14,6 +14,7 @@ struct debugOptions {
 };
 
 // Headers
+template <size_t Dim, template <size_t> class MeshClass> void debugFVM(const MeshClass<Dim>& Msh, debugOptions dOps);
 template <template <size_t> class MeshClass> void print3D(const MeshClass<3>& Msh, debugOptions dOps);
 template <template <size_t> class MeshClass> void print2D(const MeshClass<2>& Msh, debugOptions dOps);
 template <template <size_t> class MeshClass> void print1D(const MeshClass<1>& Msh, debugOptions dOps);
