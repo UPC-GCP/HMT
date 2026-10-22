@@ -16,7 +16,7 @@
 
 namespace {
     void runSolverLoop(const Json::Value& data, std::string configName) {
-
+        
         ///// Material /////
         Material Mat(data["Re"].asDouble());
 

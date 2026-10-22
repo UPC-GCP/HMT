@@ -10,8 +10,6 @@
 #include "o02_MeshFVM.h"
 /* #include "o03_Discretizer.h" */
 /* #include "o04_Solver.h" */
-/* #include "o04_CG.h" */
-/* #include "o04_BCG.h" */
 /* #include "o05_Probe.h" */
 #include "o09_Parser.h"
 #include "o09_Debugger.h"
@@ -54,18 +52,6 @@ namespace {
         MeshSolver<nDim> p{}; Msh.generateMeshSolver(p, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Pressure object created with " << p.totNodes << " nodes and " << p.Obs.size() << " obstacles.\n";
         Msh.addBoundariesSolver(p, Mat, Prs, data["boundariesPressure"], Mat.P0, Mat.sP0); std::cout << p.BC.size() << " Pressure boundary conditions added.\n";
         
-        /// Debug Current
-        // Options
-        debugOptions dOps{}; dOps.bObs = true; dOps.bGeneral = true;
-
-        // Print
-        debugFVM(p, dOps);
-        /* printDebug(p, dOps); */
-        /* for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); } */
-
-        return;
-
-
         // Temperature
         if (!data["T0"].isNull()) {
             MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
@@ -79,11 +65,16 @@ namespace {
         for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); }
 
 
+        /// Debug Current
+        // Options
+        debugOptions dOps{}; dOps.bObs = true; dOps.bGeneral = true;
 
+        // Print
+        debugFVM(p, dOps);
+        /* printDebug(p, dOps); */
+        /* for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); } */
 
-
-
-
+        return;
 
         /* ///// Discretizer ///// */
         /* std::cout << "Initializing discretizer ...\n"; */

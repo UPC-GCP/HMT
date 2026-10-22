@@ -1,9 +1,9 @@
 // Imports
-#include <iostream>
 #include <algorithm>
 #include <array>
 #include <cstddef>
 #include <json/value.h>
+#include <optional>
 #include <stdexcept>
 #include <string>
 
@@ -13,7 +13,7 @@
 #include "o02_MeshFVM.h"
 
 ///// Mesh Generation /////
-template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> cVec, Json::Value refData, std::array<std::vector<double>, Dim>& nFaces){
+template <size_t Dim> void MeshFVM<Dim>::calculateFaces(const std::array<size_t, Dim>& cVec, const Json::Value& refData, std::array<std::vector<double>, Dim>& nFaces){
     // Control
     std::string sAlgo = refData["algorithm"].asString();
     size_t iAxis = refData["axis"].asInt(), NSec = refData["N"].asInt(), cNode = cVec[iAxis];
@@ -76,7 +76,7 @@ template <size_t Dim> void MeshFVM<Dim>::calculateFaces(std::array<size_t, Dim> 
     } else { throw std::logic_error("Mesh algorithm not recognized.\n"); } 
 }
 
-template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, Json::Value qNode, Json::Value sections, Json::Value refinement, Json::Value obstacles) {
+template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh, const Json::Value& qNode, const Json::Value& sections, const Json::Value& refinement, const Json::Value& obstacles) {
 	// Control (nD)
 	for(Json::Value::ArrayIndex i = 0; i < Msh.N.size(); i++) {Msh.N[i] = qNode[i].asInt(); Msh.totNodes *= Msh.N[i];}
 
@@ -139,8 +139,6 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
                 } }, i0, i1);
     }
 
-    std::cout << "Obstacles start\n";
-
     // Obstacles
     Obstacle<Dim> tempObs{};
     for (Json::Value::ArrayIndex i = 0; i < obstacles.size(); i++) {
@@ -149,9 +147,6 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
             tempObs.i0[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x0"][j].asDouble()) - Msh.Faces[j].begin();
             tempObs.i1[j] = std::find(Msh.Faces[j].begin(), Msh.Faces[j].end(), obstacles[i]["x1"][j].asDouble()) - Msh.Faces[j].begin();
         }
-
-        std::cout << "bObs i0: "; for (size_t val : tempObs.i0) { std::cout << val << " "; } std::cout << "\n";
-        std::cout << "bObs i1: "; for (size_t val : tempObs.i1) { std::cout << val << " "; } std::cout << "\n";
 
         // bObs
         runLoopMesh<Dim>(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
@@ -162,17 +157,11 @@ template <size_t Dim> void MeshFVM<Dim>::generateMeshSolver(MeshSolver<Dim>& Msh
         Msh.Obs.push_back(std::move(tempObs)); tempObs = {};
     }
 
-    std::cout << "Obstacles done\n";
-
-    /* if constexpr (Dim == 1) {sections1D(Msh, sections, obstacles);} */ 
-    /* else if constexpr (Dim == 2) {sections2D(Msh, sections, obstacles);} */
-    /* else if constexpr (Dim == 3) {sections3D(Msh, sections, obstacles);} */
-
     // Coefficients (nD)
     Msh.matA.resize(Msh.totNodes); Msh.matB.resize(Msh.totNodes, 0); Msh.tempA.resize(Msh.totNodes); Msh.tempB.resize(Msh.totNodes, 0);
 }
 
-template <size_t Dim> void MeshFVM<Dim>::deriveMeshBase(MeshSolver<Dim> p, std::array<MeshBase<Dim>, Dim>& V) {
+template <size_t Dim> void MeshFVM<Dim>::deriveMeshBase(const MeshSolver<Dim>& p, std::array<MeshBase<Dim>, Dim>& V) {
     // Dimension Loop
     for (size_t i = 0; i < Dim; i++) {
         // Nodes
@@ -230,7 +219,7 @@ bool isFormula (const std::string value) {
     catch (...) { return true; }
 }
 
-template <size_t Dim> void importInitialConditions(MeshSolver<Dim>& Msh, std::string sPath) {
+template <size_t Dim> void importInitialConditions(MeshBase<Dim>& Msh, std::string sPath) {
     // PENDING -- MAKE THIS FUNCTION
     // Import .csv -- Check range and dimension (interpolate if needed) -- Store data
 }
@@ -244,7 +233,6 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesSolver(MeshSolver<Dim>& Ms
 
     // Boundaries
     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++) {
-
         // Position
         Msh.BC[i].side = boundaries[i]["side"].asInt(); if (Msh.BC[i].side != 0 && Msh.BC[i].side != 1) { throw std::invalid_argument("Boundary side not define correctly.\n");}
         for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
@@ -254,26 +242,20 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesSolver(MeshSolver<Dim>& Ms
 
         // Value
         if (isFormula(boundaries[i]["value"].asString())) {
-
             // Control
             Msh.BC[i].expression = boundaries[i]["value"].asString();
             Msh.BC[i].iExpr = Prs.registerExpression(Msh.BC[i].expression);
 
             // Parser
-            if (Msh.BC[i].expression.find(" t ") != std::string::npos) { // Update time
-                Msh.BC[i].bUpdate = true; Msh.BC[i].iEq = 0;
-                Msh.BC[i].value = Prs.evaluateTime(Msh.BC[i].iEq, 0);
-            } else if (Msh.BC[i].expression.find(" x ") != std::string::npos || Msh.BC[i].expression.find(" y ") != std::string::npos || Msh.BC[i].expression.find(" z ") != std::string::npos) {Msh.BC[i].iEq = 1;} // Update coordinates 
-            else { throw std::invalid_argument("Equation not recognized: " + Msh.BC[i].expression);}
-
-        } else {Msh.BC[i].value = boundaries[i]["value"].asDouble();}
+            if (Msh.BC[i].expression.find(" t ") != std::string::npos) { Msh.BC[i].bUpdate = true; Msh.BC[i].iEq = 0; Msh.BC[i].value = Prs.evaluateTime(Msh.BC[i].iEq, 0); } // Update time
+            else if (Msh.BC[i].expression.find(" x ") != std::string::npos || Msh.BC[i].expression.find(" y ") != std::string::npos || Msh.BC[i].expression.find(" z ") != std::string::npos) { Msh.BC[i].iEq = 1; if constexpr (Dim == 1) { throw std::invalid_argument("Coordinate expressions not supported for 1D\n"); } } // Update coordinates 
+            else { throw std::invalid_argument("Equation not recognized: " + Msh.BC[i].expression); }
+        } else { Msh.BC[i].value = boundaries[i]["value"].asDouble(); }
         
-
         // Type
-        if (boundaries[i]["type"] == "Dirichlet") {Msh.BC[i].type = 0;}
-        else if (boundaries[i]["type"] == "Neumann") {Msh.BC[i].type = 1;}
-        else if (boundaries[i]["type"] == "Robin") {Msh.BC[i].type = 2;
-
+        if (boundaries[i]["type"] == "Dirichlet") { Msh.BC[i].type = 0; }
+        else if (boundaries[i]["type"] == "Neumann") { Msh.BC[i].type = 1; }
+        else if (boundaries[i]["type"] == "Robin") { Msh.BC[i].type = 2;
             // Value
             if (isFormula(boundaries[i]["alpha"].asString())) {
                 // Control
@@ -281,30 +263,121 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesSolver(MeshSolver<Dim>& Ms
                 Msh.BC[i].iExprA = Prs.registerExpression(Msh.BC[i].expressionA);
 
                 // Parser
-                if (Msh.BC[i].expressionA.find(" t ") != std::string::npos) { // Update time
-                    Msh.BC[i].iEqA = 0; Msh.BC[i].alpha = Prs.evaluateTime(Msh.BC[i].iEqA, 0);
-                } else if (Msh.BC[i].expressionA.find(" x ") != std::string::npos || Msh.BC[i].expressionA.find(" y ") != std::string::npos || Msh.BC[i].expressionA.find(" z ") != std::string::npos) {Msh.BC[i].iEqA = 1; if constexpr (Dim == 1) { throw std::invalid_argument("Coordinate functions not supported for 1D\n"); }} // Update coordinates
+                if (Msh.BC[i].expressionA.find(" t ") != std::string::npos) { Msh.BC[i].iEqA = 0; Msh.BC[i].alpha = Prs.evaluateTime(Msh.BC[i].iEqA, 0); } // Update time
+                else if (Msh.BC[i].expressionA.find(" x ") != std::string::npos || Msh.BC[i].expressionA.find(" y ") != std::string::npos || Msh.BC[i].expressionA.find(" z ") != std::string::npos) { Msh.BC[i].iEqA = 1; if constexpr (Dim == 1) { throw std::invalid_argument("Coordinate functions not supported for 1D\n"); } } // Update coordinates
                 else { throw std::invalid_argument("Equation not recognized: " + Msh.BC[i].expressionA); } 
+            } else { Msh.BC[i].alpha = boundaries[i]["alpha"].asDouble(); }
+        } else { throw std::invalid_argument("Boundary type not recognized: " + boundaries[i]["type"].asString()); }
+
+        // Resize
+        size_t tempSize{1}; 
+        for (size_t nD = 0; nD < Dim; nD++) {
+            //Control
+            if (Msh.BC[i].i0[nD] != Msh.BC[i].i1[nD]) { continue; }
+            for (size_t nDD = 0; nDD < Dim; nDD++) { if (nDD != nD) { tempSize *= Msh.N[nDD]; } }
+
+            // Value
+            if (Msh.BC[i].iEq == 0) { // Time
+                // Resize
+                Msh.BC[i].Phi.resize(tempSize, Msh.BC[i].value); Msh.BC[i].oPhi.resize(tempSize, Msh.BC[i].value);
+                if (Msh.BC[i].type == 2) { Msh.BC[i].A.resize(tempSize, Msh.BC[i].alpha); Msh.BC[i].oA.resize(tempSize, Msh.BC[i].alpha); }
+            } else if (Msh.BC[i].iEq == 1) { // Coordinates
+                if constexpr (Dim > 1) {
+                    // Reduce
+                    std::array<size_t, Dim - 1> tempN{}, tempi0{}, tempi1{}, tempX{}; tempN = reduceDimension<Dim>(Msh.N, nD); tempi0 = reduceDimension<Dim>(Msh.BC[i].i0, nD); tempi1 = reduceDimension(Msh.BC[i].i1, nD);
+                    // Resize & Parser
+                    Msh.BC[i].Phi.resize(tempSize); Msh.BC[i].oPhi.resize(tempSize);
+                    runLoopMesh<Dim - 1>(tempN, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                            size_t idx = calcIndex(iX[0], iX[1], Ny, iX[2], Nx);
+                            std::array<double, 3> iXX{}; for (size_t k = 0, kk = 0; k < Dim; k++) { if (k == nD) { Msh.BC[i].side == 0 ? iXX[k] = Msh.Faces[nD].front() : iXX[k] = Msh.Faces[nD].back(); } iXX[k] = Msh.Nodes[k][iX[kk++]]; }
+                            Msh.BC[i].Phi[idx] = Prs.evaluateCoordinates(Msh.BC[i].iExpr, iXX, nD);
+                            }, tempi0, tempi1); Msh.BC[i].oPhi = Msh.BC[i].Phi;
+                    
+                    if (Msh.BC[i].type == 2) {
+                        Msh.BC[i].A.resize(tempSize); Msh.BC[i].oA.resize(tempSize);
+                        runLoopMesh<Dim - 1>(tempN, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                                size_t idx = calcIndex(iX[0], iX[1], Ny, iX[2], Nx);
+                                std::array<double, 3> iXX{}; for (size_t k = 0, kk = 0; k < Dim; k++) { if (k == nD) { Msh.BC[i].side == 0 ? iXX[k] = Msh.Faces[nD].front() : iXX[k] = Msh.Faces[nD].back(); } iXX[k] = Msh.Nodes[k][iX[kk++]]; }
+                                Msh.BC[i].A[idx] = Prs.evaluateCoordinates(Msh.BC[i].iExprA, iXX, nD);
+                                }, tempi0, tempi1); Msh.BC[i].oA = Msh.BC[i].A;
+                    }
+                }
+            } else { // Scalar
+                // Resize
+                Msh.BC[i].Phi.resize(tempSize, Msh.BC[i].value); Msh.BC[i].oPhi.resize(tempSize, Msh.BC[i].value);
+                if (Msh.BC[i].type == 2) { Msh.BC[i].A.resize(tempSize, Msh.BC[i].alpha); Msh.BC[i].oA.resize(tempSize, Msh.BC[i].alpha); }
             }
-
-        } else { throw std::invalid_argument("Boundary type not recognized: " + std::to_string(Msh.BC[i].type)); }
-
-
-        // PENDING -- DEFINE AS LAMBDAS
-        /* // Resize */
-        /* if constexpr (Dim == 1) {sizeBoundary1D(Msh.BC[i], Msh, Prs);} */
-        /* else if constexpr (Dim == 2) {sizeBoundary2D(Msh.BC[i], Msh, Prs);} */
-        /* else if constexpr (Dim == 3) {sizeBoundary3D(Msh.BC[i], Msh, Prs);} */
-
-
+        }
     }
 }
 
     // Was it worth it to pass the std::array<MeshBase<Dim>, Dim>& V ? Or should I just pass MeshBase<Dim>
     // Test with addBoundariesBase() -- The code doesn't know what index to access if I send them independently, would need to pass that as well -- in main() -> for (size_t i = 0; i < Dim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, boundaries, bInit, sInit) }
 
-template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t i, std::array<MeshBase<Dim>, Dim>& V, Material Mat, Parser& Prs, Json::Value boundaries, std::vector<double> dInit, std::vector<std::string> sInit) {
+template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t iV, std::array<MeshBase<Dim>, Dim>& V, const Material& Mat, Parser& Prs, const Json::Value& boundaries, std::vector<double> dInit, std::vector<std::string> sInit) {
+    // Initial Conditions
+    if (!Mat.bPath) {std::fill(V[iV].Phi.begin(), V[iV].Phi.end(), dInit[iV]); std::fill(V[iV].oPhi.begin(), V[iV].oPhi.end(), dInit[iV]);} else {importInitialConditions(V[iV], sInit[iV]);}
 
+    // Control
+    V[iV].BC.resize(boundaries.size());
+
+    // Boundaries
+    for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++) {
+        // Position
+        V[iV].BC[i].side = boundaries[i]["side"].asInt(); if (V[iV].BC[i].side != 0 && V[iV].BC[i].side != 1) { throw std::invalid_argument("Boundary side not define correctly.\n");}
+        for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
+            V[iV].BC[i].i0[j] = std::lower_bound(V[iV].Nodes[i].begin(), V[iV].Nodes[i].end(), boundaries[i]["x0"][j].asDouble() - epsFind) - V[iV].Nodes[i].begin();
+            V[iV].BC[i].i1[j] = std::lower_bound(V[iV].Nodes[i].begin(), V[iV].Nodes[i].end(), boundaries[i]["x1"][j].asDouble() - epsFind) - V[iV].Nodes[i].begin();
+        }
+
+        // Value
+        if (isFormula(boundaries[i]["value"].asString())) {
+            // Control
+            V[iV].BC[i].expression = boundaries[i]["value"].asString();
+            V[iV].BC[i].iExpr = Prs.registerExpression(V[iV].BC[i].expression);
+
+            // Parser
+            if (V[iV].BC[i].expression.find(" t ") != std::string::npos) { V[iV].BC[i].bUpdate = true; V[iV].BC[i].iEq = 0; V[iV].BC[i].value = Prs.evaluateTime(V[iV].BC[i].iEq, 0); } // Update time
+            else if (V[iV].BC[i].expression.find(" x ") != std::string::npos || V[iV].BC[i].expression.find(" y ") != std::string::npos || V[iV].BC[i].expression.find(" z ") != std::string::npos) { V[iV].BC[i].iEq = 1; if constexpr (Dim == 1) { throw std::invalid_argument("Coordinate expressions not supported for 1D\n"); } } // Update coordinates 
+            else { throw std::invalid_argument("Equation not recognized: " + V[iV].BC[i].expression); }
+        } else { V[iV].BC[i].value = boundaries[i]["value"].asDouble(); }
+        
+        // Type
+        if (boundaries[i]["type"] == "Dirichlet") { V[iV].BC[i].type = 0; }
+        else if (boundaries[i]["type"] == "Neumann") { V[iV].BC[i].type = 1; }
+        else { throw std::invalid_argument("Boundary type not recognized: " + boundaries[i]["type"].asString()); }
+
+        // Resize
+        size_t tempSize{1}; 
+        for (size_t nD = 0; nD < Dim; nD++) {
+            //Control
+            if (V[iV].BC[i].i0[nD] != V[iV].BC[i].i1[nD]) { continue; }
+            for (size_t nDD = 0; nDD < Dim; nDD++) { if (nDD != nD) { tempSize *= V[iV].N[nDD]; } }
+
+            // Value
+            if (V[iV].BC[i].iEq == 0) { // Time
+                // Resize
+                V[iV].BC[i].Phi.resize(tempSize, V[iV].BC[i].value); V[iV].BC[i].oPhi.resize(tempSize, V[iV].BC[i].value);
+                if (V[iV].BC[i].type == 2) { V[iV].BC[i].A.resize(tempSize, V[iV].BC[i].alpha); V[iV].BC[i].oA.resize(tempSize, V[iV].BC[i].alpha); }
+            } else if (V[iV].BC[i].iEq == 1) { // Coordinates
+                if constexpr (Dim > 1) {
+                    // Reduce
+                    std::array<size_t, Dim - 1> tempN{}, tempi0{}, tempi1{}, tempX{}; tempN = reduceDimension<Dim>(V[iV].N, nD); tempi0 = reduceDimension<Dim>(V[iV].BC[i].i0, nD); tempi1 = reduceDimension(V[iV].BC[i].i1, nD);
+                    // Resize & Parser
+                    V[iV].BC[i].Phi.resize(tempSize); V[iV].BC[i].oPhi.resize(tempSize);
+                    runLoopMesh<Dim - 1>(tempN, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
+                            size_t idx = calcIndex(iX[0], iX[1], Ny, iX[2], Nx);
+                            std::array<double, 3> iXX{}; for (size_t k = 0, kk = 0; k < Dim; k++) { if (k == nD) { V[iV].BC[i].side == 0 ? iXX[k] = V[iV].Faces[nD].front() : iXX[k] = V[iV].Faces[nD].back(); } iXX[k] = V[iV].Nodes[k][iX[kk++]]; }
+                            V[iV].BC[i].Phi[idx] = Prs.evaluateCoordinates(V[iV].BC[i].iExpr, iXX, nD);
+                            }, tempi0, tempi1); V[iV].BC[i].oPhi = V[iV].BC[i].Phi;
+                }
+            } else { // Scalar
+                // Resize
+                V[iV].BC[i].Phi.resize(tempSize, V[iV].BC[i].value); V[iV].BC[i].oPhi.resize(tempSize, V[iV].BC[i].value);
+                if (V[iV].BC[i].type == 2) { V[iV].BC[i].A.resize(tempSize, V[iV].BC[i].alpha); V[iV].BC[i].oA.resize(tempSize, V[iV].BC[i].alpha); }
+            }
+        }
+    }
 }
 
 ///// Compiler Instances /////

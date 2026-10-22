@@ -13,21 +13,21 @@
 #include "o09_Parser.h"
 
 Parser::Parser(){
-
     // Constants
     symbol_table.add_constant("pi", varPi);
 
     // Variables
     symbol_table.add_variable("t", varTime);
-    symbol_table.add_variable("x", varX);
-    symbol_table.add_variable("y", varY);
-    symbol_table.add_variable("z", varZ);
-
+    symbol_table.add_variable("x", varK[0]);
+    symbol_table.add_variable("y", varK[1]);
+    symbol_table.add_variable("z", varK[2]);
+    /* symbol_table.add_variable("x", varX); */
+    /* symbol_table.add_variable("y", varY); */
+    /* symbol_table.add_variable("z", varZ); */
 }
 
 
 size_t Parser::registerExpression(std::string exprStr){
-
     // Control
     size_t iPos = std::find(sExpr.begin(), sExpr.end(), exprStr) - sExpr.begin();
     if (iPos < sExpr.size()){return iPos;}
@@ -43,19 +43,3 @@ size_t Parser::registerExpression(std::string exprStr){
     return vExpr.size() - 1;
 
 }
-
-
-/* double Parser::evaluateTime(int i, double nVal){ */
-
-/*     // Update */
-/*     varTime = nVal; return vExpr[i].value(); */
-
-/* } */
-
-
-/* double Parser::evaluateCoordinates(int i, double xCoord, double yCoord, double zCoord){ */
-	
-/*     // Update */
-/* 	varX = xCoord; varY = yCoord; varZ = zCoord; return vExpr[i].value(); */
-
-/* } */

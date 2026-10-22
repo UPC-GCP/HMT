@@ -2,6 +2,7 @@
 #define MESHDEV_H_
 
 // Imports
+#include <array>
 #include <cstddef>
 #include <optional>
 #include <complex.h>
@@ -27,6 +28,13 @@ public:
 
 // Functions
 inline size_t calcIndex(size_t iX, size_t iY=0, size_t Ny=1, size_t iZ=0, size_t Nx=1) { return static_cast<size_t>(iY + Ny * (iX + Nx * iZ)); };
+
+template <size_t Dim> std::array<size_t, Dim - 1> reduceDimension(const std::array<size_t, Dim>& inArr, size_t iRemove) {
+    // Reduce
+    std::array<size_t, Dim - 1> resArr{}; for (size_t i = 0, j = 0; i < Dim; i++) { if (i != iRemove) { resArr[j++] = inArr[i]; } }
+
+    return resArr;
+}
 
 template <size_t Dim, typename Func> void runLoopMesh(std::array<size_t, Dim> N, Func lamb, std::optional<std::array<size_t, Dim>> i0 = std::nullopt, std::optional<std::array<size_t, Dim>> i1 = std::nullopt) {
     // Control

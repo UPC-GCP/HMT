@@ -1,7 +1,9 @@
 #ifndef PARSER_H_ 
 #define PARSER_H_
 
+#include <array>
 #include <cmath>
+#include <cstddef>
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -16,12 +18,13 @@ private:
 public:
     // Variables
     const double varPi = M_PI;
+    double varTime{};
     exprtk::parser<double> parser;
     exprtk::symbol_table<double> symbol_table;
-    double varTime{}, varX{}, varY{}, varZ{};
-    // Alternative: template <size_t Dim> std::array<double, Dim> varK{};
+    /* double varTime{}, varX{}, varY{}, varZ{}; */
 
     // Vectors
+    std::array<double, 3> varK{};
     std::vector<std::string> sExpr;
     std::vector<exprtk::expression<double>> vExpr;
 
@@ -30,13 +33,8 @@ public:
 
     // Functions
     size_t registerExpression(std::string exprStr);
-    double evaluateTime(int i, double nVal){
-        varTime = nVal; return vExpr[i].value();
-    };
-    double evaluateCoordinates(int i, double xCoord, double yCoord=NAN, double zCoord=NAN){
-        varX = xCoord; if (!std::isnan(yCoord)) {varY = yCoord;} if (!std::isnan(zCoord)) {varZ = zCoord;} 
-        return vExpr[i].value();
-    };
+    double evaluateTime(size_t i, double nVal) { varTime = nVal; return vExpr[i].value(); };
+    double evaluateCoordinates(size_t i, std::array<double, 3> iX, size_t iRmv=3) { for (size_t k = 0, kk = 0; k < 3; k++) { if (k == iRmv) { continue; } varK[k] = iX[kk++]; } return vExpr[i].value(); };
 };
 
 #endif
