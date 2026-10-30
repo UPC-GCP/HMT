@@ -1929,6 +1929,7 @@ CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o02_MeshSpectr
   /usr/include/c++/13/istream \
   /usr/include/c++/13/limits \
   /usr/include/c++/13/map \
+  /usr/include/c++/13/math.h \
   /usr/include/c++/13/memory \
   /usr/include/c++/13/new \
   /usr/include/c++/13/optional \
@@ -2099,6 +2100,8 @@ CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o03_Dis
   /home/upc_gcp/TFM/HMT/o02_MeshSpectral.h \
   /home/upc_gcp/TFM/HMT/o03_Discretizer.h \
   /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.h \
+  /home/upc_gcp/TFM/HMT/o04_Solver.h \
+  /home/upc_gcp/TFM/HMT/o04_SolverSpectral.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -2217,6 +2220,7 @@ CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o03_Dis
   /usr/include/c++/13/istream \
   /usr/include/c++/13/limits \
   /usr/include/c++/13/map \
+  /usr/include/c++/13/math.h \
   /usr/include/c++/13/memory \
   /usr/include/c++/13/new \
   /usr/include/c++/13/optional \
@@ -2504,6 +2508,7 @@ CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o04_SolverSp
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
+  /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/limits \
   /usr/include/c++/13/map \
@@ -2992,6 +2997,7 @@ CMakeFiles/ROCK.dir/o06_MedicSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o06_MedicSpec
   /home/upc_gcp/TFM/HMT/o03_Discretizer.h \
   /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.h \
   /home/upc_gcp/TFM/HMT/o04_Solver.h \
+  /home/upc_gcp/TFM/HMT/o04_SolverSpectral.h \
   /home/upc_gcp/TFM/HMT/o05_Probe.h \
   /home/upc_gcp/TFM/HMT/o06_Medic.h \
   /home/upc_gcp/TFM/HMT/o06_MedicSpectral.h \

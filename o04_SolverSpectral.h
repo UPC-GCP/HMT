@@ -5,7 +5,7 @@
 #include "o04_Solver.h"
 
 // Enumerator
-enum class solSpectral { RK4, LES };
+enum class solSpectral { DNS, LES };
 
 // Class
 class SolverSpectral : Solver<1> {
@@ -19,9 +19,20 @@ public:
     SolverSpectral(std::string solverSelection, double tolNumeric, double maxIterations);
 
     // Headers
-    bool solveModel(std::vector<std::complex<double>>& u, double Re, double t, double dt);
-    bool solveRK4(std::vector<std::complex<double>>& u, double Re, double t, double dt);
-    bool solveLES(std::vector<std::complex<double>>& u, double Re, double t, double dt);
+    template <typename MeshClass> bool solveRK4(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh);
+    template <typename MeshClass> bool solveLES(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh);
+
+    // Functions
+    template <typename MeshClass> bool solveModel(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh);
+
+    /* template <typename MeshClass> bool solveModel(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh){ */
+    /*     switch (algorithm) { */
+    /*         case solSpectral::DNS: return solveRK4(u, Re, t, dt, Msh); */
+    /*         case solSpectral::LES: return solveRK4(u, Re, t, dt, Msh); */
+    /*         default: return false; */
+    /*     } */
+    /* }; */
+
 };
 
 #endif

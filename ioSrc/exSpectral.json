@@ -3,11 +3,11 @@
     "configSolver": "Spectral",
 
     "_dataNum": "Numerical Data",
-    "N": 20, "endTime": 10, "timeStep": 0.001, "maxIterations": 2000,
-    "solver": "DNS", "tolTemporal": 1e-3, "tolNumeric": 1e-6,
+    "N": 20, "endTime": 10, "timeStep": 0.001, "tolTemporal": 1e-3,
+    "solver": "DNS", "maxIterations": 2000, "tolNumeric": 1e-6,
 
     "_dataPhys": "Physical Data",
-    "Re": 40,
+    "Re": 40, "Cs": null, "slope": 2,
 
     "_dataProbe": "Probe Data",
     "probes": [

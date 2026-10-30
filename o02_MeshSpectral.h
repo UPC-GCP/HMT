@@ -9,8 +9,13 @@
 
 // Types
 struct MeshBurgers : MeshSimplified<1> {
-    std::vector<double> E{}, oE{};
-    std::vector<std::complex<double>> uHat{}, ouHat{}, R{};
+    std::vector<double> E{}, oE{}, visc{}, viscEff{};
+    std::vector<std::complex<double>> uHat{}, ouHat{};
+};
+
+struct MeshLES : MeshBurgers {
+    std::vector<double> viscStar{};
+    double Cs{}, m{}, filterWidth{}, ls{}, viscInf{};
 };
 
 // Class
@@ -20,6 +25,7 @@ private:
 public:
     // Headers
     void generateMeshBurgers(MeshBurgers& Msh, size_t N);
+    void generateMeshBurgers(MeshLES& Msh, size_t N, double smagorinskyConstant, double slope);
 };
 
 #endif
