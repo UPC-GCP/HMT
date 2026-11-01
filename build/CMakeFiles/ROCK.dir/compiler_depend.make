@@ -1096,6 +1096,7 @@ CMakeFiles/ROCK.dir/o00_Spectral.cpp.o: /home/upc_gcp/TFM/HMT/o00_Spectral.cpp \
   /usr/include/c++/13/tuple \
   /usr/include/c++/13/type_traits \
   /usr/include/c++/13/typeinfo \
+  /usr/include/c++/13/variant \
   /usr/include/c++/13/vector \
   /usr/include/complex.h \
   /usr/include/ctype.h \
@@ -2217,6 +2218,7 @@ CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o03_Dis
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
+  /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/limits \
   /usr/include/c++/13/map \
@@ -3922,6 +3924,8 @@ CMakeFiles/ROCK.dir/o09_Parser.cpp.o: /home/upc_gcp/TFM/HMT/o09_Parser.cpp \
 /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp:
 
 /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp:
+
+/usr/include/c++/13/variant:
 
 /usr/include/c++/13/filesystem:
 
