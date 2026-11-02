@@ -9,7 +9,7 @@
 #include "o04_SolverSpectral.h"
 
 void DiscretizerSpectral::evaluateTimeStability(const Material& Mat, const MeshBurgers& Msh, double& timeStep, double C1) {
-    double dtCalc = C1 * Mat.Re / Msh.N[0]; timeStep = timeStep > dtCalc ? timeStep : dtCalc;
+    double dtCalc = C1 * Mat.Re / Msh.N[0]; timeStep = timeStep > dtCalc ? dtCalc : timeStep;
 }
 
 void DiscretizerSpectral::initializeBurgers(MeshBurgers& Msh, double Re) {
