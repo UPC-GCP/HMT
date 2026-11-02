@@ -2,6 +2,7 @@
 #define DISCRETIZERSPECTRAL_H_
 
 // Self-Imports
+#include "o01_Material.h"
 #include "o02_MeshSpectral.h"
 #include "o03_Discretizer.h"
 #include "o04_SolverSpectral.h"
@@ -11,6 +12,7 @@ private:
 
 public:
     // Headers
+    void evaluateTimeStability(const Material& Mat, const MeshBurgers& Msh, double& timeStep, double C1);
     void initializeBurgers(MeshBurgers& Msh, double Re);
     void initializeBurgers(MeshLES& Msh, double Re);
     void calculateEnergy(std::vector<double>& E, const std::vector<std::complex<double>>& uHat);

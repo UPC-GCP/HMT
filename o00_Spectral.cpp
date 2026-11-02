@@ -46,7 +46,8 @@ namespace {
         std::cout << "Initializing probe ...\n"; std::optional<ProbeSpectral> Prb; std::visit([&](auto& vMsh) { Prb.emplace(vMsh, data["probes"], configName); (*Prb).checkProbes(vMsh, 0); }, Burg); std::cout << "Directory and files created.\n";
 
         ///// Temporal Parameters /////
-        double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
+        double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; 
+        std::visit([&](auto& vMsh) { Dsc.evaluateTimeStability(Mat, vMsh, dt, data["C1"].asDouble()); }, Burg); size_t iMax = endTime / dt;
 
         ///// Medic /////
         std::cout << "Initializing medic ...\n";

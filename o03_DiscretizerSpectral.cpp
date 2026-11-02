@@ -4,8 +4,13 @@
 
 // Self-Imports
 #include "o03_DiscretizerSpectral.h"
+#include "o01_Material.h"
 #include "o02_MeshSpectral.h"
 #include "o04_SolverSpectral.h"
+
+void DiscretizerSpectral::evaluateTimeStability(const Material& Mat, const MeshBurgers& Msh, double& timeStep, double C1) {
+    double dtCalc = C1 * Mat.Re / Msh.N[0]; timeStep = timeStep > dtCalc ? timeStep : dtCalc;
+}
 
 void DiscretizerSpectral::initializeBurgers(MeshBurgers& Msh, double Re) {
     // Initialize Values
@@ -29,7 +34,7 @@ void DiscretizerSpectral::calculateConvectiveTerm(std::vector<std::complex<doubl
     for (int k = 0; k <= N; k++) {
         for (int q = k - N; q <= N; q++) {
             // Control
-            p = k - q; if (std::abs(p) > u.size()) { continue; }
+            p = k - q; if (std::abs(p) > N) { continue; }
             
             // Calculate
             up = (p >= 0) ? u[p] : std::conj(u[-p]); uq = (q >= 0) ? u[q] : std::conj(u[-q]);
@@ -44,7 +49,7 @@ void DiscretizerSpectral::calculateEnergy(std::vector<double>& E, const std::vec
 
 template <typename MeshClass> void DiscretizerSpectral::calculateVEff(MeshClass& Msh) {
     if constexpr (std::is_same_v<MeshClass, MeshBurgers>) { Msh.viscEff = Msh.visc; }
-    else if constexpr (std::is_same_v<MeshClass, MeshLES>) { for (size_t k = 0; k < Msh.totNodes; k++) { Msh.viscEff[k] = Msh.visc[k] + Msh.viscInf * Msh.viscStar[k] * std::sqrt(Msh.E.back() / Msh.N[0]); }}
+    else if constexpr (std::is_same_v<MeshClass, MeshLES>) { for (size_t k = 1; k < Msh.totNodes; k++) { Msh.viscEff[k] = Msh.visc[k] + Msh.viscInf * Msh.viscStar[k] * std::sqrt(Msh.E.back() / Msh.N[0]); }}
 }
 
 template <typename MeshClass> std::vector<std::complex<double>> DiscretizerSpectral::calculateRHS(const std::vector<std::complex<double>>& u, double Re, double t, solSpectral algorithm, MeshClass& Msh) {
@@ -53,7 +58,7 @@ template <typename MeshClass> std::vector<std::complex<double>> DiscretizerSpect
 
     // Dissipation
     calculateVEff(Msh);
-    for (size_t k = 0; k < u.size(); k++) { D[k] = 2 * static_cast<double>(k) * static_cast<double>(k) * u[k] * Msh.viscEff[k]; }
+    for (size_t k = 0; k < u.size(); k++) { D[k] = static_cast<double>(k) * static_cast<double>(k) * u[k] * Msh.viscEff[k]; } // Removed 2*
     
     // Convection
     calculateConvectiveTerm(C, u);
