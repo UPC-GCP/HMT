@@ -6,18 +6,19 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
-#include <type_traits>
 #include <variant>
+/* #include <type_traits> */
 
 // Self-Imports
 #include "o01_Material.h"
 #include "o02_MeshSpectral.h"
 #include "o03_DiscretizerSpectral.h"
+#include "o04_Solver.h"
 #include "o04_SolverSpectral.h"
 #include "o05_ProbeSpectral.h"
 #include "o06_MedicSpectral.h"
 
-using MeshVariant = std::variant<std::monostate, MeshBurgers, MeshLES>;
+using MeshVariant = std::variant<MeshBurgers, MeshLES>;
 
 namespace {
     void runSolverLoop(const Json::Value& data, std::string configName) {
@@ -36,56 +37,46 @@ namespace {
         MeshVariant Burg;
         if (Sol.algorithm == solSpectral::DNS) { auto& vMsh = Burg.emplace<MeshBurgers>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt()); }
         else if (Sol.algorithm == solSpectral::LES) { auto& vMsh = Burg.emplace<MeshLES>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt(), data["Cs"].asDouble(), data["slope"].asDouble()); }
-
-        std::visit([&](auto& vMsh) { if constexpr (!std::is_same_v<std::decay_t<decltype(vMsh)>, std::monostate>) { std::cout << "Burgers mesh truncated at " << vMsh.totNodes << " modes.\n"; } }, Burg);
-
-        std::cout << "Mesh type: " << typeid(Burg).name() << "\n";
-        std::visit([&](auto& vMsh) { std::cout << "Mesh type: " << typeid(vMsh).name() << "\n"; }, Burg);
-        auto& vMsh = Burg; std::cout << "Mesh type: " << typeid(vMsh).name() << "\n";
-
-        /* std::unique_ptr<MeshBurgers> Burg = nullptr; */
-        /* if (Sol.algorithm == solSpectral::DNS) { std::cout << "MeshBurg - creation\n"; Burg = std::make_unique<MeshBurgers>(); Msh.generateMeshBurgers(*Burg, data["N"].asInt()); } */
-        /* else if (Sol.algorithm == solSpectral::LES) { std::cout << "MeshLES - creation\n"; Burg = std::make_unique<MeshLES>(); Msh.generateMeshBurgers(static_cast<MeshLES&>(*Burg), data["N"].asInt(), data["Cs"].asDouble(), data["slope"].asDouble()); } */
+        std::visit([&](auto& vMsh) { std::cout << "Burgers mesh truncated at " << vMsh.totNodes << " modes.\n"; }, Burg);
 
         ///// Discretizer /////
-        std::cout << "Initializing discretizer ...\n";
-        DiscretizerSpectral Dsc; std::visit([&](auto& vMsh) { if constexpr (!std::is_same_v<std::decay_t<decltype(vMsh)>, std::monostate>) { Dsc.initializeBurgers(vMsh, Mat.Re); } }, Burg); std::cout << "Model initialized.\n";
+        std::cout << "Initializing discretizer ...\n"; DiscretizerSpectral Dsc; std::visit([&](auto& vMsh) { Dsc.initializeBurgers(vMsh, Mat.Re); }, Burg); std::cout << "Model initialized.\n";
 
-        /* ///// Probe ///// */
-        /* std::cout << "Initializing probe ...\n"; */
-        /* ProbeSpectral Prb(*Burg, data["probes"], configName); Prb.checkProbes(*Burg, 0); std::cout << "Directory and files created.\n"; // Probe only stores E, add uHat later */
+        ///// Probe /////
+        std::cout << "Initializing probe ...\n"; std::optional<ProbeSpectral> Prb; std::visit([&](auto& vMsh) { Prb.emplace(vMsh, data["probes"], configName); (*Prb).checkProbes(vMsh, 0); }, Burg); std::cout << "Directory and files created.\n";
 
-        /* ///// Temporal Parameters ///// */
-        /* double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt; */
+        ///// Temporal Parameters /////
+        double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; size_t iMax = endTime / dt;
 
-        /* ///// Medic ///// */
-        /* std::cout << "Initializing medic ...\n"; */
-        /* bool bMdc = data["medicOn"].asBool(); std::optional<MedicSpectral> Mdc; if (bMdc) { Mdc.emplace(*Burg, Prb, dt); } */
+        ///// Medic /////
+        std::cout << "Initializing medic ...\n";
+        bool bMdc = data["medicOn"].asBool(); std::optional<MedicSpectral> Mdc; if (bMdc) { std::visit([&](auto& vMsh) { Mdc.emplace(vMsh, *Prb, dt); }, Burg); }
 
-        /* ///// Temporal Loop ///// */
-        /* std::cout << "Processing ...\n"; */
-        /* for (size_t i = 1; i < iMax; i++) { */
-        /*     // Control */
-        /*     t = i * dt; (*Burg).ouHat = (*Burg).uHat; (*Burg).oE = (*Burg).E; */
+        ///// Temporal Loop /////
+        std::cout << "Processing ...\n";
+        std::visit([&](auto& vMsh) {
+                for (size_t i = 1; i < iMax; i++) { 
+                // Control
+                t = i * dt; vMsh.ouHat = vMsh.uHat; vMsh.oE = vMsh.E;
 
-        /*     // Solver */
-        /*     if (!Sol.solveModel((*Burg).uHat, Mat.Re, t, dt, *Burg)) { throw std::logic_error("Simulation diverges @ t = " + std::to_string(t)); }; */
+                // Solver
+                if (!Sol.solveModel(vMsh.uHat, Mat.Re, t, dt, vMsh)) { throw std::logic_error("Simulation diverges @ t = " + std::to_string(t)); };
 
-        /*     // Energy Balance */
-        /*     Dsc.calculateEnergy((*Burg).E, (*Burg).uHat); */
+                // Energy Balance
+                Dsc.calculateEnergy(vMsh.E, vMsh.uHat);
 
-        /*     // Probe & Medic */
-        /*     Prb.checkProbes(*Burg, t); */
-        /*     if (Mdc.has_value()) { Mdc->checkDiagnostics(Mat, *Burg); } */
+                // Probe & Medic
+                (*Prb).checkProbes(vMsh, t);
+                if (Mdc.has_value()) { (*Mdc).checkDiagnostics(Mat, vMsh); }
 
-        /*     // Convergence */
-        /*     if (calcErr((*Burg).uHat, (*Burg).ouHat) / dt < tolTemporal) { std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break; } */
+                // Convergence
+                if (calcErr(vMsh.uHat, vMsh.ouHat) / dt < tolTemporal) { std::cout << "\nSteady-state achieved @ t = " << t << " seconds."; break; }
 
-        /*     std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %"; */
-        /* } std::cout << "\n"; */
+                std::cout << "\r" << double(100 * static_cast<double>(i) / iMax) << " %";
+                } std::cout << "\n"; }, Burg);
 
-        /* // End */
-        /* std::cout << "Files saved to: " << Prb.fPath << "\n"; */
+        // End
+        std::cout << "Files saved to: " << (*Prb).fPath << "\n";
     }
 }
 

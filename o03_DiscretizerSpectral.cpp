@@ -1,7 +1,6 @@
 // Imports
 #include <cmath>
 #include <cstddef>
-#include <iostream>
 
 // Self-Imports
 #include "o03_DiscretizerSpectral.h"
@@ -15,8 +14,6 @@ void DiscretizerSpectral::initializeBurgers(MeshBurgers& Msh, double Re) {
 }
 
 void DiscretizerSpectral::initializeBurgers(MeshLES& Msh, double Re) {
-
-    std::cout << "LES initialization\n";
     // Base
     initializeBurgers(static_cast<MeshBurgers&>(Msh), Re);
 

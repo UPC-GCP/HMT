@@ -1,9 +1,15 @@
 ----------------------------------------------------
-Running simulations w/ 4 cores ... Wed Jul  1 05:25:37 -05 2026
+Running simulations w/ 8 cores ... Mon Nov  2 06:54:09 -05 2026
 ----------------------------------------------------
-Finished ./ioSrc/exNS5.json at 14:06:18
-Finished ./ioSrc/exNS7.json at 15:20:04
-Finished ./ioSrc/exNS6.json at 18:29:23
-Finished ./ioSrc/exNS8.json at 22:31:57
+Finished ./ioSrc/cfgBurgersDNSN20.json at 06:54:09
+Finished ./ioSrc/cfgBurgersLESCs0.05.json at 06:54:09
+Finished ./ioSrc/cfgBurgersLESCs0.15.json at 06:54:09
+Finished ./ioSrc/cfgBurgersLESCs0.25.json at 06:54:09
+Finished ./ioSrc/cfgBurgersLESCs0.35.json at 06:54:09
+Finished ./ioSrc/cfgBurgersLESCs0.4223.json at 06:54:09
+Finished ./ioSrc/cfgBurgersDNSN40.json at 06:54:09
+Finished ./ioSrc/cfgBurgersDNSN60.json at 06:54:10
+Finished ./ioSrc/cfgBurgersDNSN80.json at 06:54:10
+Finished ./ioSrc/cfgBurgersDNSN100.json at 06:54:10
 ----------------------------------------------------
-All simulations complete ... Wed Jul  1 22:31:58 -05 2026
+All simulations complete ... Mon Nov  2 06:54:10 -05 2026
