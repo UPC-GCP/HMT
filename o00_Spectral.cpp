@@ -36,7 +36,7 @@ namespace {
         // Burgers
         MeshVariant Burg;
         if (Sol.algorithm == solSpectral::DNS) { auto& vMsh = Burg.emplace<MeshBurgers>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt()); }
-        else if (Sol.algorithm == solSpectral::LES) { auto& vMsh = Burg.emplace<MeshLES>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt(), data["Cs"].asDouble(), data["slope"].asDouble()); }
+        else if (Sol.algorithm == solSpectral::LES) { auto& vMsh = Burg.emplace<MeshLES>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt(), data["CK"].asDouble(), data["slope"].asDouble()); }
         std::visit([&](auto& vMsh) { std::cout << "Burgers mesh truncated at " << vMsh.totNodes << " modes.\n"; }, Burg);
 
         ///// Discretizer /////

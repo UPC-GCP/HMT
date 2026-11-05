@@ -34,7 +34,7 @@ Finite Volume Method single scalar numerical solver.
 1. **boundariesPhi**: Boundary conditions for Scalar variable.
 
 ### Probe Data
-1. **probes**: Definition of probe types for data logging, requires specifying the time interval, logging skips and geometric region for each probe. (Accepted Values: Map, Field, Debug) --- This may change significantly
+1. **probes**: Definition of probe types for data logging, requires specifying the time interval, logging interval and geometric region for each probe. (Accepted Values: Map, Field, Debug)
 
 ### Medic Data
 1. **medicOn**: Boolean to activate the diagnostic tool.
@@ -74,18 +74,21 @@ Same as FVMScalar.
 Spectral Methods numerical solver.
 
 ### Numerical Data
-1. **N**: Truncated mode limit.
+1. **N**: Spectral cutoff frequency.
 2. **endTime**: Total duration of simulation.
 3. **timeStep**: Time interval between instants.
-4. **solver**: Numerical solver selection. (DNS, LES)
-5. **tolTemporal**: Tolerance for the steady-state convergence check.
-6. **tolNumeric**: Tolerance for the numerical solver. 
+4. **tolTemporal**: Tolerance for the steady-state convergence check.
+5. **C1**: Temporal stability condition constant.
+6. **solver**: Numerical solver selection. (DNS, LES)
+7. **tolNumeric**: Tolerance for the numerical solver. 
 
 ### Physical Data
 1. **Re**: Reynolds number.
+2. **CK**: Kolmogorov constant.
+3. **slope**: Expected slope for energy spectrum.
 
 ### Probe Data
-Same as FVMScalar.
+1. **probes**: Definition of probe types for data logging, requires specifying the time interval, logging interval and geometric region for each probe. (Accepted Values: Modal)
 
 ### Medic Data
 Same as FVMScalar.

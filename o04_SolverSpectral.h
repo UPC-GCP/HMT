@@ -24,15 +24,6 @@ public:
 
     // Functions
     template <typename MeshClass> bool solveModel(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh);
-
-    /* template <typename MeshClass> bool solveModel(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh){ */
-    /*     switch (algorithm) { */
-    /*         case solSpectral::DNS: return solveRK4(u, Re, t, dt, Msh); */
-    /*         case solSpectral::LES: return solveRK4(u, Re, t, dt, Msh); */
-    /*         default: return false; */
-    /*     } */
-    /* }; */
-
 };
 
 #endif

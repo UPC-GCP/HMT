@@ -19,7 +19,6 @@ SolverSpectral::SolverSpectral(std::string solverSelection, double tolNumeric, d
 }
 
 template <typename MeshClass> bool SolverSpectral::solveRK4(std::vector<std::complex<double>>& u, double Re, double t, double dt, MeshClass& Msh) {
-
     // Control
     std::vector<std::complex<double>> uTemp{}, STemp{}, SFinal{}; uTemp.resize(u.size()); STemp.resize(u.size()); SFinal.resize(u.size());
 

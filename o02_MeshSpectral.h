@@ -15,7 +15,7 @@ struct MeshBurgers : MeshSimplified<1> {
 
 struct MeshLES : MeshBurgers {
     std::vector<double> viscStar{};
-    double Cs{}, m{}, filterWidth{}, ls{}, viscInf{};
+    double CK{}, m{}, filterWidth{}, ls{}, viscInf{};
 };
 
 // Class

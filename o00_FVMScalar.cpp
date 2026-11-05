@@ -47,7 +47,6 @@ namespace {
 }
 
 void runFVMScalar(const Json::Value& data, std::string configName) {
-
     ///// Simulation /////
     size_t nDim = data["N"].size();
     switch (nDim) {
@@ -56,5 +55,4 @@ void runFVMScalar(const Json::Value& data, std::string configName) {
         case 3: runSolverLoop<3>(data, configName); break;
         default: throw std::runtime_error("Unrecognized number of dimensions: " + std::to_string(nDim));
     }
-
 }

@@ -19,11 +19,11 @@ void MeshSpectral::generateMeshBurgers(MeshLES& Msh, size_t N, double smagorinsk
     generateMeshBurgers(Msh, N);
 
     // Control
-    Msh.Cs = smagorinskyConstant; Msh.m = slope; Msh.filterWidth = M_PI / N;
+    Msh.CK = smagorinskyConstant; Msh.m = slope; Msh.filterWidth = M_PI / N;
 
     // Resize
     Msh.viscStar.resize(Msh.totNodes);
 
     // Constants
-    Msh.ls = Msh.Cs * Msh.filterWidth; Msh.viscInf = 0.31 * (5 - Msh.m) * std::sqrt(3 - Msh.m) * std::pow(Msh.Cs, -1.5) / (Msh.m + 1);
+    Msh.ls = 0.15 * Msh.filterWidth; Msh.viscInf = 0.31 * (5 - Msh.m) * std::sqrt(3 - Msh.m) * std::pow(Msh.CK, -1.5) / (Msh.m + 1);
 }

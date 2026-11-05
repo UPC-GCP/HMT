@@ -2097,6 +2097,7 @@ CMakeFiles/ROCK.dir/o02_MeshSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o02_MeshSpectr
 
 CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o03_DiscretizerSpectral.cpp \
   /home/upc_gcp/TFM/HMT/o00_Globals.h \
+  /home/upc_gcp/TFM/HMT/o01_Material.h \
   /home/upc_gcp/TFM/HMT/o02_Mesh.h \
   /home/upc_gcp/TFM/HMT/o02_MeshSpectral.h \
   /home/upc_gcp/TFM/HMT/o03_Discretizer.h \
@@ -2388,6 +2389,7 @@ CMakeFiles/ROCK.dir/o03_DiscretizerSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o03_Dis
 
 CMakeFiles/ROCK.dir/o04_SolverSpectral.cpp.o: /home/upc_gcp/TFM/HMT/o04_SolverSpectral.cpp \
   /home/upc_gcp/TFM/HMT/o00_Globals.h \
+  /home/upc_gcp/TFM/HMT/o01_Material.h \
   /home/upc_gcp/TFM/HMT/o02_Mesh.h \
   /home/upc_gcp/TFM/HMT/o02_MeshSpectral.h \
   /home/upc_gcp/TFM/HMT/o03_Discretizer.h \
