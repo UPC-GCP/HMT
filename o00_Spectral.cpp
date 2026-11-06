@@ -49,6 +49,8 @@ namespace {
         double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; 
         std::visit([&](auto& vMsh) { Dsc.evaluateTimeStability(Mat, vMsh, dt, data["C1"].asDouble()); }, Burg); size_t iMax = endTime / dt;
 
+        std::cout << "dt: " << dt << "\n";
+
         ///// Medic /////
         std::cout << "Initializing medic ...\n";
         bool bMdc = data["medicOn"].asBool(); std::optional<MedicSpectral> Mdc; if (bMdc) { std::visit([&](auto& vMsh) { Mdc.emplace(vMsh, *Prb, dt); }, Burg); }
@@ -64,7 +66,7 @@ namespace {
                 if (!Sol.solveModel(vMsh.uHat, Mat.Re, t, dt, vMsh)) { throw std::logic_error("Simulation diverges @ t = " + std::to_string(t)); };
 
                 // Energy Balance
-                Dsc.calculateEnergy(vMsh.E, vMsh.uHat);
+                Dsc.calculateEnergy(vMsh.E, vMsh.uHat); for (double val : vMsh.E) { if (std::isnan(val)) { throw std::logic_error("Simulation diverges @ t = " + std::to_string(t)); } }
 
                 // Probe & Medic
                 (*Prb).checkProbes(vMsh, t);

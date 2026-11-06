@@ -42,11 +42,13 @@
 
 # Directories
 ioRes/
-ioPlots/
-*.png
-__pycache__
 .cache/
 .venv/
+__pycache__
+
+# Plots
+ioPlots/*
+!ioPlots/*.py
 
 # Reports
 *.tex
@@ -55,7 +57,3 @@ __pycache__
 # Bash / Linux
 *.sh
 .*.swp
-
-# Markdown
-*.md
-!README.md

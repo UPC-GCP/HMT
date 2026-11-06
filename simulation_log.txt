@@ -1,15 +1,11 @@
 ----------------------------------------------------
-Running simulations w/ 8 cores ... Mon Nov  2 10:28:19 -05 2026
+Running simulations w/ 8 cores ... Fri Nov  6 14:03:55 -05 2026
 ----------------------------------------------------
-Finished ./ioSrc/cfgBurgersLESCs0.05.json at 10:28:19
-Finished ./ioSrc/cfgBurgersLESCs0.25.json at 10:28:19
-Finished ./ioSrc/cfgBurgersLESCs0.15.json at 10:28:19
-Finished ./ioSrc/cfgBurgersLESCs0.4223.json at 10:28:19
-Finished ./ioSrc/cfgBurgersLESCs0.35.json at 10:28:19
-Finished ./ioSrc/cfgBurgersDNSN40.json at 10:28:19
-Finished ./ioSrc/cfgBurgersDNSN20.json at 10:28:19
-Finished ./ioSrc/cfgBurgersDNSN60.json at 10:28:20
-Finished ./ioSrc/cfgBurgersDNSN80.json at 10:28:20
-Finished ./ioSrc/cfgBurgersDNSN100.json at 10:28:20
+Finished ./ioSrc/cfgBurgersTempCLESC0.45.json at 14:03:56
+Finished ./ioSrc/cfgBurgersTempCLESC0.1.json at 14:03:56
+Finished ./ioSrc/cfgBurgersTempCDNSC1.15.json at 14:03:56
+Finished ./ioSrc/cfgBurgersTempCDNSC0.8.json at 14:03:56
+Finished ./ioSrc/cfgBurgersTempCDNSC0.45.json at 14:03:56
+Finished ./ioSrc/cfgBurgersTempCDNSC0.1.json at 14:03:58
 ----------------------------------------------------
-All simulations complete ... Mon Nov  2 10:28:20 -05 2026
+All simulations complete ... Fri Nov  6 14:03:58 -05 2026

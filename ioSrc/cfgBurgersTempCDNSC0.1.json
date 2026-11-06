@@ -1,0 +1,35 @@
+{
+  "_dataConfig": "Configuration",
+  "configSolver": "Spectral",
+  "_dataNum": "Numerical Data",
+  "N": 100,
+  "endTime": 10,
+  "timeStep": 1,
+  "tolTemporal": 0.0001,
+  "C1": 0.1,
+  "solver": "DNS",
+  "tolNumeric": 0.000001,
+  "_dataPhys": "Physical Data",
+  "Re": 40,
+  "CK": 0.4223,
+  "slope": 2,
+  "_dataProbe": "Probe Data",
+  "probes": [
+    {
+      "type": "Modal",
+      "t": [
+        0,
+        100
+      ],
+      "x0": [
+        0
+      ],
+      "x1": [
+        100
+      ],
+      "nWrite": null
+    }
+  ],
+  "_dataMedic": "Medic Data",
+  "medicOn": true
+}

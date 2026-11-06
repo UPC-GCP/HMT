@@ -14,14 +14,14 @@ OUT_BASE="cfgBurgers" # cfg[CASE]
 ### ALL CHANGHING VALUES LISTED HERE (SWEEPVARIABLE=("Opt 1", "Opt 2", ... ))
 SWEEPSOLVER=("DNS" "LES")
 SWEEPDT=(0.1 0.01 0.001 0.0001) # DNS: N = 100, LES: N = 20
-SWEEPC1=(0.1, 0.3, 0.5, 0.7, 0.9) # DNS: N = 100, LES: N = 20
+SWEEPC1=(0.1 0.45 0.8 1.15 1.5) # DNS: N = 100, LES: N = 20
 
 # DNS
 SWEEPDNSN=(20 40 60 80 100) # dt = 0.0001
 
 #LES
 SWEEPLESN=(10 15 20 25 30) # dt = 0.0001
-SWEEPCK=(0.4223 0.35 0.25 0.15 0.05) # N = 20, dt = 0.0001
+SWEEPCK=(0.05 0.25 0.40 0.4223 0.45 0.60 0.80) # N = 20, dt = 0.0001
 
 # Parameter loop
 for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
@@ -56,8 +56,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             echo "$FILENAME"
 
             # Parameters
-            dt=0.0001
-            N=20
+            dt=1
+            N=100
             probes="[
                 {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
@@ -124,7 +124,7 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             echo "$FILENAME"
 
             # Parameters
-            dt=0.0001
+            dt=1
             N=20
             probes="[
                 {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
@@ -164,7 +164,7 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
         # Kolmogorov Constant [READY]
         for CK in "${SWEEPCK[@]}"; do
             # File
-            FILENAME="$INPUT_DIR/${OUT_BASE}KolC${solver}Cs${Cs}.json"
+            FILENAME="$INPUT_DIR/${OUT_BASE}KolC${solver}CK${CK}.json"
             echo "$FILENAME"
 
             # Parameters
