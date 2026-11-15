@@ -7,11 +7,12 @@
     "solver": "DNS", "tolNumeric": 1e-6,
 
     "_dataPhys": "Physical Data",
-    "Re": 40, "CK": 0.4223, "slope": 2,
+    "Re": 40, "CK": 0.4223, "slope": 2, "xF": 0,
 
     "_dataProbe": "Probe Data",
     "probes": [
-        {"type": "Modal", "t": [0, 100], "x0": [0], "x1": [100], "nWrite": null}
+        {"type": "Modal", "variable": "E", "t": [0, 100], "x0": [0], "x1": [100], "nWrite": null},
+        {"type": "Modal", "variable": "u", "t": [0, 100], "x0": [0], "x1": [100], "nWrite": null}
     ],
 
     "_dataMedic": "Medic Data",

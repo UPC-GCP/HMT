@@ -35,8 +35,8 @@ namespace {
 
         // Burgers
         MeshVariant Burg;
-        if (Sol.algorithm == solSpectral::DNS) { auto& vMsh = Burg.emplace<MeshBurgers>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt()); }
-        else if (Sol.algorithm == solSpectral::LES) { auto& vMsh = Burg.emplace<MeshLES>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt(), data["CK"].asDouble(), data["slope"].asDouble()); }
+        if (Sol.algorithm == solSpectral::DNS) { auto& vMsh = Burg.emplace<MeshBurgers>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt(), data["xF"].asDouble()); }
+        else if (Sol.algorithm == solSpectral::LES) { auto& vMsh = Burg.emplace<MeshLES>(); Msh.generateMeshBurgers(vMsh, data["N"].asInt(), data["CK"].asDouble(), data["slope"].asDouble(), data["xF"].asDouble()); }
         std::visit([&](auto& vMsh) { std::cout << "Burgers mesh truncated at " << vMsh.totNodes << " modes.\n"; }, Burg);
 
         ///// Discretizer /////
@@ -48,8 +48,6 @@ namespace {
         ///// Temporal Parameters /////
         double dt = data["timeStep"].asDouble(), endTime = data["endTime"].asDouble(), tolTemporal = data["tolTemporal"].asDouble(), t{}; 
         std::visit([&](auto& vMsh) { Dsc.evaluateTimeStability(Mat, vMsh, dt, data["C1"].asDouble()); }, Burg); size_t iMax = endTime / dt;
-
-        std::cout << "dt: " << dt << "\n";
 
         ///// Medic /////
         std::cout << "Initializing medic ...\n";

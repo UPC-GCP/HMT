@@ -15,20 +15,22 @@ OUT_BASE="cfgBurgers" # cfg[CASE]
 SWEEPSOLVER=("DNS" "LES")
 SWEEPDT=(0.1 0.01 0.001 0.0001) # DNS: N = 100, LES: N = 20
 SWEEPC1=(0.1 0.45 0.8 1.15 1.5) # DNS: N = 100, LES: N = 20
+SWEEPRE=(50 100 150 200 250 300) # DNS: N = 100, LES: N = 20
+SWEEPXF=(1 0 -1) # DNS: N = 100, LES: N = 20
 
 # DNS
 SWEEPDNSN=(20 40 60 80 100) # dt = 0.0001
 
 #LES
 SWEEPLESN=(10 15 20 25 30) # dt = 0.0001
-SWEEPCK=(0.05 0.25 0.40 0.4223 0.45 0.60 0.80) # N = 20, dt = 0.0001
+SWEEPCK=(0.05 0.25 0.4223 0.60 0.80) # N = 20, dt = 0.0001
+SWEEPM=(1 1.66667 2 2.5 3) # N = 20, dt = 0.0001
 
 # Parameter loop
 for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
-	
     # DNS
     if [[ $solver == "DNS" ]]; then
-        # Temporal Convergence - T
+        # Temporal Convergence - T [READY]
         for dt in "${SWEEPDT[@]}"; do
             # Name
             FILENAME="$INPUT_DIR/${OUT_BASE}TempT${solver}dt${dt}.json"
@@ -37,7 +39,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             # Parameters
             N=100
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
 
             # Create .json
@@ -49,7 +52,7 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
                 "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
         done
 
-        # Temporal Convergence - C1
+        # Temporal Convergence - C1 [READY]
         for C1 in "${SWEEPC1[@]}"; do
             # Name
             FILENAME="$INPUT_DIR/${OUT_BASE}TempC${solver}C${C1}.json"
@@ -59,7 +62,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             dt=1
             N=100
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
 
             # Create .json
@@ -80,7 +84,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
 
             # Parameters
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
             dt=0.0001
 
@@ -90,6 +95,50 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
                 --argjson argProbe "$probes" \
                 --argjson argDT "$dt" \
                 '.solver = $argSol | .N = $argN | .probes = $argProbe | .timeStep = $argDT' \
+                "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
+        done
+
+        # Reynolds Number - Re [READY]
+        for RE in "${SWEEPRE[@]}"; do
+            # Name
+            FILENAME="$INPUT_DIR/${OUT_BASE}Turb${solver}Re${RE}.json"
+            echo "$FILENAME"
+
+            # Parameters
+            N=100
+            probes="[
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+            ]"
+
+            # Create .json 
+            jq --arg argSol "$solver" \
+                --argjson argN "$N" \
+                --argjson argProbe "$probes" \
+                --argjson argRe "$RE" \
+                '.solver = $argSol | .N = $argN | .probes = $argProbe | .Re = $argRe' \
+                "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
+        done
+
+        # Forcing Term - xF [READY]
+        for xF in "${SWEEPXF[@]}"; do
+            # Name
+            FILENAME="$INPUT_DIR/${OUT_BASE}Forc${solver}xF${xF}.json"
+            echo "$FILENAME"
+
+            # Parameters
+            N=100
+            probes="[
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+            ]"
+
+            # Create .json 
+            jq --arg argSol "$solver" \
+                --argjson argN "$N" \
+                --argjson argProbe "$probes" \
+                --argjson argF "$xF" \
+                '.solver = $argSol | .N = $argN | .probes = $argProbe | .xF = $argF' \
                 "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
         done
     fi
@@ -105,7 +154,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             # Parameters
             N=20
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
 
             # Create .json
@@ -127,7 +177,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             dt=1
             N=20
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
 
             # Create .json
@@ -148,7 +199,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
 
             # Parameters
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
             dt=0.0001
 
@@ -171,7 +223,8 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
             dt=0.0001
             N=20
             probes="[
-                {\"type\": \"Modal\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
             ]"
 
             # Create .json 
@@ -183,6 +236,71 @@ for solver in "${SWEEPSOLVER[@]}"; do # SOLVER loop
                 '.solver = $argSol | .CK = $argCK | .timeStep = $argDT | .N = $argN | .probes = $argProbe' \
                 "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
         done
-    fi
 
+        # Reynolds Number - Re [READY]
+        for RE in "${SWEEPRE[@]}"; do
+            # Name
+            FILENAME="$INPUT_DIR/${OUT_BASE}Turb${solver}Re${RE}.json"
+            echo "$FILENAME"
+
+            # Parameters
+            N=20
+            probes="[
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+            ]"
+
+            # Create .json 
+            jq --arg argSol "$solver" \
+                --argjson argN "$N" \
+                --argjson argProbe "$probes" \
+                --argjson argRe "$RE" \
+                '.solver = $argSol | .N = $argN | .probes = $argProbe | .Re = $argRe' \
+                "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
+        done
+
+        # Forcing Term - xF [READY]
+        for xF in "${SWEEPXF[@]}"; do
+            # Name
+            FILENAME="$INPUT_DIR/${OUT_BASE}Forc${solver}xF${xF}.json"
+            echo "$FILENAME"
+
+            # Parameters
+            N=20
+            probes="[
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+            ]"
+
+            # Create .json 
+            jq --arg argSol "$solver" \
+                --argjson argN "$N" \
+                --argjson argProbe "$probes" \
+                --argjson argF "$xF" \
+                '.solver = $argSol | .N = $argN | .probes = $argProbe | .xF = $argF' \
+                "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
+        done
+
+        # Slope - m []
+        for m in "${SWEEPM[@]}"; do
+            # Name
+            FILENAME="$INPUT_DIR/${OUT_BASE}Slope${solver}m${m}.json"
+            echo "$FILENAME"
+
+            # Parameters
+            N=20
+            probes="[
+                {\"type\": \"Modal\", \"variable\": \"E\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null},
+                {\"type\": \"Modal\", \"variable\": \"u\", \"t\": [0, 100], \"x0\": [0], \"x1\": [$N], \"nWrite\": null}
+            ]"
+
+            # Create .json
+            jq --arg argSol "$solver" \
+                --argjson argN "$N" \
+                --argjson argProbe "$probes" \
+                --argjson argSlp "$m" \
+                '.solver = $argSol | .N = $argN | .probes = $argProbe | .slope = $argSlp' \
+                "$INPUT_DIR/$BASE_FILE" > "$FILENAME"
+        done
+    fi
 done

@@ -1,6 +1,9 @@
 #ifndef DISCRETIZERSPECTRAL_H_
 #define DISCRETIZERSPECTRAL_H_
 
+// Imports
+#include <complex>
+
 // Self-Imports
 #include "o01_Material.h"
 #include "o02_MeshSpectral.h"

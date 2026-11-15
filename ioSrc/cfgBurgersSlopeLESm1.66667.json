@@ -1,0 +1,52 @@
+{
+  "_dataConfig": "Configuration",
+  "configSolver": "Spectral",
+  "_dataNum": "Numerical Data",
+  "N": 20,
+  "endTime": 10,
+  "timeStep": 0.0001,
+  "tolTemporal": 0.0001,
+  "C1": 1,
+  "solver": "LES",
+  "tolNumeric": 0.000001,
+  "_dataPhys": "Physical Data",
+  "Re": 40,
+  "CK": 0.4223,
+  "slope": 1.66667,
+  "xF": 0,
+  "_dataProbe": "Probe Data",
+  "probes": [
+    {
+      "type": "Modal",
+      "variable": "E",
+      "t": [
+        0,
+        100
+      ],
+      "x0": [
+        0
+      ],
+      "x1": [
+        20
+      ],
+      "nWrite": null
+    },
+    {
+      "type": "Modal",
+      "variable": "u",
+      "t": [
+        0,
+        100
+      ],
+      "x0": [
+        0
+      ],
+      "x1": [
+        20
+      ],
+      "nWrite": null
+    }
+  ],
+  "_dataMedic": "Medic Data",
+  "medicOn": true
+}

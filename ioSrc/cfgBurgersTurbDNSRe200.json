@@ -2,21 +2,23 @@
   "_dataConfig": "Configuration",
   "configSolver": "Spectral",
   "_dataNum": "Numerical Data",
-  "N": 20,
+  "N": 100,
   "endTime": 10,
   "timeStep": 0.0001,
   "tolTemporal": 0.0001,
   "C1": 1,
-  "solver": "LES",
+  "solver": "DNS",
   "tolNumeric": 0.000001,
   "_dataPhys": "Physical Data",
-  "Re": 40,
-  "CK": 0.40,
+  "Re": 200,
+  "CK": 0.4223,
   "slope": 2,
+  "xF": 0,
   "_dataProbe": "Probe Data",
   "probes": [
     {
       "type": "Modal",
+      "variable": "E",
       "t": [
         0,
         100
@@ -25,7 +27,22 @@
         0
       ],
       "x1": [
-        20
+        100
+      ],
+      "nWrite": null
+    },
+    {
+      "type": "Modal",
+      "variable": "u",
+      "t": [
+        0,
+        100
+      ],
+      "x0": [
+        0
+      ],
+      "x1": [
+        100
       ],
       "nWrite": null
     }

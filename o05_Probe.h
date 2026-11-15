@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <json/json.h>
 
+// Types
 template <size_t Dim> struct probeBase {
     std::ofstream file{}; // File
     size_t nWrite{1}, nCount{}; // Counters
@@ -23,11 +24,12 @@ template <size_t Dim> struct probePoint : probeBase<Dim> { // Each coordinate i0
 };
 
 template <size_t Dim> struct probeRange : probeBase<Dim> { // Each range i0, i1 is stored within timestamps t[k]
-    /* size_t type{}; // Need to make it detect P, T, V for FVM, maybe this goes within */
+    /* size_t type{}; // Variable -- Order defined within each solver (FVM: p, T, V - Spectral: Ek, uk) */
     std::array<double, 2> t{}; // Time interval
     std::array<size_t, Dim> i0{}, i1{}; // Coordinates
 };
 
+// Class
 template <size_t Dim> class Probe {
 private:
 

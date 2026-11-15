@@ -1,4 +1,5 @@
 // Imports
+#include <stdexcept>
 #include <string>
 #include <cstddef>
 #include <iostream>
@@ -15,13 +16,13 @@ ProbeSpectral::~ProbeSpectral() {
 
 ProbeSpectral::ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes, std::string fName) : Probe(probes, fName) {
     // Control
-    std::string tempString{}; probeRange<1> pTemp{};
+    std::string tempString{}; probeRangeSpectral pTemp{}; std::cout << "Constructor start.\n";
     
     // Add Probes
     for (Json::Value::ArrayIndex k = 0; k < probes.size(); k++) {
         if (probes[k]["type"].asString() == "Modal") { // Modal
             // Create File
-            tempString = "Probe_" + std::to_string(iProbes + 1) + "_Modal.csv";
+            tempString = "Probe_" + std::to_string(iProbes++ ) + "_Modal.csv";
             pTemp.file = createFile(fPath / tempString);
 
             // Time
@@ -35,9 +36,13 @@ ProbeSpectral::ProbeSpectral(const MeshBurgers& Burg, const Json::Value& probes,
             // Header
             runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { pTemp.file << "," << iX[0]; }, pTemp.i0, pTemp.i1); pTemp.file << "\n";
 
+            // Type
+            if (probes[k]["variable"].asString() == "E") { pTemp.type = prbSpectral::E; }
+            else if (probes[k]["variable"].asString() == "u") { pTemp.type = prbSpectral::u; }
+            else { throw std::invalid_argument("Probe type not recognized: " + probes["variable"].asString()); }
+
             // Control
-            pModal.push_back(std::move(pTemp));
-            pTemp = {};
+            pModal.push_back(std::move(pTemp)); pTemp = {};
         }
     }
 }
@@ -51,7 +56,9 @@ void ProbeSpectral::checkProbes(const MeshBurgers& Burg, double t) {
 
         // Write Data
         pModal[k].file << t; 
-        runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { pModal[k].file << "," << Burg.E[iX[0]]; }, pModal[k].i0, pModal[k].i1); pModal[k].file << "\n";
+        if (pModal[k].type == prbSpectral::E) { runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { pModal[k].file << "," << Burg.E[iX[0]]; }, pModal[k].i0, pModal[k].i1); }
+        else if (pModal[k].type == prbSpectral::u) { runLoopMesh<1>(Burg.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { std::complex<double> uVal = Burg.uHat[iX[0]]; pModal[k].file << "," << uVal.real() << (std::signbit(uVal.imag()) ? "" : "+") << uVal.imag() << "j"; }, pModal[k].i0, pModal[k].i1); } // Value currently stored as (Re, Im). 
+        pModal[k].file << "\n";
     }
 
 }

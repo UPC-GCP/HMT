@@ -6,17 +6,17 @@
 // Self-Imports
 #include "o02_MeshSpectral.h"
 
-void MeshSpectral::generateMeshBurgers(MeshBurgers& Msh, size_t N) {
+void MeshSpectral::generateMeshBurgers(MeshBurgers& Msh, size_t N, double multF) {
     // Control
-    Msh.totNodes = N+1; Msh.N[0] = N;
+    Msh.totNodes = N+1; Msh.N[0] = N; Msh.xF = multF;
 
     // Resize
     Msh.uHat.resize(Msh.totNodes); Msh.ouHat.resize(Msh.totNodes); Msh.E.resize(Msh.totNodes); Msh.visc.resize(Msh.totNodes); Msh.viscEff.resize(Msh.totNodes);
 }
 
-void MeshSpectral::generateMeshBurgers(MeshLES& Msh, size_t N, double smagorinskyConstant, double slope) {
+void MeshSpectral::generateMeshBurgers(MeshLES& Msh, size_t N, double smagorinskyConstant, double slope, double multF) {
     // Base
-    generateMeshBurgers(Msh, N);
+    generateMeshBurgers(Msh, N, multF);
 
     // Control
     Msh.CK = smagorinskyConstant; Msh.m = slope; Msh.filterWidth = M_PI / N;

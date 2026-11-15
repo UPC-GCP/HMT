@@ -58,13 +58,13 @@ template <typename MeshClass> std::vector<std::complex<double>> DiscretizerSpect
 
     // Dissipation
     calculateVEff(Msh);
-    for (size_t k = 0; k < u.size(); k++) { D[k] = static_cast<double>(k) * static_cast<double>(k) * u[k] * Msh.viscEff[k]; } // Removed 2*
+    for (size_t k = 0; k < u.size(); k++) { D[k] = static_cast<double>(k) * static_cast<double>(k) * u[k] * Msh.viscEff[k]; }
     
     // Convection
     calculateConvectiveTerm(C, u);
 
     // Forcing Term
-    F[1] = D[1] + C[1];
+    F[1] = (1 + Msh.xF) * (D[1] + C[1]); // xF = 0 -> du/dt = 0, xF = -1 -> du/dt unforced, xF > 0 || xF < -1 -> Multiplier
 
     // RHS
     for (size_t k = 0; k < u.size(); k++) { R[k] = - D[k] - C[k] + F[k]; } R[0] = 0;

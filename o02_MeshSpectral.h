@@ -9,6 +9,7 @@
 
 // Types
 struct MeshBurgers : MeshSimplified<1> {
+    double xF{};
     std::vector<double> E{}, oE{}, visc{}, viscEff{};
     std::vector<std::complex<double>> uHat{}, ouHat{};
 };
@@ -24,8 +25,8 @@ private:
     
 public:
     // Headers
-    void generateMeshBurgers(MeshBurgers& Msh, size_t N);
-    void generateMeshBurgers(MeshLES& Msh, size_t N, double smagorinskyConstant, double slope);
+    void generateMeshBurgers(MeshBurgers& Msh, size_t N, double multF);
+    void generateMeshBurgers(MeshLES& Msh, size_t N, double smagorinskyConstant, double slope, double multF);
 };
 
 #endif
