@@ -1,15 +1,17 @@
 ----------------------------------------------------
-Running simulations w/ 8 cores ... Sun Nov 15 09:01:43 -05 2026
+Running simulations w/ 8 cores ... Mon Nov 16 08:06:57 -05 2026
 ----------------------------------------------------
-Finished ./ioSrc/cfgBurgersMeshLESN10.json at 09:01:45
-Finished ./ioSrc/cfgBurgersMeshLESN15.json at 09:01:45
-Finished ./ioSrc/cfgBurgersMeshLESN20.json at 09:01:45
-Finished ./ioSrc/cfgBurgersMeshLESN25.json at 09:01:47
-Finished ./ioSrc/cfgBurgersMeshDNSN40.json at 09:01:47
-Finished ./ioSrc/cfgBurgersMeshLESN30.json at 09:01:48
-Finished ./ioSrc/cfgBurgersMeshDNSN20.json at 09:01:49
-Finished ./ioSrc/cfgBurgersMeshDNSN60.json at 09:01:50
-Finished ./ioSrc/cfgBurgersMeshDNSN80.json at 09:01:53
-Finished ./ioSrc/cfgBurgersMeshDNSN100.json at 09:01:56
+Finished ./ioSrc/cfgBurgersTurbLESRe50.json at 08:06:58
+Finished ./ioSrc/cfgBurgersTurbLESRe100.json at 08:06:59
+Finished ./ioSrc/cfgBurgersTurbLESRe150.json at 08:07:00
+Finished ./ioSrc/cfgBurgersTurbLESRe200.json at 08:07:00
+Finished ./ioSrc/cfgBurgersTurbLESRe250.json at 08:07:01
+Finished ./ioSrc/cfgBurgersTurbLESRe300.json at 08:07:02
+Finished ./ioSrc/cfgBurgersTurbDNSRe100.json at 08:07:13
+Finished ./ioSrc/cfgBurgersTurbDNSRe50.json at 08:07:14
+Finished ./ioSrc/cfgBurgersTurbDNSRe150.json at 08:07:19
+Finished ./ioSrc/cfgBurgersTurbDNSRe200.json at 08:07:26
+Finished ./ioSrc/cfgBurgersTurbDNSRe300.json at 08:07:48
+Finished ./ioSrc/cfgBurgersTurbDNSRe250.json at 08:07:48
 ----------------------------------------------------
-All simulations complete ... Sun Nov 15 09:01:56 -05 2026
+All simulations complete ... Mon Nov 16 08:07:48 -05 2026

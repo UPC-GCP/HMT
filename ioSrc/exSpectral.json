@@ -7,7 +7,7 @@
     "solver": "DNS", "tolNumeric": 1e-6,
 
     "_dataPhys": "Physical Data",
-    "Re": 40, "CK": 0.4223, "slope": 2, "xF": 0,
+    "Re": 40, "CK": 0.4223, "slope": 2, "xF": 1,
 
     "_dataProbe": "Probe Data",
     "probes": [

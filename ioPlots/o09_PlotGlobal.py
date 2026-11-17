@@ -7,5 +7,6 @@ pathRes = Path.cwd() / 'ioRes'
 pathPlt = Path.cwd() / 'ioPlots'
 
 ### Font Sizes
-iFontSizeTicks = 10
-iFontSizeLabel = 14
+iFontSizeTicks = 14
+iFontSizeLegend = 12
+iFontSizeLabel = 16

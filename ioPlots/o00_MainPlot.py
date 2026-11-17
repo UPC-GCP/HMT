@@ -20,27 +20,36 @@ def newPlotReference(plotName:str): # 1D Burgers Reference Plots
     
     print(PG.pathRes, PG.pathPlt)
 
-    # Main code for reference plotting
-    # Import all .csv files into data
-    # Send data to plotter from library
-
-
 def newPlotNumerical(plotName:str, batchName:str, varName:str): # 1D Burgers Parametric Studies
     # Control
-    data = [];
+    data = []; iPlot = None;
 
-    for pFile in pFiles:
-        # Import
-        argiPlot = re.search(rf'Probe_(\d+)', pFile.name)
-        print(argiPlot.group(1))
-        
+    # Directories
+    pDir = [d for d in PG.pathRes.glob(f"*{batchName}*") if d.is_dir()]
+    for vDir in pDir:
+        # Files
+        pFiles = list(vDir.glob("*.csv"))
+        for vFile in pFiles:
+            # Control
+            if vFile.name.find(plotName) == -1: continue
+            iPlot = re.search(rf'Probe_(\d+)', vFile.name).group(1)
+
+            # Data
+            data = PI.importLastRow(vDir, vFile, data, varName)
+
+    # DataFrame
+    dfData = pd.DataFrame(data); dfData = dfData.sort_values(by=['Solver', varName]).reset_index(drop=True)
+
+    # Plotting
+    if iPlot == '0': PM.plotNum1DBurgers(iPlot, dfData, batchName, varName)
+    elif iPlot == '1': PM.plotSpc1DBurgers(iPlot, dfData, batchName, varName)
 
 ##### Instructions #####
 ### Plotting Toolkit Structure
 ### If any modifications need to be made they can be included here and separated into specific modules
 # o09_PlotGlobal: Global constants
-# o01_PlotImport: importFullData(), importLastRow() -- Pass empty/incomplete data structure, returns with data
-# o02_PlotModal: 
+# o01_PlotImport: importFullData(), importLastRow() -- Pass empty/incomplete list, returns with data
+# o02_PlotModal: plotRef1DBurgers(), plotNum1DBurgers() -- Pass DataFrame, generates plots
 # o02_PlotGeometry:
 # o02_PlotAnimation:
 
@@ -54,15 +63,12 @@ if iArgs == 1: print("Program Shutdown: Missing arguments.")
 elif iArgs == 2: newPlotReference(sys.argv[1])
 elif iArgs == 4: newPlotNumerical(sys.argv[1], sys.argv[2], sys.argv[3])
 
-
-
 ########## OLD CODE ##########
 ##### Use this as reference
 
 def plotFinalBurgers(): # 1D Burgers Reference Plots
     # Control
     data = []
-
     # plotImport.import*(path, List) -- List object must be initialized here
     # Objects must be initialized a directed from here, should pass file directly instead of folder
     # Should know which option of files I have first and then loop over the alternatives

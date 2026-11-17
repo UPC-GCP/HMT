@@ -4,29 +4,31 @@ import re
 import sys
 import numpy as np
 import pandas as pd
-from pathlib import Path
+import pathlib as pl
 
-def importFullData(oPath:list, oData:list): # oList -- Import entire .csv
+def importFullData(oPath:list, oData:list): # Import entire .csv
     # Import
     df = pd.read_csv(oPath)
     if df.empty: return 
-
-    # Receives oData empty object
-    # Returns it as full .csv file
+    oData = df.to_dict()
 
     return oData 
 
-def importLastRow(oPath:list, oData:list): # oList -- Append last row from .csv
+def importLastRow(oDir:pl.PosixPath, oPath:pl.PosixPath, oData:list, varName:str): # Append last row from .csv
     # Import
     df = pd.read_csv(oPath)
     if df.empty: return
-
-    # Receives oData empty/incomplete object
-    # Returns it with appended last row
+    lRow = df.iloc[-1].to_dict()
+    
+    # Data
+    argVar = re.search(rf'{varName}(-?\d+(?:\.\d+)?)', oDir.name); lRow[varName] = float(argVar.group(1))
+    argSolver = re.search(r'(DNS|LES)', oDir.name); lRow['Solver'] = argSolver.group(1)
+    lRow['label'] = f"{lRow['Solver']} ({varName}={lRow[varName]})"
+    oData.append(lRow)
 
     return oData
 
-########## Main Plotter File ##########
+########## Main Plotter File ########## [OLD]
 ### Use this file to generate the desired plots.
 ### Plot functions should be added in PlotLib.py
 
