@@ -17,7 +17,6 @@
 
 namespace {
     template <size_t nDim> void runSolverLoop(const Json::Value& data, std::string configName){
-
         ///// Parser /////
         std::cout << "Initializing Parser ...\n";
         Parser Prs; std::cout << "Parser configured.\n";
@@ -152,7 +151,6 @@ namespace {
 
         /* // End */
         /* std::cout << "Files saved to: " << Prb.dirName << "\n"; */
-
     }
 }
 

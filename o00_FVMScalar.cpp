@@ -12,7 +12,6 @@
 
 namespace {
     template <size_t nDim> void runSolverLoop(const Json::Value& data, std::string configName){
-        
         ///// Parser /////
         std::cout << "Initializing Parser ...\n";
         Parser Prs; std::cout << "Parser configured.\n";
@@ -42,7 +41,6 @@ namespace {
         MeshSolver<nDim> PHI{};
 
         // PENDING: FINISH SCALAR SOLVER STRUCTURE, SHOULD BE QUICK ONCE ALL OBJECTS ARE DONE
-        
     }
 }
 
