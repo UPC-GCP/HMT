@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <string>
 #include <variant>
-/* #include <type_traits> */
 
 // Self-Imports
 #include "o01_Material.h"

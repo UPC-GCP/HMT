@@ -60,10 +60,7 @@ namespace {
         
         // Velocity
         std::array<MeshBase<nDim>, nDim> V{}; Msh.deriveMeshBase(p, V); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b\b nodes.\n";
-        /* Msh.addBoundariesBase(V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); for (MeshBase<nDim> Vk : V) {std::cout << Vk.BC.size() << ", ";} std::cout << "\b boundary conditions added.\n"; */
-
         for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); }
-
 
         /// Debug Current
         // Options

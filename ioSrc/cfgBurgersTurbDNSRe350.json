@@ -10,10 +10,10 @@
   "solver": "DNS",
   "tolNumeric": 0.000001,
   "_dataPhys": "Physical Data",
-  "Re": 300,
+  "Re": 350,
   "CK": 0.4223,
   "slope": 2,
-  "xF": 0,
+  "xF": 1,
   "_dataProbe": "Probe Data",
   "probes": [
     {

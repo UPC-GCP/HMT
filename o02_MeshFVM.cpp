@@ -311,9 +311,6 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesSolver(MeshSolver<Dim>& Ms
     }
 }
 
-    // Was it worth it to pass the std::array<MeshBase<Dim>, Dim>& V ? Or should I just pass MeshBase<Dim>
-    // Test with addBoundariesBase() -- The code doesn't know what index to access if I send them independently, would need to pass that as well -- in main() -> for (size_t i = 0; i < Dim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, boundaries, bInit, sInit) }
-
 template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t iV, std::array<MeshBase<Dim>, Dim>& V, const Material& Mat, Parser& Prs, const Json::Value& boundaries, std::vector<double> dInit, std::vector<std::string> sInit) {
     // Initial Conditions
     if (!Mat.bPath) {std::fill(V[iV].Phi.begin(), V[iV].Phi.end(), dInit[iV]); std::fill(V[iV].oPhi.begin(), V[iV].oPhi.end(), dInit[iV]);} else {importInitialConditions(V[iV], sInit[iV]);}

@@ -5,7 +5,6 @@
 
 // Self-Imports
 #include "o04_SolverSpectral.h"
-/* #include "o02_MeshSpectral.h" */
 #include "o03_DiscretizerSpectral.h"
 
 SolverSpectral::SolverSpectral(std::string solverSelection, double tolNumeric, double maxIterations) {

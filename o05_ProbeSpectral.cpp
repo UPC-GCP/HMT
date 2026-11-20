@@ -5,7 +5,6 @@
 #include <iostream>
 
 // Self-Imports
-#include "o02_Mesh.h"
 #include "o02_MeshSpectral.h"
 #include "o05_ProbeSpectral.h"
 
