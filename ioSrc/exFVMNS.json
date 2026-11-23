@@ -42,11 +42,11 @@
     ],
     "boundariesVelocity": [
         {"type": "Dirichlet", "x0": [0, 0, 0], "x1": [0, 1, 1], "side": 0, "value": [1, 0]},
-        {"type": "Neumann", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": [0, 0]},
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": [0, 0]},
-        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": [0, 0]},
-        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": [0, 0]},
-        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": [0, 0]}
+        {"type": "Neumann", "x0": [1, 0, 0], "x1": [1, 1, 1], "side": 1, "value": [2, 0]},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 0, 1], "side": 0, "value": [3, 0]},
+        {"type": "Neumann", "x0": [0, 1, 0], "x1": [1, 1, 1], "side": 1, "value": [4, 0]},
+        {"type": "Neumann", "x0": [0, 0, 0], "x1": [1, 1, 0], "side": 0, "value": [5, 0]},
+        {"type": "Neumann", "x0": [0, 0, 1], "x1": [1, 1, 1], "side": 1, "value": [6, 0]}
     ],
     "boundariesTemperature": [
     ],

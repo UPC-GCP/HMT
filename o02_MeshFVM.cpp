@@ -226,7 +226,7 @@ template <size_t Dim> void importInitialConditions(MeshBase<Dim>& Msh, std::stri
 
 template <size_t Dim> void MeshFVM<Dim>::addBoundariesSolver(MeshSolver<Dim>& Msh, Material Mat, Parser& Prs, Json::Value boundaries, double dInit, std::string sInit) {
     // Initial Conditions
-    if (!Mat.bPath) {std::fill(Msh.Phi.begin(), Msh.Phi.end(), dInit); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), dInit);} else {importInitialConditions(Msh, sInit);}
+    if (!Mat.bPath) { std::fill(Msh.Phi.begin(), Msh.Phi.end(), dInit); std::fill(Msh.oPhi.begin(), Msh.oPhi.end(), dInit); } else { importInitialConditions(Msh, sInit); }
 
     // Control
     Msh.BC.resize(boundaries.size());
@@ -313,13 +313,15 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesSolver(MeshSolver<Dim>& Ms
 
 template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t iV, std::array<MeshBase<Dim>, Dim>& V, const Material& Mat, Parser& Prs, const Json::Value& boundaries, std::vector<double> dInit, std::vector<std::string> sInit) {
     // Initial Conditions
-    if (!Mat.bPath) {std::fill(V[iV].Phi.begin(), V[iV].Phi.end(), dInit[iV]); std::fill(V[iV].oPhi.begin(), V[iV].oPhi.end(), dInit[iV]);} else {importInitialConditions(V[iV], sInit[iV]);}
+    if (!Mat.bPath) { std::fill(V[iV].Phi.begin(), V[iV].Phi.end(), dInit[iV]); std::fill(V[iV].oPhi.begin(), V[iV].oPhi.end(), dInit[iV]); } else {importInitialConditions(V[iV], sInit[iV]);}
 
     // Control
     V[iV].BC.resize(boundaries.size());
 
     // Boundaries
     for (Json::Value::ArrayIndex i = 0; i < boundaries.size(); i++) {
+
+
         // Position
         V[iV].BC[i].side = boundaries[i]["side"].asInt(); if (V[iV].BC[i].side != 0 && V[iV].BC[i].side != 1) { throw std::invalid_argument("Boundary side not define correctly.\n");}
         for (Json::Value::ArrayIndex j = 0; j < Dim; j++) {
@@ -328,21 +330,38 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t iV, std::array
         }
 
         // Value
-        if (isFormula(boundaries[i]["value"].asString())) {
-            // Control
-            V[iV].BC[i].expression = boundaries[i]["value"].asString();
-            V[iV].BC[i].iExpr = Prs.registerExpression(V[iV].BC[i].expression);
+        V[iV].BC[i].valueV.resize(boundaries[i]["value"].size()); V[iV].BC[i].expressionV.resize(boundaries[i]["value"].size());
+        V[iV].BC[i].iExprV.resize(boundaries[i]["value"].size()); V[iV].BC[i].iEqV.resize(boundaries[i]["value"].size());
+        V[iV].BC[i].bV.resize(boundaries[i]["value"].size());
+        for (Json::Value::ArrayIndex j = 0; j < boundaries[i]["value"].size(); j++) {
+            if (isFormula(boundaries[i]["value"][j].asString())) {
+                // Control
+                V[iV].BC[i].expressionV[j] = boundaries[i]["value"][j].asString();
+                V[iV].BC[i].iExprV[j] = Prs.registerExpression(V[iV].BC[i].expressionV[j]);
 
-            // Parser
-            if (V[iV].BC[i].expression.find(" t ") != std::string::npos) { V[iV].BC[i].bUpdate = true; V[iV].BC[i].iEq = 0; V[iV].BC[i].value = Prs.evaluateTime(V[iV].BC[i].iEq, 0); } // Update time
-            else if (V[iV].BC[i].expression.find(" x ") != std::string::npos || V[iV].BC[i].expression.find(" y ") != std::string::npos || V[iV].BC[i].expression.find(" z ") != std::string::npos) { V[iV].BC[i].iEq = 1; if constexpr (Dim == 1) { throw std::invalid_argument("Coordinate expressions not supported for 1D\n"); } } // Update coordinates 
-            else { throw std::invalid_argument("Equation not recognized: " + V[iV].BC[i].expression); }
-        } else { V[iV].BC[i].value = boundaries[i]["value"].asDouble(); }
+                // Parser
+                if (V[iV].BC[i].expressionV[j].find(" t ") != std::string::npos) { V[iV].BC[i].bV[j] = true; V[iV].BC[i].iEqV[j] = 0; V[iV].BC[i].valueV[j] = Prs.evaluateTime(V[iV].BC[i].iEqV[j], 0); } // Update time
+                else if (V[iV].BC[i].expressionV[j].find(" x ") != std::string::npos || V[iV].BC[i].expressionV[j].find(" y ") != std::string::npos || V[iV].BC[i].expressionV[j].find(" z ") != std::string::npos) { V[iV].BC[i].iEqV[j] = 1; if constexpr (Dim == 1) { throw std::invalid_argument("Coordinate expressions not supported for 1D\n"); } } // Update coordinates
+                else { throw std::invalid_argument("Equation not recognized: " + V[iV].BC[i].expressionV[j]); }
+} else { V[iV].BC[i].valueV[j] = boundaries[i]["value"][j].asDouble(); }
+        }
         
         // Type
         if (boundaries[i]["type"] == "Dirichlet") { V[iV].BC[i].type = 0; }
         else if (boundaries[i]["type"] == "Neumann") { V[iV].BC[i].type = 1; }
         else { throw std::invalid_argument("Boundary type not recognized: " + boundaries[i]["type"].asString()); }
+
+        // DO I EVEN NEED TO DO THIS IF I AM JUST GOING TO FORCE VALUE OR TIME INSTEAD OF COORDINATES?
+        // IT WILL BE A SINGLE VALUE FOR ALL
+        // DO I WANT TO NOT MAKE IT AVAILABLE FOR GEOMETRIC FUNCTIONS?
+
+        // THINGS I HAVE CREATED FOR VELOCITY PROFILE:
+        // bV -- Bool Check
+        // valueV -- Double Value
+        // expressionV -- String Expression
+        // iExprV -- Index Parser position
+        // iEqV -- Index Parser type
+        // I can do this somehow -- I just need to think
 
         // Resize
         size_t tempSize{1}; 
@@ -355,7 +374,6 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t iV, std::array
             if (V[iV].BC[i].iEq == 0) { // Time
                 // Resize
                 V[iV].BC[i].Phi.resize(tempSize, V[iV].BC[i].value); V[iV].BC[i].oPhi.resize(tempSize, V[iV].BC[i].value);
-                if (V[iV].BC[i].type == 2) { V[iV].BC[i].A.resize(tempSize, V[iV].BC[i].alpha); V[iV].BC[i].oA.resize(tempSize, V[iV].BC[i].alpha); }
             } else if (V[iV].BC[i].iEq == 1) { // Coordinates
                 if constexpr (Dim > 1) {
                     // Reduce
@@ -371,7 +389,6 @@ template <size_t Dim> void MeshFVM<Dim>::addBoundariesBase(size_t iV, std::array
             } else { // Scalar
                 // Resize
                 V[iV].BC[i].Phi.resize(tempSize, V[iV].BC[i].value); V[iV].BC[i].oPhi.resize(tempSize, V[iV].BC[i].value);
-                if (V[iV].BC[i].type == 2) { V[iV].BC[i].A.resize(tempSize, V[iV].BC[i].alpha); V[iV].BC[i].oA.resize(tempSize, V[iV].BC[i].alpha); }
             }
         }
     }

@@ -32,14 +32,14 @@ namespace {
             for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isDouble()) {std::cerr << "Initial conditions (V) not defined properly.\n"; throw std::invalid_argument("Check .json");}}
 
             // Store data
-            Mat.setInitialConditions(data["T0"].isNull() ? 0 : data["T0"].asDouble(), data["P0"].asDouble(), data["VF0"]);
+            Mat.setInitialConditions(data["T0"].isNull() ? 0 : data["T0"].asDouble(), data["P0"].asDouble(), data["V0"]);
         } else if (data["P0"].isString()) {
             // Control
             if (!data["T0"].isString() && !data["T0"].isNull()) {std::cerr << "Initial conditions (p/T) not defined properly.\n"; throw std::invalid_argument("Check .json");}
             for (Json::Value::ArrayIndex i = 0; i < data["V0"].size(); i++) {if (!data["V0"][i].isString()) {std::cerr << "Initial conditions (V) not defined properly.\n"; throw std::invalid_argument("Check .json");}}
 
             // Store data
-            Mat.setInitialConditions(data["T0"].asString(), data["P0"].asString(), data["VF0"]);
+            Mat.setInitialConditions(data["T0"].asString(), data["P0"].asString(), data["V0"]);
         } else {std::cerr << "Initial conditions not defined correctly.\n"; throw std::invalid_argument("Check .json");} std::cout << "Initial conditions logged.\n";
 
         ///// Mesh /////
@@ -54,26 +54,34 @@ namespace {
         // Temperature
         if (!data["T0"].isNull()) {
             MeshSolver<nDim> T{}; Msh.generateMeshSolver(T, data["N"], data["sections"], data["refinement"], data["obstacles"]); std::cout << "Temperature object created with " << T.totNodes << " nodes and " << T.Obs.size() << " obstacles.\n";
-            Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added\n";
+            Msh.addBoundariesSolver(T, Mat, Prs, data["boundariesTemperature"], Mat.T0, Mat.sT0); std::cout << T.BC.size() << " Temperature boundary conditions added.\n";
         }
         
+
+        std::cout << "TESTING HERE:\n";
+
+
         // Velocity
         std::array<MeshBase<nDim>, nDim> V{}; Msh.deriveMeshBase(p, V); std::cout << "Velocity objects created with "; for (MeshBase<nDim> Vk : V) {std::cout << Vk.totNodes << ", ";} std::cout << "\b\b nodes.\n";
-        for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); }
+        for (size_t i = 0; i < nDim; i++) { Msh.addBoundariesBase(i, V, Mat, Prs, data["boundariesVelocity"], Mat.VF0, Mat.sVF0); } std::cout << V[0].BC.size() << " velocity boundary conditions added.\n";
 
         /// Debug Current
+
         // Options
-        debugOptions dOps{}; dOps.bObs = true; dOps.bGeneral = true;
+        debugOptions dOps{}; dOps.bGeneral = true; dOps.bPhiBC = true; 
 
         // Print
-        debugFVM(p, dOps);
+        for (MeshBase<nDim> Vk : V) { debugFVM(Vk, dOps); }
+        /* debugFVM(p, dOps); */
+
+
         /* printDebug(p, dOps); */
         /* for (MeshBase<nDim> Vk : V) { printDebug(Vk, dOps); } */
 
         return;
 
-        /* ///// Discretizer ///// */
-        /* std::cout << "Initializing discretizer ...\n"; */
+        ///// Discretizer /////
+        std::cout << "Initializing discretizer ...\n";
         /* Discretizer Dsc(data["tempScheme"].asString(), data["spatScheme"].asString(), data["endTime"].asDouble(), data["timeStep"].asDouble()); std::cout << "Discretizer parameters set.\n"; */
         /* Dsc.setSchemeParameters(Mat, Msh); std::cout << "Scheme parameters set.\n"; */
         /* Dsc.setMomentumBoundaries(Mat, Msh); std::cout << "Velocity boundaries set.\n"; */

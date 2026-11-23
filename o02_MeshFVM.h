@@ -18,6 +18,11 @@ template <size_t Dim> struct Obstacle {
 template <size_t Dim> struct Boundary {
     size_t type{}, side{}, iExpr{}, iEq{}, iExprA{}, iEqA{}; double value{}, alpha{}; // General
     bool bUpdate = false, bA = false; std::string expression{}, expressionA{}; // Expression
+    std::vector<size_t> iExprV{}, iEqV{}; std::vector<bool> bV{}; std::vector<double> valueV{}; std::vector<std::string> expressionV{}; // Velocity Field
+    // Velocity field variables are there just for Velocity BCs
+    // They shouldn't use Phi since it has dimensions
+    // Phi should be a nD array as well if you wanted it to follow the same capacity as MeshSolver
+    // I could just impose it as value for now and add it later
     std::array<size_t, Dim> i0{}, i1{}; // Indexes -> [nAxis]
     std::vector<double> Phi{}, oPhi{}; // Phi, oPhi -> [m] -> m = 1D flattened for 2D/3D
     std::vector<double> A{}, oA{}; // Alpha, oAlpha -> [m] -> Robin BC

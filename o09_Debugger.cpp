@@ -2,8 +2,10 @@
 #include <cstddef>
 #include <iostream>
 #include <strings.h>
+#include <type_traits>
 
 // Self-Imports
+#include "o02_Mesh.h"
 #include "o02_MeshFVM.h"
 #include "o09_Debugger.h"
 
@@ -226,12 +228,56 @@ template <size_t Dim, template <size_t> class MeshClass> void debugFVM(const Mes
 
     }
 
-    if (dOps.bPhiBC) { // Boundaries
 
+    /* if (dOps.bPhiBC) { // Boundary */
+    /*     std::cout << "PhiBC:\n"; */
+    /*     for (Boundary<3> BC : Msh.BC){ */
+    /*         std::cout << "BC: " << BC.type << " " << BC.side << "\n"; */
+    /*         if (BC.i0[0] == BC.i1[0]) { // X Boundary */
+    /*             for (size_t j = 0; j < Msh.N[1]; j++) { */
+    /*                 for (size_t k = 0; k < Msh.N[2]; k++) { */
+    /*                     std::cout << BC.Phi[calcIndex(j, k, Msh.N[2])] << " "; */
+    /*                 } std::cout << "\n"; */
+    /*             } std::cout << "\n"; */
+    /*         } else if (BC.i0[1] == BC.i1[1]) { // Y Boundary */
+    /*             for (size_t i = 0; i < Msh.N[0]; i++) { */
+    /*                 for (size_t k = 0; k < Msh.N[2]; k++) { */
+    /*                     std::cout << BC.Phi[calcIndex(i, k, Msh.N[2])] << " "; */
+    /*                 } std::cout << "\n"; */
+    /*             } std::cout << "\n"; */
+    /*         } else if (BC.i0[2] == BC.i1[2]) { // Z Boundary */
+    /*             for (size_t i = 0; i < Msh.N[0]; i++) { */
+    /*                 for (size_t j = 0; j < Msh.N[1]; j++) { */
+    /*                     std::cout << BC.Phi[calcIndex(i, j, Msh.N[1])] << " "; */
+    /*                 } std::cout << "\n"; */
+    /*             } std::cout << "\n"; */
+    /*         } */
+    /*     } */
+    /* } */
+
+
+    // MeshBase
+    if constexpr (std::is_same_v<MeshBase<Dim>, MeshClass<Dim>>) {
+        if (dOps.bPhiBC) { // Boundaries
+            for (size_t i = 0; i < Msh.BC.size(); i++) {
+
+            }
+            std::cout << "PhiBC ";
+
+        }
     }
+    /* if (dOps.bPhiBC) { // Boundaries */
+    /*     std::cout << "PhiBC:\n"; */
+    /*     for () */
+    /*     runLoopMesh(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) { */
+    /*             std::cout << Msh. */
+    /*             if (iX[1] == Ny - 1) { std::cout << "\n"; } if (iX[1] == Ny - 1 && iX[0] == Nx - 1) { std::cout << "\n"; } */
+    /*             }); */
+
+    /* } */
 
     // MeshSolver
-    if constexpr (std::is_same_v<MeshClass<3>, MeshSolver<3>>) {
+    if constexpr (std::is_same_v<MeshClass<Dim>, MeshSolver<Dim>>) {
         if (dOps.bMat) { // Material
             std::cout << "nMat:\n";
             runLoopMesh(Msh.N, [&](std::array<size_t, 3> iX, size_t Ny, size_t Nx) {
